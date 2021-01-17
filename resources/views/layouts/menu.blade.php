@@ -234,7 +234,7 @@
 @can('notifications.index')
     <li class="nav-item">
         <a class="nav-link {{ Request::is('notifications*') ? 'active' : '' }}" href="{{ route('notification.index') }}">@if($icons)
-                <i class="nav-icon fa fa-comment"></i>@endif<p>notifications</p></a>
+                <i class="nav-icon fa fa-bell"></i>@endif<p>notifications</p></a>
     </li>
 @endcan
 

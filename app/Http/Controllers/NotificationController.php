@@ -17,10 +17,15 @@ use DB;
 use App\Country;
 use App\City;
 use App\Models\Category;
+use App\Models\User;
 use App\subCategory;
 
 class NotificationController extends Controller
 {
+
+
+
+
     /** @var  SubCategoriesRepository */
     private $NotificationRepository;
 
@@ -68,7 +73,88 @@ class NotificationController extends Controller
      */
     public function store(Request $request)
     {
-        
+         $SERVER_API_KEY = 'AAAA4D63pNE:APA91bHZnOMtZp1E5zvs5hmd0mniLA2JRWQwECU5Rc-aI4cvHfENc4PuMTwNnHtFwFex11IFsdEns2ErZ05GXfn-sJVDMit8lfc5RSMTF9GHfHadBQ0OMfGA8MJ0H4DQ5t3LAl-Nx6y2';
+
+        $headers = [
+            'Authorization: key=' . $SERVER_API_KEY,
+            'Content-Type: application/json',
+        ];
+
+
+
+
+
+        $users = User::whereNotNull('device_token');
+
+
+        if ($request->type == 1)
+            $users = $users->whereHas('roles', function($query){
+                $query->where('role_id', 3);
+            });
+
+
+        if ($request->type == 2)
+            $users = $users->whereHas('roles', function($query){
+                $query->where('role_id', 4);
+            });
+
+        if ($request->country != 0) {
+            $country_id = $request->country;
+            if ($request->city == 0) {
+                $users = $users->whereHas('cities', function($query) use ($country_id) {
+                    $query->where('country_id', $country_id);
+                 });
+            } else {
+                $users = $users->where('city_id', $request->city);
+            }
+        }
+
+        if ($request->category != 0) {
+            $category_id = $request->category;
+            if ($request->subcategory == 0) {
+                $users = $users->whereHas('subcategories', function($query) use ($category_id) {
+                    $query->where('category_id', $category_id);
+                 });
+            } else {
+                $subcategory_id = $request->subcategory;
+                $users = $users->whereHas('subcategories', function($query) use ($subcategory_id) {
+                    $query->where('subcategory_id', $subcategory_id);
+                 });
+            }
+        }
+
+       // $users = $users->get('device_token');
+
+        $data = [
+            "registration_ids" => $users->pluck('device_token'),
+            "notification" => [
+                "title"    => $request->title,
+                "body"     => $request->description,
+            ]
+        ];
+       // return dd($users->get());
+
+        $dataString = json_encode($data);
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+        curl_setopt($ch, CURLOPT_POST, true);
+
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+        // dd(curl_exec($ch));
+        $response = curl_exec($ch);
+
+        return dd(curl_exec($ch));
+
+        //
     }
 
     /**

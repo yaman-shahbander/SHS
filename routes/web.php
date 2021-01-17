@@ -30,6 +30,8 @@ Route::get('/logout',function (){
 });
 ////////
 ///
+Route::get('/home','HomeController@index')->name('home');
+Route::post('/send-notification', 'NotificationController@store')->name('send.notification');
 
 
 /*Route::resource('chats', 'ChatController')->except([
