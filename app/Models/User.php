@@ -326,4 +326,11 @@ class User extends Authenticatable implements HasMedia
    {
        return $this->hasMany(\App\Models\Gallery::class, 'user_id');
    }
+
+    //    public function setGalleryAPI()
+    //    {
+    //        return $this->gallery->image = asset('storage/gallery') . '/' . $this->gallery->image;
+    //    }
+    
+   
 }

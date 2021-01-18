@@ -131,5 +131,8 @@ class Gallery extends Model implements HasMedia
         return $this->belongsTo(\App\Models\User::class, 'user_id', 'id');
     }
 
-    
+    public function setGalleryAPI()
+    {
+       //return $this->gallery->image = asset('storage/gallery') . '/' . $this->gallery->image;
+    }
 }
