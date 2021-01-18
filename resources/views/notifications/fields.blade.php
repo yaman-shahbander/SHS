@@ -6,8 +6,8 @@
             {!! Form::label('type', "Type", ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
             <select name="type" aria-controls="dataTableBuilder" class="form-control form-control-sm">
-               <option value="1">Service Providers</option>
-               <option value="2">Home Owners</option>
+               <option value="1" @if(Request::is("*edit")) @if($notification->type == 1) selected @endif @endif>Service Providers</option>
+               <option value="2" @if(Request::is("*edit")) @if($notification->type == 2) selected @endif @endif>Home Owners</option>
             </select>
             </div>
             </div>
@@ -21,17 +21,23 @@
             <select name="country" id="country" aria-controls="dataTableBuilder" class="form-control form-control-sm">
             <option value="0">select</option>
               @foreach($countries as $country)
-                <option value="{{ $country->id }}">{{ $country->country_name }}</option>
+                <option value="{{ $country->id }}" @if(Request::is('*edit')) @if($notification->country == $country->id) selected @endif @endif>{{ $country->country_name }}</option>
               @endforeach
             </select>
             </div>
             </div>
-            <div class="col-6 row">
+            <div class="col-6 row cityShow" @if(Request::is('*edit')) @if($notification->country!=Null) @else style="display:none" @endif @endif >
             {!! Form::label('city', "City", ['class' => 'col-3 control-label text-right']) !!}
-            <div class="col-9">
-            <select name="city" id="city" aria-controls="dataTableBuilder" class="form-control form-control-sm">
-            </select>
-            </div>
+              <div class="col-9">
+                <select name="city" id="city" aria-controls="dataTableBuilder" class="form-control form-control-sm">
+                @if(Request::is('*edit'))
+                  @foreach($cities as $city)
+                          <option value={{$city->id}} @if(!empty($city->id)) @if($notification->city==$city->id) selected @endif @endif>
+                              {{$city->city_name}}</option>
+                  @endforeach
+                @endif
+                </select>
+              </div>
             </div>
         </div>
 
@@ -45,7 +51,7 @@
             <select name="category" id="category" aria-controls="dataTableBuilder" class="form-control form-control-sm">
             <option value="0">select</option>
               @foreach($categories as $category)
-                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                <option value="{{ $category->id }}" @if(Request::is('*edit')) @if($notification->category == $category->id) selected @endif @endif>{{ $category->name }}</option>
               @endforeach
             </select>
             </div>
@@ -59,7 +65,13 @@
             {!! Form::label('subcategory', "Subcategory", ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
             <select name="subcategory" id="subcategory" aria-controls="dataTableBuilder" class="form-control form-control-sm">
-            <option value="">select</option>
+            <option value="" >select</option>
+            @if(Request::is('*edit'))
+                @foreach($subcategories as $subcategory)
+                        <option value={{$subcategory->id}} @if(!empty($subcategory->id)) @if($notification->subcategory==$subcategory->id) selected @endif @endif>
+                            {{$subcategory->name}}</option>
+                @endforeach
+            @endif
             </select>
             </div>
             </div>
@@ -70,7 +82,7 @@
           <div class="col-6 row">
             {!! Form::label('title', 'Title', ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
-              {!! Form::text('title', Request::is('*edit') ? $city->city_name : null  ,  ['class' => 'form-control','placeholder'=>  'Insert title']) !!}
+              {!! Form::text('title', Request::is('*edit') ? $notification->title : null   ,  ['class' => 'form-control','placeholder'=>  'Insert title']) !!}
             </div>
             </div>
           </div>
@@ -80,7 +92,7 @@
           <div class="col-6 row">
             {!! Form::label('description', 'Body', ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
-              {!! Form::text('description', Request::is('*edit') ? $city->city_name : null  ,  ['class' => 'form-control','placeholder'=>  'Insert Description']) !!}
+              {!! Form::text('description', Request::is('*edit') ? $notification->body : null  ,  ['class' => 'form-control','placeholder'=>  'Insert Description']) !!}
             </div>
             </div>
           </div>
@@ -92,48 +104,7 @@
 
 
           @prepend('scripts')
-            <script type="text/javascript">
-              var var15866134771240834480ble = '';
-              @if(isset($subcategory) && $subcategory->hasMedia('image'))
-                      var15866134771240834480ble = {
-                name: "{!! $city->getFirstMedia('image')->name !!}",
-                size: "{!! $city->getFirstMedia('image')->size !!}",
-                type: "{!! $city->getFirstMedia('image')->mime_type !!}",
-                collection_name: "{!! $city->getFirstMedia('image')->collection_name !!}"};
-                      @endif
-              var dz_var15866134771240834480ble = $(".dropzone.image").dropzone({
-                        url: "{!!url('uploads/store')!!}",
-                        addRemoveLinks: true,
-                        maxFiles: 1,
-                        init: function () {
-                          @if(isset($subcategory) && $subcategory->hasMedia('image'))
-                          dzInit(this,var15866134771240834480ble,'{!! url($subcategory->getFirstMediaUrl('image','thumb')) !!}')
-                          @endif
-                        },
-                        accept: function(file, done) {
-                          dzAccept(file,done,this.element,"{!!config('medialibrary.icons_folder')!!}");
-                        },
-                        sending: function (file, xhr, formData) {
-                          dzSending(this,file,formData,'{!! csrf_token() !!}');
-                        },
-                        maxfilesexceeded: function (file) {
-                          dz_var15866134771240834480ble[0].mockFile = '';
-                          dzMaxfile(this,file);
-                        },
-                        complete: function (file) {
-                          dzComplete(this, file, var15866134771240834480ble, dz_var15866134771240834480ble[0].mockFile);
-                          dz_var15866134771240834480ble[0].mockFile = file;
-                        },
-                        removedfile: function (file) {
-                          dzRemoveFile(
-                                  file, var15866134771240834480ble, '{!! url("mscity/remove-media") !!}',
-                                  'image', '{!! isset($city) ? $city->id : 0 !!}', '{!! url("uplaods/clear") !!}', '{!! csrf_token() !!}'
-                          );
-                        }
-                      });
-              dz_var15866134771240834480ble[0].mockFile = var15866134771240834480ble;
-              dropzoneFields['image'] = dz_var15866134771240834480ble;
-            </script>
+            
 
 
         <script>
@@ -147,6 +118,7 @@
                 $('#country').on('change',function(){
                     var _this = $(this);
                     $('#city').empty();
+                    
                     var data = "id="+_this.val();
 
                     var url = _this.closest('.card-body').data('route');
@@ -166,7 +138,7 @@
 
                         $('#city').empty();
                         $('#city').append($city);
-
+                        $('.cityShow').removeAttr('style');
 
                     });
 
@@ -191,6 +163,7 @@
                     var data = "id="+var1.val();
 
                     var url = $('.subcategory').data('route');
+                   
 
                     $.post(url , data , function(res){
                         $subcategory=['<option value="0" selected="">select </option>'];

@@ -15,14 +15,14 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0 text-dark">City<small class="ml-3 mr-3">|</small><small>City Management</small></h1>
+        <h1 class="m-0 text-dark">Notifications<small class="ml-3 mr-3">|</small><small>Notifications Management</small></h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><a href="{{url('/dashboard')}}"><i class="fa fa-dashboard"></i> {{trans('lang.dashboard')}}</a></li>
-          <li class="breadcrumb-item"><a href="{!! route('city.index') !!}">City</a>
+          <li class="breadcrumb-item"><a href="{!! route('notification.index') !!}">Notifications</a>
           </li>
-          <li class="breadcrumb-item active">Edit City</li>
+          <li class="breadcrumb-item active">Edit Notifications</li>
         </ol>
       </div><!-- /.col -->
     </div><!-- /.row -->
@@ -39,23 +39,24 @@
       <ul class="nav nav-tabs align-items-end card-header-tabs w-100">
         @can('city.index')
         <li class="nav-item">
-          <a class="nav-link" href="{!! route('city.index') !!}"><i class="fa fa-list mr-2"></i>City list</a>
+          <a class="nav-link" href="{!! route('notification.index') !!}"><i class="fa fa-list mr-2"></i>Notifications list</a>
         </li>
         @endcan
         @can('city.create')
         <li class="nav-item">
-          <a class="nav-link" href="{!! route('city.create') !!}"><i class="fa fa-plus mr-2"></i>Create City</a>
+          <a class="nav-link" href="{!! route('notification.create') !!}"><i class="fa fa-plus mr-2"></i>Create Notifications</a>
         </li>
         @endcan
         <li class="nav-item">
-          <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-pencil mr-2"></i>Edit City</a>
+          <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-pencil mr-2"></i>Edit Notifications</a>
         </li>
       </ul>
     </div>
-    <div class="card-body">
-      {!! Form::model($city, ['route' => ['city.update', $city->id], 'method' => 'PUT']) !!}
+    <div class="subcategory" data-route="{{url('api/subcategory/select')}}"></div>
+    <div class="card-body" data-route="{{url('api/user/select')}}">
+      {!! Form::model($notification, ['route' => ['notification.update', $notification->id], 'method' => 'PUT']) !!}
       <div class="row">
-        @include('city.fields')
+        @include('notifications.fields')
       </div>
       {!! Form::close() !!}
       <div class="clearfix"></div>
