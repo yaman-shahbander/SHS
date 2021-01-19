@@ -44,7 +44,6 @@ class VendorsSuggestedController extends Controller
      */
     public function index(VendorSuggestedDataTable $vendorsugDataTable)
     {
-
         return $vendorsugDataTable->render('settings.vendors_suggested.index');
     }
     /**
@@ -67,28 +66,17 @@ class VendorsSuggestedController extends Controller
 
     public function store(Request $request)
     {
-
-
         $input = $request->all();
         $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->vendorSugRepository->model());
-
-
         $input['user_id']=auth()->user()->id;
-        //dd($input);
-
         try {
             $vendor = $this->vendorSugRepository->create($input);
             $vendor->customFieldsValues()->createMany(getCustomFieldsValues($customFields, $request));
-
-
-            // event(new UserRoleChangedEvent($user));
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }
-
         Flash::success('saved successfully.');
-
-        return redirect(route('vendor.index'));
+        return redirect(route('suggested/vendor.index'));
     }
 
     /**
@@ -169,7 +157,7 @@ class VendorsSuggestedController extends Controller
 
         Flash::success(__('lang.updated_successfully', ['operator' => __('lang.vendor')]));
 
-        return redirect(route('categories.index'));
+        return redirect(route('suggested/vendor.index'));
     }
 
     /**

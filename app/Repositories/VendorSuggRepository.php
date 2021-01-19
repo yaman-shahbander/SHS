@@ -24,7 +24,7 @@ class VendorSuggRepository extends BaseRepository
         'name',
         'email',
         'password',
-     'phone',
+        'phone',
         'user_id',
 
     ];

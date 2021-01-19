@@ -21,9 +21,11 @@ Route::get('/clear-cache', function() {
     Artisan::call('route:clear');
     Artisan::call('config:clear');
     Artisan::call('view:clear');
+    
+
     return "Cache is cleared";
 });
-//Route::get('/verify/{api_token}', 'AppSettingController@verifyUser');
+Route::get('/verify/{api_token}', 'AppSettingController@verifyUser');
 
 Route::get('/logout',function (){
     return redirect('/');

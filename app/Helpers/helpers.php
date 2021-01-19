@@ -84,7 +84,7 @@ function getSubcategoryVendorRelationName($subcategory) {
 }
 ///////vendor suggested ?///////
 function getVendorRelationName($sugvendor) {
-    return $sugvendor->users->name;
+    return $sugvendor->name;
 }
 function subscription_Name($sugvendor) {
     return $sugvendor->subscription->type;
