@@ -10,7 +10,7 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{asset('plugins/font-awesome/css/font-awesome.min.css')}}">
 
-  
+
     <!-- Ionicons -->
 {{--<link href="https://unpkg.com/ionicons@4.1.2/dist/css/ionicons.min.css" rel="stylesheet">--}}
 {{--<!-- iCheck -->--}}
@@ -38,7 +38,7 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,600" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('css/custom.css')}}">
     <link rel="stylesheet" href="{{asset('css/'.setting("theme_color","primary").'.css')}}">
-<!-- 
+<!--
     @if(Auth::user()->language ='ar')
         <link href="{{asset('localization/css/bootstrap1/bootstrap-rtl.min.css')}}" rel="stylesheet">
         <link href="{{asset('localization/css/custom/owl.carousel-rtl.css')}}" rel="stylesheet">
@@ -49,7 +49,7 @@
         text-align:right !important;
         float:right;
        }
-       
+
        .main-sidebar {
         position: absolute;
         top: 0;
@@ -75,7 +75,7 @@
                 margin-right: 4.6rem !important;
             }
         }
-  
+
         .ml-auto{
             margin-right:400px;
         }
@@ -103,7 +103,7 @@
                     <a href="{{url('dashboard')}}" class="nav-link">@lang('lang.dashboard')</a>
                 </li>
             </ul>
-           
+
 
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
@@ -241,72 +241,49 @@
     <script src="{{asset('plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 
     <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="{{asset('https://www.gstatic.com/firebasejs/7.2.0/firebase-app.js')}}"></script>
 
-    <script src="{{asset('https://www.gstatic.com/firebasejs/7.2.0/firebase-messaging.js')}}"></script>
-
-    <script type="text/javascript">@include('vendor.notifications.init_firebase')</script>
 
     @if(LaravelLocalization::getCurrentLocaleDirection() == "rtl")
     <script src="{{asset('js/custom/custom-rtl.js')}}"></script>
     @endif
-    
-    <script type="text/javascript">
-        const messaging = firebase.messaging();
-        navigator.serviceWorker.register("{{url('firebase/sw-js')}}")
-            .then((registration) => {
-                messaging.useServiceWorker(registration);
-                messaging.requestPermission()
-                    .then(function() {
-                        console.log('Notification permission granted.');
-                        getRegToken();
-
-                    })
-                    .catch(function(err) {
-                        console.log('Unable to get permission to notify.', err);
-                    });
-                messaging.onMessage(function(payload) {
-                    console.log("Message received. ", payload);
-                    notificationTitle = payload.data.title;
-                    notificationOptions = {
-                        body: payload.data.body,
-                        icon: payload.data.icon,
-                        image:  payload.data.image
-                    };
-                    var notification = new Notification(notificationTitle,notificationOptions);
-                });
-            });
-
-        function getRegToken(argument) {
-            messaging.getToken().then(function(currentToken) {
-                if (currentToken) {
-                    saveToken(currentToken);
-                    console.log(currentToken);
-                } else {
-                    console.log('No Instance ID token available. Request permission to generate one.');
-                }
-            })
-                .catch(function(err) {
-                    console.log('An error occurred while retrieving token. ', err);
-                });
-        }
 
 
-        function saveToken(currentToken) {
-            $.ajax({
-                type: "POST",
-                data: {'device_token': currentToken, 'api_token': '{!! auth()->user()->api_token !!}'},
-                url: '{!! url('api/users',['id'=>auth()->id()]) !!}',
-                success: function (data) {
+<!--firebsae config-->
 
-                },
-                error: function (err) {
-                    console.log(err);
-                }
-            });
-        }
-    </script>
+{{--  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.2/js/toastr.min.js">--}}
+{{--  </script>--}}
+{{--<script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-app.js"></script>--}}
+{{--<script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-messaging.js"></script>--}}
 
+{{--<script>--}}
+
+
+{{--   var firebaseConfig = {--}}
+{{--       apiKey: "AIzaSyC1GWjZ1Irhj7_OB4Ob--_a_rcP0xnk1Js",--}}
+{{--       authDomain: "shs-chat-c425e.firebaseapp.com",--}}
+{{--       databaseURL: "https://shs-chat-c425e-default-rtdb.firebaseio.com/",--}}
+{{--       projectId: "shs-chat-c425e",--}}
+{{--       storageBucket: "shs-chat-c425e.appspot.com",--}}
+{{--       messagingSenderId: "963124896977",--}}
+{{--       appId: "1:963124896977:web:016e3a562edc51652211f0",--}}
+{{--       measurementId: "G-2MVVRHDF8M"--}}
+{{--   };--}}
+
+{{--     firebase.initializeApp(firebaseConfig);--}}
+{{--     const messaging = firebase.messaging();--}}
+
+
+
+{{--    messaging.onMessage(function(payload) {--}}
+{{--        const noteTitle = payload.notification.title;--}}
+{{--        const noteOptions = {--}}
+{{--            body: payload.notification.body,--}}
+{{--            icon: payload.notification.icon,--}}
+{{--        };--}}
+{{--        new Notification(noteTitle, noteOptions);--}}
+{{--    });--}}
+
+{{--</script>--}}
     <!-- Sparkline -->
     {{--<script src="{{asset('plugins/sparkline/jquery.sparkline.min.js')}}"></script>--}}
     {{--<!-- iCheck -->--}}

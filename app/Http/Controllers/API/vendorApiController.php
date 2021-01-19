@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Homeowner_filter;
+use App\Models\Gallery;
 
 class vendorApiController extends Controller
 {
@@ -73,6 +74,8 @@ class vendorApiController extends Controller
                 $i++;
             }
 
+    
+
             $respone = [
                 'id'             => $vendor->id,
                 'name'           => $vendor->name,
@@ -85,7 +88,11 @@ class vendorApiController extends Controller
                 'offers'         => $vendor->specialOffers->makeHidden(['user_id', 'created_at', 'updated_at']),
                 'reviews'        => $reviews,
                 'working_hours'  => $vendor->days->makeHidden('pivot'),
-                'availability'   => $vendor->vendor_city->makeHidden('pivot')
+                'availability'   => $vendor->vendor_city->makeHidden('pivot'),
+                'image'          => $vendor->gallery->transform(function($gallery){
+                                    $gallery['image'] = asset('storage/gallery') . '/' . $gallery['image'];
+                                    return $gallery['image'];
+                                })
             ];
         return $this->sendResponse($respone, 'vendor profile retrieved successfully');
 
