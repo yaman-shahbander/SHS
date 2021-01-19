@@ -56,7 +56,7 @@ class vendorApiController extends Controller
         return $this->sendResponse($respone, 'vendors retrieved successfully');
     }
 
-    public function profile(Request $request) {
+    public function profile(Request $request) { // for homeOwners
         $vendorID = $request->id;
         $respone = [];
         $reviewsHiddenColumns = ['custom_fields', 'media', 'has_media'];
@@ -97,6 +97,8 @@ class vendorApiController extends Controller
         return $this->sendResponse($respone, 'vendor profile retrieved successfully');
 
     }
+
+    
 } 
 
 

@@ -24,7 +24,7 @@ use App\Duration;
 use App\Models\specialOffers;
 use App\Balance;
 use App\Models\Day;
-
+use App\Models\Message;
 /**
  * Class User
  * @package App\Models
@@ -198,10 +198,10 @@ class User extends Authenticatable implements HasMedia
      **/
 
     
-    public function messages()
-    {
-        return $this->hasMany(\App\Models\Message::class, 'sender_id', 'id');
-    }
+    // public function messages()
+    // {
+    //     return $this->hasMany(\App\Models\Message::class, 'sender_id', 'id');
+    // }
     public function vendors_sugested()
     {
         return $this->hasMany(vendors_suggested::class, 'user_id', 'id');
@@ -325,6 +325,11 @@ class User extends Authenticatable implements HasMedia
    public function gallery()
    {
        return $this->hasMany(\App\Models\Gallery::class, 'user_id');
+   }
+
+   public function messages()
+   {
+       return $this->hasMany(Message::class, 'to_id');
    }
 
     //    public function setGalleryAPI()
