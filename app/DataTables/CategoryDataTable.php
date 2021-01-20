@@ -60,6 +60,11 @@ class CategoryDataTable extends DataTable
 
             ],
             [
+                'data' => 'name_en',
+                'title' => trans('lang.category_name'),
+
+            ],
+            [
                 'data' => 'image',
                 'title' => trans('lang.category_image'),
                 'searchable' => false, 'orderable' => false, 'exportable' => false, 'printable' => false,

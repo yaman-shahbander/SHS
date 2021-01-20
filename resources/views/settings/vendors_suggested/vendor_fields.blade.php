@@ -105,7 +105,18 @@
         </div>
     </div>
     <div class="row">
-        <!-- phone Fielad-->
+        <!-- Delegate Fielad-->
+        <div class="form-group row col-md-6">
+            {!! Form::label('delegate', 'Delegates', ['class' => 'col-3 control-label ']) !!}
+            <div class="col-md-9">
+                <select name="delegate" id="delegate" aria-controls="dataTableBuilder" class="form-control form-control-sm">
+                    @foreach($delegates as $delegate)
+                        <option value="{{ $delegate->id }}">{{ $delegate->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        <!-- Delegate Fielad-->
         <div class="form-group row col-md-6">
             {!! Form::label('delegate', 'Delegates', ['class' => 'col-3 control-label ']) !!}
             <div class="col-md-9">
