@@ -23,7 +23,6 @@ class VendorSuggestedDataTable extends DataTable
      */
     public function dataTable($query)
     {
-
         $dataTable = new EloquentDataTable($query);
         $columns = array_column($this->getColumns(), 'data');
         return $dataTable
@@ -123,7 +122,7 @@ class VendorSuggestedDataTable extends DataTable
             ]
         ];
 
-        $hasCustomField = in_array(User::class, setting('custom_field_models',[]));
+        $hasCustomField = in_array(vendors_suggested::class, setting('custom_field_models',[]));
         if ($hasCustomField) {
             $customFieldsCollection = CustomField::where('custom_field_model', vendors_suggested::class)->where('in_table', '=', true)->get();
             foreach ($customFieldsCollection as $key => $field) {

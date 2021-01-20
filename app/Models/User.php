@@ -79,7 +79,8 @@ class User extends Authenticatable implements HasMedia
         'duration_id',
         'start_date',
         'expire',
-        'balance_id'
+        'balance_id',
+        'delegate_id'
     ];
     /**
      * The attributes that should be casted to native types.
@@ -299,6 +300,9 @@ class User extends Authenticatable implements HasMedia
 
     public function Balance() {
         return $this->belongsTo(Balance::class, 'balance_id')->select(['id', 'balance']);
+    }
+    public function delegate() {
+        return $this->belongsTo(Delegate::class, 'delegate_id');
     }
 
     public function FromUserName() {

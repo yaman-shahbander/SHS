@@ -40,4 +40,8 @@ class Delegate extends Model
     {
         return $this->morphMany('App\Models\Discountable', 'discountable');
     }
+
+    public function Userdelegate() {
+        return $this->hasOne(User::class, 'delegate_id');
+      }
 }
