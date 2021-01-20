@@ -288,11 +288,8 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
     Route::get('/transferHistory/{id}', 'TransferTransactionController@transactionHistory');
     Route::get('user/profile', 'UserController@userprofile')->name('user.profile');
     Route::resource('/notification', 'NotificationController');
-
-
-
-
-
+    Route::get('/fee', 'VendorController@featuredfeeFunction')->name('vendor.fee');
+    Route::post('/feeSave', 'VendorController@savefeeFunction')->name('fee.save');
 
 
 
