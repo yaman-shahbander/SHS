@@ -568,6 +568,7 @@ class UserAPIController extends Controller
         // 'reviews'         => ($vendor->clientsAPI)->transform(function($q){
         //     return $q->select(['name', 'description'])->get();
         // })
+
         public function vendorprofile(Request $request) { //for vendor screens
             $id = $request->id;
             $vendor = User::find($id);
@@ -583,7 +584,8 @@ class UserAPIController extends Controller
                                         'description'=>$q->pivot->description,
                                         'image'=>$q->getFirstMediaUrl('avatar','icon'),
                                     ];
-                                })
+                                }),
+                'offers'          => $vendor->specialOffers->makeHidden(['user_id', 'created_at', 'updated_at'])
             ];
   
             return $response;
