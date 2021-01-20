@@ -7,9 +7,12 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Homeowner_filter;
 use App\Models\Gallery;
+use App\Balance;
+use App\subCategory;
 
 class vendorApiController extends Controller
 {
+    
     public function index(Request $request) {
         $id = $request->id; //subcategory id
 
@@ -19,28 +22,43 @@ class vendorApiController extends Controller
 
         $respone = [];
 
+        $maxBalance = 0;
+        
+        $maxBalanceId;
+
+        $Allvendors = User::whereHas('subcategories', function($query) use ($id) {
+            $query->where('subcategory_id', $id);
+        })->get();
+
+        
+        foreach($Allvendors as $vendor) // maxBalanceId
+            if ($vendor->Balance->balance > $maxBalance) {
+                $maxBalance   = $vendor->Balance->balance;
+                $maxBalanceId = $vendor->Balance->id;
+            }
+
+        $featuredVendor = User::where('balance_id', $maxBalanceId)->get(); 
+
         if ($userSetting->vendor_filter == 2) { // Availibility first
 
-            $vendors = User::whereHas('subcategories', function($query) use ($id) {
+            $vendorsAvailability = User::whereHas('subcategories', function($query) use ($id) {
                 $query->where('subcategory_id', $id);
             })->orderBy('status_id')->get();
 
+            $vendors = $featuredVendor->merge($vendorsAvailability);
+
         } else if ($userSetting->vendor_filter == 1) { // Vendors with special offers first
-
-            $Allvendors = User::whereHas('subcategories', function($query) use ($id) {
-                    $query->where('subcategory_id', $id);
-                })->get();
-
+            
             $vendorsSpecialOffers = User::whereHas('specialOffers', function($query) use ($id) {
                 $query->where('subcategory_id', $id);
                 })->get();
 
-            $vendors = $vendorsSpecialOffers->merge($Allvendors);
+            $vendors = $featuredVendor->merge($vendorsSpecialOffers);
+
+            $vendors = $vendors->merge($Allvendors);
 
         }
 
-        
-        
         $i = 0;
         foreach($vendors as $vendor) {
             $respone[$i] = [
@@ -49,14 +67,28 @@ class vendorApiController extends Controller
                 'email'         => $vendor->email,
                 'rating'        => getRating($vendor),
                 'description'   => $vendor->description,
-                'avatar'   => $vendor->getFirstMediaUrl('avatar','icon')
+                'avatar'        => $vendor->getFirstMediaUrl('avatar','icon')
             ];
             $i++;
         }
         return $this->sendResponse($respone, 'vendors retrieved successfully');
     }
 
-    public function profile(Request $request) {
+    public function vendorFeefunc(Request $request) {
+        $featuredVendor   = User::find($request->id);
+
+        $featuredVendorBalance = $featuredVendor->Balance->balance;
+
+        $featuredVendorBalance -= 10;
+
+        Balance::where('id', $featuredVendor->Balance->id)->update([
+            'balance' => $featuredVendorBalance]);
+
+        return $this->sendResponse($featuredVendorBalance, 'Fee subtracted successfully');;
+
+    }
+
+    public function profile(Request $request) { // for homeOwners
         $vendorID = $request->id;
         $respone = [];
         $reviewsHiddenColumns = ['custom_fields', 'media', 'has_media'];
@@ -97,6 +129,8 @@ class vendorApiController extends Controller
         return $this->sendResponse($respone, 'vendor profile retrieved successfully');
 
     }
+
+    
 } 
 
 
