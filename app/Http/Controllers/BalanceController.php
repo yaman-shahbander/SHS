@@ -154,9 +154,8 @@ class BalanceController extends Controller
      */
     public function update($id ,Request $request)
     {
-        $balance_id = User::find($id)->balance_id;
-
-        $balance = $this->balanceRepository->findWithoutFail($balance_id);
+        
+        $balance = $this->balanceRepository->findWithoutFail($id);
 
         if (empty($balance)) {
             Flash::error('balance not found');
@@ -166,10 +165,10 @@ class BalanceController extends Controller
         $input = $request->all();
 
         $input['balance'] = $input['balance'];
-
+        
         try {
 
-            $balance = $this->balanceRepository->update($input, $balance_id);
+            $balance = $this->balanceRepository->update($input, $id);
 
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
@@ -199,13 +198,13 @@ class BalanceController extends Controller
 
     public function addBalance($id) {
         $balance_id = User::find($id)->balance_id;
-
+        
         $user_name = User::find($id)->name;
-
+        
         $balance = $this->balanceRepository->findWithoutFail($balance_id);
 
-
         if (empty($balance)) {
+            
             Flash::error(__('Balance Not found', ['operator' => __('lang.category')]));
 
             return redirect(route('balance.index'));
@@ -221,9 +220,7 @@ class BalanceController extends Controller
     }
 
     public function balanceaddUpdate($id ,Request $request) {
-        $balance_id = User::find($id)->balance_id;
-
-        $balance = $this->balanceRepository->findWithoutFail($balance_id); 
+        $balance = $this->balanceRepository->findWithoutFail($id); 
 
         if (empty($balance)) {
             Flash::error('balance not found');
@@ -236,7 +233,7 @@ class BalanceController extends Controller
 
         try {
 
-            $balance = $this->balanceRepository->update($input, $balance_id);
+            $balance = $this->balanceRepository->update($input, $id);
 
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());

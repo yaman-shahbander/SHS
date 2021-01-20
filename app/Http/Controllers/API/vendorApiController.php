@@ -12,6 +12,7 @@ use App\subCategory;
 
 class vendorApiController extends Controller
 {
+    
     public function index(Request $request) {
         $id = $request->id; //subcategory id
 
@@ -29,13 +30,14 @@ class vendorApiController extends Controller
             $query->where('subcategory_id', $id);
         })->get();
 
+        
         foreach($Allvendors as $vendor) // maxBalanceId
             if ($vendor->Balance->balance > $maxBalance) {
                 $maxBalance   = $vendor->Balance->balance;
                 $maxBalanceId = $vendor->Balance->id;
             }
 
-        $featuredVendor = User::where('balance_id', $maxBalanceId)->get();    
+        $featuredVendor = User::where('balance_id', $maxBalanceId)->get(); 
 
         if ($userSetting->vendor_filter == 2) { // Availibility first
 
@@ -57,8 +59,6 @@ class vendorApiController extends Controller
 
         }
 
-        
-        
         $i = 0;
         foreach($vendors as $vendor) {
             $respone[$i] = [
@@ -72,6 +72,20 @@ class vendorApiController extends Controller
             $i++;
         }
         return $this->sendResponse($respone, 'vendors retrieved successfully');
+    }
+
+    public function vendorFeefunc(Request $request) {
+        $featuredVendor   = User::find($request->id);
+
+        $featuredVendorBalance = $featuredVendor->Balance->balance;
+
+        $featuredVendorBalance -= 10;
+
+        Balance::where('id', $featuredVendor->Balance->id)->update([
+            'balance' => $featuredVendorBalance]);
+
+        return $this->sendResponse($featuredVendorBalance, 'Fee subtracted successfully');;
+
     }
 
     public function profile(Request $request) { // for homeOwners

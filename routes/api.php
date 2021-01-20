@@ -110,6 +110,9 @@ Route::resource('specialOffers', 'API\SpecialOffersAPIController');
 Route::post('vendorLocation', 'API\GmapLocationAPIController@VendorMapDetails');
 //chat messaging
 Route::post('allMessages','API\ChatAPIController@history');
+//featured vendor fee API
+Route::post('vendorFee', 'API\vendorApiController@vendorFeefunc');
+
 
 Route::resource('restaurants', 'API\RestaurantAPIController');
 
