@@ -9,6 +9,7 @@ use App\Models\Homeowner_filter;
 use App\Models\Gallery;
 use App\Balance;
 use App\subCategory;
+use App\Models\Fee;
 
 class vendorApiController extends Controller
 {
@@ -79,12 +80,24 @@ class vendorApiController extends Controller
 
         $featuredVendorBalance = $featuredVendor->Balance->balance;
 
-        $featuredVendorBalance -= 10;
+        $count = count(Fee::all()); // if there is a fee value
+        if ($count > 0) { 
+
+            $value = Fee::all('fee_amount');
+
+            $value = $value[0]['fee_amount'];
+
+            $featuredVendorBalance -= $value;
+
+         } else {
+
+            $featuredVendorBalance = $featuredVendorBalance;
+         }
 
         Balance::where('id', $featuredVendor->Balance->id)->update([
             'balance' => $featuredVendorBalance]);
 
-        return $this->sendResponse($featuredVendorBalance, 'Fee subtracted successfully');;
+        return $this->sendResponse($featuredVendorBalance, 'Fee subtracted successfully');
 
     }
 

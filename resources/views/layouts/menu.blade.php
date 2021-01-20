@@ -265,7 +265,7 @@
 @can('country.index')
     <li class="nav-item has-treeview {{ Request::is('country*') || Request::is('City*') ? 'menu-open' : '' }}">
         <a href="#" class="nav-link {{ Request::is('City*') || Request::is('country*') ? 'active' : '' }}"> @if($icons)
-                <i class="nav-icon fa fa-support"></i>@endif
+                <i class="nav-icon fa fa-flag"></i>@endif
             <p>country<i class="right fa fa-angle-left"></i>
             </p>
         </a>
@@ -274,14 +274,14 @@
                 @can('country.index')
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('country*') ? 'active' : '' }}" href="{!! route('country.index') !!}">@if($icons)
-                            <i class="nav-icon fa fa-folder"></i>@endif<p>Countries</p></a>
+                            <i class="nav-icon fa fa-flag"></i>@endif<p>Countries</p></a>
                 </li>
                 @endcan
 
                 @can('city.index')
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('City*') ? 'active' : '' }}" href="{!! route('city.index') !!}">@if($icons)
-                            <i class="nav-icon fa fa-question-circle"></i>@endif
+                            <i class="nav-icon fa fa-building-o"></i>@endif
                         <p>Cities</p></a>
                 </li>
                 @endcan

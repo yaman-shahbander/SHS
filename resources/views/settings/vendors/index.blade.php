@@ -142,6 +142,9 @@
                 <li class="nav-item">
                         <a class="nav-link " href="{!! route('vendors.create') !!}"><i class="fa fa-plus mr-2"></i>{{trans('lang.vendor_create')}}</a>
                 </li>
+                <li class="nav-item">
+                        <a class="nav-link " href="{!! route('vendor.fee') !!}"><i class="fa fa-plus mr-2"></i>Featured Fee</a>
+                </li>
                 @include('layouts.right_toolbar', compact('dataTable'))
             </ul>
         </div>
