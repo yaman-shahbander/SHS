@@ -8,7 +8,8 @@ class Country extends Model
 {
     public $table = 'countries';
     public $fillable = [
-        'country_name'
+        'country_name',
+        'name_en'
     ];
     public static $rules = [
         'country_name' => 'required'

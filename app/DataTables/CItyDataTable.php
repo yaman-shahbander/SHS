@@ -57,7 +57,10 @@ class CityDataTable extends DataTable
             [
                 'data' => 'city_name',
                 'title' => 'City Name',
-
+            ],
+            [
+                'data' => 'name_en',
+                'title' => 'Name En',
             ],
             [
                 'data' => 'country_id',

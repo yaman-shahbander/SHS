@@ -92,6 +92,7 @@ class CityController extends Controller
          $input = $request->all();
          $input['country_id']=$input['country'];
          $input['city_name']=$input['name'];
+         $input['name_en']=$input['name_en'];
         $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->CityRepository->model());
 
         try {
@@ -164,6 +165,7 @@ class CityController extends Controller
         $input = $request->all();
         $input['country_id']=$input['country'];
         $input['city_name']=$input['name'];
+        $input['name_en']=$input['name_en'];
 
       //  DB::table('cities')->where('id', $id)->update(['city_name' => $input['name']]);
         try {

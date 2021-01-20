@@ -1,39 +1,42 @@
 @if($customFields)
 <h5 class="col-12 pb-4">{!! trans('lang.main_fields') !!}</h5>
 @endif
-<div style="flex: 50%;max-width: 50%;padding: 0 4px;" class="column">
-<!-- Name Field -->
-<div class="form-group row ">
-  {!! Form::label('name', trans("lang.category_name"), ['class' => 'col-3 control-label text-right']) !!}
-  <div class="col-9">
-    {!! Form::text('name', Request::is('*edit') ? $country->country_name : null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder")]) !!}
-    <div class="form-text text-muted">
-      Country Name
+<div style="flex: 50%;max-width: 100%;padding: 0 4px;" class="column">
+  <div class="row">
+    <!-- Name Field -->
+    <div class="form-group row col-md-6">
+      {!! Form::label('name', trans("lang.category_name"), ['class' => 'col-3 control-label text-right']) !!}
+      <div class="col-9">
+        {!! Form::text('name', Request::is('*edit') ? $country->country_name : null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder")]) !!}
+        <div class="form-text text-muted">
+          Country Name
+        </div>
+      </div>
+    </div>
+      <!-- Name Field -->
+      <div class="form-group row col-md-6">
+      {!! Form::label('name_en', "Name En", ['class' => 'col-3 control-label text-right']) !!}
+      <div class="col-9">
+        {!! Form::text('name_en', Request::is('*edit') ? $country->country_name : null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder")]) !!}
+        <div class="form-text text-muted">
+          Country Name
+        </div>
+      </div>
     </div>
   </div>
-</div>
 
-
-<!-- Description Field -->
-<div class="form-group row " style="display:none">
-            {!! Form::label('description', trans("lang.category_description"), ['class' => 'col-3 control-label text-right']) !!}
-            <div class="col-9">
-              {!! Form::textarea('description', 'ff', ['class' => 'form-control','placeholder'=>
-               trans("lang.category_description_placeholder")  ]) !!}
-              <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
-            </div>
-          </div>
+    <div class="row">
+      <!-- Description Field -->
+      <div class="form-group row col-md-6" style="display:none">
+        {!! Form::label('description', trans("lang.category_description"), ['class' => 'col-3 control-label text-right']) !!}
+        <div class="col-9">
+          {!! Form::textarea('description', 'ff', ['class' => 'form-control','placeholder'=>
+          trans("lang.category_description_placeholder")  ]) !!}
+          <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
         </div>
-
-
+      </div>
+    </div>
 </div>
-@if($customFields)
-<div class="clearfix"></div>
-<div class="col-12 custom-field-container">
-  <h5 class="col-12 pb-4">{!! trans('lang.custom_field_plural') !!}</h5>
-  {!! $customFields !!}
-</div>
-@endif
 
 @prepend('scripts')
 <script type="text/javascript">

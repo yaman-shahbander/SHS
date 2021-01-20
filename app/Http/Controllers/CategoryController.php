@@ -73,6 +73,8 @@ class CategoryController extends Controller
     public function store(CreateCategoryRequest $request)
     {
         $input = $request->all();
+        $input['name']=$input['name'];
+        $input['name_en']=$input['name_en'];
         $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->categoryRepository->model());
         try {
             $category = $this->categoryRepository->create($input);
@@ -155,6 +157,8 @@ class CategoryController extends Controller
             return redirect(route('categories.index'));
         }
         $input = $request->all();
+        $input['name']=$input['name'];
+        $input['name_en']=$input['name_en'];
         $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->categoryRepository->model());
         try {
             $category = $this->categoryRepository->update($input, $id);
