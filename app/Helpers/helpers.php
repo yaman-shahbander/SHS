@@ -83,15 +83,15 @@ function getSubcategoryVendorRelationName($subcategory) {
              return $vendor->name;
 }
 ///////vendor suggested ?///////
-//function getVendorRelationName($sugvendor) {
-//    return $sugvendor->users->name;
-//}
-//function subscription_Name($sugvendor) {
-//    return $sugvendor->subscription->type;
-//}
-//function phone_suggested($sugvendor) {
-//    return $sugvendor->phone;
-//}
+function getVendorRelationName($sugvendor) {
+    return $sugvendor->name;
+}
+function subscription_Name($sugvendor) {
+    return $sugvendor->subscription->type;
+}
+function phone_suggested($sugvendor) {
+    return $sugvendor->phone;
+}
 //////// subscription ///////////
 //function subscription_type($subscription) {
 //    return $subscription->type;

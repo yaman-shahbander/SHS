@@ -9,7 +9,7 @@
                     <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-list mr-2"></i>{{trans('lang.vendor_table')}}</a>
                 </li>
                 <li class="nav-item">
-                        <a class="nav-link " href="{!! route('vendor.create') !!}"><i class="fa fa-plus mr-2"></i>{{trans('lang.vendor_create')}}</a>
+                        <a class="nav-link " href="{!! route('vendor.create') !!}"><i class="fa fa-plus mr-2"></i>Create Suggested Vendor</a>
                 </li>
                 @include('layouts.right_toolbar', compact('dataTable'))
             </ul>

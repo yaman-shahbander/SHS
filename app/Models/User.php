@@ -24,7 +24,7 @@ use App\Duration;
 use App\Models\specialOffers;
 use App\Balance;
 use App\Models\Day;
-
+use App\Models\Message;
 /**
  * Class User
  * @package App\Models
@@ -79,7 +79,8 @@ class User extends Authenticatable implements HasMedia
         'duration_id',
         'start_date',
         'expire',
-        'balance_id'
+        'balance_id',
+        'delegate_id'
     ];
     /**
      * The attributes that should be casted to native types.
@@ -198,10 +199,10 @@ class User extends Authenticatable implements HasMedia
      **/
 
     
-    public function messages()
-    {
-        return $this->hasMany(\App\Models\Message::class, 'sender_id', 'id');
-    }
+    // public function messages()
+    // {
+    //     return $this->hasMany(\App\Models\Message::class, 'sender_id', 'id');
+    // }
     public function vendors_sugested()
     {
         return $this->hasMany(vendors_suggested::class, 'user_id', 'id');
@@ -298,7 +299,10 @@ class User extends Authenticatable implements HasMedia
     }
 
     public function Balance() {
-        return $this->belongsTo(Balance::class, 'balance_id');
+        return $this->belongsTo(Balance::class, 'balance_id')->select(['id', 'balance']);
+    }
+    public function delegate() {
+        return $this->belongsTo(Delegate::class, 'delegate_id');
     }
 
     public function FromUserName() {
@@ -325,6 +329,11 @@ class User extends Authenticatable implements HasMedia
    public function gallery()
    {
        return $this->hasMany(\App\Models\Gallery::class, 'user_id');
+   }
+
+   public function messages()
+   {
+       return $this->hasMany(Message::class, 'to_id');
    }
 
     //    public function setGalleryAPI()

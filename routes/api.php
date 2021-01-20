@@ -70,6 +70,8 @@ Route::prefix('vendor')->group(function () {
     Route::resource('gmapLocation', 'API\GmapLocationAPIController');
     //save photo profile
     Route::post('photoProfile', 'API\Manager\UserAPIController@backgroundPic');
+    //vendor profile
+    Route::post('vendorProfile', 'API\Manager\UserAPIController@vendorprofile');
 });
 
 
@@ -106,6 +108,10 @@ Route::resource('filter', 'API\FilterVendorsAPIController');
 Route::resource('specialOffers', 'API\SpecialOffersAPIController');
 //vendor map location
 Route::post('vendorLocation', 'API\GmapLocationAPIController@VendorMapDetails');
+//chat messaging
+Route::post('allMessages','API\ChatAPIController@history');
+//featured vendor fee API
+Route::post('vendorFee', 'API\vendorApiController@vendorFeefunc');
 
 
 Route::resource('restaurants', 'API\RestaurantAPIController');

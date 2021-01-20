@@ -28,6 +28,7 @@ use App\subCategory;
  use Cornford\Googlmapper\Facades\MapperFacade as Mapper;
  use Illuminate\Support\Facades\Route;
 use App\Models\GmapLocation;
+use App\Models\Fee;
 
 class VendorController extends Controller
 {
@@ -238,8 +239,33 @@ class VendorController extends Controller
         return redirect(route('vendors.index'));
     }
 
-    public function show_vendor()
-    {
-
+    public function featuredfeeFunction() {
+        $count = count(Fee::all()); // if there is an old fee value
+        if ($count > 0) { 
+            $value = Fee::all('fee_amount');
+            $value = $value[0]['fee_amount'];
+            return view('settings.vendors.featuredVendorfee')->with('count', $count)
+            ->with('value', $value);
+         } else {
+            return view('settings.vendors.featuredVendorfee')->with('count', $count);
+         }
     }
+
+    public function savefeeFunction(Request $request) {
+        $check = Fee::all();
+        if(count($check) == 0) {
+            $newfee = new Fee;
+            $newfee->fee_amount = $request->fee_amount;
+            $newfee->save();
+            Flash::success('Fee saved successfully.');
+            return redirect(route('vendors.index'));
+        } else {
+            Fee::first()->update([
+                'fee_amount' => $request->fee_amount
+            ]);
+            Flash::success('Fee updated successfully.');
+            return redirect(route('vendors.index'));
+        }
+    }
+
 }

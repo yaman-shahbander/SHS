@@ -12,6 +12,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Prettus\Validator\Exceptions\ValidatorException;
 use Flash;
+use App\Country;
+use App\Delegate;
+use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 
@@ -20,7 +23,7 @@ class VendorsSuggestedController extends Controller
     /** @var  VendorSuggRepository */
 
     private $vendorSugRepository;
-
+    private $roleRepository;
 
 
 
@@ -29,11 +32,13 @@ class VendorsSuggestedController extends Controller
      */
     private $customFieldRepository;
 
-    public function __construct(VendorSuggRepository $vendorSugRepo,
+    public function __construct(VendorSuggRepository $vendorSugRepo,RoleRepository $roleRepo,
                                 CustomFieldRepository $customFieldRepo)
     {
         parent::__construct();
         $this->vendorSugRepository = $vendorSugRepo;
+        $this->roleRepository = $roleRepo;
+
         $this->customFieldRepository = $customFieldRepo;
     }
     /**
@@ -67,28 +72,17 @@ class VendorsSuggestedController extends Controller
 
     public function store(Request $request)
     {
-
-
         $input = $request->all();
         $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->vendorSugRepository->model());
-
-
         $input['user_id']=auth()->user()->id;
-        //dd($input);
-
         try {
             $vendor = $this->vendorSugRepository->create($input);
             $vendor->customFieldsValues()->createMany(getCustomFieldsValues($customFields, $request));
-
-
-            // event(new UserRoleChangedEvent($user));
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }
-
         Flash::success('saved successfully.');
-
-        return redirect(route('vendor.index'));
+        return redirect(route('suggested/vendor.index'));
     }
 
     /**
@@ -101,14 +95,26 @@ class VendorsSuggestedController extends Controller
     public function show($id)
     {
         $vendor = $this->vendorSugRepository->findWithoutFail($id);
-
         if (empty($vendor)) {
             Flash::error('Vendor not found');
 
             return redirect(route('vendors_suggested.index'));
         }
+        $countries=Country::all();
+        $users=User::all();
+        $delegates=Delegate::all();
+//        $cities=City::all();
+        $role = $this->roleRepository->pluck('name', 'name');
+        // $rolesSelected = $user->getRoleNames()->toArray();
 
-        return view('settings.vendors_suggested.show')->with('vendor', $vendor);
+        $rolesSelected = [];
+        return view('settings.vendors_suggested.show')
+            ->with('vendor', $vendor)
+            ->with('countries',$countries)
+            ->with('role',$role)
+            ->with('users',$users)
+            ->with('delegates',$delegates)
+            ->with('rolesSelected',$rolesSelected);
     }
     /**
      * Show the form for editing the specified Category.
@@ -169,7 +175,7 @@ class VendorsSuggestedController extends Controller
 
         Flash::success(__('lang.updated_successfully', ['operator' => __('lang.vendor')]));
 
-        return redirect(route('categories.index'));
+        return redirect(route('suggested/vendor.index'));
     }
 
     /**
@@ -196,6 +202,45 @@ class VendorsSuggestedController extends Controller
         return redirect(route('vendor.index'));
     }
 
+    public function store_vendors_suggested(Request $request)
+    {
+        dd($request->input());
+        if($request->city=="0")
+        {
+            Flash::warning('please select country and city ');
+            return redirect()->back();
+        }
+        $input = $request->all();
+        $input['city_id']=$input['city'];
+        $input['user_id']=$input['user_id'];
+        $input['roles'] = isset($input['roles']) ? $input['roles'] : [];
+        $input['password'] = Hash::make($input['password']);
+        $input['api_token'] = str_random(60);
 
+
+        // $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->userRepository->model());
+
+        try {
+            $user = $this->userRepository->create($input);
+            $role_id=DB::table('roles')->where('name',$input['roles'])->pluck('id');
+            $permissions=DB::table('role_has_permissions')->where('role_id', $role_id)->pluck('permission_id');
+            $user->syncRoles($input['roles']);
+            $user->syncPermissions($permissions);
+            // $user->customFieldsValues()->createMany(getCustomFieldsValues($customFields, $request));
+
+            if (isset($input['avatar']) && $input['avatar']) {
+                $cacheUpload = $this->uploadRepository->getByUuid($input['avatar']);
+                $mediaItem = $cacheUpload->getMedia('avatar')->first();
+                $mediaItem->copy($user, 'avatar');
+            }
+
+        } catch (ValidatorException $e) {
+            Flash::error($e->getMessage());
+        }
+
+        Flash::success('saved successfully.');
+
+        return redirect(route('users.index'));
+    }
 
 }

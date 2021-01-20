@@ -565,4 +565,30 @@ class UserAPIController extends Controller
                 return $this->sendResponse([], 'Error! background image is empty');
         }
 
+        // 'reviews'         => ($vendor->clientsAPI)->transform(function($q){
+        //     return $q->select(['name', 'description'])->get();
+        // })
+
+        public function vendorprofile(Request $request) { //for vendor screens
+            $id = $request->id;
+            $vendor = User::find($id);
+            $response = [];
+            $response = [
+                'name'            => $vendor->name,
+                'rating'          => getRating($vendor),
+                'count_reviews'   => count($vendor->clients),
+                'count_contected' => count($vendor->messages->unique('from_id')),
+                'reviews'         => ($vendor->clientsAPI)->transform(function($q){
+                                    return $q=[
+                                        'name' => $q->name,
+                                        'description'=>$q->pivot->description,
+                                        'image'=>$q->getFirstMediaUrl('avatar','icon'),
+                                    ];
+                                }),
+                'offers'          => $vendor->specialOffers->makeHidden(['user_id', 'created_at', 'updated_at'])
+            ];
+  
+            return $response;
+        }
+
 }

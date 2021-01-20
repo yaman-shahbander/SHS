@@ -265,21 +265,21 @@ class AppSettingController extends Controller
         return response()->view('vendor.notifications.sw_firebase')->header('Content-Type', 'application/javascript');
     }
 
-    // public function verifyUser($api_token)
-    // {
-    //     $user = User::where('api_token', $api_token)->first();
-    //     if(isset($user) ){
-    //         $user->is_verified = 1;
-    //         if($user->save()){
+    public function verifyUser($api_token)
+    {
+        $user = User::where('api_token', $api_token)->first();
+        if(isset($user) ){
+            $user->is_verified = 1;
+            if($user->save()){
                
-    //             $status = "Your e-mail is verified. You can now login.";
-    //             return view('verify_account')->with('status',$status);
-    //         } else {
-    //             $status = "Your e-mail is already verified. You can now login.";
-    //         }
-    //     }else{
-    //         return view('verify_account')->with('warning', "Sorry your email cannot be identified.");
-    //     }
-    //     return view('/')->with('status', $status);
-    // }
+                $status = "Your e-mail is verified. You can now login.";
+                return view('verify_account')->with('status',$status);
+            } else {
+                $status = "Your e-mail is already verified. You can now login.";
+            }
+        }else{
+            return view('verify_account')->with('warning', "Sorry your email cannot be identified.");
+        }
+        return view('/')->with('status', $status);
+    }
 }

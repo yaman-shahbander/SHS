@@ -26,9 +26,9 @@
       </ul>
     </div>
     <div class="card-body">
-      {!! Form::open(['route' => 'vendor.store']) !!}
+      {!! Form::open(['route' => 'store_vendors_suggested']) !!}
       <div class="row">
-        @include('settings.vendors_suggested.fields')
+        @include('settings.vendors_suggested.vendor_fields')
       </div>
       {!! Form::close() !!}
       <div class="clearfix"></div>
@@ -46,8 +46,5 @@
 <script src="{{asset('plugins/summernote/summernote-bs4.min.js')}}"></script>
 {{--dropzone--}}
 <script src="{{asset('plugins/dropzone/dropzone.js')}}"></script>
-<script type="text/javascript">
-    Dropzone.autoDiscover = false;
-    var dropzoneFields = [];
-</script>
+
 @endpush

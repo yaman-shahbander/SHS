@@ -21,9 +21,11 @@ Route::get('/clear-cache', function() {
     Artisan::call('route:clear');
     Artisan::call('config:clear');
     Artisan::call('view:clear');
+    
+
     return "Cache is cleared";
 });
-//Route::get('/verify/{api_token}', 'AppSettingController@verifyUser');
+Route::get('/verify/{api_token}', 'AppSettingController@verifyUser');
 
 Route::get('/logout',function (){
     return redirect('/');
@@ -249,10 +251,8 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
         'show'
     ]);
 
-    Route::resource('suggested/vendor', 'VendorsSuggestedController')->except([
-
-        'show'
-    ]);
+    Route::resource('suggested/vendor', 'VendorsSuggestedController');
+    Route::post('store_vendors_suggested','VendorsSuggestedController@store_vendors_suggested')->name('store_vendors_suggested');
     Route::resource('country', 'CountryController')->except([
         'show'
     ]);
@@ -288,11 +288,8 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
     Route::get('/transferHistory/{id}', 'TransferTransactionController@transactionHistory');
     Route::get('user/profile', 'UserController@userprofile')->name('user.profile');
     Route::resource('/notification', 'NotificationController');
-
-
-
-
-
+    Route::get('/fee', 'VendorController@featuredfeeFunction')->name('vendor.fee');
+    Route::post('/feeSave', 'VendorController@savefeeFunction')->name('fee.save');
 
 
 
