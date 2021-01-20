@@ -12,7 +12,7 @@ use DB;
 class ChatAPIController extends Controller
 {
     public function history(Request $request) {
-        $id=$request->id;
+        $id = $request->id;
         // $messages = Message::where('from_id', $request->id)->orderBy('created_at','desc')->distinct('to_id')->get();
         // $message = Message::latest()->where('from_id', 1)->get();
 //   $max_created=new dateTime();
@@ -56,21 +56,20 @@ class ChatAPIController extends Controller
         // ->groupBy('to_id')
         // ->get();
 
-        $users = DB::select( DB::raw(
-            "SELECT * FROM messages msg
+        // get all users that received/sent message from/to [Auth user]
+        $users = Message::join('users',  function ($join) {
+            $join->on('messages.from_id', '=', 'users.id')
+                ->orOn('messages.to_id', '=', 'users.id');
+        })
+            ->where('messages.from_id', $id)
+            ->orWhere('messages.to_id', $id)
+            ->orderBy('messages.created_at', 'desc')
+            ->get()
+            ->unique('id');
 
-             INNER JOIN ( 
+        
 
-                  SELECT max(created_at) created_at FROM messages GROUP BY to_id ORDER BY created_at
-
-            ) m2 
-
-            ON msg.created_at = m2.created_at
-            "
-     ) 
-  );
-
-        return $users;
+       return $users;
         // foreach($messages as $message) {
         //     $response[] = [
         //         $message

@@ -298,7 +298,7 @@ class User extends Authenticatable implements HasMedia
     }
 
     public function Balance() {
-        return $this->belongsTo(Balance::class, 'balance_id');
+        return $this->belongsTo(Balance::class, 'balance_id')->select(['id', 'balance']);
     }
 
     public function FromUserName() {
