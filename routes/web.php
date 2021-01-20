@@ -32,6 +32,8 @@ Route::get('/logout',function (){
 });
 ////////
 ///
+Route::get('/home','HomeController@index')->name('home');
+Route::post('/send-notification', 'NotificationController@store')->name('send.notification');
 
 
 /*Route::resource('chats', 'ChatController')->except([
@@ -249,10 +251,8 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
         'show'
     ]);
 
-    Route::resource('suggested/vendor', 'VendorsSuggestedController')->except([
-
-        'show'
-    ]);
+    Route::resource('suggested/vendor', 'VendorsSuggestedController');
+    Route::post('store_vendors_suggested','VendorsSuggestedController@store_vendors_suggested')->name('store_vendors_suggested');
     Route::resource('country', 'CountryController')->except([
         'show'
     ]);

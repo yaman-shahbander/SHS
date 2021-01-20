@@ -1,15 +1,11 @@
-@if($customFields)
-    <h5 class="col-12 control-label" style="margin-bottom: 20px;">{!! trans('lang.main_fields') !!}</h5>
-@endif
-
+<h5 class="col-12 pb-4">{!! trans('lang.main_fields') !!}</h5>
 <div style="flex:50%;max-width:100%;padding: 0 4px;" class="column">
     <div class="row">
         <!-- Name Field -->
         <div class="form-group col-md-6 row">
             {!! Form::label('first name', trans("lang.user_name"), ['class' => 'col-md-3 control-label']) !!}
             <div class="col-md-9">
-                {!! Form::text('name', null,  ['class' => 'form-control','placeholder'=>  trans("lang.user_name_placeholder"),'required']) !!}
-                
+                <input type="text" name="name" value="{{$vendor->name}}" class = "form-control">
             </div>
         </div>
 
@@ -76,7 +72,7 @@
         <div class="form-group col-md-6 row">
             {!! Form::label('email', trans("lang.user_email"), ['class' => 'col-3 control-label']) !!}
             <div class="col-md-9">
-                {!! Form::text('email', null,  ['class' => 'form-control','placeholder'=>  trans("lang.user_email_placeholder")]) !!}
+                <input type="text" name="email" value="{{$vendor->email}}" class = "form-control">
             </div>
         </div>
 
@@ -85,6 +81,39 @@
             {!! Form::label('password', trans("lang.user_password"), ['class' => 'col-md-3 control-label']) !!}
             <div class="col-md-9">
                 {!! Form::password('password', ['class' => 'form-control','placeholder'=>  trans("lang.user_password_placeholder")]) !!}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <!-- phone Fielad-->
+        <div class="form-group row col-md-6">
+            {!! Form::label('phone', trans("lang.user_phone"), ['class' => 'col-3 control-label ']) !!}
+            <div class="col-9">
+                <input type="text" name="phone" value="{{$vendor->phone}}" class="form-control">
+            </div>
+        </div>
+        <!-- Suggedted Vendor Field -->
+        <div class="form-group col-md-6 row">
+            {!! Form::label('name', 'Vendor', ['class' => 'col-3 control-label']) !!}
+            <div class="col-md-9">
+                <select name="user_id" id="user_id" aria-controls="dataTableBuilder" class="form-control form-control-sm">
+                    @foreach($users as $user)
+                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <!-- phone Fielad-->
+        <div class="form-group row col-md-6">
+            {!! Form::label('delegate', 'Delegates', ['class' => 'col-3 control-label ']) !!}
+            <div class="col-md-9">
+                <select name="delegate" id="delegate" aria-controls="dataTableBuilder" class="form-control form-control-sm">
+                    @foreach($delegates as $delegate)
+                        <option value="{{ $delegate->id }}">{{ $delegate->name }}</option>
+                    @endforeach
+                </select>
             </div>
         </div>
     </div>
@@ -184,13 +213,8 @@
         });
     </script>
     @endprepend
-    
 
 
-
-
-<div id="gmap" {!! $style !!}>
-    {!! Mapper::render() !!}
 </div>
 
 <!-- Submit Field -->

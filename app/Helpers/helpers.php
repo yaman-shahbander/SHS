@@ -32,11 +32,11 @@ function distance($lat1, $lon1, $lat2, $lon2) {
       $dist = rad2deg($dist);
 
       $miles = $dist * 60 * 1.1515;
-      
+
       return ($miles * 1.609344);
     }
 
-} 
+}
 
  function getBalanceName($User) {
     return $User->Balance->balance;
@@ -93,26 +93,26 @@ function phone_suggested($sugvendor) {
     return $sugvendor->phone;
 }
 //////// subscription ///////////
-function subscription_type($subscription) {
-    return $subscription->type;
-}
-function subscription_duration($subscription) {
-    return $subscription->duration;
-}
-function subscription_discount($subscription) {
-    return $subscription->discount;
-}
+//function subscription_type($subscription) {
+//    return $subscription->type;
+//}
+//function subscription_duration($subscription) {
+//    return $subscription->duration;
+//}
+//function subscription_discount($subscription) {
+//    return $subscription->discount;
+//}
 
 ////// delegate////////
-function delegateName($delegate) {
-    return $delegate->name;
-}
-function delegatePhone($delegate) {
-    return $delegate->phone;
-}
-function delegateBalance($delegate) {
-    return $delegate->balance;
-}
+//function delegateName($delegate) {
+//    return $delegate->name;
+//}
+//function delegatePhone($delegate) {
+//    return $delegate->phone;
+//}
+//function delegateBalance($delegate) {
+//    return $delegate->balance;
+//}
 //////
 function getCItyRelationName($city) {
     return $city->countries->country_name;

@@ -324,7 +324,7 @@ class UserController extends Controller
 
         }
         else
-    $cities=[];
+        $cities=[];
         $style="";
             return view('settings.users.edit')
                 ->with('user', $user)->with("role", $role)

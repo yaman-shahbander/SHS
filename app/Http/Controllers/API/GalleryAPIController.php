@@ -38,28 +38,35 @@ class GalleryAPIController extends Controller
      */
     public function index(Request $request)
     {
-        try{
-            $this->galleryRepository->pushCriteria(new RequestCriteria($request));
-            $this->galleryRepository->pushCriteria(new LimitOffsetCriteria($request));
-        } catch (RepositoryException $e) {
-            return $this->sendError($e->getMessage());
-        }
-        $galleries = $this->galleryRepository->all();
+        // try{
+        //     $this->galleryRepository->pushCriteria(new RequestCriteria($request));
+        //     $this->galleryRepository->pushCriteria(new LimitOffsetCriteria($request));
+        // } catch (RepositoryException $e) {
+        //     return $this->sendError($e->getMessage());
+        // }
+    
+        $images = $this->galleryRepository->where('user_id', $request->id)->get();
 
-        
-       
-        $new_galleries = $galleries->toArray();
-        
-        $galleries_final = []; 
-        foreach($new_galleries as $new_gallery)
-        {
-            if($new_gallery['approved'] == 1)
-            {
-                array_push($galleries_final,$new_gallery);
-            }
+        $response = [];
+        foreach($images as $image) {
+            $response[] = [
+                'image'   => asset('storage/gallery') . '/' . $image->image,
+                'user_id' => $image->user_id
+            ];
         }
+       
+        // $new_galleries = $galleries->toArray();
         
-        return $this->sendResponse($galleries_final, 'Galleries retrieved successfully');
+        // $galleries_final = []; 
+        // foreach($new_galleries as $new_gallery)
+        // {
+        //     if($new_gallery['approved'] == 1)
+        //     {
+        //         array_push($galleries_final,$new_gallery);
+        //     }
+        // }
+        
+        return $this->sendResponse($response, 'Galleries retrieved successfully');
        
     }
 

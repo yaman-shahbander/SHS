@@ -1,7 +1,7 @@
 {!! Form::open(['route' => ['vendor.destroy', $id], 'method' => 'delete']) !!}
 <div class='btn-group btn-group-sm'>
-    {{--<a data-toggle="tooltip" data-placement="bottom" title="{{trans('lang.user_edit')}}" href="{{ route('users.show', $id) }}" class='btn btn-link'>--}}
-        {{--<i class="fa fa-eye"></i> </a>--}}
+    <a data-toggle="tooltip" data-placement="bottom" title="User approve" href="{{ route('vendor.show', $id) }}" class='btn btn-link'>
+        <i class="fa fa-user"></i> </a>
 
     {!! Form::button('<i class="fa fa-trash"></i>', [
     'data-toggle' => 'tooltip',
@@ -12,6 +12,7 @@
     'onclick' => "swal({title: ".trans('lang.error').", confirmButtonText: ".trans('lang.ok').",
                             text: data.message,type: 'error', confirmButtonClass: 'btn-danger'});"
     ]) !!}
+    
 
 
 

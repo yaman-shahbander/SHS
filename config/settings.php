@@ -41,5 +41,19 @@ return [
 	// If you want to use custom column names in database store you could 
 	// set them in this configuration
 	'keyColumn' => 'key',
-	'valueColumn' => 'value'
+	'valueColumn' => 'value',
+
+
+
+	////firebase config
+	'firebase_api_key'=>'AIzaSyC1GWjZ1Irhj7_OB4Ob--_a_rcP0xnk1Js',
+	'firebase_auth_domain'=> 'shs-chat-c425e.firebaseapp.com',
+	'firebase_database_url'=> 'https://shs-chat-c425e-default-rtdb.firebaseio.com/',
+	'firebase_project_id'=> 'shs-chat-c425e',
+	'firebase_storage_bucket'=> 'shs-chat-c425e.appspot.com',
+	'firebase_messaging_sender_id'=> '963124896977',
+	'firebase_app_id'=> '1:963124896977:web:016e3a562edc51652211f0',
+	'firebase_measurement_id'=> 'G-2MVVRHDF8M',
+
+
 ];

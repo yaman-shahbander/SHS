@@ -9,9 +9,13 @@ class Notification extends Model
     /**
      * @var array
      */
-    protected $fieldSearchable = [
+    protected $fillable = [
         'title',
         'body',
-        
+        'type',
+        'country',
+        'category',
+        'subcategory',
+        'city'
     ];
 }
