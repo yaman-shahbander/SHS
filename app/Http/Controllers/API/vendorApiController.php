@@ -10,7 +10,8 @@ use App\Models\Gallery;
 use App\Balance;
 use App\subCategory;
 use App\Models\Fee;
-
+use App\Models\Category;
+use App\Models\Day;
 class vendorApiController extends Controller
 {
     
@@ -141,6 +142,20 @@ class vendorApiController extends Controller
             ];
         return $this->sendResponse($respone, 'vendor profile retrieved successfully');
 
+    }
+
+    public function categorySubCatFunc(Request $request) {
+        $hiddenElems = ['created_at', 'updated_at','custom_fields','has_media']; 
+
+        $categories  = Category::with('subCategory')->get()->makeHidden($hiddenElems);
+
+        return $this->sendResponse($categories->toArray(), 'Categories with subcategories retrieved successfully!');
+    }
+
+    public function workHours(Request $request) {
+        $Days = Day::select(['id', 'name_en', 'name_ar'])->get();
+
+        return $this->sendResponse($Days->toArray(), 'Days retrieved successfully!');
     }
 
     

@@ -112,6 +112,10 @@ Route::post('vendorLocation', 'API\GmapLocationAPIController@VendorMapDetails');
 Route::post('allMessages','API\ChatAPIController@history');
 //featured vendor fee API
 Route::post('vendorFee', 'API\vendorApiController@vendorFeefunc');
+//categories with subcategories API
+Route::post('categoriesVendor', 'API\vendorApiController@categorySubCatFunc');
+//Woring hours for a new vendor
+Route::post('workHoursDays', 'API\vendorApiController@workHours');
 
 
 Route::resource('restaurants', 'API\RestaurantAPIController');

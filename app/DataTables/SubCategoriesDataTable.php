@@ -66,6 +66,11 @@ class SubCategoriesDataTable extends DataTable
 
             ],
             [
+                'data' => 'name_en',
+                'title' => 'Name En',
+
+            ],
+            [
                 'data' => 'Parent Category',
                 'title' => 'Parent Category',
                 'searchable' => false, 'orderable' => false, 'exportable' => false, 'printable' => false,

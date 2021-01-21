@@ -38,6 +38,7 @@ class Category extends Model implements HasMedia
 
     public $fillable = [
         'name',
+        'name_en',
         'description'
     ];
 
@@ -59,6 +60,7 @@ class Category extends Model implements HasMedia
      */
     public static $rules = [
         'name' => 'required',
+        'name_en' => 'required',
         'description' => 'required'
     ];
 

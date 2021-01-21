@@ -20,11 +20,13 @@ class subCategory extends Model implements HasMedia
     public $table = 'sub_categories';
     public $fillable = [
         'name',
+        'name_en',
         'description',
         'category_id'
     ];
     public static $rules = [
         'name' => 'required',
+        'name_en' => 'required',
         'description' => 'required'
     ];
 
