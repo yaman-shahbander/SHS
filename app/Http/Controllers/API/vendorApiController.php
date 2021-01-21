@@ -12,6 +12,7 @@ use App\subCategory;
 use App\Models\Fee;
 use App\Models\Category;
 use App\Models\Day;
+
 class vendorApiController extends Controller
 {
     
@@ -145,19 +146,75 @@ class vendorApiController extends Controller
     }
 
     public function categorySubCatFunc(Request $request) {
-        $hiddenElems = ['created_at', 'updated_at','custom_fields','has_media']; 
 
-        $categories  = Category::with('subCategory')->get()->makeHidden($hiddenElems);
+        $lang = false;
+        if($request->device_code) {
+            $vendor = User::where('device_code', $request->device_code)->first();
+            $l=$vendor->language;
+            $arr=[
+                'lang'=>$vendor->language,
+                'bool'=>$lang
+            ];
+            if(!empty($vendor)) {
+                $hiddenElems = ['created_at', 'updated_at','custom_fields','has_media']; 
+                try {
+                    $categories  = Category::with('subCategory')->get(['id', 'name_'.$vendor->language, 'description'])->makeHidden($hiddenElems);
+                    $lang = true;
+                } catch (\Exception  $e) {
+                    $categories  = Category::with('subCategory')->get()->makeHidden($hiddenElems);
+                    $lang = false;
+                }
 
-        return $this->sendResponse($categories->toArray(), 'Categories with subcategories retrieved successfully!');
+                $respone=[];
+                    foreach($categories as $category){
+                            $respone[]=[
+                                 'id'    => $category->id,
+                                 'name'  => $lang ? 
+                                 $category['name_'. $vendor->language] : $category['name'],
+                                 'description'    => $category->description,
+                                 'sub_categories' => $category->subCategoryAPI->transform(function($q) use($arr){
+                                  
+                                    return $arr['bool']? $q->only(['id','name_'.$arr['lang']]):$q->only(['id','name']);
+                                 })
+                    ];
+
+                }
+        
+                return $this->sendResponse($respone, 'Categories with subcategories retrieved successfully!');
+                 } else {
+                    return $this->sendResponse([], 'User not found!');
+                 }
+            }  else {
+                return $this->sendResponse([], 'Error!');
+            }
     }
+
+        
 
     public function workHours(Request $request) {
-        $Days = Day::select(['id', 'name_en', 'name_ar'])->get();
+        if($request->device_code) {
+            $vendor = User::where('device_code', $request->device_code)->first();
+           if(!empty($vendor)) {
 
-        return $this->sendResponse($Days->toArray(), 'Days retrieved successfully!');
+
+            try {
+                $Days  = Day::all(['id', 'name_'.$vendor->language]);
+            } 
+            catch (\Exception  $e) {
+                $Days  = Day::all(['id', 'name_en']);
+            }
+          
+            $respone[]=$Days;
+                return $this->sendResponse($respone, 'days retrieved successfully!');
+            } else {
+               return $this->sendResponse([], 'User not found!');
+            }
+       } 
+        else {
+           return $this->sendResponse([], 'Error!');
+       }
+        
     }
-
     
 } 
 

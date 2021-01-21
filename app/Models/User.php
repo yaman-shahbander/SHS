@@ -322,6 +322,9 @@ class User extends Authenticatable implements HasMedia
         return $this->belongsToMany(Day::class,'days_vendors','vendor_id','day_id')->select(['name_en', 'name_ar','days_vendors.start', 'days_vendors.end'])
          ->withTimestamps();
    }
+   public function daysApi() {
+    return $this->belongsToMany(Day::class,'days_vendors','vendor_id','day_id')->withPivot('start');
+}
 
    function vendor_city() {
        return $this->belongsToMany(City::class, 'vendors_cities', 'vendor_id', 'city_id')->select(['cities.id', 'cities.city_name'])->withTimeStamps();
