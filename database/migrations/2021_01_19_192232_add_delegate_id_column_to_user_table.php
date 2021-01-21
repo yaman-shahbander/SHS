@@ -14,7 +14,7 @@ class AddDelegateIdColumnToUserTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->bigInteger('delegate_id')->unsigned()->nullable();
+            $table->Integer('delegate_id')->unsigned()->nullable();
             $table->foreign('delegate_id')->references('id')->on('delegates')->onDelete('set null');
 
         });
