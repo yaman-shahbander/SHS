@@ -22,6 +22,7 @@ class SubCategoriesRepository extends BaseRepository
      */
     protected $fieldSearchable = [
         'name',
+        'name_en',
         'description',
         'category_id'
     ];

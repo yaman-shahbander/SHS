@@ -10,11 +10,12 @@ class city extends Model
 
     public $fillable = [
         'city_name',
+        'name_en',
         'country_id'
     ];
 
     public static $rules = [
-        'name' => 'required'
+        'name' => 'required',
     ];
 
     public function customFieldsValues()

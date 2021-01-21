@@ -57,6 +57,11 @@ class CountryDataTable extends DataTable
 
             ],
             [
+                'data' => 'name_en',
+                'title' => 'Name En',
+
+            ],
+            [
                 'data' => 'updated_at',
                 'title' => trans('lang.category_updated_at'),
                 'searchable' => false,

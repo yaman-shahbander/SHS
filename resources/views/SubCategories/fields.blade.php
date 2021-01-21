@@ -1,7 +1,30 @@
-<div style="flex: 50%;max-width: 50%;padding: 0 4px;" class="column">
-
+<div style="flex: 50%;max-width:100%;padding: 0 4px;" class="column">
+     
+      <div class="row">
+          <!-- Name Field -->
+          <div class="form-group row col-md-6">
+            {!! Form::label('name', trans("lang.category_name"), ['class' => 'col-3 control-label text-right']) !!}
+            <div class="col-9">
+              {!! Form::text('name', null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder")]) !!}
+              <div class="form-text text-muted">
+                {{ trans("lang.category_name_help") }}
+              </div>
+            </div>
+          </div>
+          <!-- Name Field -->
+          <div class="form-group row col-md-6">
+            {!! Form::label('name_en', "NameEn", ['class' => 'col-3 control-label text-right']) !!}
+            <div class="col-9">
+              {!! Form::text('name_en', null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder")]) !!}
+              <div class="form-text text-muted">
+                {{ trans("lang.category_name_help") }}
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="row">
         <!-- Select Category-->
-        <div class="form-group row ">
+        <div class="form-group row col-md-6">
             {!! Form::label('name', "Category", ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
             <select name="category" aria-controls="dataTableBuilder" class="form-control form-control-sm">
@@ -15,20 +38,8 @@
                 </div>
             </div>
         </div>
-
-          <!-- Name Field -->
-          <div class="form-group row ">
-            {!! Form::label('name', trans("lang.category_name"), ['class' => 'col-3 control-label text-right']) !!}
-            <div class="col-9">
-              {!! Form::text('name', null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder")]) !!}
-              <div class="form-text text-muted">
-                {{ trans("lang.category_name_help") }}
-              </div>
-            </div>
-          </div>
-
-          <!-- Description Field -->
-          <div class="form-group row ">
+        <!-- Description Field -->
+        <div class="form-group row col-md-6">
             {!! Form::label('description', trans("lang.category_description"), ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
               {!! Form::textarea('description', null, ['class' => 'form-control','placeholder'=>
@@ -37,12 +48,12 @@
             </div>
           </div>
         </div>
-        <div style="flex: 50%;max-width: 50%;padding: 0 4px;" class="column">
-
-          <!-- Image Field -->
-          <div class="form-group row">
-            {!! Form::label('image', trans("lang.category_image"), ['class' => 'col-3 control-label text-right']) !!}
-            <div class="col-9">
+      </div>   
+</div>
+ <!-- Image Field -->
+ <div class="form-group row">
+            {!! Form::label('image', trans("lang.category_image"), ['class' => 'col-2 control-label text-right']) !!}
+            <div class="col-10">
               <div style="width: 100%" class="dropzone image" id="image" data-field="image">
                 <input type="hidden" name="image">
               </div>
@@ -96,8 +107,6 @@
               dropzoneFields['image'] = dz_var15866134771240834480ble;
             </script>
           @endprepend
-        </div>
-
       <!-- Submit Field -->
         <div class="form-group col-12 text-right">
           <button type="submit" class="btn btn-{{setting('theme_color')}}" ><i class="fa fa-save"></i> Save Sub Category</button>

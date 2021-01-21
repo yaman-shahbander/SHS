@@ -111,7 +111,8 @@ class SubCategoryController extends Controller
         }
         $input = $request->all();
          $input['category_id']=$input['category'];
-
+         $input['name']=$input['name'];
+         $input['name_en']=$input['name_en'];
         $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->subcategoryRepository->model());
 
         try {
@@ -238,7 +239,8 @@ class SubCategoryController extends Controller
         }
         $input = $request->all();
         $input['category_id']=$input['category'];
-
+        $input['name']=$input['name'];
+        $input['name_en']=$input['name_en'];
         try {
             $subcategory = $this->subcategoryRepository->update($input, $id);
 
