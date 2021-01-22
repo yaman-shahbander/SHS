@@ -192,5 +192,6 @@ Route::middleware('auth:api')->group(function () {
         'show'
     ]);
 });
+//for dashboard
 Route::post('user/select','UserController@getcity');
 Route::post('subcategory/select','NotificationController@getsubcategory');

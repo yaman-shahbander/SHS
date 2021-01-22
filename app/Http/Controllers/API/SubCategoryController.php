@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\subCategory;
 use App\Http\Controllers\Controller;
@@ -21,11 +22,17 @@ class SubCategoryController extends Controller
 
 
     public function index(Request $request){
+        if($request->device_token) {
+            try {
+                $user = User::where('device_token', $request->device_token)->first();
+                if (empty($user)) {
+                    return $this->sendError('User not found', 401);
 
+                }
         $subcategories = $this->subcategoryRepository->where("category_id", $request->id)->get(['id','name','description']);
 
             $response=$subcategories->toArray();
-            
+
             $i=0;
             foreach ($subcategories as $subcategory)
             {
@@ -39,6 +46,13 @@ class SubCategoryController extends Controller
             }
 
         return $this->sendResponse($response, 'SubCategories retrieved successfully');
+            } catch (\Exception $e) {
+                return $this->sendError('error', 401);
+
+            }
+        }
+        else
+            return $this->sendError('You dont have permission', 401);
 
     }
 

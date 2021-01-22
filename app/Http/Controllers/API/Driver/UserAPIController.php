@@ -46,6 +46,10 @@ class UserAPIController extends Controller
     function login(Request $request)
     {
         try {
+            if(empty($request->input('device_token'))){
+                return $this->sendError('device token not found', 401);
+
+            }
             if($request->email){
 
                 $this->validate($request, [
@@ -72,17 +76,17 @@ class UserAPIController extends Controller
 //            if (auth()->attempt(['email' => $request->input('email'), 'password' => $request->input('password')])) {
 //                // Authentication passed...
 //                $user = auth()->user();
-                if (!$user->hasRole('homeowner')) {
-                    return $this->sendError('User not homeowner', 401);
-                }
-                $user->device_token = $request->input('device_token', '');
+//                if (!$user->hasRole('homeowner')) {
+//                    return $this->sendError('User not homeowner', 401);
+//                }
+                $user->device_token = $request->input('device_token');
                 $user->save();
                 $response=
                     ['id'=>$user->id,
                         'first_name'=>$user->name,
                         'last_name'=>$user->last_name,
                         'email'=>$user->email,
-                        'avatar'=>$user->avatar,
+                        'avatar'=>asset('storage/Avatar').'/'.$user->avatar,
                         'lang'=>$user->language,
                         'device_token'=>$user->device_token,
                         'phone'=>$user->phone,
@@ -93,7 +97,7 @@ class UserAPIController extends Controller
                 return $this->sendResponse($response, 'User retrieved successfully');
 
         } catch (\Exception $e) {
-            return $this->sendError($e->getMessage(), 401);
+            return $this->sendError('error', 401);
         }
 
     }
@@ -108,6 +112,10 @@ class UserAPIController extends Controller
     {
 
         try {
+            if(empty($request->input('device_token'))){
+                return $this->sendError('device token not found', 401);
+
+            }
             if($request->email) {
 
                 $this->validate($request, [
@@ -132,55 +140,63 @@ class UserAPIController extends Controller
             $user->last_name = $request->input('last_name');
             $user->email = $request->input('email','');
 //            $user->city_id = $request->input('city_id');
-//            $user->language = $request->input('lang');
-            $user->phone = $request->input('phone',0);
+            $user->language = $request->input('lang')==null ? '':$request->input('lang','');
+            $user->phone = $request->input('phone')==null ? '':$request->input('phone','');
+
+            $user->phone = $request->input('phone','0');
             $user->activation_code = "123456";
 //            $user->avatar = $request->input('avatar');
-            $user->device_token = $request->input('device_token', '');
+            $user->device_token = $request->input('device_token');
             $user->password = Hash::make($request->input('password'));
-            $user->api_token = str_random(60);
+           // $user->api_token = str_random(60);
             $user->save();
 
             $user->assignRole('homeowner');
 
             $response=
                 ['id'=>$user->id,
-                    //'first_name'=>$user->name,
-                    //'last_name'=>$user->last_name,
-                    //'email'=>$user->email,
+                    'first_name'=>$user->name,
+                    'last_name'=>$user->last_name,
+                    'email'=>$user->email,
                     'activation_cod'=>$user->activation_code,
-                    //'avatar'=>$user->avatar,
-                    //'lang'=>$user->language,
-                   // 'device_token'=>$user->device_token,
-                    //'phone'=>$user->phone,
+                   // 'avatar'=>$user->avatar,
+                    'lang'=>$user->language,
+                    'device_token'=>$user->device_token,
+                    'phone'=>$user->phone,
                     //'city'=>$user->cities->city_name,
-                    //'country'=>(Country::find($user->cities->country_id))->country_name,
+                   // 'country'=>(Country::find($user->cities->country_id))->country_name,
 
                 ];
 
             event(new UserRoleChangedEvent($user));
         } catch (\Exception $e) {
-            return $this->sendError($e->getMessage(), 401);
+            return $this->sendError('error', 401);
         }
 
 
         return $this->sendResponse($response, 'User retrieved successfully');
     }
     public function verify(Request $request){
-            $user=User::find($request->id);
         try {
+            if($request->id)
+               $user=User::find($request->id);
+           else{
+               return $this->sendError('user not found', 401);
+
+           }
+
 
             $user->city_id = $request->input('city_id');
-            $user->language = $request->input('lang');
-            $user->avatar = $request->input('avatar');
+            //$user->language = $request->input('lang');
+            $user->avatar = 'avatar.png';
             $user->save();
             $response=
                 ['id'=>$user->id,
                     'first_name'=>$user->name,
                     'last_name'=>$user->last_name,
                     'email'=>$user->email,
-                    'activation_cod'=>$user->activation_code,
-                    'avatar'=>$user->avatar,
+                    //'activation_cod'=>$user->activation_code,
+                    'avatar'=>asset('storage/Avatar').'/'.$user->avatar,
                     'lang'=>$user->language,
                     'device_token'=>$user->device_token,
                     'phone'=>$user->phone,
@@ -190,11 +206,11 @@ class UserAPIController extends Controller
                 ];
             event(new UserRoleChangedEvent($user));
             } catch (\Exception $e) {
-            return $this->sendError($e->getMessage(), 401);
+            return $this->sendError('error', 401);
             }
 
 
-            return $this->sendResponse($response, 'User retrieved successfully');
+            return $this->sendResponse($response, 'User updated successfully');
 
 
     }
@@ -337,30 +353,50 @@ class UserAPIController extends Controller
         return $this->sendResponse(true, 'User Deleted Successfully');
     }
 
-    
+
 
     public function myReviews(Request $request) {
-        $id = $request->id; // logged in user ID
-        $user = User::find($id);
-        $userLatitude = $user->coordinates->latitude;
-        $userLongitude = $user->coordinates->longitude;
+        //$id = $request->id; // logged in user ID
+        if($request->device_token) {
+            try{
+            $user = User::where('device_token', $request->device_token)->first();
+            if (empty($user)) {
+                return $this->sendError('User not found', 401);
 
-        $reviewsHiddenColumns = ['custom_fields', 'media', 'has_media'];
-        $attrs = $user->vendorsAPI->makeHidden($reviewsHiddenColumns); // vendors I reviewd
-        $respone = [];
-        $i = 0;
-        foreach($attrs as $attr) {
-            $respone[$i]['id'] = $attr->id;
-            $respone[$i]['name'] = $attr->name;
-            $respone[$i]['avatar'] = $attr->getFirstMediaUrl('avatar', 'icon');
-            $respone[$i]['last_name'] = $attr->last_name;
-            $respone[$i]['description'] = $attr->pivot->description;
-            $respone[$i]['rating'] = myReviewRating($attr);
-            $respone[$i]['distance'] = $attr->coordinates ? distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)) : 'No coordinates provided for the current vendor';
-            $i++;
+            }
+                try{
+            $userLatitude = $user->coordinates->latitude;
+            $userLongitude = $user->coordinates->longitude;
+                }
+                catch (\Exception $e){
+                    return $this->sendError('You have to turn on gps', 401);
+
+                }
+            $reviewsHiddenColumns = ['custom_fields', 'media', 'has_media'];
+            $attrs = $user->vendorsAPI->makeHidden($reviewsHiddenColumns); // vendors I reviewd
+            $respone = [];
+            $i = 0;
+            foreach ($attrs as $attr) {
+                $respone[$i]['id'] = $attr->id;
+                $respone[$i]['name'] = $attr->name;
+                $respone[$i]['avatar'] =asset('storage/Avatar').'/'.$attr->avatar;
+                $respone[$i]['last_name'] = $attr->last_name;
+                $respone[$i]['description'] = $attr->pivot->description;
+                $respone[$i]['rating'] = myReviewRating($attr);
+                $respone[$i]['distance'] = $attr->coordinates ? distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)) : 'No coordinates provided for the current vendor';
+                $i++;
+            }
+
+            return $this->sendResponse($respone, 'reviews retrieved successfully');
+            }
+            catch (\Exception $e){
+                return $this->sendError('Error', 401);
+
+            }
         }
-        
-        return $this->sendResponse($respone, 'reviews retrieved successfully');
+        else
+            return $this->sendError('You dont have permission', 401);
+
     }
 
     public function bookMark(Request $request) {
@@ -438,5 +474,5 @@ class UserAPIController extends Controller
             return $this->sendResponse($input, 'Review Added successfully');
 
         }
-    } 
+    }
 }

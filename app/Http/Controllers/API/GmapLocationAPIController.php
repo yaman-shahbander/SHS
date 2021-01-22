@@ -37,22 +37,36 @@ class GmapLocationAPIController extends Controller
      */
     public function store(Request $request)
     {
+        if($request->device_token) {
+            try {
+                $user = User::where('device_token', $request->device_token)->first();
+                if (empty($user)) {
+                    return $this->sendError('User not found', 401);
 
-        $checkUserCoordinates =  GmapLocation::where('user_id', $request->id)->first();
-        if(!empty($checkUserCoordinates)) {
-            return $this->sendResponse([], 'Coordinates are exist');
-        }
+                }
 
-        $coordinates = new GmapLocation();
-        $coordinates->user_id = $request->id;
-        $coordinates->latitude = $request->latitude;
-        $coordinates->longitude = $request->longitude;  
-        if ($coordinates->save()){
-            $coordinates->makeHidden(['user_id', 'updated_at', 'created_at', 'id']);
-            return $this->sendResponse($coordinates->toArray(), 'Coordinates Saved successfully'); 
-        } else {
-            return $this->sendResponse([], 'Coordinates failed to save');
+                $checkUserCoordinates = GmapLocation::where('user_id', $user->id)->first();
+                if (!empty($checkUserCoordinates)) {
+                    return $this->sendResponse([], 'Coordinates are exist');
+                }
+
+                $coordinates = new GmapLocation();
+                $coordinates->user_id = $user->id;
+                $coordinates->latitude = $request->latitude;
+                $coordinates->longitude = $request->longitude;
+                if ($coordinates->save()) {
+                    $coordinates->makeHidden(['user_id', 'updated_at', 'created_at', 'id']);
+                    return $this->sendResponse($coordinates->toArray(), 'Coordinates Saved successfully');
+                } else {
+                    return $this->sendResponse([], 'Coordinates failed to save');
+                }
+            } catch (\Exception $e) {
+                return $this->sendError('error', 401);
+
+            }
         }
+        else
+            return $this->sendError('You dont have permission', 401);
     }
 
     /**
@@ -89,11 +103,11 @@ class GmapLocationAPIController extends Controller
         $updateUserCoordinates =  GmapLocation::where('user_id', $id)->first();
 
         $updateUserCoordinates->latitude = $request->latitude;
-        $updateUserCoordinates->longitude = $request->longitude;  
+        $updateUserCoordinates->longitude = $request->longitude;
 
         if ($updateUserCoordinates->save()){
             $updateUserCoordinates->makeHidden(['user_id', 'updated_at', 'created_at', 'id', 'icon']);
-            return $this->sendResponse($updateUserCoordinates->toArray(), 'Coordinates Updated successfully'); 
+            return $this->sendResponse($updateUserCoordinates->toArray(), 'Coordinates Updated successfully');
         } else {
             return $this->sendResponse([], 'Coordinates failed to updated');
         }
@@ -118,7 +132,7 @@ class GmapLocationAPIController extends Controller
         $user = User::find($userID);
 
         $userLatitude = $user->coordinates->latitude;
-        
+
         $userLongitude = $user->coordinates->longitude;
 
         $respone = [];
@@ -126,7 +140,7 @@ class GmapLocationAPIController extends Controller
         $vendors = User::whereHas('subcategories', function($query) use ($id) {
             $query->where('subcategory_id', $id);
         })->get();
-        
+
         $i = 0;
         foreach($vendors as $vendor) {
             $respone[$i] = [
@@ -137,9 +151,9 @@ class GmapLocationAPIController extends Controller
                 'description'   => $vendor->description,
                 'avatar'        => $vendor->getFirstMediaUrl('avatar','icon'),
                 'coordinates'   => [
-                    "latitude"  => 
+                    "latitude"  =>
                     $vendor->coordinates ? $vendor->coordinates->latitude : 0,
-                    "longitude" => 
+                    "longitude" =>
                     $vendor->coordinates ? $vendor->coordinates->longitude : 0
                 ],
                 'distance'      => $vendor->coordinates ? distance(floatval($userLatitude), floatval($userLongitude), floatval($vendor->coordinates->latitude), floatval($vendor->coordinates->longitude)) : 'No coordinates provided for the current vendor'
