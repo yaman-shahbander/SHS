@@ -52,7 +52,7 @@ class SuperAdminDataTable extends DataTable
     {
         return $model->newQuery()->with('roles')
         ->leftJoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-        ->where('role_id',5);    }
+        ->where('role_id',1);    }
 
     /**
      * Optional method if you want to use html builder.

@@ -45,4 +45,7 @@
   </div>
 </div>
 @endsection
+@push('scripts_lib')
+
+@endpush
 

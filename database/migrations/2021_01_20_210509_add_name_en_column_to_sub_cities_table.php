@@ -14,7 +14,8 @@ class AddNameEnColumnToSubCitiesTable extends Migration
     public function up()
     {
         Schema::table('cities', function (Blueprint $table) {
-            //
+            $table->string('name_en');
+
         });
     }
 

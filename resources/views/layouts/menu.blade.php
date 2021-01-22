@@ -116,16 +116,16 @@
         <a href="#" class="nav-link {{ Request::is('users*') || Request::is('users*') ? 'active' : '' }}"> @if($icons)
             <i class="nav-icon fa fa-support"></i>@endif
             @if(LaravelLocalization::getCurrentLocaleDirection() == "rtl")
-            <p>{{trans('Home Owner')}} <i class="fa fa-angle-left"></i></p>
+            <p>{{trans('Home Owners')}} <i class="fa fa-angle-left"></i></p>
             @else
-                <p>{{trans('Home Owner')}} <i class="right fa fa-angle-left"></i></p>
+                <p>{{trans('Home Owners')}} <i class="right fa fa-angle-left"></i></p>
             @endif
         </a>
         <ul class="nav nav-treeview">
             @can('users.index')
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('users*') ? 'active' : '' }}" href="{!! route('users.index') !!}">@if($icons)
-                            <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('users')}}</p></a>
+                            <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('Home owner')}}</p></a>
                 </li>
             @endcan
             <!-- @can('users.index')
@@ -223,12 +223,12 @@
 
 @endcan
 
-@can('chats.index')
+<!-- @can('chats.index')
     <li class="nav-item">
         <a class="nav-link {{ Request::is('chats*') ? 'active' : '' }}" href="{{ route('chatify') }}">@if($icons)
                 <i class="nav-icon fa fa-comment"></i>@endif<p>{{trans('chats')}}</p></a>
     </li>
-@endcan
+@endcan -->
 
 
 @can('notifications.index')
@@ -389,13 +389,13 @@
                 </a>
             </li>-->
 
-            @can('users.index')
+            <!-- @can('users.index')
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('users*') ? 'active' : '' }}" href="{!! route('users.index') !!}">@if($icons)
                             <i class="nav-icon fa fa-users"></i>@endif
                         <p>{{trans('lang.user_plural')}}</p></a>
                 </li>
-            @endcan
+            @endcan -->
             @can('permissions.index')
                 <li class="nav-item has-treeview {{ Request::is('settings/permissions*') || Request::is('settings/roles*') ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link {{ Request::is('settings/permissions*') || Request::is('settings/roles*') ? 'active' : '' }}">
@@ -428,14 +428,14 @@
                                 </a>
                             </li>
                         @endcan
-                        @can('roles.create')
+                        <!-- @can('roles.create')
                             <li class="nav-item">
                                 <a class="nav-link {{ Request::is('settings/roles/create') ? 'active' : '' }}" href="{!! route('roles.create') !!}">
                                     @if($icons)<i class="nav-icon fa fa-circle-o"></i>@endif
                                     <p>{{trans('lang.role_create')}}</p>
                                 </a>
                             </li>
-                        @endcan
+                        @endcan -->
                     </ul>
 
                 </li>

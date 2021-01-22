@@ -38,6 +38,49 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,600" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('css/custom.css')}}">
     <link rel="stylesheet" href="{{asset('css/'.setting("theme_color","primary").'.css')}}">
+    <style>
+
+.chat-widget-wrapper {
+  display: block;
+  width: 300px;
+  height: 80px;
+  position: absolute;
+  bottom: 90px;
+  right: 0;
+  padding: 10px;
+  cursor: pointer;
+  animation: all 2s linear;
+}
+
+.chat-widget-container {
+  /* position: relative;
+  padding: 10px;
+  background-color: #fff; */
+  border-radius: 4px;
+  
+
+  
+}
+
+.chat-widget-avatar {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    top: -11px;
+    right: 30px;
+    border: 4px solid #fff;
+    border-radius: 50%;
+}
+
+
+  
+  .chat-box-nav {
+    background-color: #00aeef;
+    width: 100%;
+    height: 40px;
+  }
+}
+    </style>
 <!--
     @if(Auth::user()->language ='ar')
         <link href="{{asset('localization/css/bootstrap1/bootstrap-rtl.min.css')}}" rel="stylesheet">
@@ -108,7 +151,7 @@
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
             <!-- lang -->
-            <li>
+            <!-- <li>
                 <div class="dropdown">
                     <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                         <i class="fa fa-globe"></i>
@@ -124,7 +167,7 @@
                         @endforeach
                     </ul>
                 </div>
-            </li>
+            </li> -->
                 @if(env('APP_CONSTRUCTION',false))
                     <li class="nav-item">
                         <a class="nav-link text-danger" href="#"><i class="fa fa-info-circle"></i>
@@ -167,8 +210,22 @@
     <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper" >
             @yield('content')
+            
         </div>
+        @can('chats.index')
+        <div class="chat-widget-wrapper">
+            <div class="chat-widget-container">
+                <!-- <div class="chat-widget-text">
+                    <p class="heading">LIVE CHAT</p>
+                </div> -->
+                <div class="chat-widget-avatar">
+                <a href="{!! route('chatify') !!}"><img src="{{asset('236831.svg')}}"></a>
 
+                </div>
+            </div>
+               
+        </div>
+        @endcan
         <!-- Main Footer -->
         <footer class="main-footer {{setting('fixed_footer','')}}">
             <div class="float-right d-none d-sm-block">
@@ -209,6 +266,7 @@
         </div>
     </nav>
 
+    
     <div id="page-content-wrapper">
         <div class="container">
             <div class="row">
@@ -246,7 +304,6 @@
     @if(LaravelLocalization::getCurrentLocaleDirection() == "rtl")
     <script src="{{asset('js/custom/custom-rtl.js')}}"></script>
     @endif
-
 
 <!--firebsae config-->
 
@@ -313,6 +370,7 @@
     <script src="{{asset('dist/js/demo.js')}}"></script>
 
     <script src="{{asset('js/scripts.js')}}"></script>
+
 
     @stack('scripts')
     @yield('script')

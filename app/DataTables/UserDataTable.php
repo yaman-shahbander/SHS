@@ -50,7 +50,10 @@ class UserDataTable extends DataTable
      */
     public function query(User $model)
     {
-        return $model->newQuery()->with('roles');
+        // return $model->newQuery()->with('roles');
+        return $model->newQuery()->with('roles')
+        ->leftJoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+        ->where('role_id',3);    
     }
 
     /**

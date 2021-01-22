@@ -51,7 +51,6 @@ class PermissionController extends Controller
             Flash::warning('This is only demo app you can\'t change this section ');
         }else{
             $input = Request::all();
-         
 
             $this->permissionRepository->givePermissionToRole($input);
         }
