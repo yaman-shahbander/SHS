@@ -109,5 +109,10 @@ class subCategory extends Model implements HasMedia
     public function specialOffers() {
         return $this->hasMany(specialOffers::class, 'subcategory_id');
     }
+
+    public function categoriesAPI()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
 }
 

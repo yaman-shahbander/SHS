@@ -160,4 +160,8 @@ class Category extends Model implements HasMedia
     function subCategory() {
         return $this->hasMany(subCategory::class, 'category_id');
     }
+
+    function subCategoryAPI() {
+        return $this->hasMany(subCategory::class, 'category_id');
+    }
 }

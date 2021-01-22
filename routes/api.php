@@ -72,6 +72,8 @@ Route::prefix('vendor')->group(function () {
     Route::post('photoProfile', 'API\Manager\UserAPIController@backgroundPic');
     //vendor profile
     Route::post('vendorProfile', 'API\Manager\UserAPIController@vendorprofile');
+    //vendor profile
+    Route::post('saveVednorData', 'API\Manager\UserAPIController@completeRegistration');
 });
 
 
@@ -112,6 +114,10 @@ Route::post('vendorLocation', 'API\GmapLocationAPIController@VendorMapDetails');
 Route::post('allMessages','API\ChatAPIController@history');
 //featured vendor fee API
 Route::post('vendorFee', 'API\vendorApiController@vendorFeefunc');
+//categories with subcategories API
+Route::post('categoriesVendor', 'API\vendorApiController@categorySubCatFunc');
+//Woring hours for a new vendor
+Route::post('workHoursDays', 'API\vendorApiController@workHours');
 
 
 Route::resource('restaurants', 'API\RestaurantAPIController');
@@ -190,3 +196,17 @@ Route::middleware('auth:api')->group(function () {
 });
 Route::post('user/select','UserController@getcity');
 Route::post('subcategory/select','NotificationController@getsubcategory');
+
+
+/*
+if ($request->device_code) {
+            $vednor = User::where('device_code', $request->device_code)->first();
+            if (!empty($vednor)) {
+                
+            } else {
+
+            }
+        } else {
+
+        }
+*/
