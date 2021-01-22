@@ -146,7 +146,8 @@ class UserAPIController extends Controller
 //            $user->avatar = $request->input('avatar');
             $user->device_token = $request->input('device_token', '');
             $user->password = Hash::make($request->input('password'));
-            $user->api_token = str_random(60);
+
+            $user->$device_code = str_random(60) . time();
             $user->save();
 
             $user->assignRole('manager');
@@ -159,7 +160,7 @@ class UserAPIController extends Controller
                     'activation_cod'=>$user->activation_code,
                     //'avatar'=>$user->avatar,
                     //'lang'=>$user->language,
-                    // 'device_token'=>$user->device_token,
+                     'device_code'=>$user->device_code,
                     //'phone'=>$user->phone,
                     //'city'=>$user->cities->city_name,
                     //'country'=>(Country::find($user->cities->country_id))->country_name,
@@ -205,6 +206,35 @@ class UserAPIController extends Controller
         return $this->sendResponse($response, 'User retrieved successfully');
 
 
+    }
+
+    public function completeRegistration(Request $request) {
+        if ($request->device_code) {
+            $vendor = User::where('device_code', $request->device_code)->first();
+            if (!empty($vendor)) {
+                // $days = [
+                //    [ 'day_id'=>5,
+                //     'start'  => '12:00:00',
+                //     'end'    => '04:00:00'
+                //    ],
+                //    [ 
+                //     'day_id'=>7,
+                //     'start'  => '12:00:00',
+                //     'end'    => '05:00:00'
+                //     ],   
+                //     [ 'day_id'=>6,
+                //     'start'  => '12:00:00',
+                //     'end'    => '05:00:00'
+                // ]];
+                $vendor->subcategories()->sync($request->subcategories);
+                return  $vendor->daysApi()->sync($request->days);
+                return $this->sendResponse([], 'Data saved successfully');
+            } else {
+                return $this->sendResponse([], 'User not found');
+            }
+        } else {
+            return $this->sendResponse([], 'Error');
+        }
     }
 //    function register(Request $request)
 //    {
@@ -592,3 +622,5 @@ class UserAPIController extends Controller
         }
 
 }
+
+

@@ -72,6 +72,8 @@ Route::prefix('vendor')->group(function () {
     Route::post('photoProfile', 'API\Manager\UserAPIController@backgroundPic');
     //vendor profile
     Route::post('vendorProfile', 'API\Manager\UserAPIController@vendorprofile');
+    //vendor profile
+    Route::post('saveVednorData', 'API\Manager\UserAPIController@completeRegistration');
 });
 
 
@@ -195,3 +197,17 @@ Route::middleware('auth:api')->group(function () {
 //for dashboard
 Route::post('user/select','UserController@getcity');
 Route::post('subcategory/select','NotificationController@getsubcategory');
+
+
+/*
+if ($request->device_code) {
+            $vednor = User::where('device_code', $request->device_code)->first();
+            if (!empty($vednor)) {
+                
+            } else {
+
+            }
+        } else {
+
+        }
+*/
