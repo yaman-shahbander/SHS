@@ -24,7 +24,9 @@ class SubCategoriesRepository extends BaseRepository
         'name',
         'name_en',
         'description',
-        'category_id'
+        'category_id',
+        'description_en',
+        'name_ar'
     ];
 
     /**

@@ -43,9 +43,9 @@
 .chat-widget-wrapper {
   display: block;
   width: 300px;
-  height: 80px;
+  height: 0px;
   position: absolute;
-  bottom: 90px;
+  bottom: 10px;
   right: 0;
   padding: 10px;
   cursor: pointer;
@@ -212,22 +212,21 @@
             @yield('content')
             
         </div>
-        @can('chats.index')
-        <div class="chat-widget-wrapper">
-            <div class="chat-widget-container">
-                <!-- <div class="chat-widget-text">
-                    <p class="heading">LIVE CHAT</p>
-                </div> -->
-                <div class="chat-widget-avatar">
-                <a href="{!! route('chatify') !!}"><img src="{{asset('236831.svg')}}"></a>
-
-                </div>
-            </div>
-               
-        </div>
-        @endcan
+        
         <!-- Main Footer -->
         <footer class="main-footer {{setting('fixed_footer','')}}">
+            @can('chats.index')
+            <div class="chat-widget-wrapper">
+                <div class="chat-widget-container">
+                
+                    <div class="chat-widget-avatar">
+                    <a href="{!! route('chatify') !!}"><img src="{{asset('236831.svg')}}"></a>
+
+                    </div>
+                </div>
+                
+            </div>
+            @endcan
             <div class="float-right d-none d-sm-block">
                 <b>Version</b> {{implode('.',str_split(substr(config('installer.currentVersion','v100'),1,3)))}}
             </div>

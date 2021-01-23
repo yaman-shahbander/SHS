@@ -72,6 +72,7 @@ class CategoryController extends Controller
      */
     public function store(CreateCategoryRequest $request)
     {
+        
         $input = $request->all();
         $input['name']=$input['name'];
         $input['name_en']=$input['name_en'];

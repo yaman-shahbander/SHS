@@ -96,7 +96,7 @@
             @can('delegate.index')
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('delegate*') ? 'active' : '' }}" href="{!! route('delegate.index') !!}">@if($icons)
-                    <i class="nav-icon fa fa-folder"></i>@endif<p>Delegate</p></a>
+                    <i class="nav-icon fa fa-folder"></i>@endif<p>Sales Man</p></a>
                 </li>
             @endcan
         </ul>

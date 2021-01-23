@@ -27,31 +27,43 @@
         <div class="form-group row col-md-6">
             {!! Form::label('name', "Category", ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
-            <select name="category" aria-controls="dataTableBuilder" class="form-control form-control-sm">
-                @foreach($categories as $category)
-                    <option value="{{ $category->id }}" @if(!empty($subcategory->category_id)) @if( $subcategory->category_id==$category->id) selected @endif @endif>
-                    {{ $category->name }}</option>
-                @endforeach
-            </select>
+              <select name="category" aria-controls="dataTableBuilder" class="form-control form-control-sm">
+                  @foreach($categories as $category)
+                      <option value="{{ $category->id }}" @if(!empty($subcategory->category_id)) @if( $subcategory->category_id==$category->id) selected @endif @endif>
+                      {{ $category->name }}</option>
+                  @endforeach
+              </select>
                 <div class="form-text text-muted">
                 Select Category
                 </div>
             </div>
         </div>
+      </div>  
+      
+      <div class="row">
         <!-- Description Field -->
         <div class="form-group row col-md-6">
-            {!! Form::label('description', trans("lang.category_description"), ['class' => 'col-3 control-label text-right']) !!}
-            <div class="col-9">
-              {!! Form::textarea('description', null, ['class' => 'form-control','placeholder'=>
-               trans("lang.category_description_placeholder")  ]) !!}
-              <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
-            </div>
+          {!! Form::label('description', trans("lang.category_description"), ['class' => 'col-3 control-label text-right']) !!}
+          <div class="col-9">
+            {!! Form::textarea('description', null, ['class' => 'form-control','placeholder'=>
+            trans("lang.category_description_placeholder")  ]) !!}
+            <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
           </div>
         </div>
-      </div>   
-</div>
- <!-- Image Field -->
- <div class="form-group row">
+        <!-- Description En Field -->
+        <div class="form-group row col-md-6">
+          {!! Form::label('description_en', 'Description En', ['class' => 'col-3 control-label text-right']) !!}
+          <div class="col-9">
+            {!! Form::textarea('description_en', null, ['class' => 'form-control','placeholder'=>
+            trans("lang.category_description_placeholder .En")  ]) !!}
+            <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
+          </div>
+        </div>
+           
+
+      <div class="row">
+        <!-- Image Field -->
+        <div class="form-group row col-md-12">
             {!! Form::label('image', trans("lang.category_image"), ['class' => 'col-2 control-label text-right']) !!}
             <div class="col-10">
               <div style="width: 100%" class="dropzone image" id="image" data-field="image">
@@ -62,7 +74,7 @@
                 {{ trans("lang.category_image_help") }}
               </div>
             </div>
-          </div>
+        </div>
           @prepend('scripts')
             <script type="text/javascript">
               var var15866134771240834480ble = '';
@@ -107,6 +119,8 @@
               dropzoneFields['image'] = dz_var15866134771240834480ble;
             </script>
           @endprepend
+      </div>
+</div>
       <!-- Submit Field -->
         <div class="form-group col-12 text-right">
           <button type="submit" class="btn btn-{{setting('theme_color')}}" ><i class="fa fa-save"></i> Save Sub Category</button>

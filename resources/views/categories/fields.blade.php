@@ -34,6 +34,15 @@
         <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
       </div>
     </div>
+    <!-- Description En Field -->
+    <div class="form-group row col-md-6">
+      {!! Form::label('description_en', 'Description En', ['class' => 'col-3 control-label text-right']) !!}
+      <div class="col-9">
+        {!! Form::textarea('description_en', null, ['class' => 'form-control','placeholder'=>
+        trans("lang.category_description_placeholder .En")  ]) !!}
+        <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
+      </div>
+    </div>
  <!-- Image Field -->
  <div class="form-group row col-md-6">
     {!! Form::label('image', trans("lang.category_image"), ['class' => 'col-3 control-label text-right']) !!}
