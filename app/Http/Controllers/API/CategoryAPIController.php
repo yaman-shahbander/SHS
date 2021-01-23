@@ -54,7 +54,7 @@ class CategoryAPIController extends Controller
 
         return $this->sendResponse($categories->toArray(), 'Categories retrieved successfully');*/
 
-         $categories = $this->categoryRepository->all(['id','name','description']);
+        $categories = $this->categoryRepository->all(['id','name','description']);
         $response=[];
         $i=0;
         foreach ($categories as $category)
