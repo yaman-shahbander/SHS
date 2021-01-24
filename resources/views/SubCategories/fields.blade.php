@@ -3,7 +3,7 @@
       <div class="row">
           <!-- Name Field -->
           <div class="form-group row col-md-6">
-            {!! Form::label('name', trans("lang.category_name"), ['class' => 'col-3 control-label text-right']) !!}
+            {!! Form::label('name', trans("lang.category_name"), ['class' => 'col-3 control-label ']) !!}
             <div class="col-9">
               {!! Form::text('name', null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder")]) !!}
               <div class="form-text text-muted">
@@ -13,7 +13,7 @@
           </div>
           <!-- Name Field -->
           <div class="form-group row col-md-6">
-            {!! Form::label('name_en', "NameEn", ['class' => 'col-3 control-label text-right']) !!}
+            {!! Form::label('name_en', "NameEn", ['class' => 'col-3 control-label ']) !!}
             <div class="col-9">
               {!! Form::text('name_en', null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder")]) !!}
               <div class="form-text text-muted">
@@ -25,7 +25,7 @@
       <div class="row">
         <!-- Select Category-->
         <div class="form-group row col-md-6">
-            {!! Form::label('name', "Category", ['class' => 'col-3 control-label text-right']) !!}
+            {!! Form::label('name', "Category", ['class' => 'col-3 control-label ']) !!}
             <div class="col-9">
               <select name="category" aria-controls="dataTableBuilder" class="form-control form-control-sm">
                   @foreach($categories as $category)
@@ -38,33 +38,42 @@
                 </div>
             </div>
         </div>
+        <!-- Description Field -->
+        <div class="form-group row col-md-6">
+          {!! Form::label('description', trans("lang.category_description"), ['class' => 'col-3 control-label ']) !!}
+          <div class="col-9">
+          <textarea name="description" class="form-control form-control-sm" rows="3" cols="50"></textarea>
+
+            <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
+          </div>
+        </div>
       </div>  
       
       <div class="row">
-        <!-- Description Field -->
+        <!-- Description AR Field -->
         <div class="form-group row col-md-6">
-          {!! Form::label('description', trans("lang.category_description"), ['class' => 'col-3 control-label text-right']) !!}
+          {!! Form::label('description', 'Description AR', ['class' => 'col-3 control-label ']) !!}
           <div class="col-9">
-            {!! Form::textarea('description', null, ['class' => 'form-control','placeholder'=>
-            trans("lang.category_description_placeholder")  ]) !!}
+          <textarea name="description_ar" class="form-control form-control-sm" rows="3" cols="50"></textarea>
+
             <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
           </div>
         </div>
         <!-- Description En Field -->
         <div class="form-group row col-md-6">
-          {!! Form::label('description_en', 'Description En', ['class' => 'col-3 control-label text-right']) !!}
+          {!! Form::label('description_en', 'Description En', ['class' => 'col-3 control-label ']) !!}
           <div class="col-9">
-            {!! Form::textarea('description_en', null, ['class' => 'form-control','placeholder'=>
-            trans("lang.category_description_placeholder .En")  ]) !!}
+            <textarea name="description_en" class="form-control form-control-sm" rows="3" cols="50"></textarea>
+            
             <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
           </div>
         </div>
-           
+      </div>   
 
       <div class="row">
         <!-- Image Field -->
         <div class="form-group row col-md-12">
-            {!! Form::label('image', trans("lang.category_image"), ['class' => 'col-2 control-label text-right']) !!}
+            {!! Form::label('image', trans("lang.category_image"), ['class' => 'col-2 control-label ']) !!}
             <div class="col-10">
               <div style="width: 100%" class="dropzone image" id="image" data-field="image">
                 <input type="hidden" name="image">

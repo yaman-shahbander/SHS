@@ -71,6 +71,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
         Route::get('superAdmin','UserController@superAdmin')->name('superAdmin');
         Route::resource('delegate','DelegateController');
         Route::resource('subscription','SubscriptionController');
+        Route::resource('language','languageController');
         Route::get('dashboard', 'DashboardController@index')->name('dashboard');
 
         Route::group(['middleware' => ['permission:medias']], function () {

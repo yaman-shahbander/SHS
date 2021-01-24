@@ -26,7 +26,6 @@
 <!-- Daterange picker -->
 {{--<link rel="stylesheet" href="{{asset('plugins/daterangepicker/daterangepicker-bs3.css')}}">--}}
 {{--<!-- bootstrap wysihtml5 - text editor -->--}}
-{{--<link rel="stylesheet" href="{{asset('plugins/summernote/summernote-bs4.css')}}">--}}
 
 @stack('css_lib')
 <!-- Theme style -->
@@ -364,7 +363,6 @@
     <!-- AdminLTE App -->
     <script src="{{asset('dist/js/adminlte.js')}}"></script>
     {{--<!-- AdminLTE dashboard demo (This is only for demo purposes) -->--}}
-    {{--<script src="{{asset('plugins/summernote/summernote-bs4.min.js')}}"></script>--}}
     <!-- AdminLTE for demo purposes -->
     <script src="{{asset('dist/js/demo.js')}}"></script>
 

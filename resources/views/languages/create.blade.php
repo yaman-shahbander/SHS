@@ -15,14 +15,14 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0 text-dark">Sub Categories<small class="ml-3 mr-3">|</small><small>Sub Categories Management</small></h1>
+        <h1 class="m-0 text-dark">Languages<small class="ml-3 mr-3">|</small><small>Languages Management</small></h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><a href="{{url('/dashboard')}}"><i class="fa fa-dashboard"></i> {{trans('lang.dashboard')}}</a></li>
-          <li class="breadcrumb-item"><a href="{!! route('subcategory.index') !!}">Sub Categories</a>
+          <li class="breadcrumb-item"><a href="{!! route('language.index') !!}">Languages</a>
           </li>
-          <li class="breadcrumb-item active">Edit Sub Category</li>
+          <li class="breadcrumb-item active">Create Languages</li>
         </ol>
       </div><!-- /.col -->
     </div><!-- /.row -->
@@ -37,25 +37,20 @@
   <div class="card">
     <div class="card-header">
       <ul class="nav nav-tabs align-items-end card-header-tabs w-100">
-        @can('subcategory.index')
+        @can('language.index')
         <li class="nav-item">
-          <a class="nav-link" href="{!! route('subcategory.index') !!}"><i class="fa fa-list mr-2"></i>Sub Categories list</a>
-        </li>
-        @endcan
-        @can('subcategory.create')
-        <li class="nav-item">
-          <a class="nav-link" href="{!! route('subcategory.create') !!}"><i class="fa fa-plus mr-2"></i>Create Sub Category</a>
+          <a class="nav-link" href="{!! route('language.index') !!}"><i class="fa fa-list mr-2"></i>Languages List</a>
         </li>
         @endcan
         <li class="nav-item">
-          <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-pencil mr-2"></i>Edit Sub Category</a>
+          <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-plus mr-2"></i>Create Languages</a>
         </li>
       </ul>
     </div>
     <div class="card-body">
-      {!! Form::model($subcategory, ['route' => ['subcategory.update', $subcategory->id], 'method' => 'PUT']) !!}
+      {!! Form::open(['route' => 'language.store']) !!}
       <div class="row">
-        @include('SubCategories.fields')
+        @include('languages.fields')
       </div>
       {!! Form::close() !!}
       <div class="clearfix"></div>

@@ -5,7 +5,7 @@
     <div class="row">
       <!-- Name Field -->
       <div class="form-group row col-md-6">
-        {!! Form::label('name', trans("lang.category_name"), ['class' => 'col-3 control-label text-right']) !!}
+        {!! Form::label('name', trans("lang.category_name"), ['class' => 'col-3 control-label']) !!}
         <div class="col-9">
           {!! Form::text('name', null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder")]) !!}
           <div class="form-text text-muted">
@@ -15,7 +15,7 @@
       </div>
       <!-- NameEn Field -->
       <div class="form-group row col-md-6">
-        {!! Form::label('name_en', 'NameEn', ['class' => 'col-3 control-label text-right']) !!}
+        {!! Form::label('name_en', 'NameEn', ['class' => 'col-3 control-label ']) !!}
         <div class="col-9">
           {!! Form::text('name_en', null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder")]) !!}
           <div class="form-text text-muted">
@@ -27,25 +27,35 @@
   <div class="row">
     <!-- Description Field -->
     <div class="form-group row col-md-6">
-      {!! Form::label('description', trans("lang.category_description"), ['class' => 'col-3 control-label text-right']) !!}
+      {!! Form::label('description', trans("lang.category_description"), ['class' => 'col-3 control-label']) !!}
       <div class="col-9">
-        {!! Form::textarea('description', null, ['class' => 'form-control','placeholder'=>
-        trans("lang.category_description_placeholder")  ]) !!}
+      <textarea name="description" class="form-control form-control-sm" rows="3" cols="50"></textarea>
         <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
       </div>
     </div>
-    <!-- Description En Field -->
+    <!-- Description AR Field -->
     <div class="form-group row col-md-6">
-      {!! Form::label('description_en', 'Description En', ['class' => 'col-3 control-label text-right']) !!}
-      <div class="col-9">
-        {!! Form::textarea('description_en', null, ['class' => 'form-control','placeholder'=>
-        trans("lang.category_description_placeholder .En")  ]) !!}
-        <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
-      </div>
-    </div>
- <!-- Image Field -->
+          {!! Form::label('description', 'Description AR', ['class' => 'col-3 control-label ']) !!}
+          <div class="col-9">
+          <textarea name="description_ar" class="form-control form-control-sm" rows="3" cols="50"></textarea>
+
+            <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
+          </div>
+        </div>
+  </div>
+  <div class="row">
+        <!-- Description En Field -->
+        <div class="form-group row col-md-6">
+          {!! Form::label('description_en', 'Description En', ['class' => 'col-3 control-label ']) !!}
+          <div class="col-9">
+            <textarea name="description_en" class="form-control form-control-sm" rows="3" cols="50"></textarea>
+            
+            <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
+          </div>
+        </div>
+         <!-- Image Field -->
  <div class="form-group row col-md-6">
-    {!! Form::label('image', trans("lang.category_image"), ['class' => 'col-3 control-label text-right']) !!}
+    {!! Form::label('image', trans("lang.category_image"), ['class' => 'col-3 control-label ']) !!}
     <div class="col-9">
       <div style="width: 100%" class="dropzone image" id="image" data-field="image">
         <input type="hidden" name="image">
@@ -108,13 +118,9 @@
 
 
 </div>
-@if($customFields)
-<div class="clearfix"></div>
-<div class="col-12 custom-field-container">
-  <h5 class="col-12 pb-4">{!! trans('lang.custom_field_plural') !!}</h5>
-  {!! $customFields !!}
-</div>
-@endif
+      </div>
+
+
 <!-- Submit Field -->
 <div class="form-group col-12 text-right">
   <button type="submit" class="btn btn-{{setting('theme_color')}}" ><i class="fa fa-save"></i> {{trans('lang.save')}} {{trans('lang.category')}}</button>
