@@ -290,7 +290,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
     Route::resource('/notification', 'NotificationController');
     Route::get('/fee', 'VendorController@featuredfeeFunction')->name('vendor.fee');
     Route::post('/feeSave', 'VendorController@savefeeFunction')->name('fee.save');
-
+    Route::get('/mousa', 'HomeController@mousa');
 
 
 

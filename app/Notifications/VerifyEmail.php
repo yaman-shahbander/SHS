@@ -11,6 +11,7 @@ class VerifyEmail extends Notification
 {
     use Queueable;
 
+    //public $activation_code;
     /**
      * Create a new notification instance.
      *
@@ -18,7 +19,7 @@ class VerifyEmail extends Notification
      */
     public function __construct()
     {
-        //
+        //$this->activation_code = $activation_code;
     }
 
     /**
@@ -43,7 +44,8 @@ class VerifyEmail extends Notification
         return (new MailMessage)
                     ->line('The introduction to the notification.')
                     ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+                    ;
+                    
     }
 
     /**
