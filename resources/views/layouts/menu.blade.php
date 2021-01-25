@@ -96,7 +96,7 @@
             @can('delegate.index')
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('delegate*') ? 'active' : '' }}" href="{!! route('delegate.index') !!}">@if($icons)
-                    <i class="nav-icon fa fa-folder"></i>@endif<p>Delegate</p></a>
+                    <i class="nav-icon fa fa-folder"></i>@endif<p>Sales Man</p></a>
                 </li>
             @endcan
         </ul>
@@ -242,6 +242,12 @@
 
 
 <li class="nav-header">{{trans('lang.app_management')}}</li>
+    @can('language.index')
+        <li class="nav-item">
+            <a class="nav-link {{ Request::is('delegate*') ? 'active' : '' }}" href="{!! route('language.index') !!}">@if($icons)
+            <i class="nav-icon fa fa-folder"></i>@endif<p>Languages</p></a>
+        </li>
+    @endcan
     @can('categories.index')
         <li class="nav-item">
             <a class="nav-link {{ Request::is('categories*') ? 'active' : '' }}" href="{!! route('categories.index') !!}">@if($icons)

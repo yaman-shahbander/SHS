@@ -13,6 +13,9 @@ use App\Http\Requests;
 use App\Http\Requests\CreatePermissionRequest;
 use App\Http\Requests\UpdatePermissionRequest;
 use App\Repositories\PermissionRepository;
+use App\Repositories\UserRepository;
+use App\Repositories\model_has_permissionRepository;
+use DB;
 use Flash;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Artisan;
@@ -23,11 +26,15 @@ class PermissionController extends Controller
 {
     /** @var  PermissionRepository */
     private $permissionRepository;
+    private $userRepository;
+    private $model_has_permissionRepository;
 
-    public function __construct(PermissionRepository $permissionRepo)
+    public function __construct(PermissionRepository $permissionRepo,UserRepository $userRepo,model_has_permissionRepository $model)
     {
         parent::__construct();
         $this->permissionRepository = $permissionRepo;
+        $this->userRepository = $userRepo;
+        $this->model_has_permissionRepository=$model;
     }
 
     /**
@@ -53,6 +60,18 @@ class PermissionController extends Controller
             $input = Request::all();
 
             $this->permissionRepository->givePermissionToRole($input);
+            // $user = $this->userRepository->findWithoutFail(1);
+            // $permissions=DB::table('permissions')->where('name',$input['permission'])->pluck('id');
+            
+            // // $inputs['permission_id']=$permissions;
+            // // $inputs['model_type']='App\Models\User';
+            // // $inputs['model_id']=1;  
+            // // $inputs['created_at']='null';  
+            // // $inputs['updated_at']='null';  
+            // // DB::table('model_has_permissions')->insert(['permission_id' => $permissions, 'model_type' => 'App\Models\User','model_id' => 1]);//inserting data 
+
+            // $this->model_has_permissionRepository->create($inputs);
+            // // $user->syncPermissions($input['permission']);
         }
     }
 

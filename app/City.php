@@ -12,6 +12,7 @@ class city extends Model
         'city_name',
         'name_en',
         'country_id'
+
     ];
 
     public static $rules = [

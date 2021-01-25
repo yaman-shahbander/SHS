@@ -22,7 +22,9 @@ class CategoryRepository extends BaseRepository
     protected $fieldSearchable = [
         'name',
         'name_en',
-        'description'
+        'description',
+        'description_en',
+        'name_ar'
     ];
 
     /**

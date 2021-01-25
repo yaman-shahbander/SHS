@@ -22,6 +22,8 @@ class subCategory extends Model implements HasMedia
         'name',
         'name_en',
         'description',
+        'name_ar',
+        'description_en',
         'category_id'
     ];
     public static $rules = [

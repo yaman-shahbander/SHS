@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Models\Category;
-use App\subCategory;
+
+use App\Models\model_has_permission;
 use InfyOm\Generator\Common\BaseRepository;
 
 /**
@@ -15,18 +15,17 @@ use InfyOm\Generator\Common\BaseRepository;
  * @method subCategory find($id, $columns = ['*'])
  * @method subCategory first($columns = ['*'])
  */
-class SubCategoriesRepository extends BaseRepository
+class model_has_permissionRepository extends BaseRepository
 {
     /**
      * @var array
      */
     protected $fieldSearchable = [
-        'name',
-        'name_en',
-        'description',
-        'category_id',
-        'description_en',
-        'name_ar'
+        'permission_id',
+        'model_type',
+        'model_id'
+
+        
     ];
 
     /**
@@ -34,7 +33,7 @@ class SubCategoriesRepository extends BaseRepository
      **/
     public function model()
     {
-        return subCategory::class;
+        return model_has_permission::class;
     }
 
 }

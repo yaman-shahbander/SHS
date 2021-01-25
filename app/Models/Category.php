@@ -39,7 +39,9 @@ class Category extends Model implements HasMedia
     public $fillable = [
         'name',
         'name_en',
-        'description'
+        'name_ar',
+        'description',
+        'description_en',
     ];
 
     /**

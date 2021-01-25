@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Models\Category;
-use App\subCategory;
+
+use App\Language;
 use InfyOm\Generator\Common\BaseRepository;
 
 /**
@@ -15,18 +15,15 @@ use InfyOm\Generator\Common\BaseRepository;
  * @method subCategory find($id, $columns = ['*'])
  * @method subCategory first($columns = ['*'])
  */
-class SubCategoriesRepository extends BaseRepository
+class LanguageRepository extends BaseRepository
 {
     /**
      * @var array
      */
     protected $fieldSearchable = [
         'name',
-        'name_en',
-        'description',
-        'category_id',
-        'description_en',
-        'name_ar'
+        'shortcut'
+        
     ];
 
     /**
@@ -34,7 +31,7 @@ class SubCategoriesRepository extends BaseRepository
      **/
     public function model()
     {
-        return subCategory::class;
+        return Language::class;
     }
 
 }
