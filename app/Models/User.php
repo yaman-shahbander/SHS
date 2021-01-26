@@ -241,7 +241,7 @@ class User extends Authenticatable implements HasMedia
     public function clientsAPI()
     {
         return $this->belongsToMany(User::class,'reviews','vendor_id','client_id')
-            ->withPivot(['description'])->select(['users.id', 'users.name', 'users.avatar', 'users.last_name'])->where('approved', 1)
+            ->withPivot(['description','id'])->select(['users.id','users.name', 'users.avatar', 'users.last_name'])->where('approved', 1)
             ->withTimestamps();
 
     }

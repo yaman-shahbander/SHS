@@ -74,6 +74,24 @@ Route::prefix('vendor')->group(function () {
     Route::post('vendorProfile', 'API\Manager\UserAPIController@vendorprofile');
     //vendor profile
     Route::post('saveVednorData', 'API\Manager\UserAPIController@completeRegistration');
+    //categories with subcategories API
+    Route::post('categoriesVendor', 'API\vendorApiController@categorySubCatFunc');
+    //Woring hours for a new vendor
+    Route::post('workHoursDays', 'API\vendorApiController@workHours');
+    //User revires to a specific vendor
+    Route::post('vendorReviews', 'API\vendorApiController@vendorReviews');
+    //vendor background and avatar
+    Route::post('vendorbackgroundAvatar', 'API\vendorApiController@backgroundAvatar');
+    //vendor about info
+    Route::post('vendorInfo', 'API\vendorApiController@vendorInfo');
+    //vendor about info Update
+    Route::post('vendorInfoUpdate', 'API\vendorApiController@vendorInfoUpdate');
+    //contact and location
+    Route::post('contactLocation', 'API\vendorApiController@contactLocation');
+    //contact and location update
+    Route::post('contactLocationUpdate', 'API\vendorApiController@contactLocationUpdate');
+    //supported subcategoies by the vendor
+    Route::post('supportedSubcategpries', 'API\vendorApiController@supportedSubcategpries');
 });
 
 
@@ -114,10 +132,6 @@ Route::post('vendorLocation', 'API\GmapLocationAPIController@VendorMapDetails');
 Route::post('allMessages','API\ChatAPIController@history');
 //featured vendor fee API
 Route::post('vendorFee', 'API\vendorApiController@vendorFeefunc');
-//categories with subcategories API
-Route::post('categoriesVendor', 'API\vendorApiController@categorySubCatFunc');
-//Woring hours for a new vendor
-Route::post('workHoursDays', 'API\vendorApiController@workHours');
 
 
 Route::resource('restaurants', 'API\RestaurantAPIController');

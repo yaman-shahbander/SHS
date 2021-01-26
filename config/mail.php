@@ -16,7 +16,7 @@ return [
     |
     */
     'mail_smtpdebug' => true,
-    'driver' => env('MAIL_DRIVER', 'mail'),
+    'driver' => env('MAIL_DRIVER', 'smtp'),
 
     /*
     |--------------------------------------------------------------------------
@@ -29,7 +29,7 @@ return [
     |
     */
 
-    'host' => env('MAIL_HOST', 'smtp.gmail.com'),
+    'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
 
     /*
     |--------------------------------------------------------------------------
@@ -71,7 +71,7 @@ return [
     |
     */
 
-    'encryption' => env('MAIL_ENCRYPTION', 'ssl'),
+    'encryption' => env('MAIL_ENCRYPTION', 'tls'),
 
     /*
     |--------------------------------------------------------------------------
@@ -84,9 +84,11 @@ return [
     |
     */
 
-    'username' => env('yamanworkshahbandar@gmail.com'),
+   
+    'username' => env('MAIL_USERNAME'),
 
-    'password' => env("\$_POST!'Yamahn'!"),
+    'password' => env('MAIL_PASSWORD'),
+
 
     /*
     |--------------------------------------------------------------------------
@@ -101,6 +103,14 @@ return [
 
     'sendmail' => '/usr/sbin/sendmail -bs',
 
+    'markdown' => [
+        'theme' => 'default',
+
+        'paths' => [
+            resource_path('views/vendor/mail'),
+        ],
+    ],
+
     // 'markdown' => [
     //     'theme' => 'default',
 
@@ -113,13 +123,19 @@ return [
 
     // 'pretend' => false,
     
-    // 'stream' => [
-    //     'ssl' => [
-    //         'allow_self_signed' => true,
-    //         'verify_peer' => false,
-    //         'verify_peer_name' => false,
-    //     ],
-    // ],
+    // 'components' => [
+    //     'mailer' => [
+    //       'transport' => [
+    //         'streamOptions' => [ 
+    //           'ssl' => [ 
+    //             'allow_self_signed' => true,
+    //             'verify_peer' => false,
+    //             'verify_peer_name' => false,
+    //           ]
+    //         ]
+    //       ]
+    //     ]
+    //   ]
     /*
     |--------------------------------------------------------------------------
     | Markdown Mail Settings
