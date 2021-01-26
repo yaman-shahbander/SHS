@@ -100,11 +100,7 @@ class VendorSuggestedDataTable extends DataTable
                 'title' => trans('lang.user_email'),
 
             ],
-            [
-                'data' => 'Vendor Name',
-                'title' =>'Vendor Name',
-                'searchable' => false, 'orderable' => false, 'exportable' => false, 'printable' => false,
-            ],
+        
             [
                 'data' => 'subscription_id',
                 'title' =>'Subscription',

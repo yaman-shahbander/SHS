@@ -9,6 +9,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Http\Controllers\Controller;
@@ -42,17 +43,13 @@ class CategoryAPIController extends Controller
      */
     public function index(Request $request)
     {
-        /*try {
-            //$this->categoryRepository->pushCriteria(new RequestCriteria($request));
-            //$this->categoryRepository->pushCriteria(new LimitOffsetCriteria($request));
-            //$this->categoryRepository->pushCriteria(new CategoriesOfCuisinesCriteria($request));
-            //$this->categoryRepository->pushCriteria(new CategoriesOfRestaurantCriteria($request));
-        } catch (RepositoryException $e) {
-            return $this->sendError($e->getMessage());
-        }
-        $categories = $this->categoryRepository->all();
+        if($request->device_token) {
+            try {
+                $user = User::where('device_token', $request->device_token)->first();
+                if (empty($user)) {
+                    return $this->sendError('User not found', 401);
 
-        return $this->sendResponse($categories->toArray(), 'Categories retrieved successfully');*/
+                }
 
         $categories = $this->categoryRepository->all(['id','name','description']);
         $response=[];
@@ -74,9 +71,16 @@ class CategoryAPIController extends Controller
 
         }
 
-         
-          
+
+
          return $this->sendResponse($response, 'Categories retrieved successfully');
+            } catch (\Exception $e) {
+                return $this->sendError('error', 401);
+
+            }
+        }
+        else
+            return $this->sendError('You dont have permission', 401);
     }
 
     /**
@@ -110,21 +114,24 @@ class CategoryAPIController extends Controller
      */
     public function store(Request $request)
     {
-        $input = $request->all();
-        $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->categoryRepository->model());
-        try {
-            $category = $this->categoryRepository->create($input);
-            $category->customFieldsValues()->createMany(getCustomFieldsValues($customFields, $request));
-            if (isset($input['image']) && $input['image']) {
-                $cacheUpload = $this->uploadRepository->getByUuid($input['image']);
-                $mediaItem = $cacheUpload->getMedia('image')->first();
-                $mediaItem->copy($category, 'image');
-            }
-        } catch (ValidatorException $e) {
-            return $this->sendError($e->getMessage());
-        }
 
-        return $this->sendResponse($category->toArray(), __('lang.saved_successfully', ['operator' => __('lang.category')]));
+//        $input = $request->all();
+//        $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->categoryRepository->model());
+//        try {
+//            $category = $this->categoryRepository->create($input);
+//            $category->customFieldsValues()->createMany(getCustomFieldsValues($customFields, $request));
+//            if (isset($input['image']) && $input['image']) {
+//                $cacheUpload = $this->uploadRepository->getByUuid($input['image']);
+//                $mediaItem = $cacheUpload->getMedia('image')->first();
+//                $mediaItem->copy($category, 'image');
+//            }
+//        } catch (ValidatorException $e) {
+//            return $this->sendError($e->getMessage());
+//        }
+//
+//        return $this->sendResponse($category->toArray(), __('lang.saved_successfully', ['operator' => __('lang.category')]));
+   return $this->sendResponse([],'nothing');
+
     }
 
     /**
