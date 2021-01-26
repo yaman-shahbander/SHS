@@ -118,7 +118,8 @@ Route::post('vendorFee', 'API\vendorApiController@vendorFeefunc');
 Route::post('categoriesVendor', 'API\vendorApiController@categorySubCatFunc');
 //Woring hours for a new vendor
 Route::post('workHoursDays', 'API\vendorApiController@workHours');
-
+//User revires to a specific vendor
+Route::post('vendorReviews', 'API\vendorApiController@vendorReviews');
 
 Route::resource('restaurants', 'API\RestaurantAPIController');
 

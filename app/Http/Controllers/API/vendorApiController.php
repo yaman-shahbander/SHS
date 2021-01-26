@@ -215,6 +215,10 @@ class vendorApiController extends Controller
        }
         
     }
+    public function vendorReviews(Request $request) {
+        $device_token = ;
+    }
+    
     
 } 
 
