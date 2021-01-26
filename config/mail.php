@@ -15,8 +15,8 @@ return [
     |            "sparkpost", "log", "array"
     |
     */
-
-    'driver' => env('MAIL_DRIVER', 'smtp'),
+    'mail_smtpdebug' => true,
+    'driver' => env('MAIL_DRIVER', 'mail'),
 
     /*
     |--------------------------------------------------------------------------
@@ -56,8 +56,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'shs.user9@gmail.com'),
-        'name' => env('MAIL_FROM_NAME', 'shs'),
+        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
+        'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
     /*
@@ -71,7 +71,7 @@ return [
     |
     */
 
-    'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+    'encryption' => env('MAIL_ENCRYPTION', 'ssl'),
 
     /*
     |--------------------------------------------------------------------------
@@ -84,9 +84,9 @@ return [
     |
     */
 
-    'username' => env('MAIL_USERNAME','shs.user9@gmail.com'),
+    'username' => env('yamanworkshahbandar@gmail.com'),
 
-    'password' => env('MAIL_PASSWORD','Xw7AvaHeiBi8Zn7'),
+    'password' => env("\$_POST!'Yamahn'!"),
 
     /*
     |--------------------------------------------------------------------------
@@ -100,15 +100,26 @@ return [
     */
 
     'sendmail' => '/usr/sbin/sendmail -bs',
-    'pretend' => false,
+
+    // 'markdown' => [
+    //     'theme' => 'default',
+
+    //     'paths' => [
+    //         resource_path('views/vendor/mail'),
+    //     ],
+    // ],
+
+    // 'log_channel' => env('MAIL_LOG_CHANNEL'),
+
+    // 'pretend' => false,
     
-    'stream' => [
-        'ssl' => [
-            'allow_self_signed' => true,
-            'verify_peer' => false,
-            'verify_peer_name' => false,
-        ],
-    ],
+    // 'stream' => [
+    //     'ssl' => [
+    //         'allow_self_signed' => true,
+    //         'verify_peer' => false,
+    //         'verify_peer_name' => false,
+    //     ],
+    // ],
     /*
     |--------------------------------------------------------------------------
     | Markdown Mail Settings

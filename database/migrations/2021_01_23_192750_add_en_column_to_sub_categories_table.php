@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddNameEnColumnToSubCitiesTable extends Migration
+class AddEnColumnToSubCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class AddNameEnColumnToSubCitiesTable extends Migration
      */
     public function up()
     {
-        Schema::table('cities', function (Blueprint $table) {
-            $table->string('name_en');
+        Schema::table('sub_categories', function (Blueprint $table) {
+            $table->string('name_ar');
+            $table->text('description_en');
 
         });
     }
@@ -26,7 +27,7 @@ class AddNameEnColumnToSubCitiesTable extends Migration
      */
     public function down()
     {
-        Schema::table('cities', function (Blueprint $table) {
+        Schema::table('sub_categories', function (Blueprint $table) {
             //
         });
     }

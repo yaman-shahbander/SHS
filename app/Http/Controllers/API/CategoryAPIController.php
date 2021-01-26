@@ -50,7 +50,8 @@ class CategoryAPIController extends Controller
                     return $this->sendError('User not found', 401);
 
                 }
-         $categories = $this->categoryRepository->all(['id','name','description']);
+
+        $categories = $this->categoryRepository->all(['id','name','description']);
         $response=[];
         $i=0;
         foreach ($categories as $category)

@@ -281,6 +281,12 @@ class MigrationsTableSeeder extends Seeder
                 'migration' => '2020_03_27_094855_create_notifications_table',
                 'batch' => 4,
             ),
+            44 => 
+            array (
+                'id' => 45,
+                'migration' => '2019_10_16_211433_create_favorites__users_table',
+                'batch' => 4,
+            ),
         ));
         
         

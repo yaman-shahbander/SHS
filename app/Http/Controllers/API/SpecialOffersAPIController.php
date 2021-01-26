@@ -49,6 +49,7 @@ class SpecialOffersAPIController extends Controller
         $vendor_specialOffer->user_id = $request->id;
         $vendor_specialOffer->description = $request->description;
         $vendor_specialOffer->title = $request->title;
+        $vendor_specialOffer->subcategory_id = $request->subcategory_id;
         $vendor_specialOffer->image = "Null.png";
         
 

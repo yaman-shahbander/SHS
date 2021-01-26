@@ -25,6 +25,8 @@ use App\Models\specialOffers;
 use App\Balance;
 use App\Models\Day;
 use App\Models\Message;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+
 /**
  * Class User
  * @package App\Models

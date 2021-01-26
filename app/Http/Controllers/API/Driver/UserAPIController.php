@@ -110,7 +110,7 @@ class UserAPIController extends Controller
      */
     function register(Request $request)
     {
-
+        $IsEmail = false;
         try {
             if(empty($request->input('device_token'))){
                 return $this->sendError('device token not found', 401);
@@ -125,6 +125,7 @@ class UserAPIController extends Controller
                     'email' => 'required|unique:users|email',
                     'password' => 'required',
                 ]);
+                $IsEmail = true;
             }
             elseif($request->phone){
                 $this->validate($request, [
@@ -134,17 +135,20 @@ class UserAPIController extends Controller
                     'phone' => 'required|unique:users',
                     'password' => 'required',
                 ]);
+                $IsEmail = false;
             }
             $user = new User;
             $user->name = $request->input('first_name');
             $user->last_name = $request->input('last_name');
             $user->email = $request->input('email','');
 //            $user->city_id = $request->input('city_id');
+
             $user->language = $request->input('lang')==null ? '':$request->input('lang','');
             $user->phone = $request->input('phone')==null ? '':$request->input('phone','');
 
-            $user->phone = $request->input('phone','0');
-            $user->activation_code = "123456";
+
+//            $user->language = $request->input('lang');
+            $user->activation_code = rand(1000,9999); // activation code
 //            $user->avatar = $request->input('avatar');
             $user->device_token = $request->input('device_token');
             $user->password = Hash::make($request->input('password'));
@@ -153,6 +157,8 @@ class UserAPIController extends Controller
 
             $user->assignRole('homeowner');
 
+            $IsEmail ? $user->notify(new \App\Notifications\VerifyEmail($user->activation_code)) : $unused = false ;
+            
             $response=
                 ['id'=>$user->id,
                     'first_name'=>$user->name,

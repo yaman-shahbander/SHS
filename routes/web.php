@@ -71,6 +71,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
         Route::get('superAdmin','UserController@superAdmin')->name('superAdmin');
         Route::resource('delegate','DelegateController');
         Route::resource('subscription','SubscriptionController');
+        Route::resource('language','languageController');
         Route::get('dashboard', 'DashboardController@index')->name('dashboard');
 
         Route::group(['middleware' => ['permission:medias']], function () {
@@ -290,7 +291,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
     Route::resource('/notification', 'NotificationController');
     Route::get('/fee', 'VendorController@featuredfeeFunction')->name('vendor.fee');
     Route::post('/feeSave', 'VendorController@savefeeFunction')->name('fee.save');
-
+    Route::get('/mousa', 'HomeController@mousa');
 
 
 

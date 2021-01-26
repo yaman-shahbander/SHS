@@ -203,7 +203,7 @@ Route::post('subcategory/select','NotificationController@getsubcategory');
 if ($request->device_code) {
             $vednor = User::where('device_code', $request->device_code)->first();
             if (!empty($vednor)) {
-                
+
             } else {
 
             }

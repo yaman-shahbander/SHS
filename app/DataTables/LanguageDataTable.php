@@ -3,12 +3,12 @@
 namespace App\DataTables;
 
 use App\Models\CustomField;
-use App\Models\User;
+use App\Language;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
 use Barryvdh\DomPDF\Facade as PDF;
 
-class SuperAdminDataTable extends DataTable
+class LanguageDataTable extends DataTable
 {
 
     /**
@@ -29,16 +29,7 @@ class SuperAdminDataTable extends DataTable
             ->editColumn('updated_at', function ($user) {
                 return getDateColumn($user, 'updated_at');
             })
-            ->editColumn('role', function ($user) {
-                return getArrayColumn($user->roles,'name');
-            })
-            ->editColumn('email', function ($user) {
-                return getEmailColumn($user, 'email');
-            })
-            ->editColumn('avatar', function ($user) {
-                return getMediaColumn($user, 'avatar', 'img-circle elevation-2');
-            })
-            ->addColumn('action', 'settings.users.datatables_actions')
+            ->addColumn('action', 'languages.datatables_actions')
             ->rawColumns(array_merge($columns, ['action']));
     }
 
@@ -48,11 +39,10 @@ class SuperAdminDataTable extends DataTable
      * @param \App\Models\User $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(User $model)
+    public function query(Language $model)
     {
-        return $model->newQuery()->with('roles')
-        ->leftJoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-        ->where('role_id',1);    }
+        return $model->newQuery();
+    }
 
     /**
      * Optional method if you want to use html builder.
@@ -83,28 +73,18 @@ class SuperAdminDataTable extends DataTable
     {
         // TODO custom element generator
         $columns = [
-            [
-                'data' => 'avatar',
-                'title' => trans('lang.user_avatar'),
-                'orderable' => false, 'searchable' => false,
-
-            ],
+           
             [
                 'data' => 'name',
                 'title' => trans('lang.user_name'),
 
             ],
             [
-                'data' => 'email',
-                'title' => trans('lang.user_email'),
+                'data' => 'shortcut',
+                'title' => 'Shortcut',
 
             ],
-            [
-                'data' => 'role',
-                'title' => trans('lang.user_role_id'),
-                'orderable' => false, 'searchable' => false,
-
-            ],
+           
             [
                 'data' => 'updated_at',
                 'title' => trans('lang.user_updated_at'),
