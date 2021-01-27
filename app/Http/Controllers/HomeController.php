@@ -43,9 +43,10 @@ class HomeController extends Controller
 
         //yamanshahbandar4@gmail.com
 
-        $user = (\App\Models\User::where('email', 'yamanshahbandar4@gmail.com'))->first();
+        // $user = (\App\Models\User::where('email', 'yamanshahbandar4@gmail.com'))->first();
         
-        return ($user->notify(new \App\Notifications\VerifyEmail()));
+        // return ($user->notify(new \App\Notifications\VerifyEmail()));
+        return view('home');
     }
 
 
