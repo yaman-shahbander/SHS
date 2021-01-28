@@ -32,6 +32,7 @@
         "nesbot/carbon": "2.31.0 as 1.39.0",
         "orangehill/iseed": "^2.6",
         "overtrue/laravel-lang": "~3.0",
+        "phpmailer/phpmailer": "^6.2",
         "rap2hpoutre/laravel-log-viewer": "^0.15.0",
         "razorpay/razorpay": "2.*",
         "smartervision/laravel-generator": "dev-master",
