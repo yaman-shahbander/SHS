@@ -293,7 +293,10 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
     Route::post('/feeSave', 'VendorController@savefeeFunction')->name('fee.save');
     Route::get('/mousa', 'HomeController@mousa');
 
-
+    Route::post('/sendmail',[
+        'as' => 'sendmail',
+        'uses' => 'phpmailercontroller@sendEmail'
+      ]);
 
     /*
     * This is the main app route [Chatify Messenger]
