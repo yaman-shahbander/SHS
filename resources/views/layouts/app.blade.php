@@ -41,10 +41,10 @@
 
 .chat-widget-wrapper {
   display: block;
-  width: 300px;
+  width: 200px;
   height: 0px;
   position: absolute;
-  bottom: 10px;
+  bottom: 110px;
   right: 0;
   padding: 10px;
   cursor: pointer;
@@ -52,9 +52,9 @@
 }
 
 .chat-widget-container {
-  /* position: relative;
+  position: relative;
   padding: 10px;
-  background-color: #fff; */
+  /* background-color: #fff; */
   border-radius: 4px;
   
 
@@ -62,11 +62,11 @@
 }
 
 .chat-widget-avatar {
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 0px;
     position: absolute;
-    top: -11px;
-    right: 30px;
+    top: -32px;
+    right: 40px;
     border: 4px solid #fff;
     border-radius: 50%;
 }
@@ -180,7 +180,7 @@
                 @endcan
                 @can('notifications.index')
                     <li class="nav-item">
-                        <a class="nav-link {{ Request::is('notifications*') ? 'active' : '' }}" href="{!! route('notifications.index') !!}"><i class="fa fa-bell"></i></a>
+                        <a class="nav-link {{ Request::is('notifications*') ? 'active' : '' }}" href="{{ route('notification.index') }}"><i class="fa fa-bell"></i></a>
                     </li>
                 @endcan
                 <li class="nav-item dropdown">
@@ -211,21 +211,17 @@
             @yield('content')
             
         </div>
-        
+        @can('chats.index')
+            <div class="chat-widget-wrapper">
+                <div class="chat-widget-avatar">
+                
+                    <a href="{!! route('chatify') !!}"><img src="{{asset('236831.svg')}}" onmouseover="bigImg(this)" onmouseout="normalImg(this)"></a>
+                </div>
+            </div>
+        @endcan
         <!-- Main Footer -->
         <footer class="main-footer {{setting('fixed_footer','')}}">
-            @can('chats.index')
-            <div class="chat-widget-wrapper">
-                <div class="chat-widget-container">
-                
-                    <div class="chat-widget-avatar">
-                    <a href="{!! route('chatify') !!}"><img src="{{asset('236831.svg')}}"></a>
-
-                    </div>
-                </div>
-                
-            </div>
-            @endcan
+          
             <div class="float-right d-none d-sm-block">
                 <b>Version</b> {{implode('.',str_split(substr(config('installer.currentVersion','v100'),1,3)))}}
             </div>
@@ -368,7 +364,17 @@
 
     <script src="{{asset('js/scripts.js')}}"></script>
 
+    <script>
+        function bigImg(x) {
+        x.style.height = "90px";
+        x.style.width = "90px";
+        }
 
+        function normalImg(x) {
+        x.style.height = "60px";
+        x.style.width = "80px";
+        }
+</script>
     @stack('scripts')
     @yield('script')
 </body>
