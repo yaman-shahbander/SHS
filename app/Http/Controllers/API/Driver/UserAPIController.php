@@ -46,8 +46,8 @@ class UserAPIController extends Controller
     function login(Request $request)
     {
         try {
-            if(empty($request->input('device_token'))){
-                return $this->sendError('device token not found', 401);
+            if(empty($request->header('devicetoken'))){
+                return $this->sendError('nothing to process', 401);
 
             }
             if($request->email){
@@ -158,7 +158,7 @@ class UserAPIController extends Controller
             $user->assignRole('homeowner');
 
             $IsEmail ? $user->notify(new \App\Notifications\VerifyEmail($user->activation_code)) : $unused = false ;
-            
+
             $response=
                 ['id'=>$user->id,
                     'first_name'=>$user->name,
@@ -406,25 +406,45 @@ class UserAPIController extends Controller
     }
 
     public function bookMark(Request $request) {
-        $id = $request->id; // logged in user ID
-        $user = User::find($id);
-        $userLatitude = $user->coordinates->latitude;
-        $userLongitude = $user->coordinates->longitude;
-        $HiddenColumns = ['custom_fields', 'media', 'has_media', 'pivot'];
-        $attrs = $user->vendorFavoriteAPI->makeHidden($HiddenColumns);
-        $respone = [];
-        $i = 0;
-        foreach($attrs as $attr) {
-            $respone[$i]['id'] = $attr->id;
-            $respone[$i]['name'] = $attr->name;
-            $respone[$i]['avatar'] = $attr->getFirstMediaUrl('avatar', 'icon');
-            $respone[$i]['last_name'] = $attr->last_name;
-            $respone[$i]['description'] = $attr->description;
-            $respone[$i]['rating']   = getRating($attr);
-            $respone[$i]['distance'] = $attr->coordinates ? distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)) : 'No coordinates provided for the current vendor';
-            $i++;
+        if($request->header('devicetoken')) {
+            $response = [];
+            $hiddenElems = ['custom_fields', 'has_media'];
+            try {
+                $user = User::where('device_token', $request->header('devicetoken'))->first();
+                if (empty($user)) {
+                    return $this->sendError('User not found', 401);
+                }
+//
+                try{
+                    $userLatitude = $user->coordinates->latitude;
+                    $userLongitude = $user->coordinates->longitude;
+                }
+                catch (\Exception $e){
+                    return $this->sendError('You have to turn on gps', 401);
+
+                }
+                $HiddenColumns = ['custom_fields', 'media', 'has_media', 'pivot'];
+                $attrs = $user->vendorFavoriteAPI->makeHidden($HiddenColumns);
+                $respone = [];
+                $i = 0;
+                foreach ($attrs as $attr) {
+                    $respone[$i]['id'] = $attr->id;
+                    $respone[$i]['name'] = $attr->name;
+                    $respone[$i]['avatar'] = asset('storage/Avatar').'/'.$attr->avatar;
+                    $respone[$i]['last_name'] = $attr->last_name;
+                    $respone[$i]['description'] = $attr->description;
+                    $respone[$i]['rating'] = getRating($attr);
+                    $respone[$i]['distance'] = $attr->coordinates ? distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)) : 'No coordinates provided for the current vendor';
+                    $i++;
+                }
+                return $this->sendResponse($respone, 'favorites retrieved successfully');
+            } catch (\Exception $e) {
+                return $this->sendError($e->getMessage(), 401);
+            }
         }
-        return $this->sendResponse($respone, 'favorites retrieved successfully');
+        else
+        return $this->sendError('nothing to process', 401);
+
     }
 
     public function history(Request $request) {

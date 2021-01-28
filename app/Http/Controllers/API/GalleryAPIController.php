@@ -44,7 +44,7 @@ class GalleryAPIController extends Controller
         // } catch (RepositoryException $e) {
         //     return $this->sendError($e->getMessage());
         // }
-    
+
         $images = $this->galleryRepository->where('user_id', $request->id)->get();
 
         $response = [];
@@ -54,10 +54,10 @@ class GalleryAPIController extends Controller
                 'user_id' => $image->user_id
             ];
         }
-       
+
         // $new_galleries = $galleries->toArray();
-        
-        // $galleries_final = []; 
+
+        // $galleries_final = [];
         // foreach($new_galleries as $new_gallery)
         // {
         //     if($new_gallery['approved'] == 1)
@@ -65,9 +65,9 @@ class GalleryAPIController extends Controller
         //         array_push($galleries_final,$new_gallery);
         //     }
         // }
-        
+
         return $this->sendResponse($response, 'Galleries retrieved successfully');
-       
+
     }
 
     /**
@@ -93,34 +93,34 @@ class GalleryAPIController extends Controller
     }
     public function store(Request $request)
     {
-        
+
         if(!$request->hasFile('image')) {
             return response()->json(['upload_file_not_found'], 400);
         }
         $allowedfileExtension=['JPEG','jpg','png','gif','svg'];
-        $files = $request->file('image'); 
+        $files = $request->file('image');
         $errors = [];
-    
+
         foreach( $request->file('image') as $file)
         {
 
             $extension = $file->getClientOriginalExtension();
             $check = in_array($extension,$allowedfileExtension);
-    
+
             if($check) {
 
                     $image = Image::make($file);
                     $image->resize(400, 300);
                     $image->contrast(10);
                     $imageName = uniqId().$file->getClientOriginalName();
-                    $image->save(public_path('storage/gallery').$imageName);
+                    $image->save(public_path('storage/gallery/').$imageName);
 //return 55;
 //                    $image->save(public_path('images\gallery/'.$imageName));
 
 
 //                    $path = $file->store('public\images\gallery');
 //                    $name = $file->getClientOriginalName();
-         
+
                     //store image file into directory and db
                     $save = new Gallery();
                     $save->image = $imageName;
@@ -129,7 +129,7 @@ class GalleryAPIController extends Controller
             } else {
                 return response()->json(['invalid_file_format'], 422);
             }
-    
+
 
         }
         return response()->json(['file_uploaded'], 200);

@@ -147,7 +147,7 @@ class UserAPIController extends Controller
             $user->device_token = $request->input('device_token', '');
             $user->password = Hash::make($request->input('password'));
 
-            $user->$device_code = str_random(60) . time();
+            $user->device_code = str_random(60) . time();
             $user->save();
 
             $user->assignRole('manager');
@@ -217,11 +217,11 @@ class UserAPIController extends Controller
                 //     'start'  => '12:00:00',
                 //     'end'    => '04:00:00'
                 //    ],
-                //    [ 
+                //    [
                 //     'day_id'=>7,
                 //     'start'  => '12:00:00',
                 //     'end'    => '05:00:00'
-                //     ],   
+                //     ],
                 //     [ 'day_id'=>6,
                 //     'start'  => '12:00:00',
                 //     'end'    => '05:00:00'
@@ -475,7 +475,7 @@ class UserAPIController extends Controller
             $respone[$i]['distance'] = $attr->coordinates ? distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)) : 'No coordinates provided for the current vendor';
             $i++;
         }
-        
+
         return $this->sendResponse($respone, 'reviews retrieved successfully');
     }
 
@@ -617,7 +617,7 @@ class UserAPIController extends Controller
                                 }),
                 'offers'          => $vendor->specialOffers->makeHidden(['user_id', 'created_at', 'updated_at'])
             ];
-  
+
             return $response;
         }
 
