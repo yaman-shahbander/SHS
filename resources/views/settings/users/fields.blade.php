@@ -28,10 +28,12 @@
             <div class="col-md-9">
                 <select name="country" id="country" aria-controls="dataTableBuilder" class="form-control form-control-sm">
                     <option value="0" selected> Select</option>
+                    <option data-icon="france flag" value=""> ddd</option>
 
                 @foreach($countries as $country)
                         <option value="{{ $country->id }}"  @if(!empty($user->city_id)) @if($country->id==$user->cities->country_id) selected @endif @endif>
                             {{ $country->country_name }}</option>
+
                     @endforeach
                 </select>
             </div>

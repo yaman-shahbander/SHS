@@ -10,6 +10,9 @@
 {{--  <link rel="stylesheet" href="{{asset('plugins/summernote/summernote-bs4.css')}}">--}}
   {{--dropzone--}}
   <link rel="stylesheet" href="{{asset('plugins/dropzone/bootstrap.min.css')}}">
+
+<link rel="stylesheet" href="{{asset('flag.css')}}"/>
+
 @endpush
 @section('settings_title',trans('lang.user_table'))
 @section('settings_content')

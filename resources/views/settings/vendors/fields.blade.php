@@ -20,14 +20,23 @@
             </div>
         </div>
     </div>
+    <div class="border border-light p-3 mb-4">
 
+<i class="ae flag"></i>
+<i class="france flag"></i>
+<i class="myanmar flag"></i>
+
+</div>
     <div class="row">
         <!-- Country Field -->
         <div class="form-group col-md-6 row">
             {!! Form::label('name', trans('lang.country'), ['class' => 'col-3 control-label']) !!}
             <div class="col-md-9">
-                <select name="country" id="country" aria-controls="dataTableBuilder" class="form-control form-control-sm">
+                <select name="country" id="country" data-show-content="true" aria-controls="dataTableBuilder" class="form-control form-control-sm">
                     <option value="0" selected> Select</option>
+                    <option data-content="<i class='france flag'></i> Eye"></option>
+                    <option value="email"><i class="fa fa-edit"></i> Email</option>
+
 
                 @foreach($countries as $country)
 
