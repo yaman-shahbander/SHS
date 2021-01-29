@@ -26,7 +26,7 @@ Route::prefix('homeOwner')->group(function () {
     Route::get('logout', 'API\Driver\UserAPIController@logout');
     Route::get('settings', 'API\Driver\UserAPIController@settings');
     //Change password
-    Route::post('change-password', 'Api\AuthController@change_password');
+    Route::post('change-password', 'API\AuthController@change_password');
     //change phone
     Route::post('change-phone', 'API\AuthController@change_phone');
     //My reviews
@@ -105,11 +105,12 @@ Route::get('settings', 'API\UserAPIController@settings');
 Route::resource('cuisines', 'API\CuisineAPIController');
 Route::resource('categories', 'API\CategoryAPIController');
 //get subgategory
-Route::resource('subcategory', 'API\SubCategoryController');
+Route::post('subcategory', 'API\SubCategoryController@index');
 //Country APi Controller
 Route::resource('countries', 'API\CountryAPIController');
 //city APi Controller
-Route::resource('cities', 'API\cityApiController');
+//Route::p('cities', 'API\cityApiController');
+Route::post('cities', 'API\cityApiController@index');
 //forgot password API
 Route::post('forgot-password', 'API\AuthController@forgot_password');
 //vendor rating API

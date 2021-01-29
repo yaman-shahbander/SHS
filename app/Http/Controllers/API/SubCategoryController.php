@@ -22,12 +22,12 @@ class SubCategoryController extends Controller
 
 
     public function index(Request $request){
-        if($request->device_token) {
+        if($request->header('devicetoken')) {
+
             try {
-                $user = User::where('device_token', $request->device_token)->first();
+                $user = User::where('device_token', $request->header('devicetoken'))->first();
                 if (empty($user)) {
                     return $this->sendError('User not found', 401);
-
                 }
         $subcategories = $this->subcategoryRepository->where("category_id", $request->id)->get(['id','name','description']);
 
