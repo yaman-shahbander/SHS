@@ -4,6 +4,8 @@
   <link rel="stylesheet" href="{{asset('plugins/iCheck/flat/blue.css')}}">
   <!-- select2 -->
   <link rel="stylesheet" href="{{asset('plugins/select2/select2.min.css')}}">
+  <link rel="stylesheet" href="{{asset('flag.css')}}"/>
+
   <!-- bootstrap wysihtml5 - text editor -->
 {{--  <link rel="stylesheet" href="{{asset('plugins/summernote/summernote-bs4.css')}}">--}}
   {{--dropzone--}}

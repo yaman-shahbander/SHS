@@ -1,5 +1,7 @@
 @extends('layouts.app')
-
+@push('css_lib')
+<link rel="stylesheet" href="{{asset('flag.css')}}"/>
+@endpush
 @section('content')
 <!-- Content Header (Page header) -->
 <div class="content-header">

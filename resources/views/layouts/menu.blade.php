@@ -90,8 +90,7 @@
                 <i class="nav-icon fa fa-star"></i>@endif<p>favorites</p></a>
             </li>
             @endcan
-
-            
+        
 
             @can('delegate.index')
                 <li class="nav-item">
@@ -99,6 +98,28 @@
                     <i class="nav-icon fa fa-folder"></i>@endif<p>Sales Man</p></a>
                 </li>
             @endcan
+            @can('duration.index')
+            <li class="nav-item has-treeview {{ Request::is('vendorRegistration*') || Request::is('durationOffers*') ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ Request::is('durationOffers*') || Request::is('vendorRegistration*') ? 'active' : '' }}"> @if($icons)
+                        <i class="nav-icon fa fa-clock-o"></i>@endif
+                    <p>durations<i class="right fa fa-angle-left"></i>
+                    </p>
+                </a>
+
+                <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a class="nav-link {{ Request::is('vendorRegistration*') ? 'active' : '' }}" href="{!! route('vendorRegistration.index') !!}">@if($icons)
+                                    <i class="nav-icon fa fa-clock-o"></i>@endif<p>durations</p></a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link {{ Request::is('durationOffers*') ? 'active' : '' }}" href="{!! route('durationOffer.index') !!}">@if($icons)
+                                    <i class="nav-icon fa fa-clock-o"></i>@endif
+                                <p>duration offers</p></a>
+                        </li>
+                </ul>
+            </li>
+        @endcan
         </ul>
         
     </li>
@@ -174,28 +195,7 @@
 @endcan
 
 
-@can('duration.index')
-    <li class="nav-item has-treeview {{ Request::is('vendorRegistration*') || Request::is('durationOffers*') ? 'menu-open' : '' }}">
-        <a href="#" class="nav-link {{ Request::is('durationOffers*') || Request::is('vendorRegistration*') ? 'active' : '' }}"> @if($icons)
-                <i class="nav-icon fa fa-clock-o"></i>@endif
-            <p>durations<i class="right fa fa-angle-left"></i>
-            </p>
-        </a>
 
-        <ul class="nav nav-treeview">
-                <li class="nav-item">
-                    <a class="nav-link {{ Request::is('vendorRegistration*') ? 'active' : '' }}" href="{!! route('vendorRegistration.index') !!}">@if($icons)
-                            <i class="nav-icon fa fa-clock-o"></i>@endif<p>durations</p></a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link {{ Request::is('durationOffers*') ? 'active' : '' }}" href="{!! route('durationOffer.index') !!}">@if($icons)
-                            <i class="nav-icon fa fa-clock-o"></i>@endif
-                        <p>duration offers</p></a>
-                </li>
-        </ul>
-    </li>
-@endcan
 
 @can('balance.index')
 
@@ -231,12 +231,12 @@
 @endcan -->
 
 
-@can('notifications.index')
+<!-- @can('notifications.index')
     <li class="nav-item">
         <a class="nav-link {{ Request::is('notifications*') ? 'active' : '' }}" href="{{ route('notification.index') }}">@if($icons)
                 <i class="nav-icon fa fa-bell"></i>@endif<p>notifications</p></a>
     </li>
-@endcan
+@endcan -->
 
 
 
