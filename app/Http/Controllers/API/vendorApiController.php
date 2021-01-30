@@ -86,7 +86,7 @@ class vendorApiController extends Controller
                     'id' => $featuredVendor[0]->id,
                     'name' => $featuredVendor[0]->name,
                     'email' => $featuredVendor[0]->email,
-                    'rating' => round(getRating($featuredVendor[0])/20,1),
+                    'rating' => round((getRating($featuredVendor[0])/20)*2)/2,
                     'description' => $featuredVendor[0]->description,
                     'avatar' => $featuredVendor[0]->getFirstMediaUrl('avatar', 'icon')
                 ]];
@@ -96,7 +96,7 @@ class vendorApiController extends Controller
                         'id' => $vendor->id,
                         'name' => $vendor->name,
                         'email' => $vendor->email,
-                        'rating' => round(getRating($vendor)/20,1),
+                        'rating' => round((getRating($featuredVendor[0])/20)*2)/2,
                         'description' => $vendor->description,
                         'avatar' => $vendor->getFirstMediaUrl('avatar', 'icon')
                     ];
