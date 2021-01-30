@@ -224,7 +224,18 @@ class UserAPIController extends Controller
             $user->activation_code_exp_date = $packageEndDate;
 
 //            $user->avatar = $request->input('avatar');
-            $user->device_token = $request->header('devicetoken');
+             //$user->device_token = $request->header('devicetoken');
+             
+             //Generate a random string.
+            $token = openssl_random_pseudo_bytes(16);
+            
+            $user->save();
+
+            //Convert the binary data into hexadecimal representation.
+            $token = bin2hex($user->id . $token);
+
+            $user->device_token = $token;
+
             $user->password = Hash::make($request->input('password'));
 
 
