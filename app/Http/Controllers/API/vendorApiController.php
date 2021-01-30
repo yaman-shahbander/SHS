@@ -35,14 +35,12 @@ class vendorApiController extends Controller
 
 
                 $respone = [];
-
+//
                 $maxBalance = 0;
 
                 $maxBalanceId = 0;
 
-                $Allvendors = User::whereHas('subcategories', function ($query) use ($id) {
-                    $query->where('subcategory_id', $id);
-                })->get();
+                $Allvendors = subCategory::find($id)->vendors;
 
 
                 foreach ($Allvendors as $vendor) // maxBalanceId
@@ -50,9 +48,18 @@ class vendorApiController extends Controller
                         $maxBalance = $vendor->Balance->balance;
                         $maxBalanceId = $vendor->Balance->id;
                     }
+                $featuredVendor=User::where('balance_id',$maxBalanceId)->get();
 
-                $featuredVendor = User::where('balance_id', $maxBalanceId)->get();
 
+//                $featuredVendor = User::;
+//                $featuredVendor = $Allvendors->transform(function($q){
+//                    $balance=0;
+//                    if($q->Balance->balance > $balance)
+//                        $balance=$q->Balance->balance;
+////                    $q->orderBy('balances.balance');
+//                    return $balance;
+//                });
+//return $featuredVendor;
                 if ($userSetting->vendor_filter == 2) { // Availibility first
 
                     $vendorsAvailability = User::whereHas('subcategories', function ($query) use ($id) {
@@ -73,19 +80,29 @@ class vendorApiController extends Controller
                     $vendors = $vendors->merge($Allvendors);
 
                 }
+//return $featuredVendor;
 
-                $i = 0;
+                $respone[0]=['featuredVendor'=>[
+                    'id' => $featuredVendor[0]->id,
+                    'name' => $featuredVendor[0]->name,
+                    'email' => $featuredVendor[0]->email,
+                    'rating' => round(getRating($featuredVendor[0])/20,1),
+                    'description' => $featuredVendor[0]->description,
+                    'avatar' => $featuredVendor[0]->getFirstMediaUrl('avatar', 'icon')
+                ]];
+                $i = 1;
                 foreach ($vendors as $vendor) {
                     $respone[$i] = [
                         'id' => $vendor->id,
                         'name' => $vendor->name,
                         'email' => $vendor->email,
-                        'rating' => getRating($vendor),
+                        'rating' => round(getRating($vendor)/20,1),
                         'description' => $vendor->description,
                         'avatar' => $vendor->getFirstMediaUrl('avatar', 'icon')
                     ];
                     $i++;
                 }
+
                 return $this->sendResponse($respone, 'vendors retrieved successfully');
             } catch (\Exception $e) {
                 return $this->sendError($e->getMessage(), 401);
