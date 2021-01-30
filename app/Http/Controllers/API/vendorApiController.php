@@ -197,8 +197,8 @@ class vendorApiController extends Controller
     public function categorySubCatFunc(Request $request) {
 
         $lang = false;
-        if($request->device_code) {
-            $vendor = User::where('device_code', $request->device_code)->first();
+        if(!empty($request->header('devicetoken'))) {
+            $vendor = User::where('device_token', $request->header('devicetoken'))->first();
             $l=$vendor->language;
             $arr=[
                 'lang'=>$vendor->language,
@@ -241,8 +241,8 @@ class vendorApiController extends Controller
 
 
     public function workHours(Request $request) {
-        if($request->device_code) {
-            $vendor = User::where('device_code', $request->device_code)->first();
+        if(!empty($request->header('devicetoken'))) {
+            $vendor = User::where('device_token', $request->header('devicetoken'))->first();
            if(!empty($vendor)) {
 
 
