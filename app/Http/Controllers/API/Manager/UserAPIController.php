@@ -27,6 +27,7 @@ use Prettus\Repository\Exceptions\RepositoryException;
 use Prettus\Validator\Exceptions\ValidatorException;
 use App\Models\reviews;
 use Validator;
+use PHPMailer\PHPMailer\PHPMailer;
 
 class UserAPIController extends Controller
 {
@@ -54,7 +55,13 @@ class UserAPIController extends Controller
 
     function login(Request $request)
     {
+        $IsEmail = false;
+
         try {
+            if(empty($request->header('devicetoken'))){
+                return $this->sendError('nothing to process', 401);
+
+            }
             if($request->email){
 
                 $this->validate($request, [
@@ -65,6 +72,9 @@ class UserAPIController extends Controller
                 if (auth()->attempt(['email' => $request->input('email'), 'password' => $request->input('password')])) {
                     $user = auth()->user();
                 }
+                $IsEmail = true;
+
+
             }
             elseif($request->phone){
                 $this->validate($request, [
@@ -76,32 +86,82 @@ class UserAPIController extends Controller
                     $user = auth()->user();
 
                 }
+                $IsEmail = false;
+
             }
 
-
-                if (!$user->hasRole('manager')) {
-                    return  $this->sendError('User not vendor', 401);
+//            if (auth()->attempt(['email' => $request->input('email'), 'password' => $request->input('password')])) {
+//                // Authentication passed...
+//                $user = auth()->user();
+//                if (!$user->hasRole('homeowner')) {
+//                    return $this->sendError('User not homeowner', 401);
+//                }
+            if (empty($user)) {
+                    return $this->sendError('User not found', 401);
                 }
-                $user->device_token = $request->input('device_token', '');
+                $user->device_token = $request->header('devicetoken');
                 $user->save();
-            $response=
-                ['id'=>$user->id,
-                    'first_name'=>$user->name,
-                    'last_name'=>$user->last_name,
-                    'email'=>$user->email,
-                    'avatar'=>$user->avatar,
-                    'lang'=>$user->language,
-                    'device_token'=>$user->device_token,
-                    'phone'=>$user->phone,
-                    'city'=>$user->cities->city_name,
-                    'country'=>(Country::find($user->cities->country_id))->country_name,
+                if($user->is_verified==0) {
+                    $user->activation_code = rand(1000, 9999); // activation code
 
-                ];
+                    //Expiration code date
+                    $now = time();
+                    $time_plus_15_minutes = $now + (15 * 60);
+                    $packageEndDate = date('Y-m-d H:i:s', strtotime('+15 minute'));
 
+
+                    $user->activation_code_exp_date = $packageEndDate;
+
+                    if ($IsEmail) {
+                        require '../vendor/autoload.php'; // load Composer's autoloader
+
+                        $mail = new PHPMailer(true); // Passing `true` enables exceptions
+
+                        try {
+
+                            // Mail server settings
+
+                            //$mail->SMTPDebug = 4;
+                            $mail->isSMTP();
+                            $mail->Host = 'smtp.gmail.com';
+                            $mail->SMTPAuth = true;
+                            $mail->Username = 'yamanworkshahbandar@gmail.com';
+                            $mail->Password = "\$_POST!'Yamahn'!";
+                            $mail->SMTPSecure = 'tls';
+                            $mail->Port = 587;
+
+                            $mail->setFrom('yamanworkshahbandar@gmail.com', 'Smart Home Services');
+                            $mail->addAddress($user->email);
+                            $mail->isHTML(true);
+
+                            $mail->Subject = 'SHS - Verification Code';
+                            $mail->Body = 'Your verification code is: ' . $user->activation_code;
+
+                            $mail->send();
+                            return $this->sendResponse(['activation_code'=>$user->activation_code], 'user not verified');
+
+                        } catch (Exception $e) {
+                            return $this->sendError('error message ', 401);
+                        }
+                    }
+                }
+                $response=
+                    ['id'=>$user->id,
+                        'first_name'=>$user->name,
+                        'last_name'=>$user->last_name,
+                        'email'=>$user->email,
+                        'avatar'=>asset('storage/Avatar').'/'.$user->avatar,
+                        'lang'=>$user->language,
+                        'device_token'=>$user->device_token,
+                        'phone'=>$user->phone,
+                        'city'=>$user->cities->city_name,
+                        'country'=>(Country::find($user->cities->country_id))->country_name,
+
+                        ];
                 return $this->sendResponse($response, 'User retrieved successfully');
 
         } catch (\Exception $e) {
-            return $this->sendError($e->getMessage(), 401);
+            return $this->sendError('error', 401);
         }
 
     }
@@ -117,7 +177,7 @@ class UserAPIController extends Controller
 
         $IsEmail = false;
         try {
-            if(empty($request->input('device_token'))){
+            if(empty($request->header('devicetoken'))){
                 return $this->sendError('device token not found', 401);
 
             }
@@ -164,7 +224,7 @@ class UserAPIController extends Controller
             $user->activation_code_exp_date = $packageEndDate;
 
 //            $user->avatar = $request->input('avatar');
-            $user->device_token = $request->input('device_token');
+            $user->device_token = $request->header('devicetoken');
             $user->password = Hash::make($request->input('password'));
 
 
@@ -232,37 +292,48 @@ class UserAPIController extends Controller
 
         return $this->sendResponse($response, 'User retrieved successfully');
     }
+    
+    
     public function verify(Request $request){
-        $user=User::find($request->id);
-        try {
+        if($request->header('devicetoken')) {
+                   try {
+                $user = User::where('device_token', $request->header('devicetoken'))->first();
+                if (empty($user)) {
+                    return $this->sendError('User not found', 401);
+                }
 
-            $user->city_id = $request->input('city_id');
-            $user->language = $request->input('lang');
-            $user->avatar = $request->input('avatar');
-            $user->save();
-            $response=
-                ['id'=>$user->id,
-                    'first_name'=>$user->name,
-                    'last_name'=>$user->last_name,
-                    'email'=>$user->email,
-                    'activation_cod'=>$user->activation_code,
-                    'avatar'=>$user->avatar,
-                    'lang'=>$user->language,
-                    'device_token'=>$user->device_token,
-                    'phone'=>$user->phone,
-                    'city'=>$user->cities->city_name,
-                    'country'=>(Country::find($user->cities->country_id))->country_name,
 
-                ];
-            event(new UserRoleChangedEvent($user));
-        } catch (\Exception $e) {
-            return $this->sendError($e->getMessage(), 401);
+                $user->city_id = $request->input('city_id');
+                //$user->language = $request->input('lang');
+                $user->avatar = 'avatar.png';
+                $user->is_verified = 1;
+                $user->save();
+                $response =
+                    ['id' => $user->id,
+                        'first_name' => $user->name,
+                        'last_name' => $user->last_name,
+                        'email' => $user->email,
+                        //'activation_cod'=>$user->activation_code,
+                        'avatar' => asset('storage/Avatar') . '/' . $user->avatar,
+                        'lang' => $user->language,
+                        'device_token' => $user->device_token,
+                        'phone' => $user->phone,
+                        'city' => $user->cities->city_name,
+                        'country' => (Country::find($user->cities->country_id))->country_name,
+
+                    ];
+                event(new UserRoleChangedEvent($user));
+            } catch (\Exception $e) {
+                return $this->sendError('error save', 401);
+            }
+
+
+            return $this->sendResponse($response, 'User updated successfully');
+
         }
-
-
-        return $this->sendResponse($response, 'User retrieved successfully');
-
-
+        else {
+            return $this->sendError('error!', 401);
+        }
     }
 
     public function completeRegistration(Request $request) {
@@ -537,25 +608,45 @@ class UserAPIController extends Controller
     }
 
     public function bookMark(Request $request) {
-        $id = $request->id; // logged in user ID
-        $user = User::find($id);
-        $userLatitude = $user->coordinates->latitude;
-        $userLongitude = $user->coordinates->longitude;
-        $HiddenColumns = ['custom_fields', 'media', 'has_media', 'pivot'];
-        $attrs = $user->vendorFavoriteAPI->makeHidden($HiddenColumns);
-        $respone = [];
-        $i = 0;
-        foreach($attrs as $attr) {
-            $respone[$i]['id'] = $attr->id;
-            $respone[$i]['name'] = $attr->name;
-            $respone[$i]['avatar'] = $attr->getFirstMediaUrl('avatar', 'icon');
-            $respone[$i]['last_name'] = $attr->last_name;
-            $respone[$i]['description'] = $attr->description;
-            $respone[$i]['rating'] = getRating($attr);
-            $respone[$i]['distance'] = $attr->coordinates ? distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)) : 'No coordinates provided for the current vendor';
-            $i++;
+        if($request->header('devicetoken')) {
+            $response = [];
+            $hiddenElems = ['custom_fields', 'has_media'];
+            try {
+                $user = User::where('device_token', $request->header('devicetoken'))->first();
+                if (empty($user)) {
+                    return $this->sendError('User not found', 401);
+                }
+//
+                try{
+                    $userLatitude = $user->coordinates->latitude;
+                    $userLongitude = $user->coordinates->longitude;
+                }
+                catch (\Exception $e){
+                    return $this->sendError('You have to turn on gps', 401);
+
+                }
+                $HiddenColumns = ['custom_fields', 'media', 'has_media', 'pivot'];
+                $attrs = $user->vendorFavoriteAPI->makeHidden($HiddenColumns);
+                $respone = [];
+                $i = 0;
+                foreach ($attrs as $attr) {
+                    $respone[$i]['id'] = $attr->id;
+                    $respone[$i]['name'] = $attr->name;
+                    $respone[$i]['avatar'] = asset('storage/Avatar').'/'.$attr->avatar;
+                    $respone[$i]['last_name'] = $attr->last_name;
+                    $respone[$i]['description'] = $attr->description;
+                    $respone[$i]['rating'] = getRating($attr);
+                    $respone[$i]['distance'] = $attr->coordinates ? distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)) : 'No coordinates provided for the current vendor';
+                    $i++;
+                }
+                return $this->sendResponse($respone, 'favorites retrieved successfully');
+            } catch (\Exception $e) {
+                return $this->sendError($e->getMessage(), 401);
+            }
         }
-        return $this->sendResponse($respone, 'favorites retrieved successfully');
+        else
+        return $this->sendError('nothing to process', 401);
+
     }
 
     public function history(Request $request) {
