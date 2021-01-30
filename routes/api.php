@@ -78,7 +78,7 @@ Route::prefix('vendor')->group(function () {
     Route::post('categoriesVendor', 'API\vendorApiController@categorySubCatFunc');
     //Woring hours for a new vendor
     Route::post('workHoursDays', 'API\vendorApiController@workHours');
-    //User revires to a specific vendor
+    //User reviews to a specific vendor
     Route::post('vendorReviews', 'API\vendorApiController@vendorReviews');
     //vendor background and avatar
     Route::post('vendorbackgroundAvatar', 'API\vendorApiController@backgroundAvatar');
