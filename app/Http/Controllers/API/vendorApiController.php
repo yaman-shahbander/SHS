@@ -351,6 +351,7 @@ class vendorApiController extends Controller
                 $user->save();
 
                 $response = [
+                    'caption'        => $user->caption,
                     'Business_name'  => $user->nickname,
                     'Owner_name'     => $user->name,
                     'About_you'      => $user->description
@@ -398,11 +399,12 @@ class vendorApiController extends Controller
                     return $this->sendError('User not found', 401);
                 }
                 $user->coordinates->latitude = $request->input('latitude')==null ? '':$request->input('latitude','');
-                $user->coordinates->latitude  = $request->latitude;
-                $user->coordinates->longitude = $request->longitude;
+                // $user->coordinates->latitude  = $request->latitude;
+                // $user->coordinates->longitude = $request->longitude;
                 $user->coordinates->longitude = $request->input('longitude')==null ? '':$request->input('longitude','');
 
                 $user->address = $request->input('address')==null ? '':$request->input('address','');
+
                 $user->website = $request->input('website')==null ? '':$request->input('website','');
                 $user->phone = $request->input('phone')==null ? '':$request->input('phone','');
 
