@@ -748,8 +748,13 @@ class UserAPIController extends Controller
         // })
 
         public function vendorprofile(Request $request) { //for vendor screens
-            $id = $request->id;
-            $vendor = User::find($id);
+            if(empty($request->header('devicetoken'))){
+                return $this->sendError('device token not found', 401);
+            }
+            $vendor = User::where('device_token', $request->header('devicetoken'))->first();
+            if (empty($vendor)) {
+                return $this->sendError('User not found', 401);
+            }
             $response = [];
             $response = [
                 'name'            => $vendor->name,
