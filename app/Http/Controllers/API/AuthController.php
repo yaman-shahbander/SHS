@@ -101,8 +101,13 @@ class AuthController extends Controller
 
     public function change_phone(Request $request)
     {
+        if($request->header('devicetoken')) {
         $input = $request->all();
-        $userid = $input['id'];
+
+        $userid = User::where('device_token', $request->header('devicetoken'))->get('id');
+
+        $userid = $userid[0]->id;
+
         $useridPhone =(User::find($userid))->phone;
 
         $rules = array(
@@ -132,6 +137,5 @@ class AuthController extends Controller
         }
         return $this->sendResponse($response, 'Phone Number Updated Successfully');
     }
-
-
+  }
 }

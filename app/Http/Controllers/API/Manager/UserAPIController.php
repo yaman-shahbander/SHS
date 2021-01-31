@@ -350,9 +350,13 @@ class UserAPIController extends Controller
         }
     }
 
+    //$request->header('devicetoken')
+
+
+
     public function completeRegistration(Request $request) {
-        if ($request->device_code) {
-            $vendor = User::where('device_code', $request->device_code)->first();
+        if ($request->header('devicetoken')) {
+            $vendor = User::where('device_token', $request->header('devicetoken'))->first();
             if (!empty($vendor)) {
                 // $days = [
                 //    [ 'day_id'=>5,
@@ -720,9 +724,15 @@ class UserAPIController extends Controller
 
     public function backgroundPic(Request $request) {
 
-        $id = $request->id;
+        if(empty($request->header('devicetoken'))){
+            return $this->sendError('device token not found', 401);
+        }
 
-        $vendor = User::find($id);
+        $vendor = User::where('device_token', $request->header('devicetoken'))->first();
+
+        if (empty($vendor)) {
+            return $this->sendError('User not found', 401);
+        }
 
             if (!empty ($request->file('background_profile'))) {
 
