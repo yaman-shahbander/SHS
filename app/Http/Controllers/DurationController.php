@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Duration;
-use App\Models\Users;
+use App\Models\User;
 use App\DataTables\durationDataTable;
 use App\DataTables\UserDataTable;
 use App\Repositories\UserRepository;
@@ -63,7 +63,17 @@ class DurationController extends Controller
      */
     public function create()
     {
-        //
+        $hasCustomField = in_array($this->durationRepository->model(), setting('custom_field_models', []));
+        if ($hasCustomField) {
+            $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->durationRepository->model());
+            $html = generateCustomField($customFields);
+        }
+
+        $vendors = User::with('roles')->leftJoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')->where('role_id',3)->get();
+
+        $durations = Duration::all();
+
+        return view('duration.create')->with('vendors', $vendors)->with('durations', $durations)->with("customFields", isset($html) ? $html : false);
     }
 
     /**
@@ -74,7 +84,31 @@ class DurationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input = [];
+
+        $input['id']              = $request->vendornameselect;
+
+        $input['duration_id']     = $request->duration;
+
+        $duration_in_num = DB::table('durations')->select('durations.duration_in_num')->where('durations.id', '=', $request->duration)->get();
+
+        $duration_in_num = $duration_in_num[0]->duration_in_num;
+
+        $input['start_date'] = date('Y-m-d'); 
+
+        $input['expire'] = date('Y-m-d', strtotime('+'.$duration_in_num.' years'));
+
+        $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->userRepository->model());
+        try {
+            $duration = $this->userRepository->update($input, $request->vendornameselect);
+            $duration->customFieldsValues()->createMany(getCustomFieldsValues($customFields, $request));
+            
+        } catch (ValidatorException $e) {
+            Flash::error($e->getMessage());
+        }
+        Flash::success(__('Duration added successfully'));
+
+        return redirect(route('vendorRegistration.index'));
     }
 
     /**

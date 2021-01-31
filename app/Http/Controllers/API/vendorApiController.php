@@ -527,14 +527,18 @@ class vendorApiController extends Controller
             $response = [];
 
             $referer_deviceToken = $request->header('devicetoken'); // The user who's referring a vendor.
+
+            if (empty($referer_deviceToken)) {
+                return $this->sendError('User not found', 401);
+            }
+
             $referer_id = User::where('device_token', $referer_deviceToken)->get('id')->makeHidden($hiddenElems);
 
             $referer_id = $referer_id[0]->id;
 
             $rules = [
                 'name' => 'required',
-                'email' => 'required|email',
-                'phone' => 'required',
+                'phone' => 'required'
             ];
 
             $response = [

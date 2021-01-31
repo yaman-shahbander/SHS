@@ -6,20 +6,35 @@
 <div class="form-group row ">
   {!! Form::label('vendor_name', 'Vendor Name', ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important']) !!}
   <div class="col-8">
-    {!! Form::text('vendor_name', $duration->name,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'readonly']) !!}
+    @if(Request::is('*create'))
+    <select name="vendornameselect" aria-controls="dataTableBuilder" class="form-control form-control-sm">
+        @foreach($vendors as $vendor)
+        <option value="{{ $vendor->id }}">{{ $vendor->name }}</option>
+        @endforeach
+    </select>
+    @else
+         {!! Form::text('vendor_name',  $duration->name ,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'readonly']) !!}
+    @endif
   </div>
 </div>
 
 <!-- Select duration-->
 <div class="form-group row ">
-    {!! Form::label('Duration', "Duration", ['class' => 'col-3 control-label text-right', 'style' => 'text-align: left !important;']) !!}
-    <div class="col-9">
+    {!! Form::label('Duration', "Duration", ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important;']) !!}
+    <div class="col-8">
     <select name="duration" aria-controls="dataTableBuilder" class="form-control form-control-sm">
+    @if(Request::is('*create'))
+        @foreach($durations as $duration)
+            <option value="{{ $duration->id }}">{{ $duration->duration }}</option>
+        @endforeach
+    @else
          @foreach($durations as $dur)
            <option value="{{ $dur->id }}"
            @if(!empty($duration->duration_id)) @if( $duration->duration_id==$dur->id) selected @endif @endif
            >{{  $dur->duration  }}</option>
          @endforeach
+    @endif
+        
     </select>
         <div class="form-text text-muted">
         Select Duration
@@ -28,10 +43,12 @@
 </div>
 
 <!-- Start date-->
+@if(Request::is('*edit'))
 <div class="form-group row ">
-    {!! Form::label('start_date', "Start Date", ['class' => 'col-3 control-label text-right', 'style' => 'text-align: left !important;']) !!}
-    <div class="col-9">   
+    {!! Form::label('start_date', "Start Date", ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important;']) !!}
+    <div class="col-8">   
         <div class="input-group date">
+            
             <input  name="start_date"  type="text" class="form-control datepicker" value = {{ $duration->start_date }}>
             <div class="input-group-addon">
                 <span class="glyphicon glyphicon-th"></span>
@@ -42,8 +59,8 @@
 
 <!-- Start date-->
 <div class="form-group row ">
-    {!! Form::label('expire', "Expire", ['class' => 'col-3 control-label text-right', 'style' => 'text-align: left !important;']) !!}
-    <div class="col-9">   
+    {!! Form::label('expire', "Expire", ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important;']) !!}
+    <div class="col-8">   
         <div class="input-group date" >
             <input name="expire" type="text" class="form-control datepicker" value = {{ $duration->expire }} >
             <div class="input-group-addon">
@@ -53,7 +70,7 @@
     </div>
 </div>
 
-
+@endif
 
 
 </div>
