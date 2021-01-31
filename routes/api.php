@@ -125,8 +125,15 @@ Route::post('currentBalance', 'API\MoneyAPIController@currentBalance');
 Route::post('transactions', 'API\MoneyAPIController@history');
 //Transfer money API
 Route::post('transfer', 'API\MoneyAPIController@transferMoney');
+//Route::resource('filter', 'API\FilterVendorsAPIController');
+
 //FIlter vendors API
-Route::resource('filter', 'API\FilterVendorsAPIController');
+Route::post('getfilter', 'API\FilterVendorsAPIController@index');
+//FIlter vendors API
+Route::post('storefilter', 'API\FilterVendorsAPIController@store');
+//FIlter vendors API
+Route::post('updatefilter', 'API\FilterVendorsAPIController@update');
+
 //Route::resource('specialOffers', 'API\SpecialOffersAPIController');
 
 //special offers vendors API

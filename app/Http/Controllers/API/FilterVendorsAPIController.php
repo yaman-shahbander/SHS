@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\specialOffers;
 use App\Models\Homeowner_filter;
-
+use App\Models\User;
 class FilterVendorsAPIController extends Controller
 {
     /**
@@ -16,9 +16,20 @@ class FilterVendorsAPIController extends Controller
      */
     public function index(Request $request)
     {
-        $id = $request->id;
-        $userSettings = Homeowner_filter::where('homeOwner_id', $id)->get(['homeOwner_id', 'vendor_filter']);
-        return $this->sendResponse($userSettings->toArray(), 'Settings retrieved successfully');
+
+        if($request->header('devicetoken')) {
+
+            $user = User::where('device_token', $request->header('devicetoken'))->first();
+
+            if (empty($user)) {
+                return $this->sendError('User not found', 401);
+            }
+
+            $userSettings = Homeowner_filter::where('homeOwner_id', $user->id)->get(['homeOwner_id', 'vendor_filter']);
+
+            return $this->sendResponse($userSettings->toArray(), 'Settings retrieved successfully');
+
+        }
     }
 
     /**
@@ -39,20 +50,27 @@ class FilterVendorsAPIController extends Controller
      */
     public function store(Request $request)
     {
-        $homeowner_id =  $request->id;
-        $userSettings = Homeowner_filter::where('homeOwner_id', $homeowner_id)->get();
 
-        if(count($userSettings) > 0) {
+        if($request->header('devicetoken')) {
 
-            return $this->sendResponse($userSettings->toArray(), 'Error setting is exist');
+            $user = User::where('device_token', $request->header('devicetoken'))->first();
+
+            if (empty($user)) {
+                return $this->sendError('User not found', 401);
+            }
+
+            $userSettings = Homeowner_filter::where('homeOwner_id', $user->id)->get();
+
+            if(count($userSettings) > 0) {
+                return $this->sendResponse($userSettings->toArray(), 'Error setting is exist');
+            }
+
+            $userSettings = Homeowner_filter::create([
+                'homeOwner_id'  => $user->id,
+                'vendor_filter' => $request->filter_setting
+            ]);
+            return $this->sendResponse($userSettings->toArray(), 'Setting added successfully');
         }
-
-        $userSettings = Homeowner_filter::create([
-            'homeOwner_id'  => $homeowner_id,
-            'vendor_filter' => $request->filter_setting
-        ]);
-        return $this->sendResponse($userSettings->toArray(), 'Setting added successfully');
-
     }
 
     /**
@@ -84,18 +102,28 @@ class FilterVendorsAPIController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update($id, Request $request)
+    public function update(Request $request)
     {
-        
-        $userSettings = Homeowner_filter::where('homeOwner_id', $id)->first(); 
-        if(empty($userSettings)) {
-            return $this->sendResponse($userSettings->toArray(), 'Error setting is not exist');
-        } 
 
-        $userSettings->vendor_filter = $request->filter_setting;
-        if ($userSettings->save())
-        return $this->sendResponse($userSettings->toArray(), 'setting updated successfully');
-        return $this->sendResponse($userSettings->toArray(), 'Error in updating setting');
+        if($request->header('devicetoken')) {
+
+            $user = User::where('device_token', $request->header('devicetoken'))->first();
+
+            if (empty($user)) {
+                return $this->sendError('User not found', 401);
+            }
+
+            $userSettings = Homeowner_filter::where('homeOwner_id', $user->id)->first(); 
+
+            if(empty($userSettings)) {
+                return $this->sendResponse($userSettings->toArray(), 'Error setting is not exist');
+            } 
+            
+            $userSettings->vendor_filter = $request->filter_setting;
+
+            if ($userSettings->save())
+            return $this->sendResponse($userSettings->toArray(), 'setting updated successfully');
+        }
     }
 
     /**
