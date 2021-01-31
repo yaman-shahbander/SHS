@@ -13,7 +13,9 @@ use App\Models\Fee;
 use App\Models\Category;
 use App\Models\Day;
 use App\Models\reviews;
+use App\vendors_suggested;
 use DB;
+use Illuminate\Support\Facades\Validator;
 
 class vendorApiController extends Controller
 {
@@ -515,6 +517,49 @@ class vendorApiController extends Controller
             ];
 
             return $this->sendResponse($response, "Reply added successfully!");
+        }
+    }
+
+    public function vendorRefer(Request $request) {
+        if($request->header('devicetoken')) {
+            $hiddenElems = ['custom_fields', 'has_media', 'media'];
+
+            $response = [];
+
+            $referer_deviceToken = $request->header('devicetoken'); // The user who's referring a vendor.
+            $referer_id = User::where('device_token', $referer_deviceToken)->get('id')->makeHidden($hiddenElems);
+
+            $referer_id = $referer_id[0]->id;
+
+            $rules = [
+                'name' => 'required',
+                'email' => 'required|email',
+                'phone' => 'required',
+            ];
+
+            $response = [
+                'name'    =>  $request->name,
+                'email'   =>  $request->email,
+                'phone'   =>  $request->phone,
+            ];
+
+            $validator = Validator::make($response, $rules);
+
+            if ($validator->fails()) {
+
+                return $arr = array("status" => 400, "message" => $validator->errors()->first(), "data" => array());
+
+            } else {
+
+                vendors_suggested::create([
+                    'name'    =>  $request->name,
+                    'email'   =>  $request->email,
+                    'phone'   =>  $request->phone,
+                    'user_id' =>  $referer_id
+                ]);
+                
+            }
+            return $this->sendResponse($response, "Referring added successfully!");
         }
     }
 }
