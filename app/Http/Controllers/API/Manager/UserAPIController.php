@@ -58,10 +58,7 @@ class UserAPIController extends Controller
         $IsEmail = false;
 
         try {
-            if(empty($request->header('devicetoken'))){
-                return $this->sendError('nothing to process', 401);
 
-            }
             if($request->email){
 
                 $this->validate($request, [
@@ -99,8 +96,11 @@ class UserAPIController extends Controller
             if (empty($user)) {
                     return $this->sendError('User not found', 401);
                 }
-                $user->device_token = $request->header('devicetoken');
-                $user->save();
+            if (!$user->hasRole('vendor')) {
+                    return $this->sendError('User not Vendor', 401);
+                }
+//                $user->device_token = $request->header('devicetoken');
+//                $user->save();
                 if($user->is_verified==0) {
                     $user->activation_code = rand(1000, 9999); // activation code
 
@@ -138,7 +138,15 @@ class UserAPIController extends Controller
                             $mail->Body = 'Your verification code is: ' . $user->activation_code;
 
                             $mail->send();
-                            return $this->sendResponse(['activation_code'=>$user->activation_code], 'user not verified');
+                            $response_cod=
+                                ['id'=>$user->id,
+                                    'email'=>$user->email,
+                                    'device_token'=>$user->device_token,
+                                    'phone'=>$user->phone,
+                                    'activation_code'=>$user->activation_code
+
+                                ];
+                            return $this->sendResponse($response_cod, 'user not verified');
 
                         } catch (Exception $e) {
                             return $this->sendError('error message ', 401);
@@ -177,15 +185,11 @@ class UserAPIController extends Controller
 
         $IsEmail = false;
         try {
-            if(empty($request->header('devicetoken'))){
-                return $this->sendError('device token not found', 401);
 
-            }
             if($request->email) {
 
                 $this->validate($request, [
                     'first_name' => 'required',
-                    'device_token' => 'required',
                     'last_name' => 'required',
                     'email' => 'required|unique:users|email',
                     'password' => 'required',
@@ -196,7 +200,6 @@ class UserAPIController extends Controller
                 $this->validate($request, [
                     'first_name' => 'required',
                     'last_name' => 'required',
-                    'device_token' => 'required',
                     'phone' => 'required|unique:users',
                     'password' => 'required',
                 ]);
@@ -225,10 +228,10 @@ class UserAPIController extends Controller
 
 //            $user->avatar = $request->input('avatar');
              //$user->device_token = $request->header('devicetoken');
-             
+
              //Generate a random string.
             $token = openssl_random_pseudo_bytes(16);
-            
+
             $user->save();
 
             //Convert the binary data into hexadecimal representation.
@@ -240,11 +243,11 @@ class UserAPIController extends Controller
 
 
 
-            $user->device_code = str_random(60) . time();
+//            $user->device_code = str_random(60) . time();
            // $user->api_token = str_random(60);
             $user->save();
 
-            $user->assignRole('manager');
+            $user->assignRole('vendor');
 
             if($IsEmail) {
                 require '../vendor/autoload.php'; // load Composer's autoloader
@@ -297,14 +300,14 @@ class UserAPIController extends Controller
 
             event(new UserRoleChangedEvent($user));
         } catch (\Exception $e) {
-            return $this->sendError('error', 401);
+            return $this->sendError($e->getMessage(), 401);
         }
 
 
         return $this->sendResponse($response, 'User retrieved successfully');
     }
-    
-    
+
+
     public function verify(Request $request){
         if($request->header('devicetoken')) {
                    try {
