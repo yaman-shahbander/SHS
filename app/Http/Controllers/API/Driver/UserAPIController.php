@@ -522,13 +522,14 @@ class UserAPIController extends Controller
                 if (empty($user)) {
                     return $this->sendError('User not found', 401);
                 }
+
 //
                 try{
                     $userLatitude = $user->coordinates->latitude;
                     $userLongitude = $user->coordinates->longitude;
                 }
                 catch (\Exception $e){
-                    return $this->sendError('You have to turn on gps', 401);
+                    //   return $this->sendError(, 401);
 
                 }
                 $HiddenColumns = ['custom_fields', 'media', 'has_media', 'pivot'];
@@ -541,8 +542,8 @@ class UserAPIController extends Controller
                     $respone[$i]['avatar'] = asset('storage/Avatar').'/'.$attr->avatar;
                     $respone[$i]['last_name'] = $attr->last_name;
                     $respone[$i]['description'] = $attr->description;
-                    $respone[$i]['rating'] = getRating($attr);
-                    $respone[$i]['distance'] = $attr->coordinates ? distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)) : 'No coordinates provided for the current vendor';
+                    $respone[$i]['rating'] = round((getRating($attr)/20)*2)/2;
+                    $respone[$i]['distance'] = $attr->coordinates==null ? distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)) : 'No coordinates provided for the current vendor';
                     $i++;
                 }
                 return $this->sendResponse($respone, 'favorites retrieved successfully');
@@ -551,7 +552,7 @@ class UserAPIController extends Controller
             }
         }
         else
-        return $this->sendError('nothing to process', 401);
+            return $this->sendError('nothing to process', 401);
 
     }
 

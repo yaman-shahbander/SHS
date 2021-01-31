@@ -31,7 +31,7 @@ class vendorApiController extends Controller
 
                 $userID = $user->id; // user id
                 $userSetting=null;
-                    $userSetting = Homeowner_filter::where('homeOwner_id', $userID)->first('vendor_filter'); // user setting
+                $userSetting = Homeowner_filter::where('homeOwner_id', $userID)->first('vendor_filter'); // user setting
 
 
                 $respone = [];
@@ -40,16 +40,57 @@ class vendorApiController extends Controller
 
                 $maxBalanceId = 0;
 
-                $Allvendors = subCategory::find($id)->vendors;
+
+                try{
+                    $Allvendors = subCategory::find($id)->vendors;
+
+                }
+                catch (\Exception $e){
+                    return $this->sendError('there is no vendor for this subcategory', 401);
+
+                }
 
 
-                foreach ($Allvendors as $vendor) // maxBalanceId
-                    if ($vendor->Balance->balance > $maxBalance) {
-                        $maxBalance = $vendor->Balance->balance;
-                        $maxBalanceId = $vendor->Balance->id;
+                try{
+
+                    foreach ($Allvendors as $vendor) // maxBalanceId
+
+                        if ($vendor->Balance!=null ) {
+
+
+                            if($vendor->Balance->balance > $maxBalance){
+                                $maxBalance = $vendor->Balance->balance;
+
+                                $maxBalanceId = $vendor->Balance->id;}
+                        }
+
+                    if($maxBalanceId!=0){
+
+                        $featuredVendor=User::where('balance_id',$maxBalanceId)->get();
+
                     }
-                $featuredVendor=User::where('balance_id',$maxBalanceId)->get();
+                    else{
+                        return $maxBalanceId;
 
+                        $featuredVendor='';
+
+                    }
+//  return $featuredVendor;
+
+
+                    $respone[]=
+                        [
+                            'featuredVendor'=>[
+                                'id' => $featuredVendor[0]->id,
+                                'name' => $featuredVendor[0]->name,
+                                'email' => $featuredVendor[0]->email,
+                                'rating' => round((getRating($featuredVendor[0])/20)*2)/2,
+                                'description' => $featuredVendor[0]->description,
+                                'avatar' => $featuredVendor[0]->getFirstMediaUrl('avatar', 'icon')
+                            ]];
+                }
+                catch (\Exception $e){
+                    return $e->getMessage();}
 
 //                $featuredVendor = User::;
 //                $featuredVendor = $Allvendors->transform(function($q){
@@ -60,47 +101,43 @@ class vendorApiController extends Controller
 //                    return $balance;
 //                });
 //return $featuredVendor;
-                if ($userSetting->vendor_filter == 2) { // Availibility first
+                try{
+                    if ($userSetting->vendor_filter == 2) { // Availibility first
 
-                    $vendorsAvailability = User::whereHas('subcategories', function ($query) use ($id) {
-                        $query->where('subcategory_id', $id);
-                    })->orderBy('status_id')->get();
+                        $vendorsAvailability = User::whereHas('subcategories', function ($query) use ($id) {
+                            $query->where('subcategory_id', $id);
+                        })->orderBy('status_id')->get();
 
-                    $vendors = $featuredVendor->merge($vendorsAvailability);
+                        $vendors = $featuredVendor->merge($vendorsAvailability);
 
 
-                } else if ($userSetting->vendor_filter == 1) { // Vendors with special offers first
+                    } else if ($userSetting->vendor_filter == 1) { // Vendors with special offers first
 
-                    $vendorsSpecialOffers = User::whereHas('specialOffers', function ($query) use ($id) {
-                        $query->where('subcategory_id', $id);
-                    })->get();
+                        $vendorsSpecialOffers = User::whereHas('specialOffers', function ($query) use ($id) {
+                            $query->where('subcategory_id', $id);
+                        })->get();
 
-                    $vendors = $featuredVendor->merge($vendorsSpecialOffers);
+                        $vendors = $featuredVendor->merge($vendorsSpecialOffers);
 
-                    $vendors = $vendors->merge($Allvendors);
+                        $vendors = $vendors->merge($Allvendors);
 
+                    }
+                }
+                catch (\Exception $e){
+                    $vendors=$Allvendors;
                 }
 //return $featuredVendor;
 
-                $respone[0]=['featuredVendor'=>[
-                    'id' => $featuredVendor[0]->id,
-                    'name' => $featuredVendor[0]->name,
-                    'email' => $featuredVendor[0]->email,
-                    'rating' => round((getRating($featuredVendor[0])/20)*2)/2,
-                    'description' => $featuredVendor[0]->description,
-                    'avatar' => $featuredVendor[0]->getFirstMediaUrl('avatar', 'icon')
-                ]];
-                $i = 1;
+
                 foreach ($vendors as $vendor) {
-                    $respone[$i] = [
+                    $respone[] = [
                         'id' => $vendor->id,
                         'name' => $vendor->name,
                         'email' => $vendor->email,
-                        'rating' => round((getRating($featuredVendor[0])/20)*2)/2,
+                        'rating' => round((getRating($vendor)/20)*2)/2,
                         'description' => $vendor->description,
                         'avatar' => $vendor->getFirstMediaUrl('avatar', 'icon')
                     ];
-                    $i++;
                 }
 
                 return $this->sendResponse($respone, 'vendors retrieved successfully');
