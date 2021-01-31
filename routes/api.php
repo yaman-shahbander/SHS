@@ -92,6 +92,8 @@ Route::prefix('vendor')->group(function () {
     Route::post('contactLocationUpdate', 'API\vendorApiController@contactLocationUpdate');
     //supported subcategoies by the vendor
     Route::post('supportedSubcategpries', 'API\vendorApiController@supportedSubcategpries');
+    //Add a reply to a homeowner review (vendor reply to a homeowner)
+    Route::post('vendorReply', 'API\vendorApiController@vendorReply');
 });
 
 

@@ -13,6 +13,7 @@ use App\Models\Fee;
 use App\Models\Category;
 use App\Models\Day;
 use App\Models\reviews;
+use DB;
 
 class vendorApiController extends Controller
 {
@@ -527,7 +528,32 @@ class vendorApiController extends Controller
             }
     }
 
+    public function vendorReply(Request $request) {
+        if($request->header('devicetoken')) {
+            $hiddenElems = ['custom_fields', 'has_media', 'media'];
 
+            $response = [];
+
+            $homeowner_deviceToken = $request->header('devicetoken');
+
+            $homeowner_id = User::where('device_token', $homeowner_deviceToken)->get('id')->makeHidden($hiddenElems);
+
+            $homeowner_id = $homeowner_id[0]->id;
+
+
+            $vendor_id = $request->id;
+
+            $replyMessage = $request->reply;
+
+            DB::table('reviews')->where('vendor_id', $vendor_id)->where('client_id', $homeowner_id)->update(['reply' => $replyMessage]);
+
+            $response = [
+                'Message'   => $replyMessage
+            ];
+
+            return $this->sendResponse($response, "Reply added successfully!");
+        }
+    }
 }
 
 
