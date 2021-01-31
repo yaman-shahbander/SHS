@@ -60,7 +60,7 @@ class CityController extends Controller
         if(count($countries)!=0) {
             return view('city.create', ['countries'=>$countries,'customFields'=> isset($html) ? $html : false]);
         }else{
-            return redirect()->back()->with(["error"=> 'Please add category','customFields'=> isset($html) ? $html : false]);
+            return redirect()->back()->with(["error"=> 'Please add country','customFields'=> isset($html) ? $html : false]);
         }
     }
 

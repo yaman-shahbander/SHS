@@ -135,6 +135,8 @@ Route::post('vendorLocation', 'API\GmapLocationAPIController@VendorMapDetails');
 Route::post('allMessages','API\ChatAPIController@history');
 //featured vendor fee API
 Route::post('vendorFee', 'API\vendorApiController@vendorFeefunc');
+//Refer a vendor
+Route::post('vendorRefer', 'API\vendorApiController@vendorRefer');
 
 
 Route::resource('restaurants', 'API\RestaurantAPIController');
