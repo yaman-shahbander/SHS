@@ -16,7 +16,9 @@ class SpecialOffersAPIController extends Controller
     public function index(Request $request)
     {
         $vendor_id = $request->id;
+        
         $vendor    =  specialOffers::where('user_id', $vendor_id)->get(['description', 'title', 'image']);
+        return $vendor;
         $response = [];
         foreach($vendor as $info) {
             $response['description'] = $info->description;
