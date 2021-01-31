@@ -127,8 +127,14 @@ Route::post('transactions', 'API\MoneyAPIController@history');
 Route::post('transfer', 'API\MoneyAPIController@transferMoney');
 //FIlter vendors API
 Route::resource('filter', 'API\FilterVendorsAPIController');
+//Route::resource('specialOffers', 'API\SpecialOffersAPIController');
+
 //special offers vendors API
-Route::resource('specialOffers', 'API\SpecialOffersAPIController');
+Route::post('getVendorspecialOffers', 'API\SpecialOffersAPIController@index');
+
+//special offers vendors API
+Route::post('storeVendorspecialOffers', 'API\SpecialOffersAPIController@store');
+
 //vendor map location
 Route::post('vendorLocation', 'API\GmapLocationAPIController@VendorMapDetails');
 //chat messaging
