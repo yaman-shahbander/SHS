@@ -8,7 +8,7 @@
 
 <!-- Name Field -->
 <div class="form-group row col-6">
-  {!! Form::label('name', 'Name:', ['class' => 'col-3 control-label text-right']) !!}
+  {!! Form::label('name', trans("lang.user_name"), ['class' => 'col-3 control-label text-right']) !!}
   <div class="col-9">
     <p>{!! $user->name !!}</p>
   </div>
@@ -16,7 +16,7 @@
 
 <!-- Email Field -->
 <div class="form-group row col-6">
-  {!! Form::label('email', 'Email:', ['class' => 'col-3 control-label text-right']) !!}
+  {!! Form::label('email',trans("lang.user_email"), ['class' => 'col-3 control-label text-right']) !!}
   <div class="col-9">
     <p>{!! $user->email !!}</p>
   </div>
@@ -24,7 +24,7 @@
 
 <!-- Password Field -->
 <div class="form-group row col-6">
-  {!! Form::label('password', 'Password:', ['class' => 'col-3 control-label text-right']) !!}
+  {!! Form::label('password', trans("lang.user_password"), ['class' => 'col-3 control-label text-right']) !!}
   <div class="col-9">
     <p>{!! $user->password !!}</p>
   </div>

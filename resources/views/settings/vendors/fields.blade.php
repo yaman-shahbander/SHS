@@ -20,13 +20,7 @@
             </div>
         </div>
     </div>
-    <div class="border border-light p-3 mb-4">
-
-<i class="ae flag"></i>
-<i class="france flag"></i>
-<i class="myanmar flag"></i>
-
-</div>
+   
     <div class="row">
         <!-- Country Field -->
         <div class="form-group col-md-6 row">
@@ -84,7 +78,7 @@
         <div class="form-group row col-md-6">
             {!! Form::label('Language', 'Lang', ['class' => 'col-3 control-label']) !!}
             <div class="col-9">
-                {!! Form::text('language', null,  ['class' => 'form-control','placeholder'=>  'Language','required']) !!}
+                {!! Form::text('language', null,  ['class' => 'form-control','placeholder'=> trans("lang.language_placeholder") ,'required']) !!}
                 <div class="form-text text-muted">
                     Language
                 </div>

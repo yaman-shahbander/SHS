@@ -2,20 +2,20 @@
     <h5 class="col-12 pb-4">{!! trans('lang.main_fields') !!}</h5>
 @endif
 
-<div style="flex: 50%;max-width: 50%;padding: 0 4px;" class="column">
-    <!-- Name Field -->
-    <div class="form-group row ">
-        {!! Form::label('name', trans("lang.delegate_name"), ['class' => 'col-4 control-label text-right']) !!}
-        <div class="col-8">
-            {!! Form::text('name', null,  ['class' => 'form-control','placeholder'=>  trans("lang.user_name_placeholder"),'required']) !!}
-            <div class="form-text text-muted">
-                 Name
+<div style="flex: 50%;max-width:100%;padding: 0 4px;" class="column">
+    <div class="row">
+        <!-- Name Field -->
+        <div class="form-group row col-md-6">
+            {!! Form::label('name', trans("lang.delegate_name"), ['class' => 'col-4 control-label text-right']) !!}
+            <div class="col-8">
+                {!! Form::text('name', null,  ['class' => 'form-control','placeholder'=>  trans("lang.user_name_placeholder"),'required']) !!}
+                <div class="form-text text-muted">
+                    Name
+                </div>
             </div>
         </div>
-    </div>
-
-     <!-- username Field -->
-    <div class="form-group row ">
+        <!-- username Field -->
+        <div class="form-group row col-md-6">
             {!! Form::label('phone', 'Phone', ['class' => 'col-4 control-label text-right']) !!}
             <div class="col-8">
                 {!! Form::text('phone', null,  ['class' => 'form-control','placeholder'=>  'phone','required']) !!}
@@ -23,9 +23,11 @@
                 phone
                 </div>
             </div>
+        </div>
     </div>
-     <!-- balance Field -->
-     <div class="form-group row ">
+    <div class="row">
+        <!-- balance Field -->
+        <div class="form-group row col-md-6">
             {!! Form::label('balance', 'Balance', ['class' => 'col-4 control-label text-right']) !!}
             <div class="col-8">
                 {!! Form::text('balance', null,  ['class' => 'form-control','placeholder'=>  'Balance','required']) !!}
@@ -33,6 +35,7 @@
                 balance
                 </div>
             </div>
+        </div>
     </div>
 </div>
  
