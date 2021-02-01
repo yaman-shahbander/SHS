@@ -21,11 +21,26 @@ class cityApiController extends Controller
 
 
     public function index(Request $request) {
+        if($request->header('devicetoken')) {
+
+            try {
+                $user = User::where('device_token', $request->header('devicetoken'))->first();
+                if (empty($user)) {
+                    return $this->sendError('User not found', 401);
+                }
         $country_id = $request->id;
 
         $cities = $this->cityRepository->where(['country_id'=> $country_id])->get(["id", "city_name"]);
 
         return $this->sendResponse($cities->toArray(), 'Cities retrieved successfully');
+            }
+            catch (\Exception $e) {
+                return $this->sendError('error save', 401);
+            }
+        }
+        else {
+            return $this->sendError('error!', 401);
+        }
     }
 
     public function store(Request $request) {

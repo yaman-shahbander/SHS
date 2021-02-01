@@ -41,14 +41,14 @@ class CategoryAPIController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index(Request $request)
+        public function index(Request $request)
     {
-        if($request->device_token) {
+        if($request->header('devicetoken')) {
+
             try {
-                $user = User::where('device_token', $request->device_token)->first();
+                $user = User::where('device_token', $request->header('devicetoken'))->first();
                 if (empty($user)) {
                     return $this->sendError('User not found', 401);
-
                 }
 
         $categories = $this->categoryRepository->all(['id','name','description']);
@@ -74,13 +74,14 @@ class CategoryAPIController extends Controller
 
 
          return $this->sendResponse($response, 'Categories retrieved successfully');
-            } catch (\Exception $e) {
-                return $this->sendError('error', 401);
-
+            }
+            catch (\Exception $e) {
+                return $this->sendError('error save', 401);
             }
         }
-        else
-            return $this->sendError('You dont have permission', 401);
+        else {
+            return $this->sendError('you dont have permission!', 401);
+        }
     }
 
     /**

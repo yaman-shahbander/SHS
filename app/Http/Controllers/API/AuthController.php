@@ -44,22 +44,29 @@ class AuthController extends Controller
 
     public function change_password(Request $request)
     {
+        if($request->header('devicetoken')) {
+            try {
+                $user = User::where('device_token', $request->header('devicetoken'))->first();
+                if (empty($user)) {
+                    return $this->sendError('User not found', 401);
+                }
         $input = $request->all();
-        $userid = $input['id'];
-        $useridPassword =( User::find($userid))->password;
+        $useridPassword =$user->password;
 
         $rules = array(
             'old_password' => 'required',
             'new_password' => 'required|min:8',
-            'confirm_password' => 'required|same:new_password',
         );
         $validator = Validator::make($input, $rules);
         if ($validator->fails()) {
             $response = array("status" => 400, "message" => $validator->errors()->first(), "data" => array());
         } else {
             try {
+              //  return ''.request('old_password').(Hash::check(request('old_password'), $useridPassword));
+
                 if ((Hash::check(request('old_password'), $useridPassword)) == false) {
-                    return $this->sendError('"Check your old password."');
+                    return $this->sendError('Check your old password.');
+
 
                    // $response = array("status" => 400, "message" => "Check your old password.", "data" => array());
                 } else if ((Hash::check(request('new_password'), $useridPassword)) == true) {
@@ -67,7 +74,8 @@ class AuthController extends Controller
 
                  //   $response = array("status" => 400, "message" => "Please enter a password which is not similar then current password.", "data" => array());
                 } else {
-                    User::where('id', $userid)->update(['password' => Hash::make($input['new_password'])]);
+                    $user->password= Hash::make($input['new_password']);
+                    $user->save();
                     $response = array("status" => 200, "message" => "Password updated successfully.", "data" => array());
                 }
             } catch (\Exception $ex) {
@@ -80,13 +88,26 @@ class AuthController extends Controller
             }
         }
         return $this->sendResponse($response, 'Password Updated Successfully');
+            }
+            catch (\Exception $e) {
+                return $this->sendError('error save', 401);
+            }
+        }
+        else {
+            return $this->sendError('error!', 401);
+        }
     }
 
 
     public function change_phone(Request $request)
     {
+        if($request->header('devicetoken')) {
         $input = $request->all();
-        $userid = $input['id'];
+
+        $userid = User::where('device_token', $request->header('devicetoken'))->get('id');
+
+        $userid = $userid[0]->id;
+
         $useridPhone =(User::find($userid))->phone;
 
         $rules = array(
@@ -116,6 +137,5 @@ class AuthController extends Controller
         }
         return $this->sendResponse($response, 'Phone Number Updated Successfully');
     }
-
-
+  }
 }

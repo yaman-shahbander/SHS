@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\CountryRepository;
@@ -23,9 +24,24 @@ class CountryAPIController extends Controller
     }
     public function index(Request $request)
     {
+        if($request->header('devicetoken')) {
+
+            try {
+                $user = User::where('device_token', $request->header('devicetoken'))->first();
+                if (empty($user)) {
+                    return $this->sendError('User not found', 401);
+                }
         $countries = $this->countryRepository->all(["id", "country_name"]);
 
         return $this->sendResponse($countries->toArray(), 'Countries retrieved successfully');
+            }
+            catch (\Exception $e) {
+                return $this->sendError('error save', 401);
+            }
+        }
+        else {
+            return $this->sendError('error!', 401);
+        }
     }
 
     /**

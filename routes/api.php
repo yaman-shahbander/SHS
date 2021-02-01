@@ -26,7 +26,7 @@ Route::prefix('homeOwner')->group(function () {
     Route::get('logout', 'API\Driver\UserAPIController@logout');
     Route::get('settings', 'API\Driver\UserAPIController@settings');
     //Change password
-    Route::post('change-password', 'Api\AuthController@change_password');
+    Route::post('change-password', 'API\AuthController@change_password');
     //change phone
     Route::post('change-phone', 'API\AuthController@change_phone');
     //My reviews
@@ -78,7 +78,7 @@ Route::prefix('vendor')->group(function () {
     Route::post('categoriesVendor', 'API\vendorApiController@categorySubCatFunc');
     //Woring hours for a new vendor
     Route::post('workHoursDays', 'API\vendorApiController@workHours');
-    //User revires to a specific vendor
+    //User reviews to a specific vendor
     Route::post('vendorReviews', 'API\vendorApiController@vendorReviews');
     //vendor background and avatar
     Route::post('vendorbackgroundAvatar', 'API\vendorApiController@backgroundAvatar');
@@ -92,6 +92,8 @@ Route::prefix('vendor')->group(function () {
     Route::post('contactLocationUpdate', 'API\vendorApiController@contactLocationUpdate');
     //supported subcategoies by the vendor
     Route::post('supportedSubcategpries', 'API\vendorApiController@supportedSubcategpries');
+    //Add a reply to a homeowner review (vendor reply to a homeowner)
+    Route::post('vendorReply', 'API\vendorApiController@vendorReply');
 });
 
 
@@ -105,11 +107,12 @@ Route::get('settings', 'API\UserAPIController@settings');
 Route::resource('cuisines', 'API\CuisineAPIController');
 Route::resource('categories', 'API\CategoryAPIController');
 //get subgategory
-Route::resource('subcategory', 'API\SubCategoryController');
+Route::post('subcategory', 'API\SubCategoryController@index');
 //Country APi Controller
 Route::resource('countries', 'API\CountryAPIController');
 //city APi Controller
-Route::resource('cities', 'API\cityApiController');
+//Route::p('cities', 'API\cityApiController');
+Route::post('cities', 'API\cityApiController@index');
 //forgot password API
 Route::post('forgot-password', 'API\AuthController@forgot_password');
 //vendor rating API
@@ -122,16 +125,31 @@ Route::post('currentBalance', 'API\MoneyAPIController@currentBalance');
 Route::post('transactions', 'API\MoneyAPIController@history');
 //Transfer money API
 Route::post('transfer', 'API\MoneyAPIController@transferMoney');
+//Route::resource('filter', 'API\FilterVendorsAPIController');
+
 //FIlter vendors API
-Route::resource('filter', 'API\FilterVendorsAPIController');
+Route::post('getfilter', 'API\FilterVendorsAPIController@index');
+//FIlter vendors API
+Route::post('storefilter', 'API\FilterVendorsAPIController@store');
+//FIlter vendors API
+Route::post('updatefilter', 'API\FilterVendorsAPIController@update');
+
+//Route::resource('specialOffers', 'API\SpecialOffersAPIController');
+
 //special offers vendors API
-Route::resource('specialOffers', 'API\SpecialOffersAPIController');
+Route::post('getVendorspecialOffers', 'API\SpecialOffersAPIController@index');
+
+//special offers vendors API
+Route::post('storeVendorspecialOffers', 'API\SpecialOffersAPIController@store');
+
 //vendor map location
 Route::post('vendorLocation', 'API\GmapLocationAPIController@VendorMapDetails');
 //chat messaging
 Route::post('allMessages','API\ChatAPIController@history');
 //featured vendor fee API
 Route::post('vendorFee', 'API\vendorApiController@vendorFeefunc');
+//Refer a vendor
+Route::post('vendorRefer', 'API\vendorApiController@vendorRefer');
 
 
 Route::resource('restaurants', 'API\RestaurantAPIController');

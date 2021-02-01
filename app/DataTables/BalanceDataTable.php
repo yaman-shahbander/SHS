@@ -93,7 +93,7 @@ class BalanceDataTable extends DataTable
      */
     public function query(User $model)
     {
-        return $model->newQuery();
+        return $model->whereNotNull('balance_id')->newQuery();
     }
 
     /**

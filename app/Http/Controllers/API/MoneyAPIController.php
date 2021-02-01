@@ -23,36 +23,65 @@ class MoneyAPIController extends Controller
     }
 
     public function history(Request $request) {
-        $id = $request->id;//Id of logged in user(gets their transaction history)
-        $transactionsHistory = TransferTransaction::where('from_id', $id)->get(['from_id', 'to_id', 'amount', 'created_at']);
-        return $this->sendResponse($transactionsHistory->toArray(), 'History retrieved successfully');
+        if($request->header('devicetoken')) {
+
+            $user = User::where('device_token', $request->header('devicetoken'))->first();
+
+            if (empty($user)) {
+                return $this->sendError('User not found', 401);
+            }
+
+            $transactionsHistory = TransferTransaction::where('from_id', $user->id)->get(['from_id', 'to_id', 'amount', 'created_at']);
+            return $this->sendResponse($transactionsHistory->toArray(), 'History retrieved successfully');
+        }
     }
 
     public function transferMoney(Request $request) {
-         $response['from_id'] = $request->id;//sender
-         $response['to_id']   = $request->to_id;// Receiver
-         $response['amount']  = $request->amount;// amount
-         $fromUserBalanceID   = User::find($response['from_id'])->balance_id;
-         $toUserBalanceID     = User::find($response['to_id'])->balance_id;
-         $fromUserBalance     = Balance::find($fromUserBalanceID)->balance;
-         $toUserBalance       = Balance::find($toUserBalanceID)->balance;
-         if ($fromUserBalance - $response['amount'] >= 0) {
-            $subtractedAmount = $fromUserBalance - $response['amount'];
-            $addAmountToUser  = $toUserBalance + $response['amount'];
-            DB::table('balances')->where('id', $fromUserBalanceID)->update(['balance' => $subtractedAmount]);
-            DB::table('balances')->where('id', $toUserBalanceID)->update(['balance' => $addAmountToUser]);
-            $transfer = $this->TransferTransactionRepository->create($response);
-            return $this->sendResponse($response, 'Money transfered successfully!');
-         } else {
-            return $this->sendResponse($response, 'failed! Not enough money');
-         }
+        if($request->header('devicetoken')) {
+
+            $user = User::where('device_token', $request->header('devicetoken'))->first();
+
+            if (empty($user)) {
+                return $this->sendError('User not found', 401);
+            }
+
+            $response['from_id'] = $user->id;//sender
+            $response['to_id']   = $request->to_id;// Receiver
+            $response['amount']  = $request->amount;// amount
+            $fromUserBalanceID   = $user->balance_id;
+            $toUserBalanceID     = User::find($response['to_id'])->balance_id;
+            $fromUserBalance     = Balance::find($fromUserBalanceID)->balance;
+            $toUserBalance       = Balance::find($toUserBalanceID)->balance;
+            if ($fromUserBalance - $response['amount'] >= 0) {
+                $subtractedAmount = $fromUserBalance - $response['amount'];
+                $addAmountToUser  = $toUserBalance + $response['amount'];
+                DB::table('balances')->where('id', $fromUserBalanceID)->update(['balance' => $subtractedAmount]);
+                DB::table('balances')->where('id', $toUserBalanceID)->update(['balance' => $addAmountToUser]);
+                $transfer = $this->TransferTransactionRepository->create($response);
+                return $this->sendResponse($response, 'Money transfered successfully!');
+            } else {
+                return $this->sendResponse($response, 'failed! Not enough money');
+            }
+        }
     }   
 
     public function currentBalance(Request $request) {
-        $id = $request->id;
-        $userBalanceId = User::find($id)->balance_id;
-        $userBalance   = Balance::find($userBalanceId);
-        if ($userBalance == null) return $this->sendResponse($userBalance, 'failed to retrieve!');
-        else return $this->sendResponse($userBalance->balance, 'Balance retrieved successfuly!');
+        if($request->header('devicetoken')) {
+
+            $user = User::where('device_token', $request->header('devicetoken'))->first();
+
+            if (empty($user)) {
+                return $this->sendError('User not found', 401);
+            }
+
+            
+            $userBalanceId = $user->balance_id;
+
+            $userBalance   = Balance::find($userBalanceId);
+
+            if ($userBalance == null) return $this->sendResponse($userBalance, 'failed to retrieve!');
+
+            else return $this->sendResponse($userBalance->balance, 'Balance retrieved successfuly!');
+        }
     }
 }

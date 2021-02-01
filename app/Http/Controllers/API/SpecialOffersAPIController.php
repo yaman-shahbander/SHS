@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\specialOffers;
-
+use App\Models\User;
 class SpecialOffersAPIController extends Controller
 {
     /**
@@ -15,15 +15,31 @@ class SpecialOffersAPIController extends Controller
      */
     public function index(Request $request)
     {
-        $vendor_id = $request->id;
-        $vendor    =  specialOffers::where('user_id', $vendor_id)->get(['description', 'title', 'image']);
-        $response = [];
-        foreach($vendor as $info) {
-            $response['description'] = $info->description;
-            $response['title']       = $info->title;
-            $response['image']       = url('storage/specialOffersPic/' . $info->image);
+
+        if($request->header('devicetoken')) {
+
+            $user = User::where('device_token', $request->header('devicetoken'))->first();
+
+            if (empty($user)) {
+                return $this->sendError('User not found', 401);
+            }
+
+            $vendor_id = $request->id;
+            
+            $vendoroffers    =  specialOffers::where('user_id', $vendor_id)->get(['description', 'title', 'image']);
+
+            
+
+            $response = [];
+            foreach($vendoroffers as $info) {
+                $response[] = [
+                    'description' => $info->description,
+                    'title'       => $info->title,
+                    'image'       => url('storage/specialOffersPic/' . $info->image)
+                ];
+            }
+            return $this->sendResponse($response, 'Offers retrieved successfully');
         }
-        return $this->sendResponse($response, 'Offers retrieved successfully');
     }
 
     /**
@@ -44,30 +60,39 @@ class SpecialOffersAPIController extends Controller
      */
     public function store(Request $request)
     {
+
+        if($request->header('devicetoken')) {
+
+            $user = User::where('device_token', $request->header('devicetoken'))->first();
+
+                if (empty($user)) {
+                    return $this->sendError('User not found', 401);
+                }
         
-        $vendor_specialOffer = new specialOffers();
-        $vendor_specialOffer->user_id = $request->id;
-        $vendor_specialOffer->description = $request->description;
-        $vendor_specialOffer->title = $request->title;
-        $vendor_specialOffer->subcategory_id = $request->subcategory_id;
-        $vendor_specialOffer->image = "Null.png";
-        
+                $vendor_specialOffer = new specialOffers();
+                $vendor_specialOffer->user_id = $user->id;
+                $vendor_specialOffer->description = $request->description;
+                $vendor_specialOffer->title = $request->title;
+                $vendor_specialOffer->subcategory_id = $request->subcategory_id;
+                $vendor_specialOffer->image = "Null.png";
+                
 
-        if ($vendor_specialOffer->save()){
-            if (!empty ($request->file('image'))) {
+                if ($vendor_specialOffer->save()){
+                    if (!empty ($request->file('image'))) {
 
-            $imageName = uniqid() . $request->file('image')->getClientOriginalName();
+                    $imageName = uniqid() . $request->file('image')->getClientOriginalName();
 
-            $request->file('image')->move(public_path('storage/specialOffersPic'), $imageName);
+                    $request->file('image')->move(public_path('storage/specialOffersPic'), $imageName);
 
-            $vendor_specialOffer->update(['image' => $imageName]);
+                    $vendor_specialOffer->update(['image' => $imageName]);
 
-            return $this->sendResponse($vendor_specialOffer->toArray(), 'Offers Saved successfully');
+                    return $this->sendResponse($vendor_specialOffer->toArray(), 'Offers Saved successfully');
 
-            } else
-            return $this->sendResponse($vendor_specialOffer->toArray(), 'Offers Saved successfully with default image');
-    }  else
-        return $this->sendResponse([], 'Error');
+                    } else
+                    return $this->sendResponse($vendor_specialOffer->toArray(), 'Offers Saved successfully with default image');
+                }  else
+                return $this->sendResponse([], 'Error');
+    }
 }
 
     /**
