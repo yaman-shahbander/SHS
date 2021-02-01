@@ -164,7 +164,7 @@ Route::post('vendorRefer', 'API\vendorApiController@vendorRefer');
 Route::post('langCountryCity', 'API\UserAPIController@langCountryCity');
 //save language, country, and city
 Route::post('savelangCountryCity', 'API\UserAPIController@savelangCountryCity');
-
+//
 Route::resource('restaurants', 'API\RestaurantAPIController');
 
 Route::resource('faq_categories', 'API\FaqCategoryAPIController');
