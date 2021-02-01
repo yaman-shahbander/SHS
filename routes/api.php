@@ -161,9 +161,9 @@ Route::post('vendorFee', 'API\vendorApiController@vendorFeefunc');
 //Refer a vendor
 Route::post('vendorRefer', 'API\vendorApiController@vendorRefer');
 //select language, country, and city
-Route::post('langCountryCity', 'API\CountryAPIController@langCountryCity');
+Route::post('langCountryCity', 'API\UserAPIController@langCountryCity');
 //save language, country, and city
-Route::post('savelangCountryCity', 'API\CountryAPIController@savelangCountryCity');
+Route::post('savelangCountryCity', 'API\UserAPIController@savelangCountryCity');
 
 Route::resource('restaurants', 'API\RestaurantAPIController');
 

@@ -148,52 +148,5 @@ class CountryAPIController extends Controller
 
         // return $this->sendResponse($country, __('lang.deleted_successfully', ['operator' => __('lang.category')]));
     }
-
-    public function langCountryCity(Request $request) {
-        if($request->header('devicetoken')) {
-            $user = User::where('device_token', $request->header('devicetoken'))->first();
-            if (empty($user)) {
-                return $this->sendError('User not found', 401);
-            }
-            
-            $hiddenElems = ['created_at', 'updated_at', 'name_en'];
-
-            $UserCityId[] = $user->city_id;
-
-            $response = [];
-
-            $cities = City::all(['id', 'city_name', 'country_id'])->transform(function($c) use($UserCityId) {
-                if (in_array($c->toArray()['id'], $UserCityId))
-                    $c['check'] = 1;
-                return $c;
-            });
-
-            //  $countries = Country::all(['id', 'country_name']);
-
-             $countries = Country::with('Cities')->get()->makeHidden($hiddenElems);
-
-            //  foreach($countries as $country){
-            //     $country->toArray()['cities'] = array_replace($country->toArray()['cities'],$cities->toArray());
-            //  }
-
-            return $countries;
-        }
-    }
-
-    public function savelangCountryCity(Request $request) {
-        if($request->header('devicetoken')) {
-            $user = User::where('device_token', $request->header('devicetoken'))->first();
-            if (empty($user)) {
-                return $this->sendError('User not found', 401);
-            }
-            
-            User::where('device_token', $request->header('devicetoken'))->update([
-                'city_id'   => $request->city_id,
-                'language'  => $request->lang
-            ]);
-
-            return $this->sendResponse([], 'Inforamtion saved successfully');;
-        }
-    }
 }
 
