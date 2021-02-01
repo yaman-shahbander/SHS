@@ -102,6 +102,8 @@ Route::prefix('vendor')->group(function () {
     Route::post('supportedSubcategpries', 'API\vendorApiController@supportedSubcategpries');
     //Add a reply to a homeowner review (vendor reply to a homeowner)
     Route::post('vendorReply', 'API\vendorApiController@vendorReply');
+    //supported days by the vendor
+    Route::post('supportedDays', 'API\vendorApiController@supportedDays');
 });
 
 
