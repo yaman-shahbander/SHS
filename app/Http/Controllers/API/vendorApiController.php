@@ -153,29 +153,32 @@ class vendorApiController extends Controller
     }
 
     public function vendorFeefunc(Request $request) {
-        $featuredVendor   = User::find($request->id);
+        if($request->header('devicetoken')) {
 
-        $featuredVendorBalance = $featuredVendor->Balance->balance;
+            $featuredVendor = User::where('device_token', $request->header('devicetoken'))->first();
 
-        $count = count(Fee::all()); // if there is a fee value
-        if ($count > 0) {
+            $featuredVendorBalance = $featuredVendor->Balance->balance;
 
-            $value = Fee::all('fee_amount');
+            $count = count(Fee::all()); // if there is a fee value
+            
+            if ($count > 0) {
 
-            $value = $value[0]['fee_amount'];
+                $value = Fee::all('fee_amount');
 
-            $featuredVendorBalance -= $value;
+                $value = $value[0]['fee_amount'];
 
-         } else {
+                $featuredVendorBalance -= $value;
 
-            $featuredVendorBalance = $featuredVendorBalance;
-         }
+            } else {
 
-        Balance::where('id', $featuredVendor->Balance->id)->update([
-            'balance' => $featuredVendorBalance]);
+                $featuredVendorBalance = $featuredVendorBalance;
+            }
 
-        return $this->sendResponse($featuredVendorBalance, 'Fee subtracted successfully');
+            Balance::where('id', $featuredVendor->Balance->id)->update([
+                'balance' => $featuredVendorBalance]);
 
+            return $this->sendResponse($featuredVendorBalance, 'Fee subtracted successfully');
+        }
     }
 
     public function profile(Request $request) { // for homeOwners

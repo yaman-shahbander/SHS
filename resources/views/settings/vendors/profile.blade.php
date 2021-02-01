@@ -270,7 +270,7 @@
                 <!-- sub-categories vendor offers-->
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title"><i class="fa fa-list mr-2"></i>Sub-Categories</h3>
+                                <h3 class="card-title"><i class="fa fa-list mr-2"></i>{{trans('lang.subcategory')}}</h3>
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">

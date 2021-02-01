@@ -40,7 +40,11 @@ Route::prefix('homeOwner')->group(function () {
     //Leave a review
     Route::post('leaveReview', 'API\Driver\UserAPIController@leaveReview');
     //Gmaps location
-    Route::resource('gmapLocation', 'API\GmapLocationAPIController');
+    Route::post('storegmapLocation', 'API\GmapLocationAPIController@store');
+
+    Route::post('updategmapLocation', 'API\GmapLocationAPIController@update');
+
+    // Route::resource('gmapLocation', 'API\GmapLocationAPIController');
 });
 
 Route::prefix('vendor')->group(function () {
@@ -67,7 +71,11 @@ Route::prefix('vendor')->group(function () {
     //Leave a review
     Route::post('leaveReview', 'API\Manager\UserAPIController@leaveReview');
     //Gmaps location
-    Route::resource('gmapLocation', 'API\GmapLocationAPIController');
+    Route::post('storegmapLocation', 'API\GmapLocationAPIController@store');
+
+    Route::post('updategmapLocation', 'API\GmapLocationAPIController@update');
+
+    //Route::resource('gmapLocation', 'API\GmapLocationAPIController');
     //save photo profile
     Route::post('photoProfile', 'API\Manager\UserAPIController@backgroundPic');
     //vendor profile
@@ -125,10 +133,23 @@ Route::post('currentBalance', 'API\MoneyAPIController@currentBalance');
 Route::post('transactions', 'API\MoneyAPIController@history');
 //Transfer money API
 Route::post('transfer', 'API\MoneyAPIController@transferMoney');
+//Route::resource('filter', 'API\FilterVendorsAPIController');
+
 //FIlter vendors API
-Route::resource('filter', 'API\FilterVendorsAPIController');
+Route::post('getfilter', 'API\FilterVendorsAPIController@index');
+//FIlter vendors API
+Route::post('storefilter', 'API\FilterVendorsAPIController@store');
+//FIlter vendors API
+Route::post('updatefilter', 'API\FilterVendorsAPIController@update');
+
+//Route::resource('specialOffers', 'API\SpecialOffersAPIController');
+
 //special offers vendors API
-Route::resource('specialOffers', 'API\SpecialOffersAPIController');
+Route::post('getVendorspecialOffers', 'API\SpecialOffersAPIController@index');
+
+//special offers vendors API
+Route::post('storeVendorspecialOffers', 'API\SpecialOffersAPIController@store');
+
 //vendor map location
 Route::post('vendorLocation', 'API\GmapLocationAPIController@VendorMapDetails');
 //chat messaging

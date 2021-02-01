@@ -15,14 +15,14 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0 text-dark">Duration offer<small class="ml-3 mr-3">|</small><small>Duration offer Management</small></h1>
+        <h1 class="m-0 text-dark">{{trans('lang.duration_offers')}}<small class="ml-3 mr-3">|</small><small>{{trans('lang.duration_offers_desc')}}</small></h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><a href="{{url('/dashboard')}}"><i class="fa fa-dashboard"></i> {{trans('lang.dashboard')}}</a></li>
-          <li class="breadcrumb-item"><a href="{!! route('durationOffer.index') !!}">Duration offer</a>
+          <li class="breadcrumb-item"><a href="{!! route('durationOffer.index') !!}">{{trans('lang.duration_offers')}}</a>
           </li>
-          <li class="breadcrumb-item active">Edit Duration offer</li>
+          <li class="breadcrumb-item active">{{trans('lang.duration_offers_create')}}</li>
         </ol>
       </div><!-- /.col -->
     </div><!-- /.row -->
@@ -37,18 +37,18 @@
   <div class="card">
     <div class="card-header">
       <ul class="nav nav-tabs align-items-end card-header-tabs w-100">
-        @can('country.index')
+        @can('durationOffer.index')
         <li class="nav-item">
-          <a class="nav-link" href="{!! route('durationOffer.index') !!}"><i class="fa fa-list mr-2"></i>Duration offer list</a>
+          <a class="nav-link" href="{!! route('durationOffer.index') !!}"><i class="fa fa-list mr-2"></i>{{trans('lang.duration_offers_desc')}}</a>
         </li>
         @endcan
-        @can('country.create')
+        @can('durationOffer.create')
         <li class="nav-item">
-          <a class="nav-link" href="{!! route('durationOffer.create') !!}"><i class="fa fa-plus mr-2"></i>Create Duration offer</a>
+          <a class="nav-link" href="{!! route('durationOffer.create') !!}"><i class="fa fa-plus mr-2"></i>{{trans('lang.duration_offers_create')}}</a>
         </li>
         @endcan
         <li class="nav-item">
-          <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-pencil mr-2"></i>Edit Duration offer</a>
+          <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-pencil mr-2"></i>{{trans('lang.duration_offers_edit')}}</a>
         </li>
       </ul>
     </div>

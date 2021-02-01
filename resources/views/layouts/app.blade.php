@@ -2,7 +2,7 @@
 <html lang="{{ app()->getLocale() }}" >
 <head>
     <meta charset="UTF-8">
-    <title>Smart Home Revices</title>
+    <title>@lang('lang.title')</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <link rel="icon" type="image/png" href="{{url('images/english_logo_inverted.png')}}"/>
     <!-- Tell the browser to be responsive to screen width -->
@@ -126,12 +126,10 @@
     @endif -->
     @yield('css_custom')
 
-
-
 </head>
 
 <body style="height: 100%; background-color: #f9f9f9;" class="hold-transition sidebar-mini {{setting('theme_color')}}">
-@if(auth()->check())
+    @if(auth()->check())
     <div class="wrapper">
         <!-- Main Header -->
         <!-- Navbar -->
@@ -225,7 +223,7 @@
             <div class="float-right d-none d-sm-block">
                 <b>Version</b> {{implode('.',str_split(substr(config('installer.currentVersion','v100'),1,3)))}}
             </div>
-            <strong>Copyright © {{date('Y')}} <a href="{{url('/')}}">Smart Home Services</a>.</strong> All rights reserved.
+            <strong>Copyright © {{date('Y')}} <a href="{{url('/')}}">@lang('lang.title')</a>.</strong> All rights reserved.
         </footer>
 </div>
 @else
@@ -246,7 +244,7 @@
                         {!! Auth::user()->name !!}
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
-                        <a href="{{route('users.profile')}}" class="dropdown-item"> <i class="fa fa-user mr-2"></i> Profile </a>
+                        <a href="{{route('users.profile')}}" class="dropdown-item"> <i class="fa fa-user mr-2"></i> {{trans('lang.user_profile')}} </a>
                         <div class="dropdown-divider"></div>
                         <a href="{!! url('/logout') !!}" class="dropdown-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             <i class="fa fa-envelope mr-2"></i> {{__('auth.logout')}}
@@ -273,7 +271,7 @@
                 <div class="float-right d-none d-sm-block">
                     <b>Version</b> {{implode('.',str_split(substr(config('installer.currentVersion','v100'),1,3)))}}
                 </div>
-                <strong>Copyright © {{date('Y')}} <a href="{{url('/')}}">Smart Home Services</a>.</strong> All rights reserved.
+                <strong>Copyright © {{date('Y')}} <a href="{{url('/')}}">@lang('lang.title')</a>.</strong> All rights reserved.
             </footer>
         </div>
     </div>

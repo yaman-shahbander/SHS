@@ -6,14 +6,14 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0 text-dark">Delegate<small class="ml-3 mr-3">|</small><small>Delegate Management</small></h1>
+        <h1 class="m-0 text-dark">{{trans('lang.delegates')}}<small class="ml-3 mr-3">|</small><small>{{trans('lang.delegate_desc')}}</small></h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><a href="{{url('/dashboard')}}"><i class="fa fa-dashboard"></i> {{trans('lang.dashboard')}}</a></li>
-          <li class="breadcrumb-item"><a href="{!! route('delegate.index') !!}">Delegate</a>
+          <li class="breadcrumb-item"><a href="{!! route('delegate.index') !!}">{{trans('lang.delegates')}}</a>
           </li>
-          <li class="breadcrumb-item active">Delegate List</li>
+          <li class="breadcrumb-item active">{{trans('lang.delegate_table')}}</li>
         </ol>
       </div><!-- /.col -->
     </div><!-- /.row -->
@@ -29,11 +29,11 @@
         <ul class="nav nav-tabs align-items-end card-header-tabs w-100">
             <li class="nav-item">
                 <a class="nav-link active" href="{!! url()->current() !!}">
-                <i class="fa fa-list mr-2"></i>Delegate List</a>
+                <i class="fa fa-list mr-2"></i>{{trans('lang.delegate_table')}}</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{!! route('delegate.create') !!}">
-                <i class="fa fa-plus mr-2"></i>Create Delegate</a>
+                <i class="fa fa-plus mr-2"></i>{{trans('lang.delegate_create')}}</a>
             </li>
         @include('layouts.right_toolbar', compact('dataTable'))
       </ul>
