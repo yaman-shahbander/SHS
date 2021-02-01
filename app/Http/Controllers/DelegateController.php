@@ -82,7 +82,7 @@ class DelegateController extends Controller
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }
-        Flash::success(__('lang.saved_successfully', ['operator' => __('lang.category')]));
+        Flash::success(__('lang.saved_successfully', ['operator' => __('lang.dalegate')]));
 
         return redirect(route('delegate.index'));
     }

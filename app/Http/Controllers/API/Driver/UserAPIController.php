@@ -49,10 +49,7 @@ class UserAPIController extends Controller
         $IsEmail = false;
 
         try {
-            if(empty($request->header('devicetoken'))){
-                return $this->sendError('nothing to process', 401);
 
-            }
             if($request->email){
 
                 $this->validate($request, [
@@ -90,8 +87,8 @@ class UserAPIController extends Controller
             if (empty($user)) {
                     return $this->sendError('User not found', 401);
                 }
-                $user->device_token = $request->header('devicetoken');
-                $user->save();
+            $user->language = $request->input('lang')==null ? 'en':$request->input('lang','');
+
                 if($user->is_verified==0) {
                     $user->activation_code = rand(1000, 9999); // activation code
 
@@ -129,26 +126,50 @@ class UserAPIController extends Controller
                             $mail->Body = 'Your verification code is: ' . $user->activation_code;
 
                             $mail->send();
-                            return $this->sendResponse(['activation_code'=>$user->activation_code], 'user not verified');
+                            $user->save();
+
+                            $response_cod=
+                                ['id'=>$user->id,
+                                    'first_name'=>$user->name,
+                                    'last_name'=>$user->last_name,
+                                    'email'=>$user->email,
+                                    'avatar'=>asset('storage/Avatar').'/'.$user->avatar,
+                                    'device_token'=>$user->device_token,
+                                    'phone'=>$user->phone,
+                                    'country'=>null,
+                                    'activation_code'=>$user->activation_code
+
+                                ];
+
+                            return $this->sendResponse($response_cod, 'user not verified');
 
                         } catch (Exception $e) {
                             return $this->sendError('error message ', 401);
                         }
                     }
                 }
-                $response=
-                    ['id'=>$user->id,
-                        'first_name'=>$user->name,
-                        'last_name'=>$user->last_name,
-                        'email'=>$user->email,
-                        'avatar'=>asset('storage/Avatar').'/'.$user->avatar,
-                        'lang'=>$user->language,
-                        'device_token'=>$user->device_token,
-                        'phone'=>$user->phone,
-                        'city'=>$user->cities->city_name,
-                        'country'=>(Country::find($user->cities->country_id))->country_name,
+                           $user->save();
 
-                        ];
+          $response=
+                ['id'=>$user->id,
+                    'first_name'=>$user->name,
+                    'last_name'=>$user->last_name,
+                    'email'=>$user->email,
+                    'avatar'=>asset('storage/Avatar').'/'.$user->avatar,
+                    'lang'=>$user->language,
+                    'device_token'=>$user->device_token,
+                    'phone'=>$user->phone,
+
+                    'country'=>[
+                        'id'=>(Country::find($user->cities->country_id))->id,
+                        'country_name'=>(Country::find($user->cities->country_id))->country_name,
+                        'city'=>[
+                            'id'=>$user->cities->id,
+                            'name'=>$user->cities->city_name,
+                        ]
+                    ]
+
+                ];
                 return $this->sendResponse($response, 'User retrieved successfully');
 
         } catch (\Exception $e) {
@@ -168,10 +189,7 @@ class UserAPIController extends Controller
 
         $IsEmail = false;
         try {
-            if(empty($request->header('devicetoken'))){
-                return $this->sendError('nothing to process', 401);
 
-            }
             if($request->email) {
 
                 $this->validate($request, [
@@ -223,7 +241,7 @@ class UserAPIController extends Controller
 
             //Generate a random string.
             $token = openssl_random_pseudo_bytes(16);
-            
+
             $user->save();
 
             //Convert the binary data into hexadecimal representation.
@@ -286,7 +304,7 @@ class UserAPIController extends Controller
                     'device_token'=>$user->device_token,
                     'phone'=>$user->phone,
                     //'city'=>$user->cities->city_name,
-                   // 'country'=>(Country::find($user->cities->country_id))->country_name,
+                    'country'=>null,
 
                 ];
 
@@ -308,7 +326,7 @@ class UserAPIController extends Controller
 
 
                 $user->city_id = $request->input('city_id');
-                //$user->language = $request->input('lang');
+                $user->language = $request->input('lang');
                 $user->avatar = 'avatar.png';
                 $user->is_verified = 1;
                 $user->save();
@@ -322,8 +340,14 @@ class UserAPIController extends Controller
                         'lang' => $user->language,
                         'device_token' => $user->device_token,
                         'phone' => $user->phone,
-                        'city' => $user->cities->city_name,
-                        'country' => (Country::find($user->cities->country_id))->country_name,
+                        'country'=>[
+                            'id'=>(Country::find($user->cities->country_id))->id,
+                            'country_name'=>(Country::find($user->cities->country_id))->country_name,
+                            'city'=>[
+                                'id'=>$user->cities->id,
+                                'name'=>$user->cities->city_name,
+                            ]
+                        ]
 
                     ];
                 event(new UserRoleChangedEvent($user));
@@ -371,38 +395,7 @@ class UserAPIController extends Controller
 
     function settings(Request $request)
     {
-        $settings = setting()->all();
-        $settings = array_intersect_key($settings,
-            [
-                'default_tax' => '',
-                'default_currency' => '',
-                'default_currency_decimal_digits' => '',
-                'app_name' => '',
-                'currency_right' => '',
-                'enable_paypal' => '',
-                'enable_stripe' => '',
-                'enable_razorpay' => '',
-                'main_color' => '',
-                'main_dark_color' => '',
-                'second_color' => '',
-                'second_dark_color' => '',
-                'accent_color' => '',
-                'accent_dark_color' => '',
-                'scaffold_dark_color' => '',
-                'scaffold_color' => '',
-                'google_maps_key' => '',
-                'mobile_language' => '',
-                'app_version' => '',
-                'enable_version' => '',
-                'distance_unit' => '',
-            ]
-        );
 
-        if (!$settings) {
-            return $this->sendError('Settings not found', 401);
-        }
-
-        return $this->sendResponse($settings, 'Settings retrieved successfully');
     }
 
     /**

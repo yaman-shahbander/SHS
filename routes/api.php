@@ -20,7 +20,7 @@
 Route::prefix('homeOwner')->group(function () {
     Route::post('login', 'API\Driver\UserAPIController@login');
     Route::post('register', 'API\Driver\UserAPIController@register');
-    Route::post('verified', 'API\Driver\UserAPIController@verify');
+    Route::post('setCityCountry', 'API\Driver\UserAPIController@verify');
     Route::post('send_reset_link_email', 'API\UserAPIController@sendResetLinkEmail');
     Route::get('user', 'API\Driver\UserAPIController@user');
     Route::get('logout', 'API\Driver\UserAPIController@logout');
@@ -50,7 +50,7 @@ Route::prefix('homeOwner')->group(function () {
 Route::prefix('vendor')->group(function () {
     Route::post('login', 'API\Manager\UserAPIController@login');
     Route::post('register', 'API\Manager\UserAPIController@register');
-    Route::post('verified', 'API\Manager\UserAPIController@verify');
+    Route::post('setCityCountry', 'API\Manager\UserAPIController@verify');
 
     Route::post('send_reset_link_email', 'API\UserAPIController@sendResetLinkEmail');
     Route::get('user', 'API\Manager\UserAPIController@user');
