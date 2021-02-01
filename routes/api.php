@@ -40,7 +40,11 @@ Route::prefix('homeOwner')->group(function () {
     //Leave a review
     Route::post('leaveReview', 'API\Driver\UserAPIController@leaveReview');
     //Gmaps location
-    Route::resource('gmapLocation', 'API\GmapLocationAPIController');
+    Route::post('storegmapLocation', 'API\GmapLocationAPIController@store');
+
+    Route::post('updategmapLocation', 'API\GmapLocationAPIController@update');
+
+    // Route::resource('gmapLocation', 'API\GmapLocationAPIController');
 });
 
 Route::prefix('vendor')->group(function () {
@@ -67,7 +71,11 @@ Route::prefix('vendor')->group(function () {
     //Leave a review
     Route::post('leaveReview', 'API\Manager\UserAPIController@leaveReview');
     //Gmaps location
-    Route::resource('gmapLocation', 'API\GmapLocationAPIController');
+    Route::post('storegmapLocation', 'API\GmapLocationAPIController@store');
+
+    Route::post('updategmapLocation', 'API\GmapLocationAPIController@update');
+
+    //Route::resource('gmapLocation', 'API\GmapLocationAPIController');
     //save photo profile
     Route::post('photoProfile', 'API\Manager\UserAPIController@backgroundPic');
     //vendor profile

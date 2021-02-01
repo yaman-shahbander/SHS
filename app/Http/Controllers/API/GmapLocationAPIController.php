@@ -37,12 +37,11 @@ class GmapLocationAPIController extends Controller
      */
     public function store(Request $request)
     {
-        if($request->device_token) {
+        if($request->header('devicetoken')) {
             try {
-                $user = User::where('device_token', $request->device_token)->first();
+                $user = User::where('device_token', $request->header('devicetoken'))->first();
                 if (empty($user)) {
                     return $this->sendError('User not found', 401);
-
                 }
 
                 $checkUserCoordinates = GmapLocation::where('user_id', $user->id)->first();
@@ -98,18 +97,26 @@ class GmapLocationAPIController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update($id, Request $request)
+    public function update(Request $request)
     {
-        $updateUserCoordinates =  GmapLocation::where('user_id', $id)->first();
+        if($request->header('devicetoken')) {
 
-        $updateUserCoordinates->latitude = $request->latitude;
-        $updateUserCoordinates->longitude = $request->longitude;
+            $user = User::where('device_token', $request->header('devicetoken'))->first();
+                if (empty($user)) {
+                    return $this->sendError('User not found', 401);
+                }
 
-        if ($updateUserCoordinates->save()){
-            $updateUserCoordinates->makeHidden(['user_id', 'updated_at', 'created_at', 'id', 'icon']);
-            return $this->sendResponse($updateUserCoordinates->toArray(), 'Coordinates Updated successfully');
-        } else {
-            return $this->sendResponse([], 'Coordinates failed to updated');
+            $updateUserCoordinates =  GmapLocation::where('user_id', $user->id)->first();
+
+            $updateUserCoordinates->latitude = $request->latitude;
+            $updateUserCoordinates->longitude = $request->longitude;
+
+            if ($updateUserCoordinates->save()){
+                $updateUserCoordinates->makeHidden(['user_id', 'updated_at', 'created_at', 'id', 'icon']);
+                return $this->sendResponse($updateUserCoordinates->toArray(), 'Coordinates Updated successfully');
+            } else {
+                return $this->sendResponse([], 'Coordinates failed to updated');
+            }
         }
     }
 
