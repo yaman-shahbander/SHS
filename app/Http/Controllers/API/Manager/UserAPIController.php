@@ -101,7 +101,9 @@ class UserAPIController extends Controller
                 }
 //                $user->device_token = $request->header('devicetoken');
 //                $user->save();
-                if($user->is_verified==0) {
+            $user->language = $request->input('lang')==null ? 'en':$request->input('lang','');
+
+            if($user->is_verified==0) {
                     $user->activation_code = rand(1000, 9999); // activation code
 
                     //Expiration code date
@@ -138,11 +140,17 @@ class UserAPIController extends Controller
                             $mail->Body = 'Your verification code is: ' . $user->activation_code;
 
                             $mail->send();
+                            $user->save();
+
                             $response_cod=
                                 ['id'=>$user->id,
+                                    'first_name'=>$user->name,
+                                    'last_name'=>$user->last_name,
                                     'email'=>$user->email,
+                                    'avatar'=>asset('storage/Avatar').'/'.$user->avatar,
                                     'device_token'=>$user->device_token,
                                     'phone'=>$user->phone,
+                                    'country'=>null,
                                     'activation_code'=>$user->activation_code
 
                                 ];
@@ -153,7 +161,9 @@ class UserAPIController extends Controller
                         }
                     }
                 }
-                $response=
+                   $user->save();
+
+            $response=
                     ['id'=>$user->id,
                         'first_name'=>$user->name,
                         'last_name'=>$user->last_name,
@@ -162,8 +172,15 @@ class UserAPIController extends Controller
                         'lang'=>$user->language,
                         'device_token'=>$user->device_token,
                         'phone'=>$user->phone,
-                        'city'=>$user->cities->city_name,
-                        'country'=>(Country::find($user->cities->country_id))->country_name,
+
+                        'country'=>[
+                            'id'=>(Country::find($user->cities->country_id))->id,
+                            'country_name'=>(Country::find($user->cities->country_id))->country_name,
+                            'city'=>[
+                                'id'=>$user->cities->id,
+                                'name'=>$user->cities->city_name,
+                                     ]
+                            ]
 
                         ];
                 return $this->sendResponse($response, 'User retrieved successfully');
@@ -772,6 +789,7 @@ class UserAPIController extends Controller
         // })
 
         public function vendorprofile(Request $request) { //for vendor screens
+
             if(empty($request->header('devicetoken'))){
                 return $this->sendError('device token not found', 401);
             }
@@ -782,20 +800,20 @@ class UserAPIController extends Controller
             $response = [];
             $response = [
                 'name'            => $vendor->name,
-                'rating'          => getRating($vendor),
+                'rating'          => round((getRating($vendor)/20)*2)/2,
                 'count_reviews'   => count($vendor->clients),
                 'count_contected' => count($vendor->messages->unique('from_id')),
                 'reviews'         => ($vendor->clientsAPI)->transform(function($q){
                                     return $q=[
                                         'name' => $q->name,
                                         'description'=>$q->pivot->description,
-                                        'image'=>$q->getFirstMediaUrl('avatar','icon'),
+                                        'image'=> asset('storage/Avatar') . '/' . $q->avatar,
                                     ];
                                 }),
                 'offers'          => $vendor->specialOffers->makeHidden(['user_id', 'created_at', 'updated_at'])
             ];
+            return $this->sendResponse($response, 'User retrieved successfully');
 
-            return $response;
         }
 
 }
