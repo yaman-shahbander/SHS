@@ -41,4 +41,8 @@ class Country extends Model
     function City() {
         return $this->hasMany(City::class, 'country_id');
     }
+
+    function Cities() {
+        return $this->hasMany(City::class, 'country_id')->select(['cities.id','cities.city_name', 'cities.country_id']);
+    }
 }

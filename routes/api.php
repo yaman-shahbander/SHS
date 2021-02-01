@@ -160,7 +160,10 @@ Route::post('allMessages','API\ChatAPIController@history');
 Route::post('vendorFee', 'API\vendorApiController@vendorFeefunc');
 //Refer a vendor
 Route::post('vendorRefer', 'API\vendorApiController@vendorRefer');
-
+//select language, country, and city
+Route::post('langCountryCity', 'API\CountryAPIController@langCountryCity');
+//save language, country, and city
+Route::post('savelangCountryCity', 'API\CountryAPIController@savelangCountryCity');
 
 Route::resource('restaurants', 'API\RestaurantAPIController');
 
