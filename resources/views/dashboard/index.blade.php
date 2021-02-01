@@ -30,6 +30,7 @@
 @endpush
 @push('scripts')
     <script type="text/javascript">
+
         var data = [1000, 2000, 3000, 2500, 2700, 2500, 3000];
         var labels = ['JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
@@ -120,6 +121,7 @@
         });
         //var salesChart = renderChart($salesChart, data, labels);
         })*/
+         
     </script>
 @endpush
 
