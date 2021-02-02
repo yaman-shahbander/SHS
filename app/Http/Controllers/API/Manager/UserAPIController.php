@@ -943,8 +943,6 @@ class UserAPIController extends Controller
             return $this->sendResponse($user->toArray(), 'Inforamtion saved successfully');;
         }
     }
-    
-
 }
 
 
