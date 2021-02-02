@@ -24,13 +24,14 @@ class SpecialOffersAPIController extends Controller
                 return $this->sendError('User not found', 401);
             }
             
-            $vendoroffers    =  specialOffers::where('user_id', $user->id)->get(['description', 'title', 'image']);
+            $vendoroffers    =  specialOffers::where('user_id', $user->id)->get(['id', 'description', 'title', 'image']);
 
             
 
             $response = [];
             foreach($vendoroffers as $info) {
                 $response[] = [
+                    'id'          => $info->id,
                     'description' => $info->description,
                     'title'       => $info->title,
                     'image'       => url('storage/specialOffersPic/' . $info->image)
