@@ -606,6 +606,57 @@ class vendorApiController extends Controller
             return $this->sendResponse($response, "Referring added successfully!");
         }
     }
+
+    public function supportedDays(Request $request) {
+        $lang = false;
+        if($request->header('devicetoken')) {
+            $vendor = User::where('device_token', $request->header('devicetoken'))->first();
+            $supported = $vendor->daysApi->transform(function($q) {
+                return  $q->id;
+             });
+             
+             $langBool = false;
+
+             $language = $vendor->language;
+
+              if(!empty($language)) {
+                  $nameField = 'name_'.$language; 
+                  $langBool = true;
+                } else { 
+                  $nameField = 'name_en'; 
+                  $langBool = false;
+                } // The field in database
+
+             $days  = Day::all(['id', $nameField])->transform(function($days) use($supported){
+                 if (in_array($days->id, $supported->toArray()))
+                     $days['check'] = 1;
+                 else 
+                     $days['check'] = 0;
+                 return $days;     
+             });
+
+             $response = [];
+
+             foreach($days as $day) {
+                if($day->check == 1) {
+                    $response[] = [
+                        'id'       => $day->id,
+                        $nameField => $langBool ? $day->name_ar : $day->name_en,
+                        'check'    => $day->check,
+                        'workHours'=> DB::table('days_vendors')->where('day_id', $day->id)->where('vendor_id', $vendor->id)->get(['start', 'end']),
+                    ];
+                } else {
+                    $response[] = [
+                        'id'       => $day->id,
+                        $nameField => $langBool ? $day->name_ar : $day->name_en,
+                        'check'    => $day->check
+                    ];
+                }       
+            } 
+                
+             return $this->sendResponse($response, "Supported added successfully!");
+        }
+    }
 }
 
 
