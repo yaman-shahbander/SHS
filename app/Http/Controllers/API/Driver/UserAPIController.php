@@ -632,64 +632,80 @@ class UserAPIController extends Controller
     }
 
     public function langCountryCity(Request $request) {
-        if($request->header('devicetoken')) {
-            $user = User::where('device_token', $request->header('devicetoken'))->first();
-            if (empty($user)) {
-                return $this->sendError('User not found', 401);
-            }
-            
-            $hiddenElems = ['created_at', 'updated_at', 'name_en'];
-            $arr=[
-            'UserCityId'=>$user->city_id,
-            'UserCountryId'=>(Country::find($user->cities->country_id))->id
-            ];
-                
-             $countries = Country::all()->makeHidden($hiddenElems)->transform(function($c) use($arr) {
-                 $c->cities->transform(function($c) use($arr) {
-                     // if (in_array($c->toArray()['id'], $UserCityId))
-                    if ($c->id== $arr['UserCityId'])
-    
-                        $c['check'] = 1;
+        try {
+
+
+            if ($request->header('devicetoken')) {
+                $user = User::where('device_token', $request->header('devicetoken'))->first();
+                if (empty($user)) {
+                    return $this->sendError('User not found', 401);
+                }
+
+                $hiddenElems = ['created_at', 'updated_at', 'name_en'];
+                $arr = [
+                    'UserCityId' => $user->city_id,
+                    'UserCountryId' => (Country::find($user->cities->country_id))->id
+                ];
+
+                $countries = Country::all()->makeHidden($hiddenElems)->transform(function ($c) use ($arr) {
+                    $c->cities->transform(function ($c) use ($arr) {
+                        // if (in_array($c->toArray()['id'], $UserCityId))
+                        if ($c->id == $arr['UserCityId'])
+
+                            $c['check'] = 1;
                         else
+                            $c['check'] = 0;
+
+                        return $c;
+                    });
+
+                    if ($c->id == $arr['UserCountryId'])
+
+                        $c['check'] = 1;
+                    else
                         $c['check'] = 0;
-    
-                     return $c;
+
+
+                    return $c;
                 });
-            
-                if ($c->id== $arr['UserCountryId'])
-    
-                $c['check'] = 1;
-                else
-                $c['check'] = 0;
+                $response = [
+                    'lang' => $user->language,
+                    'countries' => $countries
 
-            
-                 return $c;
-            });
-            $response=[
-                'lang'=>$user->language,
-               'countries'=> $countries
-               
-            ];
+                ];
 
-           
-            return $this->sendResponse($response, 'Inforamtion retrieved successfully');;
 
+                return $this->sendResponse($response, 'Inforamtion retrieved successfully');;
+
+            }
         }
+
+            catch (\Exception $e){
+                return $this->sendError('something was wrong', 401);
+
+            }
+
     }
 
     public function savelangCountryCity(Request $request) {
-        if($request->header('devicetoken')) {
-            $user = User::where('device_token', $request->header('devicetoken'))->first();
-            if (empty($user)) {
-                return $this->sendError('User not found', 401);
-            }
-            
-            $user->update([
-                'city_id'   => $request->city_id,
-                'language'  => $request->lang
-            ]);
+        try {
 
-            return $this->sendResponse([], 'Inforamtion saved successfully');;
+            if ($request->header('devicetoken')) {
+                $user = User::where('device_token', $request->header('devicetoken'))->first();
+                if (empty($user)) {
+                    return $this->sendError('User not found', 401);
+                }
+
+                $user->update([
+                    'city_id' => $request->city_id,
+                    'language' => $request->lang
+                ]);
+
+                return $this->sendResponse([], 'Inforamtion saved successfully');;
+            }
+        }catch (\Exception $e){
+            return $this->sendError('something was wrong', 401);
+
         }
     }
 

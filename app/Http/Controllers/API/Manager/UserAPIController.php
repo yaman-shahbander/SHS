@@ -834,87 +834,100 @@ class UserAPIController extends Controller
         // })
 
         public function vendorprofile(Request $request) { //for vendor screens
-
-            if(empty($request->header('devicetoken'))){
-                return $this->sendError('device token not found', 401);
-            }
-            $vendor = User::where('device_token', $request->header('devicetoken'))->first();
-            if (empty($vendor)) {
-                return $this->sendError('User not found', 401);
-            }
-            $response = [];
-            $response = [
-                'first_name'            => $vendor->name,
-                'status'          =>$vendor->status->only('id','status_type'),
-                'rating'          => round((getRating($vendor)/20)*2)/2,
-                'count_reviews'   => count($vendor->clients),
-                'count_contected' => count($vendor->messages->unique('from_id')),
-                'reviews'         => ($vendor->clientsAPI)->transform(function($q){
-                                    return $q=[
-                                        'name' => $q->name,
-                                        'description'=>$q->pivot->description,
-                                        'image'=> asset('storage/Avatar') . '/' . $q->avatar,
-                                    ];
-                                }),
-                'offers'          => $vendor->specialOffers->makeHidden(['user_id', 'created_at', 'updated_at'])
+        try {
+    if (empty($request->header('devicetoken'))) {
+        return $this->sendError('device token not found', 401);
+    }
+    $vendor = User::where('device_token', $request->header('devicetoken'))->first();
+    if (empty($vendor)) {
+        return $this->sendError('User not found', 401);
+    }
+    $response = [];
+    $response = [
+        'first_name' => $vendor->name,
+        'status' => $vendor->status->only('id', 'status_type'),
+        'rating' => round((getRating($vendor) / 20) * 2) / 2,
+        'count_reviews' => count($vendor->clients),
+        'count_contected' => count($vendor->messages->unique('from_id')),
+        'reviews' => ($vendor->clientsAPI)->transform(function ($q) {
+            return $q = [
+                'name' => $q->name,
+                'description' => $q->pivot->description,
+                'image' => asset('storage/Avatar') . '/' . $q->avatar,
             ];
-            return $this->sendResponse($response, 'User retrieved successfully');
+        }),
+        'offers' => $vendor->specialOffers->makeHidden(['user_id', 'created_at', 'updated_at'])
+    ];
+    return $this->sendResponse($response, 'User retrieved successfully');
+
+  }catch (\Exception $e){
+return $this->sendError('something was wrong', 401);
+
+}
 
         }
-        
+
     public function langCountryCity(Request $request) {
-        if($request->header('devicetoken')) {
+        try {
+
+            if($request->header('devicetoken')) {
             $user = User::where('device_token', $request->header('devicetoken'))->first();
             if (empty($user)) {
                 return $this->sendError('User not found', 401);
             }
-            
+
             $hiddenElems = ['created_at', 'updated_at', 'name_en'];
             $arr=[
             'UserCityId'=>$user->city_id,
             'UserCountryId'=>(Country::find($user->cities->country_id))->id
             ];
-                
+
              $countries = Country::all()->makeHidden($hiddenElems)->transform(function($c) use($arr) {
                  $c->cities->transform(function($c) use($arr) {
                      // if (in_array($c->toArray()['id'], $UserCityId))
                     if ($c->id== $arr['UserCityId'])
-    
+
                         $c['check'] = 1;
                         else
                         $c['check'] = 0;
-    
+
                      return $c;
                 });
-            
+
                 if ($c->id== $arr['UserCountryId'])
-    
+
                 $c['check'] = 1;
                 else
                 $c['check'] = 0;
 
-            
+
                  return $c;
             });
             $response=[
                 'lang'=>$user->language,
                'countries'=> $countries
-               
+
             ];
 
-           
+
             return $this->sendResponse($response, 'Inforamtion retrieved successfully');;
+
+        }
+        }catch (\Exception $e){
+            return $this->sendError('something was wrong', 401);
 
         }
     }
 
     public function savelangCountryCity(Request $request) {
-        if($request->header('devicetoken')) {
+        try {
+
+            if($request->header('devicetoken')) {
             $user = User::where('device_token', $request->header('devicetoken'))->first();
             if (empty($user)) {
                 return $this->sendError('User not found', 401);
             }
-            
+
             $user->update([
                 'city_id'   => $request->city_id,
                 'language'  => $request->lang
@@ -922,22 +935,32 @@ class UserAPIController extends Controller
 
             return $this->sendResponse([], 'Inforamtion saved successfully');;
         }
+        }catch (\Exception $e){
+            return $this->sendError('something was wrong', 401);
+
+        }
     }
 
     public function updatevendorstatus(Request $request) {
-        if($request->header('devicetoken')) {
+        try {
+
+            if($request->header('devicetoken')) {
             $user = User::where('device_token', $request->header('devicetoken'))->first();
             if (empty($user)) {
                 return $this->sendError('User not found', 401);
             }
-            
+
             $user->status_id=$request->status_id;
             $user->save();
 
             return $this->sendResponse($user->toArray(), 'Inforamtion saved successfully');;
         }
+            }catch (\Exception $e){
+        return $this->sendError('something was wrong', 401);
+
+        }
     }
-    
+
 
 }
 
