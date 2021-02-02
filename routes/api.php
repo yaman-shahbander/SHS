@@ -114,7 +114,8 @@ Route::prefix('vendor')->group(function () {
     Route::post('savelangCountryCity', 'API\Manager\UserAPIController@savelangCountryCity');
     //update vendor status
     Route::post('updatevendorstatus', 'API\Manager\UserAPIController@updatevendorstatus');
-
+    //update vendor status
+    Route::get('getcategorySubcatory', 'API\Manager\UserAPIController@getcategorySubcatory');
 });
 
 

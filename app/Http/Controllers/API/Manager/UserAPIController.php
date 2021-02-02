@@ -943,6 +943,41 @@ class UserAPIController extends Controller
             return $this->sendResponse($user->toArray(), 'Inforamtion saved successfully');;
         }
     }
-}
 
+    public function getcategorySubcatory(Request $request) {
+        if($request->header('devicetoken')) {
+            $user = User::where('device_token', $request->header('devicetoken'))->first();
+            if (empty($user)) {
+                return $this->sendError('User not found', 401);
+            }
+
+
+            $user1 = User::where('device_token', $request->header('devicetoken'))->first();
+
+            $sub= $user->subcategories->transform(function($q) {
+                return  $q->id;
+             });
+        
+            $user1 = $user1->subcategories->transform(function($q) use($sub){
+                $arr = $q->categories->subCategory->transform(function($s) use($sub){
+                    if (in_array($s->id, $sub->toArray()))
+                    return $s->only('id', 'name') ;
+                         
+                });
+
+               
+
+                $q['id']            = $q->categories->id;
+                $q['name']          = $q->categories->name;
+                
+                $q['subcategories'] = $arr->filter(function ($value) {
+                    return $value != null;
+                });;
+               
+                return  $q->only('id', 'name', 'subcategories');
+            });
+            return $this->sendResponse($user1, 'Inforamtion saved successfully');;
+        }
+    }
+}
 
