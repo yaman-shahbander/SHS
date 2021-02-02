@@ -880,50 +880,50 @@ return $this->sendError('something was wrong', 401);
         try {
 
             if($request->header('devicetoken')) {
-            $user = User::where('device_token', $request->header('devicetoken'))->first();
-            if (empty($user)) {
-                return $this->sendError('User not found', 401);
-            }
+                $user = User::where('device_token', $request->header('devicetoken'))->first();
+                if (empty($user)) {
+                    return $this->sendError('User not found', 401);
+                }
 
-            $hiddenElems = ['created_at', 'updated_at', 'name_en'];
-            $arr=[
-            'UserCityId'=>$user->city_id,
-            'UserCountryId'=>(Country::find($user->cities->country_id))->id
-            ];
+                $hiddenElems = ['created_at', 'updated_at', 'name_en'];
+                $arr=[
+                    'UserCityId'=>$user->city_id,
+                    'UserCountryId'=>(Country::find($user->cities->country_id))->id
+                ];
+                //return dd(Country::with('City')->get());
 
-             $countries = Country::all()->makeHidden($hiddenElems)->transform(function($c) use($arr) {
-                 $c->cities->transform(function($c) use($arr) {
-                     // if (in_array($c->toArray()['id'], $UserCityId))
-                    if ($c->id== $arr['UserCityId'])
+                $countries = Country::all()->makeHidden($hiddenElems)->transform(function($c) use($arr) {
+                    $c->City->transform(function($c) use($arr) {
+                        // if (in_array($c->toArray()['id'], $UserCityId))
+                        if ($c->id== $arr['UserCityId'])
+
+                            $c['check'] = 1;
+                        else
+                            $c['check'] = 0;
+
+                        return $c->only('id','city_name','check');
+                    });
+
+                    if ($c->id== $arr['UserCountryId'])
 
                         $c['check'] = 1;
-                        else
+                    else
                         $c['check'] = 0;
 
-                     return $c;
+
+                    return $c;
                 });
+                $response=[
+                    'lang'=>$user->language,
+                    'countries'=> $countries
 
-                if ($c->id== $arr['UserCountryId'])
+                ];
 
-                $c['check'] = 1;
-                else
-                $c['check'] = 0;
+                return $this->sendResponse($response, 'Inforamtion retrieved successfully');;
 
-
-                 return $c;
-            });
-            $response=[
-                'lang'=>$user->language,
-               'countries'=> $countries
-
-            ];
-
-
-            return $this->sendResponse($response, 'Inforamtion retrieved successfully');;
-
-        }
+            }
         }catch (\Exception $e){
-            return $this->sendError('something was wrong', 401);
+            return $this->sendError($e->getMessage(), 401);
 
         }
     }

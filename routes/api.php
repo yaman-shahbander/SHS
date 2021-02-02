@@ -115,6 +115,16 @@ Route::prefix('vendor')->group(function () {
     //update vendor status
     Route::post('updatevendorstatus', 'API\Manager\UserAPIController@updatevendorstatus');
 
+
+//special offers vendors API
+    Route::get('getVendorspecialOffers', 'API\SpecialOffersAPIController@index');
+
+//special offers vendors API
+    Route::post('storeVendorspecialOffers', 'API\SpecialOffersAPIController@store');
+
+//special offers vendors API
+    Route::post('deleteVendorspecialOffers', 'API\SpecialOffersAPIController@destroy');
+
 });
 
 
@@ -157,14 +167,6 @@ Route::post('updatefilter', 'API\FilterVendorsAPIController@update');
 
 //Route::resource('specialOffers', 'API\SpecialOffersAPIController');
 
-//special offers vendors API
-Route::get('getVendorspecialOffers', 'API\SpecialOffersAPIController@index');
-
-//special offers vendors API
-Route::post('storeVendorspecialOffers', 'API\SpecialOffersAPIController@store');
-
-//special offers vendors API
-Route::post('deleteVendorspecialOffers', 'API\SpecialOffersAPIController@destroy');
 
 //vendor map location
 Route::post('vendorLocation', 'API\GmapLocationAPIController@VendorMapDetails');
