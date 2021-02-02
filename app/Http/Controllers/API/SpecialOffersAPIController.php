@@ -15,6 +15,7 @@ class SpecialOffersAPIController extends Controller
      */
     public function index(Request $request)
     {
+        try {
 
         if($request->header('devicetoken')) {
 
@@ -39,6 +40,8 @@ class SpecialOffersAPIController extends Controller
             }
             return $this->sendResponse($response, 'Offers retrieved successfully');
         }
+      } catch (\Exception $e) {
+        return $this->sendError("Something is wrong", 401); }
     }
 
     /**
@@ -60,6 +63,8 @@ class SpecialOffersAPIController extends Controller
     public function store(Request $request)
     {
 
+        try {
+
         if($request->header('devicetoken')) {
 
             $user = User::where('device_token', $request->header('devicetoken'))->first();
@@ -74,9 +79,19 @@ class SpecialOffersAPIController extends Controller
                 $vendor_specialOffer->title = $request->title;
                 $vendor_specialOffer->subcategory_id = $request->subcategory_id;
                 $vendor_specialOffer->image = "default.png";
+                $response = [];
                 
 
                 if ($vendor_specialOffer->save()){
+
+                    $response = [
+                        'user_id'          => $vendor_specialOffer->user_id,
+                        'description'      => $vendor_specialOffer->description,
+                        'title'            => $vendor_specialOffer->title,
+                        'subcategory_id'   => $vendor_specialOffer->subcategory_id,
+                        'offer_id'         => $vendor_specialOffer->id,
+                    ];
+
                     if (!empty ($request->file('image'))) {
 
                     $imageName = uniqid() . $request->file('image')->getClientOriginalName();
@@ -85,13 +100,20 @@ class SpecialOffersAPIController extends Controller
 
                     $vendor_specialOffer->update(['image' => $imageName]);
 
-                    return $this->sendResponse($vendor_specialOffer->toArray(), 'Offers Saved successfully');
+                    $response['image'] = asset('storage/specialOffersPic') . '/' .$imageName;
 
-                    } else
-                    return $this->sendResponse($vendor_specialOffer->toArray(), 'Offers Saved successfully with default image');
+                    return $this->sendResponse($response, 'Offers Saved successfully');
+
+                    } else{
+                        $response['image'] = asset('storage/specialOffersPic') . '/default.jpg' ;
+
+                    return $this->sendResponse($response, 'Offers Saved successfully with default image');
+                    }
                 }  else
                 return $this->sendResponse([], 'Error');
-    }
+       }
+    } catch (\Exception $e) {
+        return $this->sendError("Something is wrong", 401); }
 }
 
     /**
@@ -134,8 +156,22 @@ class SpecialOffersAPIController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        try {
+            if($request->header('devicetoken')) {
+
+                $user = User::where('device_token', $request->header('devicetoken'))->first();
+
+                    if (empty($user)) {
+                        return $this->sendError('User not found', 401);
+                    }
+
+                    specialOffers::find($request->offer_id)->delete();
+
+                    return $this->sendResponse([], 'Offer deleted successfully!');
+            } else return $this->sendError("Error!", 401);
+        } catch (\Exception $e) {
+            return $this->sendError("Something is wrong", 401); }
     }
 }
