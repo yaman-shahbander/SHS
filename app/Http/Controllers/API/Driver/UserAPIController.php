@@ -23,6 +23,7 @@ use App\Country;
 use App\Models\reviews;
 use Validator;
 use PHPMailer\PHPMailer\PHPMailer;
+use App\City;
 
 class UserAPIController extends Controller
 {
@@ -638,26 +639,41 @@ class UserAPIController extends Controller
             }
             
             $hiddenElems = ['created_at', 'updated_at', 'name_en'];
+            $arr=[
+            'UserCityId'=>$user->city_id,
+            'UserCountryId'=>(Country::find($user->cities->country_id))->id
+            ];
+                
+             $countries = Country::all()->makeHidden($hiddenElems)->transform(function($c) use($arr) {
+                 $c->cities->transform(function($c) use($arr) {
+                     // if (in_array($c->toArray()['id'], $UserCityId))
+                    if ($c->id== $arr['UserCityId'])
+    
+                        $c['check'] = 1;
+                        else
+                        $c['check'] = 0;
+    
+                     return $c;
+                });
+            
+                if ($c->id== $arr['UserCountryId'])
+    
+                $c['check'] = 1;
+                else
+                $c['check'] = 0;
 
-            $UserCityId[] = $user->city_id;
-
-            $response = [];
-
-            $cities = City::all(['id', 'city_name', 'country_id'])->transform(function($c) use($UserCityId) {
-                if (in_array($c->toArray()['id'], $UserCityId))
-                    $c['check'] = 1;
-                return $c;
+            
+                 return $c;
             });
+            $response=[
+                'lang'=>$user->language,
+               'countries'=> $countries
+               
+            ];
 
-            //  $countries = Country::all(['id', 'country_name']);
+           
+            return $this->sendResponse($response, 'Inforamtion retrieved successfully');;
 
-             $countries = Country::with('Cities')->get()->makeHidden($hiddenElems);
-
-            //  foreach($countries as $country){
-            //     $country->toArray()['cities'] = array_replace($country->toArray()['cities'],$cities->toArray());
-            //  }
-
-            return $countries;
         }
     }
 
@@ -668,7 +684,7 @@ class UserAPIController extends Controller
                 return $this->sendError('User not found', 401);
             }
             
-            User::where('device_token', $request->header('devicetoken'))->update([
+            $user->update([
                 'city_id'   => $request->city_id,
                 'language'  => $request->lang
             ]);

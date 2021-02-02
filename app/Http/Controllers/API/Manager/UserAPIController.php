@@ -28,6 +28,8 @@ use Prettus\Validator\Exceptions\ValidatorException;
 use App\Models\reviews;
 use Validator;
 use PHPMailer\PHPMailer\PHPMailer;
+use App\City;
+
 
 class UserAPIController extends Controller
 {
@@ -843,7 +845,7 @@ class UserAPIController extends Controller
             $response = [];
             $response = [
                 'first_name'            => $vendor->name,
-                'last_name'            => $vendor->last_name,
+                'status'          =>$vendor->status->only('id','status_type'),
                 'rating'          => round((getRating($vendor)/20)*2)/2,
                 'count_reviews'   => count($vendor->clients),
                 'count_contected' => count($vendor->messages->unique('from_id')),
@@ -859,6 +861,83 @@ class UserAPIController extends Controller
             return $this->sendResponse($response, 'User retrieved successfully');
 
         }
+        
+    public function langCountryCity(Request $request) {
+        if($request->header('devicetoken')) {
+            $user = User::where('device_token', $request->header('devicetoken'))->first();
+            if (empty($user)) {
+                return $this->sendError('User not found', 401);
+            }
+            
+            $hiddenElems = ['created_at', 'updated_at', 'name_en'];
+            $arr=[
+            'UserCityId'=>$user->city_id,
+            'UserCountryId'=>(Country::find($user->cities->country_id))->id
+            ];
+                
+             $countries = Country::all()->makeHidden($hiddenElems)->transform(function($c) use($arr) {
+                 $c->cities->transform(function($c) use($arr) {
+                     // if (in_array($c->toArray()['id'], $UserCityId))
+                    if ($c->id== $arr['UserCityId'])
+    
+                        $c['check'] = 1;
+                        else
+                        $c['check'] = 0;
+    
+                     return $c;
+                });
+            
+                if ($c->id== $arr['UserCountryId'])
+    
+                $c['check'] = 1;
+                else
+                $c['check'] = 0;
+
+            
+                 return $c;
+            });
+            $response=[
+                'lang'=>$user->language,
+               'countries'=> $countries
+               
+            ];
+
+           
+            return $this->sendResponse($response, 'Inforamtion retrieved successfully');;
+
+        }
+    }
+
+    public function savelangCountryCity(Request $request) {
+        if($request->header('devicetoken')) {
+            $user = User::where('device_token', $request->header('devicetoken'))->first();
+            if (empty($user)) {
+                return $this->sendError('User not found', 401);
+            }
+            
+            $user->update([
+                'city_id'   => $request->city_id,
+                'language'  => $request->lang
+            ]);
+
+            return $this->sendResponse([], 'Inforamtion saved successfully');;
+        }
+    }
+
+    public function updatevendorstatus(Request $request) {
+        if($request->header('devicetoken')) {
+            $user = User::where('device_token', $request->header('devicetoken'))->first();
+            if (empty($user)) {
+                return $this->sendError('User not found', 401);
+            }
+            
+            $user->status_id=$request->status_id;
+            $user->save();
+
+            return $this->sendResponse($user->toArray(), 'Inforamtion saved successfully');;
+        }
+    }
+    
 
 }
 

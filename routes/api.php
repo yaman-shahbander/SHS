@@ -45,6 +45,10 @@ Route::prefix('homeOwner')->group(function () {
     Route::post('updategmapLocation', 'API\GmapLocationAPIController@update');
 
     // Route::resource('gmapLocation', 'API\GmapLocationAPIController');
+     //select language, country, and city
+     Route::get('langCountryCity', 'API\Driver\UserAPIController@langCountryCity');
+     //save language, country, and city
+     Route::post('savelangCountryCity', 'API\Driver\UserAPIController@savelangCountryCity');
 });
 
 Route::prefix('vendor')->group(function () {
@@ -79,7 +83,7 @@ Route::prefix('vendor')->group(function () {
     //save photo profile
     Route::post('photoProfile', 'API\Manager\UserAPIController@backgroundPic');
     //vendor profile
-    Route::post('vendorProfile', 'API\Manager\UserAPIController@vendorprofile');
+    Route::get('vendorProfile', 'API\Manager\UserAPIController@vendorprofile');
     //vendor profile
     Route::post('saveVednorData', 'API\Manager\UserAPIController@completeRegistration');
     //categories with subcategories API
@@ -104,6 +108,13 @@ Route::prefix('vendor')->group(function () {
     Route::post('vendorReply', 'API\vendorApiController@vendorReply');
     //supported days by the vendor
     Route::post('supportedDays', 'API\vendorApiController@supportedDays');
+    //select language, country, and city
+    Route::get('langCountryCity', 'API\Manager\UserAPIController@langCountryCity');
+    //save language, country, and city
+    Route::post('savelangCountryCity', 'API\Manager\UserAPIController@savelangCountryCity');
+    //update vendor status
+    Route::post('updatevendorstatus', 'API\Manager\UserAPIController@updatevendorstatus');
+
 });
 
 
@@ -161,9 +172,9 @@ Route::post('vendorFee', 'API\vendorApiController@vendorFeefunc');
 //Refer a vendor
 Route::post('vendorRefer', 'API\vendorApiController@vendorRefer');
 //select language, country, and city
-Route::post('langCountryCity', 'API\UserAPIController@langCountryCity');
+Route::get('langCountryCity', 'API\Driver\UserAPIController@langCountryCity');
 //save language, country, and city
-Route::post('savelangCountryCity', 'API\UserAPIController@savelangCountryCity');
+Route::post('savelangCountryCity', 'API\Driver\UserAPIController@savelangCountryCity');
 //
 Route::resource('restaurants', 'API\RestaurantAPIController');
 
