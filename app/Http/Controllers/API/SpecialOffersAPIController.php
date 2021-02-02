@@ -23,10 +23,8 @@ class SpecialOffersAPIController extends Controller
             if (empty($user)) {
                 return $this->sendError('User not found', 401);
             }
-
-            $vendor_id = $request->id;
             
-            $vendoroffers    =  specialOffers::where('user_id', $vendor_id)->get(['description', 'title', 'image']);
+            $vendoroffers    =  specialOffers::where('user_id', $user->id)->get(['description', 'title', 'image']);
 
             
 
@@ -74,7 +72,7 @@ class SpecialOffersAPIController extends Controller
                 $vendor_specialOffer->description = $request->description;
                 $vendor_specialOffer->title = $request->title;
                 $vendor_specialOffer->subcategory_id = $request->subcategory_id;
-                $vendor_specialOffer->image = "Null.png";
+                $vendor_specialOffer->image = "default.png";
                 
 
                 if ($vendor_specialOffer->save()){

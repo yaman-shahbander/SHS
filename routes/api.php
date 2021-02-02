@@ -158,7 +158,7 @@ Route::post('updatefilter', 'API\FilterVendorsAPIController@update');
 //Route::resource('specialOffers', 'API\SpecialOffersAPIController');
 
 //special offers vendors API
-Route::post('getVendorspecialOffers', 'API\SpecialOffersAPIController@index');
+Route::get('getVendorspecialOffers', 'API\SpecialOffersAPIController@index');
 
 //special offers vendors API
 Route::post('storeVendorspecialOffers', 'API\SpecialOffersAPIController@store');

@@ -835,29 +835,37 @@ class UserAPIController extends Controller
 
         public function vendorprofile(Request $request) { //for vendor screens
         try {
-    if (empty($request->header('devicetoken'))) {
-        return $this->sendError('device token not found', 401);
-    }
-    $vendor = User::where('device_token', $request->header('devicetoken'))->first();
-    if (empty($vendor)) {
-        return $this->sendError('User not found', 401);
-    }
-    $response = [];
-    $response = [
-        'first_name' => $vendor->name,
-        'status' => $vendor->status->only('id', 'status_type'),
-        'rating' => round((getRating($vendor) / 20) * 2) / 2,
-        'count_reviews' => count($vendor->clients),
-        'count_contected' => count($vendor->messages->unique('from_id')),
-        'reviews' => ($vendor->clientsAPI)->transform(function ($q) {
-            return $q = [
-                'name' => $q->name,
-                'description' => $q->pivot->description,
-                'image' => asset('storage/Avatar') . '/' . $q->avatar,
+
+
+            if(empty($request->header('devicetoken'))){
+                return $this->sendError('device token not found', 401);
+            }
+            $vendor = User::where('device_token', $request->header('devicetoken'))->first();
+            if (empty($vendor)) {
+                return $this->sendError('User not found', 401);
+            }
+            $response = [];
+            $response = [
+                'first_name'            => $vendor->name,
+                'status'          =>$vendor->status->only('id','status_type'),
+                'rating'          => round((getRating($vendor)/20)*2)/2,
+                'count_reviews'   => count($vendor->clients),
+                'count_contected' => count($vendor->messages->unique('from_id')),
+                'reviews'         => ($vendor->clientsAPI)->transform(function($q){
+                                    return $q=[
+                                        'name' => $q->name,
+                                        'description'=>$q->pivot->description,
+                                        'image'=> asset('storage/Avatar') . '/' . $q->avatar,
+                                    ];
+                                }),
+                'offers'          => $vendor->specialOffers->transform(function($q){
+                                    return $q=[
+                                        'title' => $q->title,
+                                        'description'=>$q->description,
+                                        'image'=> asset('storage/specialOffersPic') . '/' . $q->image,
+                                    ];
+                }),
             ];
-        }),
-        'offers' => $vendor->specialOffers->makeHidden(['user_id', 'created_at', 'updated_at'])
-    ];
     return $this->sendResponse($response, 'User retrieved successfully');
 
   }catch (\Exception $e){
@@ -866,6 +874,7 @@ return $this->sendError('something was wrong', 401);
 }
 
         }
+
 
     public function langCountryCity(Request $request) {
         try {
