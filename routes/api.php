@@ -163,6 +163,9 @@ Route::get('getVendorspecialOffers', 'API\SpecialOffersAPIController@index');
 //special offers vendors API
 Route::post('storeVendorspecialOffers', 'API\SpecialOffersAPIController@store');
 
+//special offers vendors API
+Route::post('deleteVendorspecialOffers', 'API\SpecialOffersAPIController@destroy');
+
 //vendor map location
 Route::post('vendorLocation', 'API\GmapLocationAPIController@VendorMapDetails');
 //chat messaging
