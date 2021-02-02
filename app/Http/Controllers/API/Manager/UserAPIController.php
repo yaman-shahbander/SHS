@@ -856,11 +856,17 @@ class UserAPIController extends Controller
                                         'image'=> asset('storage/Avatar') . '/' . $q->avatar,
                                     ];
                                 }),
-                'offers'          => $vendor->specialOffers->makeHidden(['user_id', 'created_at', 'updated_at'])
+                'offers'          => $vendor->specialOffers->transform(function($q){
+                                    return $q=[
+                                        'title' => $q->title,
+                                        'description'=>$q->description,
+                                        'image'=> asset('storage/specialOffersPic') . '/' . $q->image,
+                                    ];
+                }),
             ];
             return $this->sendResponse($response, 'User retrieved successfully');
 
-        }
+        }//
         
     public function langCountryCity(Request $request) {
         if($request->header('devicetoken')) {
