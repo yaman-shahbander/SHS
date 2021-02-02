@@ -487,7 +487,7 @@ class UserAPIController extends Controller
             $userLongitude = $user->coordinates->longitude;
                 }
                 catch (\Exception $e){
-                    return $this->sendError('You have to turn on gps', 401);
+                   // return $this->sendError('You have to turn on gps', 401);
 
                 }
             $reviewsHiddenColumns = ['custom_fields', 'media', 'has_media'];
@@ -501,7 +501,9 @@ class UserAPIController extends Controller
                 $respone[$i]['last_name'] = $attr->last_name;
                 $respone[$i]['description'] = $attr->pivot->description;
                 $respone[$i]['rating'] = myReviewRating($attr);
-                $respone[$i]['distance'] = $attr->coordinates ? distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)) : 'No coordinates provided for the current vendor';
+                $respone[$i]['distance'] = $attr->coordinates==null ? distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)) : 'No coordinates provided for the current vendor';
+
+                //  $respone[$i]['distance'] = $attr->coordinates ? distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)) : 'No coordinates provided for the current vendor';
                 $i++;
             }
 
@@ -618,7 +620,7 @@ class UserAPIController extends Controller
 
             } else {
                 $input['client_id']  = $user->id;
-                
+
 
                 reviews::create($input);
 

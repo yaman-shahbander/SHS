@@ -310,7 +310,7 @@ class UserAPIController extends Controller
                     'lang'=>$user->language,
                     'device_token'=>$user->device_token,
                     'phone'=>$user->phone,
-                    //'city'=>$user->cities->city_name,
+                    'country'=>null,
                    // 'country'=>(Country::find($user->cities->country_id))->country_name,
 
                 ];
@@ -349,8 +349,17 @@ class UserAPIController extends Controller
                         'lang' => $user->language,
                         'device_token' => $user->device_token,
                         'phone' => $user->phone,
-                        'city' => $user->cities->city_name,
-                        'country' => (Country::find($user->cities->country_id))->country_name,
+//                        'city' => $user->cities->city_name,
+//                        'country' => (Country::find($user->cities->country_id))->country_name,
+
+                    'country'=>[
+                        'id'=>(Country::find($user->cities->country_id))->id,
+                        'country_name'=>(Country::find($user->cities->country_id))->country_name,
+                        'city'=>[
+                            'id'=>$user->cities->id,
+                            'name'=>$user->cities->city_name,
+                        ]
+                    ]
 
                     ];
                 event(new UserRoleChangedEvent($user));
@@ -375,22 +384,22 @@ class UserAPIController extends Controller
         if ($request->header('devicetoken')) {
             $vendor = User::where('device_token', $request->header('devicetoken'))->first();
             if (!empty($vendor)) {
-                // $days = [
-                //    [ 'day_id'=>5,
-                //     'start'  => '12:00:00',
-                //     'end'    => '04:00:00'
-                //    ],
-                //    [
-                //     'day_id'=>7,
-                //     'start'  => '12:00:00',
-                //     'end'    => '05:00:00'
-                //     ],
-                //     [ 'day_id'=>6,
-                //     'start'  => '12:00:00',
-                //     'end'    => '05:00:00'
-                // ]];
+//                 $days = [
+//                    [ 'day_id'=>5,
+//                     'start'  => '12:00:00',
+//                     'end'    => '04:00:00'
+//                    ],
+//                    [
+//                     'day_id'=>7,
+//                     'start'  => '12:00:00',
+//                     'end'    => '05:00:00'
+//                     ],
+//                     [ 'day_id'=>6,
+//                     'start'  => '12:00:00',
+//                     'end'    => '05:00:00'
+//                 ]];
                 $vendor->subcategories()->sync($request->subcategories);
-                return  $vendor->daysApi()->sync($request->days);
+                  $vendor->daysApi()->sync($request->days);
                 return $this->sendResponse([], 'Data saved successfully');
             } else {
                 return $this->sendResponse([], 'User not found');
@@ -763,7 +772,7 @@ class UserAPIController extends Controller
 
             } else {
                 $input['client_id']  = $user->id;
-                
+
 
                 reviews::create($input);
 
@@ -833,7 +842,8 @@ class UserAPIController extends Controller
             }
             $response = [];
             $response = [
-                'name'            => $vendor->name,
+                'first_name'            => $vendor->name,
+                'last_name'            => $vendor->last_name,
                 'rating'          => round((getRating($vendor)/20)*2)/2,
                 'count_reviews'   => count($vendor->clients),
                 'count_contected' => count($vendor->messages->unique('from_id')),

@@ -47,9 +47,9 @@ class User extends Authenticatable implements HasMedia
         getFirstMediaUrl as protected getFirstMediaUrlTrait;
     }
 
-    
+
     use HasRoles;
-    
+
 
     /**
      * Validation rules
@@ -201,7 +201,7 @@ class User extends Authenticatable implements HasMedia
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      **/
 
-    
+
     // public function messages()
     // {
     //     return $this->hasMany(\App\Models\Message::class, 'sender_id', 'id');
@@ -254,7 +254,7 @@ class User extends Authenticatable implements HasMedia
             ->withTimestamps();
 
     }
-    
+
     public function homeOwnerFavorite()
     {
         return $this->belongsToMany(User::class,'favorite_user','vendor_id','user_id')
@@ -346,6 +346,6 @@ class User extends Authenticatable implements HasMedia
     //    {
     //        return $this->gallery->image = asset('storage/gallery') . '/' . $this->gallery->image;
     //    }
-    
-   
+
+
 }
