@@ -106,7 +106,7 @@ Route::prefix('vendor')->group(function () {
     Route::post('supportedSubcategpries', 'API\vendorApiController@supportedSubcategpries');
     //Add a reply to a homeowner review (vendor reply to a homeowner)
     Route::post('vendorReplyToReview', 'API\Manager\UserAPIController@vendorReply');
-    //Add a reply to a homeowner review (vendor reply to a homeowner)
+    //get reply to a homeowner review (vendor reply to a homeowner)
     Route::post('getvendorReplyToReview', 'API\Manager\UserAPIController@vendorReplyInfo');
     //supported days by the vendor
     Route::get('getSupportedDaysVendor', 'API\Manager\UserAPIController@supportedDays');
@@ -155,6 +155,8 @@ Route::post('forgot-password', 'API\AuthController@forgot_password');
 //vendor rating API
 Route::post('vendorWithRating', 'API\vendorApiController@index');
 //vendor profile API
+
+
 Route::post('vendorProfile', 'API\vendorApiController@profile');
 //User current balance API
 Route::post('currentBalance', 'API\MoneyAPIController@currentBalance');

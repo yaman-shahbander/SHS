@@ -384,7 +384,7 @@ class UserAPIController extends Controller
         if ($request->header('devicetoken')) {
             $vendor = User::where('device_token', $request->header('devicetoken'))->first();
             if (!empty($vendor)) {
-                
+
                 $vendor->subcategories()->sync($request->subcategories);
                 $vendor->daysApi()->sync($request->days);
                 return $this->sendResponse([], 'Data saved successfully');
@@ -786,11 +786,12 @@ class UserAPIController extends Controller
                         'rating' => round((getFullRating($review) / 20) * 2) / 2 ,
                         'description' => $q->pivot->description,
                         'image' => asset('storage/Avatar') . '/' . $q->avatar,
-                        
+
                     ];
                 }),
                 'offers' => $vendor->specialOffers->transform(function ($q) {
                     return $q = [
+                        'id' => $q->id,
                         'title' => $q->title,
                         'description' => $q->description,
                         'image' => asset('storage/specialOffersPic') . '/' . $q->image,
@@ -904,7 +905,7 @@ class UserAPIController extends Controller
         }
     }
 
-    public function getcategorySubcatory(Request $request) { 
+    public function getcategorySubcatory(Request $request) {
         if($request->header('devicetoken')) {
             $user = User::where('device_token', $request->header('devicetoken'))->first();
             if (empty($user)) {
@@ -941,6 +942,7 @@ class UserAPIController extends Controller
     }
 
     public function vendorReply(Request $request) {
+        try{
         if($request->header('devicetoken')) {
 
             $user = User::where('device_token', $request->header('devicetoken'))->first();
@@ -956,29 +958,38 @@ class UserAPIController extends Controller
 
             return $this->sendResponse($request->message, "Reply added successfully!");
         }
+    }catch (\Exception $e) {
+return $this->sendError('somthing was wrong', 401);
+
+}
     }
 
     public function vendorReplyInfo(Request $request) {
-        if($request->header('devicetoken')) {
-            
-            $user = User::where('device_token', $request->header('devicetoken'))->first();
+        try {
+            if ($request->header('devicetoken')) {
+
+                $user = User::where('device_token', $request->header('devicetoken'))->first();
                 if (empty($user)) {
                     return $this->sendError('User not found', 401);
-                }   
+                }
 
-            $review =  reviews::find($request->review_id);
+                $review = reviews::find($request->review_id);
 
-            $response = [
-                'price_rating'       => round(($review->price_rating / 20) * 2) / 2 ,
-                'service_rating'     => round(($review->service_rating / 20) * 2) / 2 ,
-                'speed_rating'       => round(($review->speed_rating / 20) * 2) / 2 ,
-                'trust_rating'       => round(($review->trust_rating / 20) * 2) / 2 ,
-                'knowledge_rating'   => round(($review->knowledge_rating / 20) * 2) / 2 ,
-                'reply'              => $review->reply,
-            ];
+                $response = [
+                    'price_rating' => round(($review->price_rating / 20) * 2) / 2,
+                    'service_rating' => round(($review->service_rating / 20) * 2) / 2,
+                    'speed_rating' => round(($review->speed_rating / 20) * 2) / 2,
+                    'trust_rating' => round(($review->trust_rating / 20) * 2) / 2,
+                    'knowledge_rating' => round(($review->knowledge_rating / 20) * 2) / 2,
+                    'reply' => $review->reply,
+                ];
 
-            return $this->sendResponse($response, "Reply retrieved successfully!");
-        }
+                return $this->sendResponse($response, "Reply retrieved successfully!");
+            }
+        }catch (\Exception $e) {
+                return $this->sendError('somthing was wrong', 401);
+
+            }
     }
 
     public function supportedDays(Request $request) {
@@ -995,7 +1006,7 @@ class UserAPIController extends Controller
                 'vendor_id'=> $vendor->id,
                 'lang'=> $vendor->language
              ];
-           
+
              $days  = Day::all()->transform(function($days) use($arr){
                  if (in_array($days->id, $arr['supported'])){
                      $days['check'] = 1;
@@ -1004,11 +1015,12 @@ class UserAPIController extends Controller
                          'end'=> $days->Vendordays->where('id',$arr['vendor_id'])->first()->pivot->end,
                      ];
                     }
-                 else 
+                 else
                      $days['check'] = 0;
-                 return $days->only('id', 'name_'.$arr['lang'],'check','workHours');     
-             });
-                
+                 $days['name']=$days['name_'.$arr['lang']];
+
+                 return $days->only('id','name','check','workHours');             });
+
              return $this->sendResponse($days, "Supported retrieved successfully!");
         }
     }
@@ -1024,8 +1036,8 @@ catch (\Exception $e) {
         if ($request->header('devicetoken')) {
             $vendor = User::where('device_token', $request->header('devicetoken'))->first();
             if (!empty($vendor)) {
-                
-               
+
+
                 $vendor->daysApi()->sync($request->days);
                 return $this->sendResponse([], 'Data saved successfully');
             } else {
@@ -1036,7 +1048,7 @@ catch (\Exception $e) {
         }
     }catch (\Exception $e) {
             return $this->sendError('somthing was wrong', 401);
-        
+
             }
     }
 

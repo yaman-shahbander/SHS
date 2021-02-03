@@ -24,7 +24,7 @@ class SpecialOffersAPIController extends Controller
             if (empty($user)) {
                 return $this->sendError('User not found', 401);
             }
-            
+
             $vendoroffers    =  specialOffers::where('user_id', $user->id)->get(['id', 'description', 'title', 'image']);
 
             $user1 = User::where('device_token', $request->header('devicetoken'))->first();
@@ -53,11 +53,11 @@ class SpecialOffersAPIController extends Controller
             })->unique('id');
 
             $response = [];
-            $response[] = [ 
+            $response[] = [
                 'categories'  =>  $user1
             ];
             foreach($vendoroffers as $info) {
-                $response[] = [
+                $response['offers'][] = [
                     'id'          => $info->id,
                     'description' => $info->description,
                     'title'       => $info->title,
@@ -98,7 +98,7 @@ class SpecialOffersAPIController extends Controller
                 if (empty($user)) {
                     return $this->sendError('User not found', 401);
                 }
-        
+
                 $vendor_specialOffer = new specialOffers();
                 $vendor_specialOffer->user_id = $user->id;
                 $vendor_specialOffer->description = $request->description;
@@ -106,7 +106,7 @@ class SpecialOffersAPIController extends Controller
                 $vendor_specialOffer->subcategory_id = $request->subcategory_id;
                 $vendor_specialOffer->image = "default.png";
                 $response = [];
-                
+
 
                 if ($vendor_specialOffer->save()){
 
