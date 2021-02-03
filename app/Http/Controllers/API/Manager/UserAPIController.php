@@ -1005,5 +1005,5 @@ class UserAPIController extends Controller
             return $this->sendResponse($user1, 'Inforamtion saved successfully');;
         }
     }
-}
+}//
 
