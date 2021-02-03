@@ -105,9 +105,13 @@ Route::prefix('vendor')->group(function () {
     //supported subcategoies by the vendor
     Route::post('supportedSubcategpries', 'API\vendorApiController@supportedSubcategpries');
     //Add a reply to a homeowner review (vendor reply to a homeowner)
-    Route::post('vendorReply', 'API\vendorApiController@vendorReply');
+    Route::post('vendorReplyToReview', 'API\Manager\UserAPIController@vendorReply');
+    //Add a reply to a homeowner review (vendor reply to a homeowner)
+    Route::post('getvendorReplyToReview', 'API\Manager\UserAPIController@vendorReplyInfo');
     //supported days by the vendor
-    Route::post('supportedDays', 'API\vendorApiController@supportedDays');
+    Route::get('getSupportedDaysVendor', 'API\Manager\UserAPIController@supportedDays');
+        //supported days by the vendor
+    Route::post('updateSupportedDaysVendor', 'API\Manager\UserAPIController@supportedDaysUpdate');
     //select language, country, and city
     Route::get('langCountryCity', 'API\Manager\UserAPIController@langCountryCity');
     //save language, country, and city
@@ -182,6 +186,11 @@ Route::post('vendorRefer', 'API\vendorApiController@vendorRefer');
 Route::get('langCountryCity', 'API\Driver\UserAPIController@langCountryCity');
 //save language, country, and city
 Route::post('savelangCountryCity', 'API\Driver\UserAPIController@savelangCountryCity');
+
+
+
+
+
 //
 Route::resource('restaurants', 'API\RestaurantAPIController');
 

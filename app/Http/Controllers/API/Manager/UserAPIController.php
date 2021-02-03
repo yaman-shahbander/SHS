@@ -29,7 +29,7 @@ use App\Models\reviews;
 use Validator;
 use PHPMailer\PHPMailer\PHPMailer;
 use App\City;
-
+use App\Models\Day;
 
 class UserAPIController extends Controller
 {
@@ -157,7 +157,7 @@ class UserAPIController extends Controller
                             ];
                         return $this->sendResponse($response_cod, 'user not verified');
 
-                    } catch (Exception $e) {
+                    } catch (\Exception $e) {
                         return $this->sendError('error message ', 401);
                     }
                 }
@@ -384,20 +384,7 @@ class UserAPIController extends Controller
         if ($request->header('devicetoken')) {
             $vendor = User::where('device_token', $request->header('devicetoken'))->first();
             if (!empty($vendor)) {
-//                 $days = [
-//                    [ 'day_id'=>5,
-//                     'start'  => '12:00:00',
-//                     'end'    => '04:00:00'
-//                    ],
-//                    [
-//                     'day_id'=>7,
-//                     'start'  => '12:00:00',
-//                     'end'    => '05:00:00'
-//                     ],
-//                     [ 'day_id'=>6,
-//                     'start'  => '12:00:00',
-//                     'end'    => '05:00:00'
-//                 ]];
+                
                 $vendor->subcategories()->sync($request->subcategories);
                 $vendor->daysApi()->sync($request->days);
                 return $this->sendResponse([], 'Data saved successfully');
@@ -408,63 +395,6 @@ class UserAPIController extends Controller
             return $this->sendResponse([], 'Error');
         }
     }
-//    function register(Request $request)
-//    {
-//        try {
-//            if($request->email) {
-//
-//                $this->validate($request, [
-//                    'first_name' => 'required',
-//                    'email' => 'required|unique:users|email',
-//                    'password' => 'required',
-//                ]);
-//            }
-//            elseif($request->phone){
-//                $this->validate($request, [
-//                    'first_name' => 'required',
-//                    'phone' => 'required|unique:users',
-//                    'password' => 'required',
-//                ]);
-//            }
-//            $user = new User;
-//            $user->name = $request->input('first_name');
-//            $user->last_name = $request->input('last_name');
-//            $user->email = $request->input('email');
-//            $user->city_id = $request->input('city_id');
-//            $user->language = $request->input('lang');
-//            $user->phone = $request->input('phone');
-//            $user->activation_code = "123456";
-//            $user->avatar = $request->input('avatar');
-//            $user->device_token = $request->input('device_token', '');
-//            $user->password = Hash::make($request->input('password'));
-//            $user->api_token = str_random(60);
-//            $user->save();
-//
-//
-//            $user->assignRole('manager');
-//            $response=
-//                ['id'=>$user->id,
-//                    'first_name'=>$user->name,
-//                    'last_name'=>$user->last_name,
-//                    'email'=>$user->email,
-//                    'activation_cod'=>$user->activation_code,
-//                    'avatar'=>$user->avatar,
-//                    'lang'=>$user->language,
-//                    'device_token'=>$user->device_token,
-//                    'phone'=>$user->phone,
-//                    'city'=>$user->cities->city_name,
-//                    'country'=>(Country::find($user->cities->country_id))->country_name,
-//
-//                ];
-//
-//            event(new UserRoleChangedEvent($user));
-//        } catch (\Exception $e) {
-//            return $this->sendError($e->getMessage(), 401);
-//        }
-//
-//
-//        return $this->sendResponse($response, 'User retrieved successfully');
-//    }
 
     function logout(Request $request)
     {
@@ -849,10 +779,14 @@ class UserAPIController extends Controller
                 'count_reviews' => count($vendor->clients),
                 'count_contected' => count($vendor->messages->unique('from_id')),
                 'reviews' => ($vendor->clientsAPI)->transform(function ($q) {
+                    $review = reviews::find($q->pivot->id);
                     return $q = [
+                        'id' => $q->pivot->id,
                         'name' => $q->name,
+                        'rating' => round((getFullRating($review) / 20) * 2) / 2 ,
                         'description' => $q->pivot->description,
                         'image' => asset('storage/Avatar') . '/' . $q->avatar,
+                        
                     ];
                 }),
                 'offers' => $vendor->specialOffers->transform(function ($q) {
@@ -970,7 +904,7 @@ class UserAPIController extends Controller
         }
     }
 
-    public function getcategorySubcatory(Request $request) {
+    public function getcategorySubcatory(Request $request) { 
         if($request->header('devicetoken')) {
             $user = User::where('device_token', $request->header('devicetoken'))->first();
             if (empty($user)) {
@@ -1001,9 +935,110 @@ class UserAPIController extends Controller
                 });;
 
                 return  $q->only('id', 'name', 'subcategories');
-            });
+            })->unique('id');
             return $this->sendResponse($user1, 'Inforamtion saved successfully');;
         }
     }
-}//
+
+    public function vendorReply(Request $request) {
+        if($request->header('devicetoken')) {
+
+            $user = User::where('device_token', $request->header('devicetoken'))->first();
+                if (empty($user)) {
+                    return $this->sendError('User not found', 401);
+                }
+
+            $review =  reviews::find($request->review_id);
+
+            $review->reply = $request->message;
+
+            $review->save();
+
+            return $this->sendResponse($request->message, "Reply added successfully!");
+        }
+    }
+
+    public function vendorReplyInfo(Request $request) {
+        if($request->header('devicetoken')) {
+            
+            $user = User::where('device_token', $request->header('devicetoken'))->first();
+                if (empty($user)) {
+                    return $this->sendError('User not found', 401);
+                }   
+
+            $review =  reviews::find($request->review_id);
+
+            $response = [
+                'price_rating'       => round(($review->price_rating / 20) * 2) / 2 ,
+                'service_rating'     => round(($review->service_rating / 20) * 2) / 2 ,
+                'speed_rating'       => round(($review->speed_rating / 20) * 2) / 2 ,
+                'trust_rating'       => round(($review->trust_rating / 20) * 2) / 2 ,
+                'knowledge_rating'   => round(($review->knowledge_rating / 20) * 2) / 2 ,
+                'reply'              => $review->reply,
+            ];
+
+            return $this->sendResponse($response, "Reply retrieved successfully!");
+        }
+    }
+
+    public function supportedDays(Request $request) {
+        try{
+        $lang = false;
+        if($request->header('devicetoken')) {
+            $vendor = User::where('device_token', $request->header('devicetoken'))->first();
+            $supported = $vendor->daysApi->transform(function($q) {
+                return  $q->id;
+             });
+
+             $arr=[
+                'supported'=>$supported->toArray(),
+                'vendor_id'=> $vendor->id,
+                'lang'=> $vendor->language
+             ];
+           
+             $days  = Day::all()->transform(function($days) use($arr){
+                 if (in_array($days->id, $arr['supported'])){
+                     $days['check'] = 1;
+                     $days['workHours']=[
+                         'start'=> $days->Vendordays->where('id',$arr['vendor_id'])->first()->pivot->start,
+                         'end'=> $days->Vendordays->where('id',$arr['vendor_id'])->first()->pivot->end,
+                     ];
+                    }
+                 else 
+                     $days['check'] = 0;
+                 return $days->only('id', 'name_'.$arr['lang'],'check','workHours');     
+             });
+                
+             return $this->sendResponse($days, "Supported retrieved successfully!");
+        }
+    }
+
+catch (\Exception $e) {
+    return $this->sendError('somthing was wrong', 401);
+
+    }
+}
+
+    public function supportedDaysUpdate(Request $request)
+    {  try{
+        if ($request->header('devicetoken')) {
+            $vendor = User::where('device_token', $request->header('devicetoken'))->first();
+            if (!empty($vendor)) {
+                
+               
+                $vendor->daysApi()->sync($request->days);
+                return $this->sendResponse([], 'Data saved successfully');
+            } else {
+                return $this->sendError( 'User not found',401);
+            }
+        } else {
+            return $this->sendResponse([], 'Error');
+        }
+    }catch (\Exception $e) {
+            return $this->sendError('somthing was wrong', 401);
+        
+            }
+    }
+
+}
 

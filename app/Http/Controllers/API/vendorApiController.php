@@ -533,32 +533,7 @@ class vendorApiController extends Controller
             }
     }
 
-    public function vendorReply(Request $request) {
-        if($request->header('devicetoken')) {
-            $hiddenElems = ['custom_fields', 'has_media', 'media'];
-
-            $response = [];
-
-            $homeowner_deviceToken = $request->header('devicetoken');
-
-            $homeowner_id = User::where('device_token', $homeowner_deviceToken)->get('id')->makeHidden($hiddenElems);
-
-            $homeowner_id = $homeowner_id[0]->id;
-
-
-            $vendor_id = $request->id;
-
-            $replyMessage = $request->reply;
-
-            DB::table('reviews')->where('vendor_id', $vendor_id)->where('client_id', $homeowner_id)->update(['reply' => $replyMessage]);
-
-            $response = [
-                'Message'   => $replyMessage
-            ];
-
-            return $this->sendResponse($response, "Reply added successfully!");
-        }
-    }
+    
 
     public function vendorRefer(Request $request) {
         if($request->header('devicetoken')) {
@@ -607,56 +582,7 @@ class vendorApiController extends Controller
         }
     }
 
-    public function supportedDays(Request $request) {
-        $lang = false;
-        if($request->header('devicetoken')) {
-            $vendor = User::where('device_token', $request->header('devicetoken'))->first();
-            $supported = $vendor->daysApi->transform(function($q) {
-                return  $q->id;
-             });
-             
-             $langBool = false;
-
-             $language = $vendor->language;
-
-              if(!empty($language)) {
-                  $nameField = 'name_'.$language; 
-                  $langBool = true;
-                } else { 
-                  $nameField = 'name_en'; 
-                  $langBool = false;
-                } // The field in database
-
-             $days  = Day::all(['id', $nameField])->transform(function($days) use($supported){
-                 if (in_array($days->id, $supported->toArray()))
-                     $days['check'] = 1;
-                 else 
-                     $days['check'] = 0;
-                 return $days;     
-             });
-
-             $response = [];
-
-             foreach($days as $day) {
-                if($day->check == 1) {
-                    $response[] = [
-                        'id'       => $day->id,
-                        $nameField => $langBool ? $day->name_ar : $day->name_en,
-                        'check'    => $day->check,
-                        'workHours'=> DB::table('days_vendors')->where('day_id', $day->id)->where('vendor_id', $vendor->id)->get(['start', 'end']),
-                    ];
-                } else {
-                    $response[] = [
-                        'id'       => $day->id,
-                        $nameField => $langBool ? $day->name_ar : $day->name_en,
-                        'check'    => $day->check
-                    ];
-                }       
-            } 
-                
-             return $this->sendResponse($response, "Supported added successfully!");
-        }
-    }
+    
 }
 
 

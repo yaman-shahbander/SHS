@@ -27,9 +27,35 @@ class SpecialOffersAPIController extends Controller
             
             $vendoroffers    =  specialOffers::where('user_id', $user->id)->get(['id', 'description', 'title', 'image']);
 
-            
+            $user1 = User::where('device_token', $request->header('devicetoken'))->first();
+
+            $sub= $user->subcategories->transform(function($q) {
+                return  $q->id;
+             });
+
+            $user1 = $user1->subcategories->transform(function($q) use($sub){
+                $arr = $q->categories->subCategory->transform(function($s) use($sub){
+                    if (in_array($s->id, $sub->toArray()))
+                    return $s->only('id', 'name') ;
+
+                });
+
+
+
+                $q['id']            = $q->categories->id;
+                $q['name']          = $q->categories->name;
+
+                $q['subcategories'] = $arr->filter(function ($value) {
+                    return $value != null;
+                });;
+
+                return  $q->only('id', 'name', 'subcategories');
+            })->unique('id');
 
             $response = [];
+            $response[] = [ 
+                'categories'  =>  $user1
+            ];
             foreach($vendoroffers as $info) {
                 $response[] = [
                     'id'          => $info->id,
