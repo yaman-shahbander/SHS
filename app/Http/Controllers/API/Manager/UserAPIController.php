@@ -146,8 +146,8 @@ class UserAPIController extends Controller
                         $response_cod =
                             ['id' => $user->id,
                                 'first_name' => $user->name,
-                                'last_name' => $user->last_name,
                                 'email' => $user->email,
+                                'is_verified' => false,
                                 'avatar' => asset('storage/Avatar') . '/' . $user->avatar,
                                 'device_token' => $user->device_token,
                                 'phone' => $user->phone,
@@ -167,8 +167,8 @@ class UserAPIController extends Controller
             $response =
                 ['id' => $user->id,
                     'first_name' => $user->name,
-                    'last_name' => $user->last_name,
                     'email' => $user->email,
+                    'is_verified' => $user->is_verified==1?true:false,
                     'avatar' => asset('storage/Avatar') . '/' . $user->avatar,
                     'lang' => $user->language,
                     'device_token' => $user->device_token,
@@ -208,7 +208,6 @@ class UserAPIController extends Controller
 
                 $this->validate($request, [
                     'first_name' => 'required',
-                    'last_name' => 'required',
                     'email' => 'required|unique:users|email',
                     'password' => 'required',
                 ]);
@@ -216,7 +215,6 @@ class UserAPIController extends Controller
             } elseif ($request->phone) {
                 $this->validate($request, [
                     'first_name' => 'required',
-                    'last_name' => 'required',
                     'phone' => 'required|unique:users',
                     'password' => 'required',
                 ]);
@@ -227,6 +225,8 @@ class UserAPIController extends Controller
             $user->last_name = $request->input('last_name');
             $user->email = $request->input('email', '');
 //            $user->city_id = $request->input('city_id');
+            $user->is_verified = 0;
+
 
             $user->language = $request->input('lang') == null ? '' : $request->input('lang', '');
             $user->phone = $request->input('phone') == null ? '' : $request->input('phone', '');
@@ -302,9 +302,9 @@ class UserAPIController extends Controller
             $response =
                 ['id' => $user->id,
                     'first_name' => $user->name,
-                    'last_name' => $user->last_name,
                     'email' => $user->email,
                     'activation_cod' => $user->activation_code,
+                    'is_verified' => $user->is_verified==1?true:false,
                     // 'avatar'=>$user->avatar,
                     'lang' => $user->language,
                     'device_token' => $user->device_token,
@@ -342,7 +342,8 @@ class UserAPIController extends Controller
                 $response =
                     ['id' => $user->id,
                         'first_name' => $user->name,
-                        'last_name' => $user->last_name,
+                        'is_verified' => $user->is_verified==1?true:false,
+
                         'email' => $user->email,
                         //'activation_cod'=>$user->activation_code,
                         'avatar' => asset('storage/Avatar') . '/' . $user->avatar,
@@ -982,23 +983,23 @@ class UserAPIController extends Controller
             $sub= $user->subcategories->transform(function($q) {
                 return  $q->id;
              });
-        
+
             $user1 = $user1->subcategories->transform(function($q) use($sub){
                 $arr = $q->categories->subCategory->transform(function($s) use($sub){
                     if (in_array($s->id, $sub->toArray()))
                     return $s->only('id', 'name') ;
-                         
+
                 });
 
-               
+
 
                 $q['id']            = $q->categories->id;
                 $q['name']          = $q->categories->name;
-                
+
                 $q['subcategories'] = $arr->filter(function ($value) {
                     return $value != null;
                 });;
-               
+
                 return  $q->only('id', 'name', 'subcategories');
             });
             return $this->sendResponse($user1, 'Inforamtion saved successfully');;

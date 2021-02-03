@@ -114,7 +114,6 @@ Route::prefix('vendor')->group(function () {
     Route::post('savelangCountryCity', 'API\Manager\UserAPIController@savelangCountryCity');
     //update vendor status
     Route::post('updatevendorstatus', 'API\Manager\UserAPIController@updatevendorstatus');
-<<<<<<< HEAD
 
 
 //special offers vendors API
@@ -126,10 +125,8 @@ Route::prefix('vendor')->group(function () {
 //special offers vendors API
     Route::post('deleteVendorspecialOffers', 'API\SpecialOffersAPIController@destroy');
 
-=======
     //update vendor status
     Route::get('getcategorySubcatory', 'API\Manager\UserAPIController@getcategorySubcatory');
->>>>>>> 195804efc2a06f0eb1b19223ff8771eb243b0c7b
 });
 
 

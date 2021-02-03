@@ -133,6 +133,7 @@ class UserAPIController extends Controller
                                 ['id'=>$user->id,
                                     'first_name'=>$user->name,
                                     'last_name'=>$user->last_name,
+                                    'is_verified' => false,
                                     'email'=>$user->email,
                                     'avatar'=>asset('storage/Avatar').'/'.$user->avatar,
                                     'device_token'=>$user->device_token,
@@ -155,6 +156,7 @@ class UserAPIController extends Controller
                 ['id'=>$user->id,
                     'first_name'=>$user->name,
                     'last_name'=>$user->last_name,
+                    'is_verified' => $user->is_verified==1?true:false,
                     'email'=>$user->email,
                     'avatar'=>asset('storage/Avatar').'/'.$user->avatar,
                     'lang'=>$user->language,
@@ -222,6 +224,7 @@ class UserAPIController extends Controller
             $user->last_name = $request->input('last_name');
             $user->email = $request->input('email','');
            $user->city_id = $request->input('city_id');
+            $user->is_verified = 0;
 
             $user->language = $request->input('lang')==null ? 'en':$request->input('lang','');
             $user->phone = $request->input('phone')==null ? '':$request->input('phone','');
@@ -256,9 +259,9 @@ class UserAPIController extends Controller
 
             $user->assignRole('homeowner');
 
-
           //  $IsEmail ? $user->notify(new \App\Notifications\VerifyEmail($user->activation_code)) : $unused = false ;
 
+            $user->assignRole('homeowner');
 
             if($IsEmail) {
                 require '../vendor/autoload.php'; // load Composer's autoloader
@@ -298,6 +301,7 @@ class UserAPIController extends Controller
                 ['id'=>$user->id,
                     'first_name'=>$user->name,
                     'last_name'=>$user->last_name,
+                    'is_verified' => $user->is_verified==1?true:false,
                     'email'=>$user->email,
                     'activation_cod'=>$user->activation_code,
                    // 'avatar'=>$user->avatar,
@@ -334,7 +338,7 @@ class UserAPIController extends Controller
                 $response =
                     ['id' => $user->id,
                         'first_name' => $user->name,
-                        'last_name' => $user->last_name,
+                        'is_verified' => $user->is_verified==1?true:false,
                         'email' => $user->email,
                         //'activation_cod'=>$user->activation_code,
                         'avatar' => asset('storage/Avatar') . '/' . $user->avatar,
