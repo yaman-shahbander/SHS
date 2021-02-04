@@ -87,7 +87,7 @@ Route::prefix('vendor')->group(function () {
     //vendor profile
     Route::post('saveVednorData', 'API\Manager\UserAPIController@completeRegistration');
     //categories with subcategories API
-    Route::post('categoriesVendor', 'API\vendorApiController@categorySubCatFunc');
+    Route::get('categoriesVendor', 'API\vendorApiController@categorySubCatFunc');
     //Woring hours for a new vendor
     Route::post('workHoursDays', 'API\vendorApiController@workHours');
     //User reviews to a specific vendor
@@ -95,15 +95,20 @@ Route::prefix('vendor')->group(function () {
     //vendor background and avatar
     Route::post('vendorbackgroundAvatar', 'API\vendorApiController@backgroundAvatar');
     //vendor about info
-    Route::post('vendorInfo', 'API\vendorApiController@vendorInfo');
+    Route::get('vendorInfo', 'API\vendorApiController@vendorInfo');
+    //update vendor about info
+
     //vendor about info Update
     Route::post('vendorInfoUpdate', 'API\vendorApiController@vendorInfoUpdate');
     //contact and location
-    Route::post('contactLocation', 'API\vendorApiController@contactLocation');
+    Route::get('contactLocation', 'API\vendorApiController@contactLocation');
     //contact and location update
     Route::post('contactLocationUpdate', 'API\vendorApiController@contactLocationUpdate');
     //supported subcategoies by the vendor
-    Route::post('supportedSubcategpries', 'API\vendorApiController@supportedSubcategpries');
+    Route::get('supportedSubcategpries', 'API\vendorApiController@supportedSubcategpries');
+    //supported subcategoies by the vendor
+
+    Route::post('changeSupportedSubcategpries', 'API\vendorApiController@saveSupportedSubcategpries');
     //Add a reply to a homeowner review (vendor reply to a homeowner)
     Route::post('vendorReplyToReview', 'API\Manager\UserAPIController@vendorReply');
     //get reply to a homeowner review (vendor reply to a homeowner)
@@ -111,7 +116,7 @@ Route::prefix('vendor')->group(function () {
     //supported days by the vendor
     Route::get('getSupportedDaysVendor', 'API\Manager\UserAPIController@supportedDays');
         //supported days by the vendor
-    Route::post('updateSupportedDaysVendor', 'API\Manager\UserAPIController@supportedDaysUpdate');
+    Route::post('changeSupportedDaysVendor', 'API\Manager\UserAPIController@supportedDaysUpdate');
     //select language, country, and city
     Route::get('langCountryCity', 'API\Manager\UserAPIController@langCountryCity');
     //save language, country, and city
@@ -142,6 +147,7 @@ Route::get('logout', 'API\UserAPIController@logout');
 Route::get('settings', 'API\UserAPIController@settings');
 
 Route::resource('cuisines', 'API\CuisineAPIController');
+Route::get('getCategories','API\CategoryAPIController@index');
 Route::resource('categories', 'API\CategoryAPIController');
 //get subgategory
 Route::post('subcategory', 'API\SubCategoryController@index');

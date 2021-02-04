@@ -51,27 +51,27 @@ class CategoryAPIController extends Controller
                     return $this->sendError('User not found', 401);
                 }
 
-        $categories = $this->categoryRepository->all(['id','name','description']);
-        $response=[];
-        $i=0;
-        foreach ($categories as $category)
-        {
-            $response[$i]['id']=$category->id;
-            $response[$i]['name']=$category->name;
-            $response[$i]['description']=$category->description;
+        $categories = $this->categoryRepository->all(['id','name','description'])->makeHidden(['custom_fields','has_media','media'])->transform(function($q){
+            $q->subCategory->transform(function($q){
+                try{
+
+                    $q['image']=$q->media[0]->getUrlAttribute();
+                }
+                catch (\Exception $e) {
+                    $q['image']=url('images/image_default.png');
+                }
+                return $q->only('id','name','description','image');
+            });
             try{
 
-
-                $response[$i]['photo']=$category->media[0]->getUrlAttribute();
+                $q['image']=$q->media[0]->getUrlAttribute();
             }
             catch (\Exception $e) {
-                $response[$i]['photo']=url('images/image_default.png');
+                $q['image']=url('images/image_default.png');
             }
-            $i++;
-
-        }
-
-
+            return $q;
+        });
+        $response=$categories->toArray();
 
          return $this->sendResponse($response, 'Categories retrieved successfully');
             }

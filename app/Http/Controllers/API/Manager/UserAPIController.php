@@ -168,7 +168,7 @@ class UserAPIController extends Controller
                 ['id' => $user->id,
                     'first_name' => $user->name,
                     'email' => $user->email,
-                    'is_verified' => $user->is_verified==1?true:false,
+                    'is_verified' => $user->is_verified == 1 ? true : false,
                     'avatar' => asset('storage/Avatar') . '/' . $user->avatar,
                     'lang' => $user->language,
                     'device_token' => $user->device_token,
@@ -223,7 +223,7 @@ class UserAPIController extends Controller
             $user = new User;
             $user->name = $request->input('first_name');
             $user->last_name = $request->input('last_name');
-            $user->email = $request->input('email', '');
+            $user->email = $request->input('email');
 //            $user->city_id = $request->input('city_id');
             $user->is_verified = 0;
 
@@ -304,7 +304,7 @@ class UserAPIController extends Controller
                     'first_name' => $user->name,
                     'email' => $user->email,
                     'activation_cod' => $user->activation_code,
-                    'is_verified' => $user->is_verified==1?true:false,
+                    'is_verified' => $user->is_verified == 1 ? true : false,
                     // 'avatar'=>$user->avatar,
                     'lang' => $user->language,
                     'device_token' => $user->device_token,
@@ -342,7 +342,7 @@ class UserAPIController extends Controller
                 $response =
                     ['id' => $user->id,
                         'first_name' => $user->name,
-                        'is_verified' => $user->is_verified==1?true:false,
+                        'is_verified' => $user->is_verified == 1 ? true : false,
 
                         'email' => $user->email,
                         //'activation_cod'=>$user->activation_code,
@@ -714,45 +714,46 @@ class UserAPIController extends Controller
 
     public function backgroundPic(Request $request)
     {
+        try {
+            if (empty($request->header('devicetoken'))) {
+                return $this->sendError('device token not found', 401);
+            }
 
-        if (empty($request->header('devicetoken'))) {
-            return $this->sendError('device token not found', 401);
-        }
+            $vendor = User::where('device_token', $request->header('devicetoken'))->first();
 
-        $vendor = User::where('device_token', $request->header('devicetoken'))->first();
+            if (empty($vendor)) {
+                return $this->sendError('User not found', 401);
+            }
 
-        if (empty($vendor)) {
-            return $this->sendError('User not found', 401);
-        }
+            if (!empty ($request->file('background_profile'))) {
 
-        if (!empty ($request->file('background_profile'))) {
+                $imageName = uniqid() . $request->file('background_profile')->getClientOriginalName();
 
-            $imageName = uniqid() . $request->file('background_profile')->getClientOriginalName();
+                $request->file('background_profile')->move(public_path('storage/vendors_background'), $imageName);
 
-            $request->file('background_profile')->move(public_path('storage/vendors_background'), $imageName);
+                $vendor->background_profile = $imageName;
 
-            $vendor->background_profile = $imageName;
+                $vendor->save();
 
-            $vendor->save();
+                //
+            }
+            if (!empty ($request->file('avatar'))) {
+                $imageNameAvater = uniqid() . $request->file('avatar')->getClientOriginalName();
+                $request->file('avatar')->move(public_path('storage/Avatar'), $imageNameAvater);
 
-            //
+                $vendor->avatar = $imageNameAvater;
 
-//                if ($request->file('avatar')) {
-//                    $input['avatar'] = $request->file('avatar');
-//                    return dd($mediaItem);
-//
-//      $cacheUpload = $this->uploadRepository;
-//                    $cacheUpload->avatar=$request->file('avatar');
-//    return dd($cacheUpload);
-//                    $mediaItem = $cacheUpload->getMedia('avatar')->first();
-//
-//                    $mediaItem->copy($vendor, 'avatar');
-//
-//                }
+                $vendor->save();
 
+
+            }
             return $this->sendResponse([], 'photo Saved successfully');
-        } else
-            return $this->sendResponse([], 'Error! background image is empty');
+        } catch (\Exception $e) {
+            return $this->sendError('something was wrong', 401);
+
+        }
+
+
     }
 
     // 'reviews'         => ($vendor->clientsAPI)->transform(function($q){
@@ -783,7 +784,7 @@ class UserAPIController extends Controller
                     return $q = [
                         'id' => $q->pivot->id,
                         'name' => $q->name,
-                        'rating' => round((getFullRating($review) / 20) * 2) / 2 ,
+                        'rating' => round((getFullRating($review) / 20) * 2) / 2,
                         'description' => $q->pivot->description,
                         'image' => asset('storage/Avatar') . '/' . $q->avatar,
 
@@ -905,8 +906,9 @@ class UserAPIController extends Controller
         }
     }
 
-    public function getcategorySubcatory(Request $request) {
-        if($request->header('devicetoken')) {
+    public function getcategorySubcatory(Request $request)
+    {
+        if ($request->header('devicetoken')) {
             $user = User::where('device_token', $request->header('devicetoken'))->first();
             if (empty($user)) {
                 return $this->sendError('User not found', 401);
@@ -915,56 +917,57 @@ class UserAPIController extends Controller
 
             $user1 = User::where('device_token', $request->header('devicetoken'))->first();
 
-            $sub= $user->subcategories->transform(function($q) {
-                return  $q->id;
-             });
+            $sub = $user->subcategories->transform(function ($q) {
+                return $q->id;
+            });
 
-            $user1 = $user1->subcategories->transform(function($q) use($sub){
-                $arr = $q->categories->subCategory->transform(function($s) use($sub){
+            $user1 = $user1->subcategories->transform(function ($q) use ($sub) {
+                $arr = $q->categories->subCategory->transform(function ($s) use ($sub) {
                     if (in_array($s->id, $sub->toArray()))
-                    return $s->only('id', 'name') ;
+                        return $s->only('id', 'name');
 
                 });
 
 
-
-                $q['id']            = $q->categories->id;
-                $q['name']          = $q->categories->name;
+                $q['id'] = $q->categories->id;
+                $q['name'] = $q->categories->name;
 
                 $q['subcategories'] = $arr->filter(function ($value) {
                     return $value != null;
                 });;
 
-                return  $q->only('id', 'name', 'subcategories');
+                return $q->only('id', 'name', 'subcategories');
             })->unique('id');
             return $this->sendResponse($user1, 'Inforamtion saved successfully');;
         }
     }
 
-    public function vendorReply(Request $request) {
-        try{
-        if($request->header('devicetoken')) {
+    public function vendorReply(Request $request)
+    {
+        try {
+            if ($request->header('devicetoken')) {
 
-            $user = User::where('device_token', $request->header('devicetoken'))->first();
+                $user = User::where('device_token', $request->header('devicetoken'))->first();
                 if (empty($user)) {
                     return $this->sendError('User not found', 401);
                 }
 
-            $review =  reviews::find($request->review_id);
+                $review = reviews::find($request->review_id);
 
-            $review->reply = $request->message;
+                $review->reply = $request->message;
 
-            $review->save();
+                $review->save();
 
-            return $this->sendResponse($request->message, "Reply added successfully!");
+                return $this->sendResponse($request->message, "Reply added successfully!");
+            }
+        } catch (\Exception $e) {
+            return $this->sendError('somthing was wrong', 401);
+
         }
-    }catch (\Exception $e) {
-return $this->sendError('somthing was wrong', 401);
-
-}
     }
 
-    public function vendorReplyInfo(Request $request) {
+    public function vendorReplyInfo(Request $request)
+    {
         try {
             if ($request->header('devicetoken')) {
 
@@ -986,70 +989,70 @@ return $this->sendError('somthing was wrong', 401);
 
                 return $this->sendResponse($response, "Reply retrieved successfully!");
             }
-        }catch (\Exception $e) {
-                return $this->sendError('somthing was wrong', 401);
-
-            }
-    }
-
-    public function supportedDays(Request $request) {
-        try{
-        $lang = false;
-        if($request->header('devicetoken')) {
-            $vendor = User::where('device_token', $request->header('devicetoken'))->first();
-            $supported = $vendor->daysApi->transform(function($q) {
-                return  $q->id;
-             });
-
-             $arr=[
-                'supported'=>$supported->toArray(),
-                'vendor_id'=> $vendor->id,
-                'lang'=> $vendor->language
-             ];
-
-             $days  = Day::all()->transform(function($days) use($arr){
-                 if (in_array($days->id, $arr['supported'])){
-                     $days['check'] = 1;
-                     $days['workHours']=[
-                         'start'=> $days->Vendordays->where('id',$arr['vendor_id'])->first()->pivot->start,
-                         'end'=> $days->Vendordays->where('id',$arr['vendor_id'])->first()->pivot->end,
-                     ];
-                    }
-                 else
-                     $days['check'] = 0;
-                 $days['name']=$days['name_'.$arr['lang']];
-
-                 return $days->only('id','name','check','workHours');             });
-
-             return $this->sendResponse($days, "Supported retrieved successfully!");
-        }
-    }
-
-catch (\Exception $e) {
-    return $this->sendError('somthing was wrong', 401);
-
-    }
-}
-
-    public function supportedDaysUpdate(Request $request)
-    {  try{
-        if ($request->header('devicetoken')) {
-            $vendor = User::where('device_token', $request->header('devicetoken'))->first();
-            if (!empty($vendor)) {
-
-
-                $vendor->daysApi()->sync($request->days);
-                return $this->sendResponse([], 'Data saved successfully');
-            } else {
-                return $this->sendError( 'User not found',401);
-            }
-        } else {
-            return $this->sendResponse([], 'Error');
-        }
-    }catch (\Exception $e) {
+        } catch (\Exception $e) {
             return $this->sendError('somthing was wrong', 401);
 
+        }
+    }
+
+    public function supportedDays(Request $request)
+    {
+        try {
+            $lang = false;
+            if ($request->header('devicetoken')) {
+                $vendor = User::where('device_token', $request->header('devicetoken'))->first();
+                $supported = $vendor->daysApi->transform(function ($q) {
+                    return $q->id;
+                });
+
+                $arr = [
+                    'supported' => $supported->toArray(),
+                    'vendor_id' => $vendor->id,
+                    'lang' => $vendor->language
+                ];
+
+                $days = Day::all()->transform(function ($days) use ($arr) {
+                    if (in_array($days->id, $arr['supported'])) {
+                        $days['check'] = 1;
+                        $days['workHours'] = [
+                            'start' => $days->Vendordays->where('id', $arr['vendor_id'])->first()->pivot->start,
+                            'end' => $days->Vendordays->where('id', $arr['vendor_id'])->first()->pivot->end,
+                        ];
+                    } else
+                        $days['check'] = 0;
+                    $days['name'] = $days['name_' . $arr['lang']];
+
+                    return $days->only('id', 'name', 'check', 'workHours');
+                });
+
+                return $this->sendResponse($days, "Supported retrieved successfully!");
             }
+        } catch (\Exception $e) {
+            return $this->sendError('somthing was wrong', 401);
+
+        }
+    }
+
+    public function supportedDaysUpdate(Request $request)
+    {
+        try {
+            if ($request->header('devicetoken')) {
+                $vendor = User::where('device_token', $request->header('devicetoken'))->first();
+                if (!empty($vendor)) {
+
+
+                    $vendor->daysApi()->sync($request->days);
+                    return $this->sendResponse([], 'Data saved successfully');
+                } else {
+                    return $this->sendError('User not found', 401);
+                }
+            } else {
+                return $this->sendResponse([], 'Error');
+            }
+        } catch (\Exception $e) {
+            return $this->sendError('somthing was wrong', 401);
+
+        }
     }
 
 }

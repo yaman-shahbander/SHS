@@ -61,11 +61,14 @@ class UserAPIController extends Controller
                 if (auth()->attempt(['email' => $request->input('email'), 'password' => $request->input('password')])) {
                     $user = auth()->user();
                 }
+
                 $IsEmail = true;
 
 
             }
+
             elseif($request->phone){
+
                 $this->validate($request, [
 
                     'phone' => 'required',
@@ -78,7 +81,6 @@ class UserAPIController extends Controller
                 $IsEmail = false;
 
             }
-
 //            if (auth()->attempt(['email' => $request->input('email'), 'password' => $request->input('password')])) {
 //                // Authentication passed...
 //                $user = auth()->user();
@@ -88,6 +90,7 @@ class UserAPIController extends Controller
             if (empty($user)) {
                     return $this->sendError('User not found', 401);
                 }
+
             $user->language = $request->input('lang')==null ? 'en':$request->input('lang','');
 
                 if($user->is_verified==0) {
@@ -102,6 +105,7 @@ class UserAPIController extends Controller
                     $user->activation_code_exp_date = $packageEndDate;
 
                     if ($IsEmail) {
+
                         require '../vendor/autoload.php'; // load Composer's autoloader
 
                         $mail = new PHPMailer(true); // Passing `true` enables exceptions
@@ -129,27 +133,30 @@ class UserAPIController extends Controller
                             $mail->send();
                             $user->save();
 
-                            $response_cod=
-                                ['id'=>$user->id,
-                                    'first_name'=>$user->name,
-                                    'last_name'=>$user->last_name,
-                                    'is_verified' => false,
-                                    'email'=>$user->email,
-                                    'avatar'=>asset('storage/Avatar').'/'.$user->avatar,
-                                    'device_token'=>$user->device_token,
-                                    'phone'=>$user->phone,
-                                    'country'=>null,
-                                    'activation_code'=>$user->activation_code
 
-                                ];
 
-                            return $this->sendResponse($response_cod, 'user not verified');
 
                         } catch (Exception $e) {
                             return $this->sendError('error message ', 401);
                         }
                     }
+                    $response_cod=
+                        ['id'=>$user->id,
+                            'first_name'=>$user->name,
+                            'last_name'=>$user->last_name,
+                            'is_verified' => false,
+                            'email'=>$user->email,
+                            'avatar'=>asset('storage/Avatar').'/'.$user->avatar,
+                            'device_token'=>$user->device_token,
+                            'phone'=>$user->phone,
+                            'country'=>null,
+                            'activation_code'=>$user->activation_code
+
+                        ];
+                    return $this->sendResponse($response_cod, 'user not verified');
+
                 }
+
                            $user->save();
 
           $response=
@@ -176,7 +183,7 @@ class UserAPIController extends Controller
                 return $this->sendResponse($response, 'User retrieved successfully');
 
         } catch (\Exception $e) {
-            return $this->sendError('error', 401);
+            return $this->sendError($e->getMessage(), 401);
         }
 
     }
@@ -197,7 +204,6 @@ class UserAPIController extends Controller
 
                 $this->validate($request, [
                     'first_name' => 'required',
-                    'last_name' => 'required',
                     'email' => 'required|email',
                     'password' => 'required',
                 ]);
@@ -207,7 +213,6 @@ class UserAPIController extends Controller
             elseif($request->phone){
                 $this->validate($request, [
                     'first_name' => 'required',
-                    'last_name' => 'required',
                     'phone' => 'required',
                     'password' => 'required',
                 ]);
@@ -222,7 +227,7 @@ class UserAPIController extends Controller
             $user = new User;
             $user->name = $request->input('first_name');
             $user->last_name = $request->input('last_name');
-            $user->email = $request->input('email','');
+            $user->email = $request->input('email');
            $user->city_id = $request->input('city_id');
             $user->is_verified = 0;
 

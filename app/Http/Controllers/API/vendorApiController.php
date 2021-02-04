@@ -160,7 +160,7 @@ class vendorApiController extends Controller
             $featuredVendorBalance = $featuredVendor->Balance->balance;
 
             $count = count(Fee::all()); // if there is a fee value
-            
+
             if ($count > 0) {
 
                 $value = Fee::all('fee_amount');
@@ -356,55 +356,74 @@ class vendorApiController extends Controller
         }
      }
 
-     public function vendorInfo(Request $request) {
-        if($request->header('devicetoken')) {
-            $response = [];
-            try {
-                $user = User::where('device_token', $request->header('devicetoken'))->first();
-                if (empty($user)) {
-                    return $this->sendError('User not found', 401);
-                }
-                $response = [
-                    'caption'        => $user->caption,
-                    'Business_name'  => $user->nickname,
-                    'Owner_name'     => $user->name,
-                    'About_you'      => $user->description
-                ];
+     public function vendorInfo(Request $request)
+     {
+         try {
+             if ($request->header('devicetoken')) {
+                 $response = [];
+                 try {
+                     $user = User::where('device_token', $request->header('devicetoken'))->first();
+                     if (empty($user)) {
+                         return $this->sendError('User not found', 401);
+                     }
+                     $response = [
+                         'caption' => $user->caption,
+                         'Business_name' => $user->nickname,
+                         'Owner_name' => $user->name,
+                         'About_you' => $user->description
+                     ];
 
-                return $this->sendResponse($response, 'Data retrieved successfully!');
-                } catch (\Exception $e) {
-                    return $this->sendError($e->getMessage(), 401);
+                     return $this->sendResponse($response, 'Data retrieved successfully!');
+                 } catch (\Exception $e) {
+                     return $this->sendError($e->getMessage(), 401);
+                 }
              }
+         }
+         catch (\Exception $e) {
+             return $this->sendError('something was wrong', 401);
          }
      }
 
      public function vendorInfoUpdate(Request $request) {
-        if($request->header('devicetoken')) {
-            $response = [];
-            try {
-                $user = User::where('device_token', $request->header('devicetoken'))->first();
-                if (empty($user)) {
-                    return $this->sendError('User not found', 401);
-                }
+      try {
+          if ($request->header('devicetoken')) {
+              $response = [];
+              try {
+                  $user = User::where('device_token', $request->header('devicetoken'))->first();
+                  if (empty($user)) {
+                      return $this->sendError('User not found', 401);
+                  }
 
-                $user->name          = $request->ownerName;
-                $user->caption = $request->input('caption')==null ? '':$request->input('caption','');
-                $user->description = $request->input('aboutyou')==null ? '':$request->input('aboutyou','');
-                $user->nickname = $request->input('businessName')==null ? '':$request->input('businessName','');
-                $user->save();
+                  $user->name = $request->ownerName;
+                  $user->caption = $request->input('caption') == null ? '' : $request->input('caption', '');
+                  $user->description = $request->input('aboutyou') == null ? '' : $request->input('aboutyou', '');
+                  $user->nickname = $request->input('businessName') == null ? '' : $request->input('businessName', '');
+                  if ($user->save()) {
 
-                $response = [
-                    'caption'        => $user->caption,
-                    'Business_name'  => $user->nickname,
-                    'Owner_name'     => $user->name,
-                    'About_you'      => $user->description
-                ];
+                      $response = [
+                          'caption' => $user->caption,
+                          'Business_name' => $user->nickname,
+                          'Owner_name' => $user->name,
+                          'About_you' => $user->description
+                      ];
 
-                return $this->sendResponse($response, 'Data retrieved successfully!');
-                } catch (\Exception $e) {
-                    return $this->sendError($e->getMessage(), 401);
-             }
-         }
+                      return $this->sendResponse($response, 'Data retrieved successfully!');
+                  } else
+                      return $this->sendError('error save User information', 401);
+
+
+              } catch (\Exception $e) {
+                  return $this->sendError('something was wrong!', 401);
+              }
+          }
+          else
+              return $this->sendError('Error!', 401);
+
+
+      }
+      catch (\Exception $e) {
+          return $this->sendError('something was wrong!', 401);
+      }
      }
 
 
@@ -418,8 +437,8 @@ class vendorApiController extends Controller
                 }
                 $response = [
                     'coordinates'        => [
-                        'latitude'  => $user->coordinates->latitude,
-                        'longitude' => $user->coordinates->longitude
+                        'latitude'  => $user->coordinates==null?'no coordinates':$user->coordinates->latitude,
+                        'longitude' => $user->coordinates==null?'no coordinates':$user->coordinates->longitude
                      ],
                     'address'        => $user->address,
                     'website'        => $user->website,
@@ -428,112 +447,141 @@ class vendorApiController extends Controller
 
                 return $this->sendResponse($response, 'Data retrieved successfully!');
                 } catch (\Exception $e) {
-                    return $this->sendError($e->getMessage(), 401);
+                    return $this->sendError('something was wrong', 401);
             }
         }
+        else
+            return $this->sendError('Error!', 401);
+
     }
 
     public function contactLocationUpdate(Request $request) {
-        if($request->header('devicetoken')) {
-            $response = [];
-            try {
-                $user = User::where('device_token', $request->header('devicetoken'))->first();
-                if (empty($user)) {
-                    return $this->sendError('User not found', 401);
-                }
-                $user->coordinates->latitude = $request->input('latitude')==null ? '':$request->input('latitude','');
-                // $user->coordinates->latitude  = $request->latitude;
-                // $user->coordinates->longitude = $request->longitude;
-                $user->coordinates->longitude = $request->input('longitude')==null ? '':$request->input('longitude','');
+        try {
+            if ($request->header('devicetoken')) {
+                $response = [];
+                try {
+                    $user = User::where('device_token', $request->header('devicetoken'))->first();
+                    if (empty($user)) {
+                        return $this->sendError('User not found', 401);
+                    }
+                    $user->coordinates->latitude = $request->input('latitude') == null ? '' : $request->input('latitude', '');
+                    // $user->coordinates->latitude  = $request->latitude;
+                    // $user->coordinates->longitude = $request->longitude;
+                    $user->coordinates->longitude = $request->input('longitude') == null ? '' : $request->input('longitude', '');
 
-                $user->address = $request->input('address')==null ? '':$request->input('address','');
+                    $user->address = $request->input('address') == null ? '' : $request->input('address', '');
 
-                $user->website = $request->input('website')==null ? '':$request->input('website','');
-                $user->phone = $request->input('phone')==null ? '':$request->input('phone','');
+                    $user->website = $request->input('website') == null ? '' : $request->input('website', '');
+                    $user->phone = $request->input('phone') == null ? '' : $request->input('phone', '');
 
 
-                $user->save();
-                $user->coordinates->save();
+                    $user->save();
+                    $user->coordinates->save();
 
-                $response = [
-                    'coordinates'  =>
-                    [
+                    $response = [
+                        'coordinates' =>
+                            [
 
-                        'latitude'  => $user->coordinates->latitude,
-                        'longitude' => $user->coordinates->longitude,
+                                'latitude' => $user->coordinates == null ? 'no coordinates' : $user->coordinates->latitude,
+                                'longitude' => $user->coordinates == null ? 'no coordinates' : $user->coordinates->longitude
 
-                    ],
-                    'address'  => $user->address,
-                    'website'  => $user->website,
-                    'phone'    => $user->phone
-                ];
+                            ],
+                        'address' => $user->address,
+                        'website' => $user->website,
+                        'phone' => $user->phone
+                    ];
 
-                return $this->sendResponse($response, 'Data retrieved successfully!');
+                    return $this->sendResponse($response, 'Data retrieved successfully!');
                 } catch (\Exception $e) {
                     return $this->sendError($e->getMessage(), 401);
-             }
-         }
+                }
+            } else
+                return $this->sendError('Error!', 401);
+        }
+        catch (\Exception $e) {
+            return $this->sendError($e->getMessage(), 401);
+        }
      }
 
      public function supportedSubcategpries(Request $request) {
-        $lang = false;
-        if($request->header('devicetoken')) {
+       try {
+           $lang = false;
+           if ($request->header('devicetoken')) {
+               $vendor = User::where('device_token', $request->header('devicetoken'))->first();
+               $sub = $vendor->subcategories->transform(function ($q) {
+
+                   return $q->id;
+               });
+               //return $sub;
+               $l = $vendor->language;
+               $arr = [
+                   'lang' => $vendor->language,
+                   'bool' => $lang
+               ];
+               if (!empty($vendor)) {
+                   $ids = [3, 4, 7];
+                   $hiddenElems = ['created_at', 'updated_at', 'custom_fields', 'has_media'];
+                   try {
+                       $categories = Category::with('subCategory')->get(['id', 'name_' . $vendor->language, 'description'])->transform(function ($q) use ($sub) {
+
+                           $q->subCategory->transform(function ($q) use ($sub) {
+                               if (in_array($q->id, $sub->toArray()))
+                                   $q['check'] = 1;
+                               else
+                                   $q['check'] = 0;
+                               return $q;
+                           });
+                           return $q;
+                       });
+                       $lang = true;
+                   } catch (\Exception  $e) {
+                       return $this->sendError('something was wrong ');
+                   }
+
+                   $respone = [];
+                   foreach ($categories as $category) {
+                       $respone[] = [
+                           'id' => $category->id,
+                           'name' => $lang ?
+                               $category['name_' . $vendor->language] : $category['name'],
+                           'description' => $category->description,
+                           'sub_categories' => $category->subCategory->transform(function ($q) use ($arr) {
+
+                               return $q->only(['id', 'name', 'check']);
+                           })
+                       ];
+
+                   }
+
+                   return $this->sendResponse($respone, 'Categories with subcategories retrieved successfully!');
+               } else {
+                   return $this->sendResponse([], 'User not found!');
+               }
+           } else {
+               return $this->sendResponse([], 'Error!');
+           }
+       }
+       catch (\Exception  $e) {
+           return $this->sendError('something was wrong ');
+       }
+
+    }
+    public function saveSupportedSubcategpries(Request $request)
+    {
+        if ($request->header('devicetoken')) {
             $vendor = User::where('device_token', $request->header('devicetoken'))->first();
-           $sub=$vendor->subcategories->transform(function($q) {
+            if (!empty($vendor)) {
 
-                return  $q->id;
-             });
-             //return $sub;
-            $l=$vendor->language;
-            $arr=[
-                'lang'=>$vendor->language,
-                'bool'=>$lang
-            ];
-            if(!empty($vendor)) {
-                $ids=[3,4,7];
-                $hiddenElems = ['created_at', 'updated_at','custom_fields','has_media'];
-                try {
-                    $categories  = Category::with('subCategory')->get(['id', 'name_'.$vendor->language, 'description'])->transform(function($q) use($sub) {
-
-                          $q->subCategory->transform(function($q) use($sub) {
-                              if(in_array($q->id,$sub->toArray()))
-                             $q['check']=1;
-                            else
-                             $q['check']=0;
-                             return $q;
-                          });
-                          return $q;
-                     });
-                    $lang = true;
-                } catch (\Exception  $e) {
-                 return $e->getMessage();
-                }
-
-                $respone=[];
-                    foreach($categories as $category){
-                            $respone[]=[
-                                 'id'    => $category->id,
-                                 'name'  => $lang ?
-                                 $category['name_'. $vendor->language] : $category['name'],
-                                 'description'    => $category->description,
-                                 'sub_categories' => $category->subCategory->transform(function($q) use($arr){
-
-                                    return $arr['bool']? $q->only(['id','name_'.$arr['lang'],'check']):$q->only(['id','name','check']);
-                                 })
-                    ];
-
-                }
-
-                return $this->sendResponse($respone, 'Categories with subcategories retrieved successfully!');
-                 } else {
-                    return $this->sendResponse([], 'User not found!');
-                 }
-            }  else {
-                return $this->sendResponse([], 'Error!');
+                $vendor->subcategories()->sync($request->subcategories);
+                return $this->sendResponse([], 'Categories and Subcategories saved successfully');
+            } else {
+                return $this->sendResponse([], 'User not found');
             }
+        } else {
+            return $this->sendResponse([], 'Error');
+        }
     }
 
-    
 
     public function vendorRefer(Request $request) {
         if($request->header('devicetoken')) {
@@ -576,13 +624,13 @@ class vendorApiController extends Controller
                     'phone'   =>  $request->phone,
                     'user_id' =>  $referer_id
                 ]);
-                
+
             }
             return $this->sendResponse($response, "Referring added successfully!");
         }
     }
 
-    
+
 }
 
 
