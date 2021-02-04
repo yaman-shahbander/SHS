@@ -20,7 +20,7 @@
 Route::prefix('homeOwner')->group(function () {
     Route::post('login', 'API\Driver\UserAPIController@login');
     Route::post('register', 'API\Driver\UserAPIController@register');
-    Route::post('verified', 'API\Driver\UserAPIController@verify');
+    Route::post('setCityCountry', 'API\Driver\UserAPIController@verify');
     Route::post('send_reset_link_email', 'API\UserAPIController@sendResetLinkEmail');
     Route::get('user', 'API\Driver\UserAPIController@user');
     Route::get('logout', 'API\Driver\UserAPIController@logout');
@@ -45,12 +45,16 @@ Route::prefix('homeOwner')->group(function () {
     Route::post('updategmapLocation', 'API\GmapLocationAPIController@update');
 
     // Route::resource('gmapLocation', 'API\GmapLocationAPIController');
+     //select language, country, and city
+     Route::get('langCountryCity', 'API\Driver\UserAPIController@langCountryCity');
+     //save language, country, and city
+     Route::post('savelangCountryCity', 'API\Driver\UserAPIController@savelangCountryCity');
 });
 
 Route::prefix('vendor')->group(function () {
     Route::post('login', 'API\Manager\UserAPIController@login');
     Route::post('register', 'API\Manager\UserAPIController@register');
-    Route::post('verified', 'API\Manager\UserAPIController@verify');
+    Route::post('setCityCountry', 'API\Manager\UserAPIController@verify');
 
     Route::post('send_reset_link_email', 'API\UserAPIController@sendResetLinkEmail');
     Route::get('user', 'API\Manager\UserAPIController@user');
@@ -79,11 +83,11 @@ Route::prefix('vendor')->group(function () {
     //save photo profile
     Route::post('photoProfile', 'API\Manager\UserAPIController@backgroundPic');
     //vendor profile
-    Route::post('vendorProfile', 'API\Manager\UserAPIController@vendorprofile');
+    Route::get('vendorProfile', 'API\Manager\UserAPIController@vendorprofile');
     //vendor profile
     Route::post('saveVednorData', 'API\Manager\UserAPIController@completeRegistration');
     //categories with subcategories API
-    Route::post('categoriesVendor', 'API\vendorApiController@categorySubCatFunc');
+    Route::get('categoriesVendor', 'API\vendorApiController@categorySubCatFunc');
     //Woring hours for a new vendor
     Route::post('workHoursDays', 'API\vendorApiController@workHours');
     //User reviews to a specific vendor
@@ -91,17 +95,47 @@ Route::prefix('vendor')->group(function () {
     //vendor background and avatar
     Route::post('vendorbackgroundAvatar', 'API\vendorApiController@backgroundAvatar');
     //vendor about info
-    Route::post('vendorInfo', 'API\vendorApiController@vendorInfo');
+    Route::get('vendorInfo', 'API\vendorApiController@vendorInfo');
+    //update vendor about info
+
     //vendor about info Update
     Route::post('vendorInfoUpdate', 'API\vendorApiController@vendorInfoUpdate');
     //contact and location
-    Route::post('contactLocation', 'API\vendorApiController@contactLocation');
+    Route::get('contactLocation', 'API\vendorApiController@contactLocation');
     //contact and location update
     Route::post('contactLocationUpdate', 'API\vendorApiController@contactLocationUpdate');
     //supported subcategoies by the vendor
-    Route::post('supportedSubcategpries', 'API\vendorApiController@supportedSubcategpries');
+    Route::get('supportedSubcategpries', 'API\vendorApiController@supportedSubcategpries');
+    //supported subcategoies by the vendor
+
+    Route::post('changeSupportedSubcategpries', 'API\vendorApiController@saveSupportedSubcategpries');
     //Add a reply to a homeowner review (vendor reply to a homeowner)
-    Route::post('vendorReply', 'API\vendorApiController@vendorReply');
+    Route::post('vendorReplyToReview', 'API\Manager\UserAPIController@vendorReply');
+    //get reply to a homeowner review (vendor reply to a homeowner)
+    Route::post('getvendorReplyToReview', 'API\Manager\UserAPIController@vendorReplyInfo');
+    //supported days by the vendor
+    Route::get('getSupportedDaysVendor', 'API\Manager\UserAPIController@supportedDays');
+        //supported days by the vendor
+    Route::post('changeSupportedDaysVendor', 'API\Manager\UserAPIController@supportedDaysUpdate');
+    //select language, country, and city
+    Route::get('langCountryCity', 'API\Manager\UserAPIController@langCountryCity');
+    //save language, country, and city
+    Route::post('savelangCountryCity', 'API\Manager\UserAPIController@savelangCountryCity');
+    //update vendor status
+    Route::post('updatevendorstatus', 'API\Manager\UserAPIController@updatevendorstatus');
+
+
+//special offers vendors API
+    Route::get('getVendorspecialOffers', 'API\SpecialOffersAPIController@index');
+
+//special offers vendors API
+    Route::post('storeVendorspecialOffers', 'API\SpecialOffersAPIController@store');
+
+//special offers vendors API
+    Route::post('deleteVendorspecialOffers', 'API\SpecialOffersAPIController@destroy');
+
+    //update vendor status
+    Route::get('getcategorySubcatory', 'API\Manager\UserAPIController@getcategorySubcatory');
 });
 
 
@@ -113,6 +147,7 @@ Route::get('logout', 'API\UserAPIController@logout');
 Route::get('settings', 'API\UserAPIController@settings');
 
 Route::resource('cuisines', 'API\CuisineAPIController');
+Route::get('getCategories','API\CategoryAPIController@index');
 Route::resource('categories', 'API\CategoryAPIController');
 //get subgategory
 Route::post('subcategory', 'API\SubCategoryController@index');
@@ -126,6 +161,8 @@ Route::post('forgot-password', 'API\AuthController@forgot_password');
 //vendor rating API
 Route::post('vendorWithRating', 'API\vendorApiController@index');
 //vendor profile API
+
+
 Route::post('vendorProfile', 'API\vendorApiController@profile');
 //User current balance API
 Route::post('currentBalance', 'API\MoneyAPIController@currentBalance');
@@ -144,11 +181,6 @@ Route::post('updatefilter', 'API\FilterVendorsAPIController@update');
 
 //Route::resource('specialOffers', 'API\SpecialOffersAPIController');
 
-//special offers vendors API
-Route::post('getVendorspecialOffers', 'API\SpecialOffersAPIController@index');
-
-//special offers vendors API
-Route::post('storeVendorspecialOffers', 'API\SpecialOffersAPIController@store');
 
 //vendor map location
 Route::post('vendorLocation', 'API\GmapLocationAPIController@VendorMapDetails');
@@ -158,8 +190,16 @@ Route::post('allMessages','API\ChatAPIController@history');
 Route::post('vendorFee', 'API\vendorApiController@vendorFeefunc');
 //Refer a vendor
 Route::post('vendorRefer', 'API\vendorApiController@vendorRefer');
+//select language, country, and city
+Route::get('langCountryCity', 'API\Driver\UserAPIController@langCountryCity');
+//save language, country, and city
+Route::post('savelangCountryCity', 'API\Driver\UserAPIController@savelangCountryCity');
 
 
+
+
+
+//
 Route::resource('restaurants', 'API\RestaurantAPIController');
 
 Route::resource('faq_categories', 'API\FaqCategoryAPIController');

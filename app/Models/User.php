@@ -48,9 +48,9 @@ class User extends Authenticatable implements HasMedia
         getFirstMediaUrl as protected getFirstMediaUrlTrait;
     }
 
-    
+
     use HasRoles;
-    
+
 
     /**
      * Validation rules
@@ -202,7 +202,7 @@ class User extends Authenticatable implements HasMedia
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      **/
 
-    
+
     // public function messages()
     // {
     //     return $this->hasMany(\App\Models\Message::class, 'sender_id', 'id');
@@ -255,7 +255,7 @@ class User extends Authenticatable implements HasMedia
             ->withTimestamps();
 
     }
-    
+
     public function homeOwnerFavorite()
     {
         return $this->belongsToMany(User::class,'favorite_user','vendor_id','user_id')
@@ -327,8 +327,8 @@ class User extends Authenticatable implements HasMedia
          ->withTimestamps();
    }
    public function daysApi() {
-    return $this->belongsToMany(Day::class,'days_vendors','vendor_id','day_id')->withPivot('start');
-}
+    return $this->belongsToMany(Day::class,'days_vendors','vendor_id','day_id')->withPivot('start', 'end');
+    }
 
    function vendor_city() {
        return $this->belongsToMany(City::class, 'vendors_cities', 'vendor_id', 'city_id')->select(['cities.id', 'cities.city_name'])->withTimeStamps();
@@ -347,6 +347,6 @@ class User extends Authenticatable implements HasMedia
     //    {
     //        return $this->gallery->image = asset('storage/gallery') . '/' . $this->gallery->image;
     //    }
-    
-   
+
+
 }

@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Country;
+use App\City;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\CountryRepository;
 use App\Repositories\customFieldRepository;
+use function foo\func;
+
 class CountryAPIController extends Controller
 {
     /**
@@ -24,24 +28,20 @@ class CountryAPIController extends Controller
     }
     public function index(Request $request)
     {
-        if($request->header('devicetoken')) {
 
             try {
-                $user = User::where('device_token', $request->header('devicetoken'))->first();
-                if (empty($user)) {
-                    return $this->sendError('User not found', 401);
-                }
-        $countries = $this->countryRepository->all(["id", "country_name"]);
+
+        $countries = Country::with('City')->get(["id", "country_name"])->transform(function($q){
+            $q->City->makeHidden(['created_at','updated_at','name_en','country_id']);
+            return $q;
+        });
 
         return $this->sendResponse($countries->toArray(), 'Countries retrieved successfully');
             }
             catch (\Exception $e) {
-                return $this->sendError('error save', 401);
+                return $this->sendError('error', 401);
             }
-        }
-        else {
-            return $this->sendError('error!', 401);
-        }
+
     }
 
     /**
@@ -149,3 +149,4 @@ class CountryAPIController extends Controller
         // return $this->sendResponse($country, __('lang.deleted_successfully', ['operator' => __('lang.category')]));
     }
 }
+
