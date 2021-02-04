@@ -18,10 +18,10 @@
     <div class="card-header">
       <ul class="nav nav-tabs align-items-end card-header-tabs w-100">
         <li class="nav-item">
-          <a class="nav-link" href="{!! route('delegate.index') !!}"><i class="fa fa-list mr-2"></i>{{trans('lang.delegate_table')}}</a>
+          <a class="nav-link" href="{!! route('sales_man.index') !!}"><i class="fa fa-list mr-2"></i>{{trans('lang.delegate_table')}}</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{!! route('delegate.create') !!}"><i class="fa fa-plus mr-2"></i>{{trans('lang.delegete_create')}}</a>
+          <a class="nav-link" href="{!! route('sales_man.create') !!}"><i class="fa fa-plus mr-2"></i>{{trans('lang.delegete_create')}}</a>
         </li>
         <li class="nav-item">
           <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-pencil mr-2"></i>{{trans('lang.delegate_edit')}}</a>

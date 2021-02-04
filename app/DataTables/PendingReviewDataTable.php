@@ -44,6 +44,7 @@ class PendingReviewDataTable extends DataTable
             ->editColumn('vendor_id',function ($review){
                 return getVendorName($review);
             })
+            
             ->editColumn('client_id',function ($review){
                 return getClientName($review);
             })
@@ -71,7 +72,11 @@ class PendingReviewDataTable extends DataTable
                 'title' => 'Client Name',
 
             ],
+            [
+                'data' => 'vendors.phone',
+                'title' => 'Phone',
 
+            ],
             [
                 'data' => 'description',
                 'title' => 'Description',
@@ -108,7 +113,7 @@ class PendingReviewDataTable extends DataTable
      */
     public function query(reviews $model)
     {
-        return $model->newQuery()->where('approved',0);
+        return $model->newQuery()->with('vendors')->where('approved',0);
     }
 
     /**

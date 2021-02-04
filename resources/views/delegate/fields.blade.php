@@ -30,9 +30,9 @@
         <div class="form-group row col-md-6">
             {!! Form::label('balance', 'Balance', ['class' => 'col-4 control-label text-right']) !!}
             <div class="col-8">
-                {!! Form::text('balance', null,  ['class' => 'form-control','placeholder'=>  'Balance','required']) !!}
+                {!! Form::number('balance', null,  ['class' => 'form-control','placeholder'=>  'Balance','required']) !!}
                 <div class="form-text text-muted">
-                balance
+                default 0
                 </div>
             </div>
         </div>

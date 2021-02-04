@@ -30,6 +30,8 @@ class UserRepository extends BaseRepository
         'remember_token',
         'duration_id',
         'start_date',
+        'delegate_id',
+        'user_id',
         'expire'
     ];
 

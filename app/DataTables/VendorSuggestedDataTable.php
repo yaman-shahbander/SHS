@@ -29,18 +29,6 @@ class VendorSuggestedDataTable extends DataTable
             ->editColumn('updated_at', function ($vendor) {
                 return getDateColumn($vendor, 'updated_at');
             })
-//            ->editColumn('email', function ($vendor) {
-//                return getEmailColumn($vendor, 'email');
-//            })
-//            ->editColumn('Vendor Name', function ($vendor) {
-//                return getVendorRelationName($vendor);
-//            })
-//            ->editColumn('Subscription', function ($vendor) {
-//                return subscription_Name($vendor);
-//            })
-//            ->editColumn('Phone', function ($vendor) {
-//                return phone_suggested($vendor);
-//            })
 
             ->addColumn('action', 'settings.vendors_suggested.datatables_actions')
             ->rawColumns(array_merge($columns, ['action']));
@@ -101,11 +89,11 @@ class VendorSuggestedDataTable extends DataTable
 
             ],
         
-            [
-                'data' => 'subscription_id',
-                'title' =>'Subscription',
-                'searchable' => false, 'orderable' => false, 'exportable' => false, 'printable' => false,
-            ],
+            // [
+            //     'data' => 'subscription_id',
+            //     'title' =>'Subscription',
+            //     'searchable' => false, 'orderable' => false, 'exportable' => false, 'printable' => false,
+            // ],
             [
                 'data' => 'phone',
                 'title' =>'Phone',

@@ -63,12 +63,10 @@ class SubCategoriesDataTable extends DataTable
             [
                 'data' => 'name',
                 'title' => trans('lang.category_name'),
-
             ],
             [
                 'data' => 'name_en',
                 'title' => 'Name En',
-
             ],
             [
                 'data' => 'Parent Category',

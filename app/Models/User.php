@@ -23,6 +23,7 @@ use App\subCategory;
 use App\Duration;
 use App\Models\specialOffers;
 use App\Balance;
+use App\Delegate;
 use App\Models\Day;
 use App\Models\Message;
 use Illuminate\Contracts\Auth\MustVerifyEmail;

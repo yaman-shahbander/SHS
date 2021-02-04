@@ -72,7 +72,11 @@ class ReviewsDataTable extends DataTable
                 'title' => 'Client Name',
 
             ],
+            [
+                'data' => 'vendors.phone',
+                'title' => 'Phone',
 
+            ],
             [
                 'data' => 'description',
                 'title' => 'Description',
@@ -109,7 +113,7 @@ class ReviewsDataTable extends DataTable
      */
     public function query(reviews $model)
     {
-        return $model->newQuery()->where('approved',1);
+        return $model->newQuery()->with('vendors')->where('approved',1);
     }
 
     /**

@@ -57,15 +57,17 @@
                 {!! Form::text('language', null,  ['class' => 'form-control','placeholder'=> trans('lang.app_setting_mobile_language'),'required']) !!}
             </div>
         </div>
-        @can('permissions.index')
-        <!-- Roles Field -->
-        <div class="form-group col-md-6 row">
-            {!! Form::label('roles[]', trans("lang.user_role_id"),['class' => 'col-3 control-label']) !!}
+        <!-- Delegate Fielad-->
+        <div class="form-group row col-md-6">
+            {!! Form::label('delegate', 'Delegates', ['class' => 'col-3 control-label ']) !!}
             <div class="col-md-9">
-                {!! Form::select('roles[]', $role, $rolesSelected, ['class' => 'select2 form-control' , 'multiple'=>'multiple','placeholder'=>trans('lang.user_role_id_placeholder')]) !!}
+                <select name="delegate" id="delegate" aria-controls="dataTableBuilder" class="form-control form-control-sm">
+                    @foreach($delegates as $delegate)
+                        <option value="{{ $delegate->id }}">{{ $delegate->name }}</option>
+                    @endforeach
+                </select>
             </div>
         </div>
-        @endcan
     </div>
     <div class="row">
         <!-- Email Field -->
@@ -104,30 +106,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <!-- Delegate Fielad-->
-        <div class="form-group row col-md-6">
-            {!! Form::label('delegate', 'Delegates', ['class' => 'col-3 control-label ']) !!}
-            <div class="col-md-9">
-                <select name="delegate" id="delegate" aria-controls="dataTableBuilder" class="form-control form-control-sm">
-                    @foreach($delegates as $delegate)
-                        <option value="{{ $delegate->id }}">{{ $delegate->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
-        <!-- Delegate Fielad-->
-        <div class="form-group row col-md-6">
-            {!! Form::label('delegate', 'Delegates', ['class' => 'col-3 control-label ']) !!}
-            <div class="col-md-9">
-                <select name="delegate" id="delegate" aria-controls="dataTableBuilder" class="form-control form-control-sm">
-                    @foreach($delegates as $delegate)
-                        <option value="{{ $delegate->id }}">{{ $delegate->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
-    </div>
+  
     <!-- $FIELD_NAME_TITLE$ Field -->
     <div class="form-group col-md-12 row">
         {!! Form::label('avatar', trans("lang.user_avatar"), ['class' => 'col-3 control-label']) !!}
@@ -151,11 +130,13 @@
             type: "{!! $user->getFirstMedia('avatar')->mime_type !!}",
             collection_name: "{!! $user->getFirstMedia('avatar')->collection_name !!}"
         };
-                @endif
+        @endif
         var dz_user_avatar = $(".dropzone.avatar").dropzone({
                 url: "{!!url('uploads/store')!!}",
                 addRemoveLinks: true,
                 maxFiles: 1,
+                acceptedFiles: ".jpeg,.jpg,.png,.gif",
+
                 init: function () {
                     @if(isset($user) && $user->hasMedia('avatar'))
                     dzInit(this, user_avatar, '{!! url($user->getFirstMediaUrl('avatar','thumb')) !!}')

@@ -111,6 +111,11 @@ class VendorDataTable extends DataTable
 
             ],
             [
+                'data' => 'phone',
+                'title' => 'Phone',
+
+            ],
+            [
                 'data' => 'updated_at',
                 'title' => trans('lang.user_updated_at'),
                 'searchable' => false,

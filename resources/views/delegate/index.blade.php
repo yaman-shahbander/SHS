@@ -11,7 +11,7 @@
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><a href="{{url('/dashboard')}}"><i class="fa fa-dashboard"></i> {{trans('lang.dashboard')}}</a></li>
-          <li class="breadcrumb-item"><a href="{!! route('delegate.index') !!}">{{trans('lang.delegates')}}</a>
+          <li class="breadcrumb-item"><a href="{!! route('sales_man.index') !!}">{{trans('lang.delegates')}}</a>
           </li>
           <li class="breadcrumb-item active">{{trans('lang.delegate_table')}}</li>
         </ol>
@@ -32,7 +32,7 @@
                 <i class="fa fa-list mr-2"></i>{{trans('lang.delegate_table')}}</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{!! route('delegate.create') !!}">
+                <a class="nav-link" href="{!! route('sales_man.create') !!}">
                 <i class="fa fa-plus mr-2"></i>{{trans('lang.delegate_create')}}</a>
             </li>
         @include('layouts.right_toolbar', compact('dataTable'))

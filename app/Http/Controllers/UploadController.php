@@ -77,6 +77,8 @@ class UploadController extends Controller
      */
     public function store(UploadRequest $request)
     {
+        dd($request);
+        
         $input = $request->all();
         try {
             $upload = $this->uploadRepository->create($input);

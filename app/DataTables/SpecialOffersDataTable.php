@@ -36,6 +36,9 @@ class SpecialOffersDataTable extends DataTable
             ->editColumn('updated_at', function ($special) {
                 return getDateColumn($special, 'updated_at');
             })
+            ->editColumn('created_at', function ($special) {
+                return getDateCreatedAtColumn($special, 'created_at');
+            })
             ->addColumn('action', 'special_offers.datatables_actions')
             ->editColumn('user_id', function ($special) {
                 return getsSpecialRelationName($special);
@@ -63,9 +66,19 @@ class SpecialOffersDataTable extends DataTable
                 'title' => 'Owner Vendor',
                 'searchable' => false, 'orderable' => false, 'exportable' => false, 'printable' => false,
             ],
+             [
+                'data' => 'phone',
+                'title' => 'Phone',
+
+            ],
             [
                 'data' => 'updated_at',
-                'title' => 'updated_at',
+                'title' => 'Updated At',
+                'searchable' => false,
+            ],
+            [
+                'data' => 'created_at',
+                'title' => 'Created At',
                 'searchable' => false,
             ]
 

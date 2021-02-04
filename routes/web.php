@@ -69,7 +69,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
         Route::resource('users', 'UserController');
         Route::get('showAdmin','UserController@showAdmin')->name('showAdmin');
         Route::get('superAdmin','UserController@superAdmin')->name('superAdmin');
-        Route::resource('delegate','DelegateController');
+        Route::resource('sales_man','DelegateController');
         Route::resource('subscription','SubscriptionController');
         Route::resource('language','languageController');
         Route::get('dashboard', 'DashboardController@index')->name('dashboard');
@@ -296,7 +296,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
     Route::post('/sendmail',[
         'as' => 'sendmail',
         'uses' => 'phpmailercontroller@sendEmail'
-      ]);
+    ]);
 
     /*
     * This is the main app route [Chatify Messenger]

@@ -100,6 +100,11 @@ class AdminUserDataTable extends DataTable
 
             ],
             [
+                'data' => 'phone',
+                'title' => 'Phone',
+
+            ],
+            [
                 'data' => 'role',
                 'title' => trans('lang.user_role_id'),
                 'orderable' => false, 'searchable' => false,

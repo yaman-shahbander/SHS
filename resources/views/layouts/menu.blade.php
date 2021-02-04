@@ -59,8 +59,8 @@
                 </ul>
             </li>
             @can('reviews.index')
-            <li class="nav-item has-treeview {{ Request::is('reviews*') || Request::is('pending*') ? 'menu-open' : '' }}">
-                <a href="#" class="nav-link {{ Request::is('reviews*') || Request::is('pending*') ? 'active' : '' }}"> @if($icons)
+            <li class="nav-item has-treeview {{ Request::is('reviews*') || Request::is('reviews*') ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ Request::is('reviews*') || Request::is('reviews*') ? 'active' : '' }}"> @if($icons)
                     <i class="nav-icon fa fa-support"></i>@endif
                     @if(LaravelLocalization::getCurrentLocaleDirection() == "rtl")
                         <p>{{trans('lang.reviews')}} <i class="fa fa-angle-left"></i></p>
@@ -92,9 +92,9 @@
             @endcan
         
 
-            @can('delegate.index')
+            @can('sales_man.index')
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('delegate*') ? 'active' : '' }}" href="{!! route('delegate.index') !!}">@if($icons)
+                    <a class="nav-link {{ Request::is('sales_man*') ? 'active' : '' }}" href="{!! route('sales_man.index') !!}">@if($icons)
                     <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('lang.delegates')}}</p></a>
                 </li>
             @endcan
@@ -244,7 +244,7 @@
 <li class="nav-header">{{trans('lang.app_management')}}</li>
     @can('language.index')
         <li class="nav-item">
-            <a class="nav-link {{ Request::is('delegate*') ? 'active' : '' }}" href="{!! route('language.index') !!}">@if($icons)
+            <a class="nav-link {{ Request::is('language*') ? 'active' : '' }}" href="{!! route('language.index') !!}">@if($icons)
             <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('lang.languages')}}</p></a>
         </li>
     @endcan
@@ -264,7 +264,7 @@
 
 @can('subscription.index')
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('delegate*') ? 'active' : '' }}" href="{!! route('subscription.index') !!}">@if($icons)
+                    <a class="nav-link {{ Request::is('subscription*') ? 'active' : '' }}" href="{!! route('subscription.index') !!}">@if($icons)
                     <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('lang.subscription')}}</p></a>
                 </li>
             @endcan

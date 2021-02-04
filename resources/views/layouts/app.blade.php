@@ -37,49 +37,6 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,600" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('css/custom.css')}}">
     <link rel="stylesheet" href="{{asset('css/'.setting("theme_color","primary").'.css')}}">
-    <style>
-
-.chat-widget-wrapper {
-  display: block;
-  width: 200px;
-  height: 0px;
-  position: absolute;
-  bottom: 110px;
-  right: 0;
-  padding: 10px;
-  cursor: pointer;
-  animation: all 2s linear;
-}
-
-.chat-widget-container {
-  position: relative;
-  padding: 10px;
-  /* background-color: #fff; */
-  border-radius: 4px;
-  
-
-  
-}
-
-.chat-widget-avatar {
-    width: 60px;
-    height: 0px;
-    position: absolute;
-    top: -32px;
-    right: 40px;
-    border: 4px solid #fff;
-    border-radius: 50%;
-}
-
-
-  
-  .chat-box-nav {
-    background-color: #00aeef;
-    width: 100%;
-    height: 40px;
-  }
-}
-    </style>
 <!--
     @if(Auth::user()->language ='ar')
         <link href="{{asset('localization/css/bootstrap1/bootstrap-rtl.min.css')}}" rel="stylesheet">
@@ -181,6 +138,11 @@
                         <a class="nav-link {{ Request::is('notifications*') ? 'active' : '' }}" href="{{ route('notification.index') }}"><i class="fa fa-bell"></i></a>
                     </li>
                 @endcan
+                @can('chats.index')
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::is('notifications*') ? 'active' : '' }}" href="{!! route('chatify') !!}"><i class="fa fa-comments"></i></a>
+                    </li>
+                @endcan
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <img src="{{auth()->user()->getFirstMediaUrl('avatar','icon')}}" class="brand-image mx-2 img-circle elevation-2" alt="User Image">
@@ -209,14 +171,7 @@
             @yield('content')
             
         </div>
-        @can('chats.index')
-            <div class="chat-widget-wrapper">
-                <div class="chat-widget-avatar">
-                
-                    <a href="{!! route('chatify') !!}"><img src="{{asset('236831.svg')}}" onmouseover="bigImg(this)" onmouseout="normalImg(this)"></a>
-                </div>
-            </div>
-        @endcan
+        
         <!-- Main Footer -->
         <footer class="main-footer {{setting('fixed_footer','')}}">
           
@@ -362,17 +317,7 @@
 
     <script src="{{asset('js/scripts.js')}}"></script>
 
-    <script>
-        function bigImg(x) {
-        x.style.height = "90px";
-        x.style.width = "90px";
-        }
-
-        function normalImg(x) {
-        x.style.height = "60px";
-        x.style.width = "80px";
-        }
-</script>
+   
     @stack('scripts')
     @yield('script')
 </body>
