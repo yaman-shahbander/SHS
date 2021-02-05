@@ -529,7 +529,7 @@ class UserAPIController extends Controller
 
     }
 
-    
+
 
     public function history(Request $request)
     {
@@ -555,7 +555,7 @@ class UserAPIController extends Controller
             foreach ($attrs as $attr) {
                 $respone[$i]['id'] = $attr->id;
                 $respone[$i]['name'] = $attr->name;
-                $respone[$i]['avatar'] = $attr->getFirstMediaUrl('avatar', 'icon');
+                $respone[$i]['avatar'] =asset('storage/Avatar').'/'.$attr->avatar;
                 $respone[$i]['last_name'] = $attr->last_name;
                 $respone[$i]['description'] = $attr->description;
                 $respone[$i]['rating'] = round((getRating($attr)/20)*2)/2;

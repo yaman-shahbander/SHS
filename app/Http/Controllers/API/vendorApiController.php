@@ -189,7 +189,7 @@ class vendorApiController extends Controller
                 $vendor = User::where('device_token', $request->header('devicetoken'))->first();
                 if (empty($vendor)) {
                     return $this->sendError('User not found', 401);
-                }        
+                }
                 $respone = [];
                 $reviewsHiddenColumns = ['custom_fields', 'media', 'has_media'];
                 $attrs = $vendor->clientsAPI->makeHidden($reviewsHiddenColumns);
@@ -206,12 +206,12 @@ class vendorApiController extends Controller
             }
 
           //  {{ date("g:i A",strtotime($hour->start)) }}
-
+//round((getRating($vendor)/20)*2)/2
             $respone = [
                 'id'             => $vendor->id,
                 'name'           => $vendor->name,
                 'email'          => $vendor->email,
-                'rating'         => getRating($vendor),
+                'rating'         => round((getRating($vendor)/20)*2)/2,
                 'description'    => $vendor->description,
                 'phone'          => $vendor->phone,
                 'avatar'         => asset('storage/Avatar').'/'.$vendor->avatar,
@@ -629,6 +629,9 @@ class vendorApiController extends Controller
             }
             return $this->sendResponse($response, "Referring added successfully!");
         }
+        else
+            return $this->sendError('Error', 401);
+
     }
 
 

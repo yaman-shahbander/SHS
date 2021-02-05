@@ -52,6 +52,11 @@ class ReviewsAPIController extends Controller
                 $input['knowledge_rating'] = $input['knowledge_rating'] * 20;
 
                 reviews::create($input);
+                $input['price_rating']     =round(($input['price_rating'] /20)*2)/2 ;
+                $input['service_rating']   = round(( $input['service_rating']/20)*2)/2 ;
+                $input['speed_rating']     = round(($input['speed_rating'] /20)*2)/2 ;
+                $input['trust_rating']     = round(($input['trust_rating']/20)*2)/2 ;
+                $input['knowledge_rating'] = round(($input['knowledge_rating'] /20)*2)/2;
 
                 return $this->sendResponse($input, 'Review Added successfully');
 
