@@ -72,26 +72,28 @@ class CategoryController extends Controller
      */
     public function store(CreateCategoryRequest $request)
     {
-        
         $input = $request->all();
         $input['name']=$input['name'];
         $input['name_en']=$input['name_en'];
-        $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->categoryRepository->model());
-        try {
-            $category = $this->categoryRepository->create($input);
-            $category->customFieldsValues()->createMany(getCustomFieldsValues($customFields, $request));
-            if (isset($input['image']) && $input['image']) {
-                $cacheUpload = $this->uploadRepository->getByUuid($input['image']);
-                $mediaItem = $cacheUpload->getMedia('image')->first();
-                $mediaItem->copy($category, 'image');
+        $category=$this->categoryRepository->where('name',$input['name'])->first();
+        if(!empty($category)){
+            Flash::error(__('lang.error', ['operator' => __('lang.category')]));
+        }else{
+            $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->categoryRepository->model());
+            try {
+                $category = $this->categoryRepository->create($input);
+                $category->customFieldsValues()->createMany(getCustomFieldsValues($customFields, $request));
+                if (isset($input['image']) && $input['image']) {
+                    $cacheUpload = $this->uploadRepository->getByUuid($input['image']);
+                    $mediaItem = $cacheUpload->getMedia('image')->first();
+                    $mediaItem->copy($category, 'image');
+                }
+            } catch (ValidatorException $e) {
+                Flash::error($e->getMessage());
             }
-        } catch (ValidatorException $e) {
-            Flash::error($e->getMessage());
+            Flash::success(__('lang.saved_successfully', ['operator' => __('lang.category')]));
+            return redirect(route('categories.index'));
         }
-
-        Flash::success(__('lang.saved_successfully', ['operator' => __('lang.category')]));
-
-        return redirect(route('categories.index'));
     }
 
     /**

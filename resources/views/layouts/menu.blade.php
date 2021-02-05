@@ -32,9 +32,9 @@
             <li class="nav-item has-treeview {{ Request::is('vendors*') || Request::is('special*')|| Request::is('suggested*') ? 'menu-open' : '' }}">
                 <a href="#" class="nav-link {{ Request::is('vendors*') || Request::is('vendors*') ? 'active' : '' }}"> @if($icons)<i class="nav-icon fa fa-support"></i>@endif
                 @if(LaravelLocalization::getCurrentLocaleDirection() == "rtl")
-                    <p>{{trans('lang.vendor_create')}} <i class="fa fa-angle-left"></i></p>
+                    <p>{{trans('lang.vendor')}} <i class="fa fa-angle-left"></i></p>
                 @else
-                    <p>{{trans('lang.vendor_create')}}<i class="right fa fa-angle-left"></i></p>
+                    <p>{{trans('lang.vendor')}}<i class="right fa fa-angle-left"></i></p>
                 @endif
                 </a>
                 <ul class="nav nav-treeview">
@@ -50,46 +50,10 @@
                         <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('lang.suggested')}}</p></a>
                     </li>
                     @endcan
-                    @can('offers.index')
-                    <li class="nav-item">
-                        <a class="nav-link {{ Request::is('special*') ? 'active' : '' }}" href="{!! route('offers.index') !!}">@if($icons)
-                        <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('lang.special_offers')}}</p></a>
-                    </li>
-                    @endcan
+                   
                 </ul>
             </li>
-            @can('reviews.index')
-            <li class="nav-item has-treeview {{ Request::is('reviews*') || Request::is('reviews*') ? 'menu-open' : '' }}">
-                <a href="#" class="nav-link {{ Request::is('reviews*') || Request::is('reviews*') ? 'active' : '' }}"> @if($icons)
-                    <i class="nav-icon fa fa-support"></i>@endif
-                    @if(LaravelLocalization::getCurrentLocaleDirection() == "rtl")
-                        <p>{{trans('lang.reviews')}} <i class="fa fa-angle-left"></i></p>
-                    @else
-                        <p>{{trans('lang.reviews')}}  <i class="right fa fa-angle-left"></i></p>
-                    @endif
-                </a>
-                <ul class="nav nav-treeview">
-                    @can('approved.index')
-                        <li class="nav-item">
-                            <a class="nav-link {{ Request::is('reviews*') ? 'active' : '' }}" href="{!! route('approved.index') !!}">@if($icons)
-                                    <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('lang.approved_reviews')}}</p></a>
-                        </li>
-                    @endcan
-                    @can('reviews.index')
-                        <li class="nav-item">
-                            <a class="nav-link {{ Request::is('pending*') ? 'active' : '' }}" href="{!! route('reviews.index') !!}">@if($icons)
-                                    <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('lang.pending_reviews')}}</p></a>
-                        </li>
-                    @endcan
-                </ul>
-            </li>
-            @endcan
-            @can('favorites.index')
-            <li class="nav-item">
-                <a class="nav-link {{ Request::is('homeOwnerFavorites*') ? 'active' : '' }}" href="{!! route('homeOwnerFavorites.index') !!}">@if($icons)
-                <i class="nav-icon fa fa-star"></i>@endif<p>{{trans('lang.favorites')}}</p></a>
-            </li>
-            @endcan
+           
         
 
             @can('sales_man.index')
@@ -98,33 +62,83 @@
                     <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('lang.delegates')}}</p></a>
                 </li>
             @endcan
-            @can('duration.index')
-            <li class="nav-item has-treeview {{ Request::is('vendorRegistration*') || Request::is('durationOffers*') ? 'menu-open' : '' }}">
-                <a href="#" class="nav-link {{ Request::is('durationOffers*') || Request::is('vendorRegistration*') ? 'active' : '' }}"> @if($icons)
-                        <i class="nav-icon fa fa-clock-o"></i>@endif
-                    <p>{{trans('lang.durations')}}<i class="right fa fa-angle-left"></i>
-                    </p>
-                </a>
-
-                <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a class="nav-link {{ Request::is('vendorRegistration*') ? 'active' : '' }}" href="{!! route('vendorRegistration.index') !!}">@if($icons)
-                                    <i class="nav-icon fa fa-clock-o"></i>@endif<p>{{trans('lang.durations')}}</p></a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link {{ Request::is('durationOffers*') ? 'active' : '' }}" href="{!! route('durationOffer.index') !!}">@if($icons)
-                                    <i class="nav-icon fa fa-clock-o"></i>@endif
-                                <p>{{trans('lang.duration_offers')}}</p></a>
-                        </li>
-                </ul>
-            </li>
-        @endcan
+            
         </ul>
         
     </li>
 @endcan
+    @can('reviews.index')
+    <li class="nav-item has-treeview {{ Request::is('reviews*') || Request::is('reviews*') ? 'menu-open' : '' }}">
+        <a href="#" class="nav-link {{ Request::is('reviews*') || Request::is('reviews*') ? 'active' : '' }}"> @if($icons)
+            <i class="nav-icon fa fa-support"></i>@endif
+            @if(LaravelLocalization::getCurrentLocaleDirection() == "rtl")
+                <p>{{trans('lang.reviews')}} <i class="fa fa-angle-left"></i></p>
+            @else
+                <p>{{trans('lang.reviews')}}  <i class="right fa fa-angle-left"></i></p>
+            @endif
+        </a>
+        <ul class="nav nav-treeview">
+            @can('approved.index')
+                <li class="nav-item">
+                    <a class="nav-link {{ Request::is('reviews*') ? 'active' : '' }}" href="{!! route('approved.index') !!}">@if($icons)
+                            <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('lang.approved_reviews')}}</p></a>
+                </li>
+            @endcan
+            @can('reviews.index')
+                <li class="nav-item">
+                    <a class="nav-link {{ Request::is('pending*') ? 'active' : '' }}" href="{!! route('reviews.index') !!}">@if($icons)
+                            <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('lang.pending_reviews')}}</p></a>
+                </li>
+            @endcan
+        </ul>
+    </li>
+    @endcan
+    @can('offers.index')
+    <li class="nav-item">
+        <a class="nav-link {{ Request::is('special*') ? 'active' : '' }}" href="{!! route('offers.index') !!}">@if($icons)
+        <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('lang.special_offers')}}</p></a>
+    </li>
+    @endcan
+    @can('favorites.index')
+    <li class="nav-item">
+        <a class="nav-link {{ Request::is('homeOwnerFavorites*') ? 'active' : '' }}" href="{!! route('homeOwnerFavorites.index') !!}">@if($icons)
+        <i class="nav-icon fa fa-star"></i>@endif<p>{{trans('lang.favorites')}}</p></a>
+    </li>
+    @endcan
+    @can('duration.index')
+    <li class="nav-item has-treeview {{ Request::is('vendorRegistration*') || Request::is('durationOffers*') ? 'menu-open' : '' }}">
+        <a href="#" class="nav-link {{ Request::is('durationOffers*') || Request::is('vendorRegistration*') ? 'active' : '' }}"> @if($icons)
+                <i class="nav-icon fa fa-clock-o"></i>@endif
+            <p>{{trans('lang.durations')}}<i class="right fa fa-angle-left"></i>
+            </p>
+        </a>
 
+        <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a class="nav-link {{ Request::is('vendorRegistration*') ? 'active' : '' }}" href="{!! route('vendorRegistration.index') !!}">@if($icons)
+                            <i class="nav-icon fa fa-clock-o"></i>@endif<p>{{trans('lang.durations')}}</p></a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {{ Request::is('durationOffers*') ? 'active' : '' }}" href="{!! route('durationOffer.index') !!}">@if($icons)
+                            <i class="nav-icon fa fa-clock-o"></i>@endif
+                        <p>{{trans('lang.duration_offers')}}</p></a>
+                </li>
+        </ul>
+    </li>
+    @endcan
+    @can('users.index')
+    <li class="nav-item">
+        <a class="nav-link {{ Request::is('users*') ? 'active' : '' }}" href="{!! route('users.index') !!}">@if($icons)
+                <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('lang.home_owner')}}</p></a>
+    </li>
+@endcan
+    @can('users.index')
+                <li class="nav-item">
+                    <a class="nav-link {{ Request::is('bannedUsers*') ? 'active' : '' }}" href="{!! route('bannedUsers.index') !!}">@if($icons)
+                            <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('lang.banned_users')}}</p></a>
+                </li>
+            @endcan
 <!-- @can('rating.index')
     <li class="nav-item">
         <a class="nav-link {{ Request::is('rating*') ? 'active' : '' }}" href="{!! route('rating.index') !!}">@if($icons)
@@ -132,39 +146,15 @@
     </li>
 @endcan -->
 
-@can('users.index')
-    <li class="nav-item has-treeview {{ Request::is('users*') || Request::is('bannedUsers*') ? 'menu-open' : '' }}">
-        <a href="#" class="nav-link {{ Request::is('users*') || Request::is('users*') ? 'active' : '' }}"> @if($icons)
-            <i class="nav-icon fa fa-support"></i>@endif
-            @if(LaravelLocalization::getCurrentLocaleDirection() == "rtl")
-            <p>{{trans('lang.home_owners')}} <i class="fa fa-angle-left"></i></p>
-            @else
-                <p>{{trans('lang.home_owners')}} <i class="right fa fa-angle-left"></i></p>
-            @endif
-        </a>
-        <ul class="nav nav-treeview">
-            @can('users.index')
-                <li class="nav-item">
-                    <a class="nav-link {{ Request::is('users*') ? 'active' : '' }}" href="{!! route('users.index') !!}">@if($icons)
-                            <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('lang.home_owner')}}</p></a>
-                </li>
-            @endcan
+
             <!-- @can('users.index')
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('users*') ? 'active' : '' }}" href="{!! route('showAdmin') !!}">@if($icons)
                             <i class="nav-icon fa fa-folder"></i>@endif<p>Admin</p></a>
                 </li>
             @endcan -->
-            @can('users.index')
-                <li class="nav-item">
-                    <a class="nav-link {{ Request::is('bannedUsers*') ? 'active' : '' }}" href="{!! route('bannedUsers.index') !!}">@if($icons)
-                            <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('lang.banned_users')}}</p></a>
-                </li>
-            @endcan
+            
 
-        </ul>
-    </li>
-@endcan
 @can('users.index')
     <li class="nav-item has-treeview {{ Request::is('users*') || Request::is('bannedUsers*') ? 'menu-open' : '' }}">
         <a href="#" class="nav-link {{ Request::is('users*') || Request::is('users*') ? 'active' : '' }}"> @if($icons)
@@ -249,18 +239,31 @@
         </li>
     @endcan
     @can('categories.index')
-        <li class="nav-item">
-            <a class="nav-link {{ Request::is('categories*') ? 'active' : '' }}" href="{!! route('categories.index') !!}">@if($icons)
-            <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('lang.category_plural')}}</p></a>
-        </li>
+    <li class="nav-item has-treeview {{ Request::is('categories*') || Request::is('subcategory*') ? 'menu-open' : '' }}">
+        <a href="#" class="nav-link {{ Request::is('categories*') || Request::is('subcategory*') ? 'active' : '' }}"> @if($icons)
+            <i class="nav-icon fa fa-support"></i>@endif
+            @if(LaravelLocalization::getCurrentLocaleDirection() == "rtl")
+            <p>{{trans('lang.category_plural')}} <i class="fa fa-angle-left"></i></p>
+            @else
+                <p>{{trans('lang.category_plural')}} <i class="right fa fa-angle-left"></i></p>
+            @endif
+        </a>
+        <ul class="nav nav-treeview">
+            @can('categories.index')
+            <li class="nav-item">
+                <a class="nav-link {{ Request::is('categories*') ? 'active' : '' }}" href="{!! route('categories.index') !!}">@if($icons)
+                <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('lang.category_plural')}}</p></a>
+            </li>
+            @endcan
+            @can('subcategory.index')
+            <li class="nav-item">
+                <a class="nav-link {{ Request::is('subcategory*') ? 'active' : '' }}" href="{!! route('subcategory.index') !!}">@if($icons)
+                <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('lang.subcategory')}}</p></a>
+            </li>
+            @endcan
+        </ul>
     @endcan
-    @can('subcategory.index')
-        <li class="nav-item">
-            <a class="nav-link {{ Request::is('subcategory*') ? 'active' : '' }}" href="{!! route('subcategory.index') !!}">@if($icons)
-            <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('lang.subcategory')}}</p></a>
-        </li>
-    @endcan
-</li>
+    </li>
 
 @can('subscription.index')
                 <li class="nav-item">

@@ -907,4 +907,5 @@ return [
     'balance_desc' => 'Balance Managment',
     'balance_edit' => 'Balance Edit',
     'balance_name' => 'Balance Name',
+    'error'=>'This name already exists',
 ];
