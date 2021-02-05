@@ -510,7 +510,7 @@ class UserAPIController extends Controller
                 $respone[$i]['avatar'] =asset('storage/Avatar').'/'.$attr->avatar;
                 $respone[$i]['last_name'] = $attr->last_name;
                 $respone[$i]['description'] = $attr->pivot->description;
-                $respone[$i]['rating'] = myReviewRating($attr);
+                $respone[$i]['rating'] = round((myReviewRating($attr)/20)*2)/2;
                 $respone[$i]['distance'] = $attr->coordinates==null ? distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)) : 'No coordinates provided for the current vendor';
 
                 //  $respone[$i]['distance'] = $attr->coordinates ? distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)) : 'No coordinates provided for the current vendor';
@@ -572,30 +572,45 @@ class UserAPIController extends Controller
 
     }
 
-    public function history(Request $request) {
-        if($request->header('devicetoken')) {
+    public function history(Request $request)
+    {
+        try {
+
+        if ($request->header('devicetoken')) {
             $user = User::where('device_token', $request->header('devicetoken'))->first();
-                if (empty($user)) {
-                    return $this->sendError('User not found', 401);
-                }
-            $userLatitude = $user->coordinates->latitude;
-            $userLongitude = $user->coordinates->longitude;
+            if (empty($user)) {
+                return $this->sendError('User not found', 401);
+            }
+            try{
+                $userLatitude = $user->coordinates->latitude;
+                $userLongitude = $user->coordinates->longitude;
+            }
+            catch (\Exception $e){
+                //   return $this->sendError(, 401);
+
+            }
             $HiddenColumns = ['custom_fields', 'media', 'has_media', 'pivot'];
             $attrs = $user->homeOwnerHistoryAPI->makeHidden($HiddenColumns);
             $respone = [];
             $i = 0;
-            foreach($attrs as $attr) {
+            foreach ($attrs as $attr) {
                 $respone[$i]['id'] = $attr->id;
                 $respone[$i]['name'] = $attr->name;
                 $respone[$i]['avatar'] = $attr->getFirstMediaUrl('avatar', 'icon');
                 $respone[$i]['last_name'] = $attr->last_name;
                 $respone[$i]['description'] = $attr->description;
-                $respone[$i]['rating'] = getRating($attr);
-                $respone[$i]['distance'] = $attr->coordinates ? distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)) : 'No coordinates provided for the current vendor';
+                $respone[$i]['rating'] = round((getRating($attr)/20)*2)/2;
+                $respone[$i]['distance'] = $attr->coordinates==null ? distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)) : 'No coordinates provided for the current vendor';
                 $i++;
             }
             return $this->sendResponse($respone, 'history retrieved successfully');
+        } else
+            return $this->sendError('Error!', 401);
         }
+        catch (\Exception $e) {
+            return $this->sendError($e->getMessage(), 401);
+        }
+
     }
 
     public function leaveReview(Request $request) {

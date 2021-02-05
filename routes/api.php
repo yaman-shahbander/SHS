@@ -30,11 +30,11 @@ Route::prefix('homeOwner')->group(function () {
     //change phone
     Route::post('change-phone', 'API\AuthController@change_phone');
     //My reviews
-    Route::post('myReviews', 'API\Driver\UserAPIController@myReviews');
+    Route::get('myReviews', 'API\Driver\UserAPIController@myReviews');
     //My favorites(BookMark)
     Route::post('bookMark', 'API\Driver\UserAPIController@bookMark');
     //History of vendors
-    Route::post('history', 'API\Driver\UserAPIController@history');
+    Route::get('history', 'API\Driver\UserAPIController@history');
     //Delete account
     Route::delete('deleteAccount', 'API\Driver\UserAPIController@delete');
     //Leave a review
@@ -105,10 +105,10 @@ Route::prefix('vendor')->group(function () {
     //contact and location update
     Route::post('contactLocationUpdate', 'API\vendorApiController@contactLocationUpdate');
     //supported subcategoies by the vendor
-    Route::get('supportedSubcategpries', 'API\vendorApiController@supportedSubcategpries');
+    Route::get('supportedSubcategories', 'API\vendorApiController@supportedSubcategpries');
     //supported subcategoies by the vendor
 
-    Route::post('changeSupportedSubcategpries', 'API\vendorApiController@saveSupportedSubcategpries');
+    Route::post('changeSupportedSubcategories', 'API\vendorApiController@saveSupportedSubcategpries');
     //Add a reply to a homeowner review (vendor reply to a homeowner)
     Route::post('vendorReplyToReview', 'API\Manager\UserAPIController@vendorReply');
     //get reply to a homeowner review (vendor reply to a homeowner)

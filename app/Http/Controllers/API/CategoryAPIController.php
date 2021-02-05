@@ -43,13 +43,9 @@ class CategoryAPIController extends Controller
      */
         public function index(Request $request)
     {
-        if($request->header('devicetoken')) {
 
             try {
-                $user = User::where('device_token', $request->header('devicetoken'))->first();
-                if (empty($user)) {
-                    return $this->sendError('User not found', 401);
-                }
+
 
         $categories = $this->categoryRepository->all(['id','name','description'])->makeHidden(['custom_fields','has_media','media'])->transform(function($q){
             $q->subCategory->transform(function($q){
@@ -78,10 +74,7 @@ class CategoryAPIController extends Controller
             catch (\Exception $e) {
                 return $this->sendError('error save', 401);
             }
-        }
-        else {
-            return $this->sendError('you dont have permission!', 401);
-        }
+
     }
 
     /**
