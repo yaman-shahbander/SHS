@@ -31,14 +31,18 @@ Route::prefix('homeOwner')->group(function () {
     Route::post('change-phone', 'API\AuthController@change_phone');
     //My reviews
     Route::get('myReviews', 'API\Driver\UserAPIController@myReviews');
-    //My favorites(BookMark)
-    Route::post('bookMark', 'API\Driver\UserAPIController@bookMark');
+    //Show My favorites(BookMark)
+    Route::get('showBookMark', 'API\bookmarkAPIController@index');
+    //store My favorites(BookMark)
+    Route::post('storeBookMark', 'API\bookmarkAPIController@store');
+    //remove My favorites(BookMark)
+    Route::post('removeBookMark', 'API\bookmarkAPIController@remove');
     //History of vendors
     Route::get('history', 'API\Driver\UserAPIController@history');
     //Delete account
     Route::delete('deleteAccount', 'API\Driver\UserAPIController@delete');
     //Leave a review
-    Route::post('leaveReview', 'API\Driver\UserAPIController@leaveReview');
+    Route::post('leaveReview', 'API\ReviewsAPIController@leaveReview');
     //Gmaps location
     Route::post('storegmapLocation', 'API\GmapLocationAPIController@store');
 
@@ -67,13 +71,17 @@ Route::prefix('vendor')->group(function () {
     //My reviews
     Route::post('myReviews', 'API\Manager\UserAPIController@myReviews');
     //My favorites(BookMark)
-    Route::post('bookMark', 'API\Manager\UserAPIController@bookMark');
+    Route::get('showBookMark', 'API\bookmarkAPIController@index');
+    //store My favorites(BookMark)
+    Route::post('storeBookMark', 'API\bookmarkAPIController@store');
+    //remove My favorites(BookMark)
+    Route::post('removeBookMark', 'API\bookmarkAPIController@remove');
     //History of vendors
     Route::post('history', 'API\Manager\UserAPIController@history');
     //Delete account
     Route::delete('deleteAccount', 'API\Manager\UserAPIController@delete');
     //Leave a review
-    Route::post('leaveReview', 'API\Manager\UserAPIController@leaveReview');
+    Route::post('leaveReview', 'API\ReviewsAPIController@leaveReview');
     //Gmaps location
     Route::post('storegmapLocation', 'API\GmapLocationAPIController@store');
 
@@ -163,7 +171,7 @@ Route::post('vendorWithRating', 'API\vendorApiController@index');
 //vendor profile API
 
 
-Route::post('vendorProfile', 'API\vendorApiController@profile');
+Route::get('vendorProfile', 'API\vendorApiController@profile');
 //User current balance API
 Route::post('currentBalance', 'API\MoneyAPIController@currentBalance');
 //History of all transactions API

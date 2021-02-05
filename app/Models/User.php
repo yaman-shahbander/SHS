@@ -322,11 +322,11 @@ class User extends Authenticatable implements HasMedia
     public function coordinates() {
         return $this->hasOne(GmapLocation::class, 'user_id');
     }
-    public function days() {
+    public function daysApi() {
         return $this->belongsToMany(Day::class,'days_vendors','vendor_id','day_id')->select(['name_en', 'name_ar','days_vendors.start', 'days_vendors.end'])
          ->withTimestamps();
    }
-   public function daysApi() {
+   public function days() {
     return $this->belongsToMany(Day::class,'days_vendors','vendor_id','day_id')->withPivot('start', 'end');
     }
 
