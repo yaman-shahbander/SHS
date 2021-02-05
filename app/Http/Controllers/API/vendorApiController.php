@@ -189,11 +189,12 @@ class vendorApiController extends Controller
                 $vendor = User::where('device_token', $request->header('devicetoken'))->first();
                 if (empty($vendor)) {
                     return $this->sendError('User not found', 401);
-                }        $respone = [];
-        $reviewsHiddenColumns = ['custom_fields', 'media', 'has_media'];
-        $attrs = $vendor->clientsAPI->makeHidden($reviewsHiddenColumns);
-        $reviews = [];
-        $i = 0;
+                }
+                $respone = [];
+                $reviewsHiddenColumns = ['custom_fields', 'media', 'has_media'];
+                $attrs = $vendor->clientsAPI->makeHidden($reviewsHiddenColumns);
+                $reviews = [];
+                $i = 0;
 
             foreach($attrs as $attr) {
                 $reviews[$i]['id'] = $attr->id;
@@ -204,13 +205,13 @@ class vendorApiController extends Controller
                 $i++;
             }
 
-
-
+          //  {{ date("g:i A",strtotime($hour->start)) }}
+//round((getRating($vendor)/20)*2)/2
             $respone = [
                 'id'             => $vendor->id,
                 'name'           => $vendor->name,
                 'email'          => $vendor->email,
-                'rating'         => getRating($vendor),
+                'rating'         => round((getRating($vendor)/20)*2)/2,
                 'description'    => $vendor->description,
                 'phone'          => $vendor->phone,
                 'avatar'         => asset('storage/Avatar').'/'.$vendor->avatar,
@@ -219,7 +220,11 @@ class vendorApiController extends Controller
                 'offers'         => $vendor->specialOffers->makeHidden(['user_id', 'created_at', 'updated_at']),
                 'reviews_count'  => count($reviews),
                 'reviews'        => $reviews,
-                'working_hours'  => $vendor->days->makeHidden('pivot'),
+                'working_hours'  => $vendor->daysApi->transform(function($q){
+                    $q['start'] = date("g:i A",strtotime($q->start));
+                    $q['end'] = date("g:i A",strtotime($q->end));
+                    return $q->only('name_en', 'name_ar', 'start', 'end');
+                }),
                 'availability'   => $vendor->vendor_city->makeHidden('pivot'),
                 'image'          => $vendor->gallery->transform(function($gallery){
                                     $gallery['image'] = asset('storage/gallery') . '/' . $gallery['image'];
@@ -589,15 +594,11 @@ class vendorApiController extends Controller
 
             $response = [];
 
-            $referer_deviceToken = $request->header('devicetoken'); // The user who's referring a vendor.
+            $referer = User::where('device_token', $request->header('devicetoken'))->first('id')->makeHidden($hiddenElems);
 
-            if (empty($referer_deviceToken)) {
+            if (empty($referer)) {
                 return $this->sendError('User not found', 401);
             }
-
-            $referer_id = User::where('device_token', $referer_deviceToken)->get('id')->makeHidden($hiddenElems);
-
-            $referer_id = $referer_id[0]->id;
 
             $rules = [
                 'name' => 'required',
@@ -622,12 +623,15 @@ class vendorApiController extends Controller
                     'name'    =>  $request->name,
                     'email'   =>  $request->email,
                     'phone'   =>  $request->phone,
-                    'user_id' =>  $referer_id
+                    'user_id' =>  $referer->id
                 ]);
 
             }
             return $this->sendResponse($response, "Referring added successfully!");
         }
+        else
+            return $this->sendError('Error', 401);
+
     }
 
 
