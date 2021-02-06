@@ -52,7 +52,7 @@ function getvendorRegistrationdiscount($vendorduration) {
 }
 
 function getUserStatus($user) {
-    return $user->status->status_type;
+    return $user->status_id;
 }
 
 function getTransfererName($TransferTransaction) {

@@ -719,6 +719,8 @@ class UserAPIController extends Controller
                 'rating' => round((getRating($vendor) / 20) * 2) / 2,
                 'count_reviews' => count($vendor->clients),
                 'count_contected' => count($vendor->messages->unique('from_id')),
+                'count_views' => 0,
+                'count_favorites' => 0,
                 'reviews' => ($vendor->clientsAPI)->transform(function ($q) {
                     $review = reviews::find($q->pivot->id);
                     return $q = [
@@ -789,6 +791,7 @@ class UserAPIController extends Controller
 //                });
                 if($user->city_id==null){
                     $response = [
+                        'notification'=> $user->notification,
                         'lang' => $user->language,
                         'city_id' => '',
                         'country_id' =>  ''
@@ -797,6 +800,7 @@ class UserAPIController extends Controller
                 }
                 else
                 $response = [
+                    'notification'=> $user->notification,
                     'lang' => $user->language,
                     'city_id' => $user->city_id,
                     'country_id' =>  (Country::find($user->cities->country_id))->id
@@ -822,10 +826,10 @@ class UserAPIController extends Controller
                     return $this->sendError('User not found', 401);
                 }
 
-                $user->update([
-                    'city_id' => $request->city_id,
-                    'language' => $request->lang
-                ]);
+                $user->notification=$request->notification;
+                $user->city_id=$request->city_id;
+                $user->language=$request->lang;
+                $user->save();
 
                 return $this->sendResponse([], 'Inforamtion saved successfully');;
             }

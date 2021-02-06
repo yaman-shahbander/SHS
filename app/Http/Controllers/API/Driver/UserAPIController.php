@@ -648,10 +648,10 @@ class UserAPIController extends Controller
                     return $this->sendError('User not found', 401);
                 }
 
-                $user->update([
-                    'city_id' => $request->city_id,
-                    'language' => $request->lang
-                ]);
+                $user->notification=$request->notification;
+                $user->city_id=$request->city_id;
+                $user->language=$request->lang;
+                $user->save();
 
                 return $this->sendResponse([], 'Inforamtion saved successfully');;
             }
