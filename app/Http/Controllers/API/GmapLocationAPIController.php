@@ -60,7 +60,7 @@ class GmapLocationAPIController extends Controller
                     return $this->sendResponse([], 'Coordinates failed to save');
                 }
             } catch (\Exception $e) {
-                return $this->sendError('error', 401);
+                return $this->sendError('something was wrong', 401);
 
             }
         }

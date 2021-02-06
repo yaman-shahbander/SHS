@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\GmapLocation;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -469,6 +470,11 @@ class vendorApiController extends Controller
                     if (empty($user)) {
                         return $this->sendError('User not found', 401);
                     }
+                    if($user->coordinates==null) {
+                        $coordinates = new GmapLocation();
+                        $coordinates->user_id = $user->id;
+                        $coordinates->save();
+                    }
                     $user->coordinates->latitude = $request->input('latitude') == null ? '' : $request->input('latitude', '');
                     // $user->coordinates->latitude  = $request->latitude;
                     // $user->coordinates->longitude = $request->longitude;
@@ -513,52 +519,55 @@ class vendorApiController extends Controller
            $lang = false;
            if ($request->header('devicetoken')) {
                $vendor = User::where('device_token', $request->header('devicetoken'))->first();
-               $sub = $vendor->subcategories->transform(function ($q) {
 
-                   return $q->id;
-               });
                //return $sub;
-               $l = $vendor->language;
-               $arr = [
-                   'lang' => $vendor->language,
-                   'bool' => $lang
-               ];
+
                if (!empty($vendor)) {
+
+                   $sub = $vendor->subcategories->transform(function ($q) {
+
+                       return $q->id;
+                   });
+                   $l = $vendor->language;
+                   $arr = [
+                       'lang' => $vendor->language,
+                       'bool' => $lang
+                   ];
                    $ids = [3, 4, 7];
                    $hiddenElems = ['created_at', 'updated_at', 'custom_fields', 'has_media'];
-                   try {
-                       $categories = Category::with('subCategory')->get(['id', 'name_' . $vendor->language, 'description'])->transform(function ($q) use ($sub) {
-
-                           $q->subCategory->transform(function ($q) use ($sub) {
-                               if (in_array($q->id, $sub->toArray()))
-                                   $q['check'] = 1;
-                               else
-                                   $q['check'] = 0;
-                               return $q;
-                           });
-                           return $q;
-                       });
-                       $lang = true;
-                   } catch (\Exception  $e) {
-                       return $this->sendError('something was wrong ');
-                   }
+//                   try {
+//                       $categories = Category::with('subCategory')->get(['id', 'name_' . $vendor->language, 'description'])->transform(function ($q) use ($sub) {
+//
+//                           $q->subCategory->transform(function ($q) use ($sub) {
+//                               if (in_array($q->id, $sub->toArray()))
+//                                   $q['check'] = 1;
+//                               else
+//                                   $q['check'] = 0;
+//                               return $q;
+//                           });
+//                           return $q;
+//                       });
+//                       $lang = true;
+//                   } catch (\Exception  $e) {
+//                       return $this->sendError('something was wrong ');
+//                   }
 
                    $respone = [];
-                   foreach ($categories as $category) {
-                       $respone[] = [
-                           'id' => $category->id,
-                           'name' => $lang ?
-                               $category['name_' . $vendor->language] : $category['name'],
-                           'description' => $category->description,
-                           'sub_categories' => $category->subCategory->transform(function ($q) use ($arr) {
+//                   foreach ($categories as $category) {
+//                       $respone[] = [
+//                           'id' => $category->id,
+//                           'name' => $lang ?
+//                               $category['name_' . $vendor->language] : $category['name'],
+//                           'description' => $category->description,
+//                           'sub_categories' => $category->subCategory->transform(function ($q) use ($arr) {
+//
+//                               return $q->only(['id', 'name', 'check']);
+//                           })
+//                       ];
+//
+//                   }
 
-                               return $q->only(['id', 'name', 'check']);
-                           })
-                       ];
-
-                   }
-
-                   return $this->sendResponse($respone, 'Categories with subcategories retrieved successfully!');
+                   return $this->sendResponse($sub, 'Categories with subcategories retrieved successfully!');
                } else {
                    return $this->sendResponse([], 'User not found!');
                }
