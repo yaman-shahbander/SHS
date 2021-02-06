@@ -582,39 +582,49 @@ class UserAPIController extends Controller
                 if (empty($user)) {
                     return $this->sendError('User not found', 401);
                 }
+//
+//                $hiddenElems = ['created_at', 'updated_at', 'name_en'];
+//                $arr = [
+//                    'UserCityId' => $user->city_id,
+//                    'UserCountryId' => (Country::find($user->cities->country_id))->id
+//                ];
+//
+//                $countries = Country::all()->makeHidden($hiddenElems)->transform(function ($c) use ($arr) {
+//                    $c->cities->transform(function ($c) use ($arr) {
+//                        // if (in_array($c->toArray()['id'], $UserCityId))
+//                        if ($c->id == $arr['UserCityId'])
+//
+//                            $c['check'] = 1;
+//                        else
+//                            $c['check'] = 0;
+//
+//                        return $c;
+//                    });
+//
+//                    if ($c->id == $arr['UserCountryId'])
+//
+//                        $c['check'] = 1;
+//                    else
+//                        $c['check'] = 0;
+//
+//
+//                    return $c;
+//                });
+                if($user->city_id==null){
+                    $response = [
+                        'lang' => $user->language,
+                        'city_id' => '',
+                        'country_id' =>  ''
 
-                $hiddenElems = ['created_at', 'updated_at', 'name_en'];
-                $arr = [
-                    'UserCityId' => $user->city_id,
-                    'UserCountryId' => (Country::find($user->cities->country_id))->id
-                ];
+                    ];
+                }
+                else
+                    $response = [
+                        'lang' => $user->language,
+                        'city_id' => $user->city_id,
+                        'country_id' =>  (Country::find($user->cities->country_id))->id
 
-                $countries = Country::all()->makeHidden($hiddenElems)->transform(function ($c) use ($arr) {
-                    $c->cities->transform(function ($c) use ($arr) {
-                        // if (in_array($c->toArray()['id'], $UserCityId))
-                        if ($c->id == $arr['UserCityId'])
-
-                            $c['check'] = 1;
-                        else
-                            $c['check'] = 0;
-
-                        return $c;
-                    });
-
-                    if ($c->id == $arr['UserCountryId'])
-
-                        $c['check'] = 1;
-                    else
-                        $c['check'] = 0;
-
-
-                    return $c;
-                });
-                $response = [
-                    'lang' => $user->language,
-                    'countries' => $countries
-
-                ];
+                    ];
 
 
                 return $this->sendResponse($response, 'Inforamtion retrieved successfully');;

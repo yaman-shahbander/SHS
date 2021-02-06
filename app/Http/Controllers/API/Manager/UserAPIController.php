@@ -605,7 +605,7 @@ class UserAPIController extends Controller
 
     }
 
-    
+
 
     public function history(Request $request)
     {
@@ -648,7 +648,7 @@ class UserAPIController extends Controller
 
     }
 
-    
+
 
     public function backgroundPic(Request $request)
     {
@@ -712,6 +712,8 @@ class UserAPIController extends Controller
             }
             $response = [];
             $response = [
+                'avatar' =>asset('storage/Avatar').'/'.$vendor->avatar,
+                'background' =>asset('storage/vendors_background').'/'.($vendor->background_profile==null?'background.jpg':$vendor->background_profile),
                 'first_name' => $vendor->name,
                 'status' => $vendor->status->only('id', 'status_type'),
                 'rating' => round((getRating($vendor) / 20) * 2) / 2,
@@ -756,38 +758,48 @@ class UserAPIController extends Controller
                 if (empty($user)) {
                     return $this->sendError('User not found', 401);
                 }
+//
+//                $hiddenElems = ['created_at', 'updated_at', 'name_en'];
+//                $arr = [
+//                    'UserCityId' => $user->city_id,
+//                    'UserCountryId' => (Country::find($user->cities->country_id))->id
+//                ];
+//                //return dd(Country::with('City')->get());
+//
+//                $countries = Country::all()->makeHidden($hiddenElems)->transform(function ($c) use ($arr) {
+//                    $c->City->transform(function ($c) use ($arr) {
+//                        // if (in_array($c->toArray()['id'], $UserCityId))
+//                        if ($c->id == $arr['UserCityId'])
+//
+//                            $c['check'] = 1;
+//                        else
+//                            $c['check'] = 0;
+//
+//                        return $c->only('id', 'city_name', 'check');
+//                    });
+//
+//                    if ($c->id == $arr['UserCountryId'])
+//
+//                        $c['check'] = 1;
+//                    else
+//                        $c['check'] = 0;
+//
+//
+//                    return $c;
+//                });
+                if($user->city_id==null){
+                    $response = [
+                        'lang' => $user->language,
+                        'city_id' => '',
+                        'country_id' =>  ''
 
-                $hiddenElems = ['created_at', 'updated_at', 'name_en'];
-                $arr = [
-                    'UserCityId' => $user->city_id,
-                    'UserCountryId' => (Country::find($user->cities->country_id))->id
-                ];
-                //return dd(Country::with('City')->get());
-
-                $countries = Country::all()->makeHidden($hiddenElems)->transform(function ($c) use ($arr) {
-                    $c->City->transform(function ($c) use ($arr) {
-                        // if (in_array($c->toArray()['id'], $UserCityId))
-                        if ($c->id == $arr['UserCityId'])
-
-                            $c['check'] = 1;
-                        else
-                            $c['check'] = 0;
-
-                        return $c->only('id', 'city_name', 'check');
-                    });
-
-                    if ($c->id == $arr['UserCountryId'])
-
-                        $c['check'] = 1;
-                    else
-                        $c['check'] = 0;
-
-
-                    return $c;
-                });
+                    ];
+                }
+                else
                 $response = [
                     'lang' => $user->language,
-                    'countries' => $countries
+                    'city_id' => $user->city_id,
+                    'country_id' =>  (Country::find($user->cities->country_id))->id
 
                 ];
 
@@ -795,7 +807,7 @@ class UserAPIController extends Controller
 
             }
         } catch (\Exception $e) {
-            return $this->sendError($e->getMessage(), 401);
+            return $this->sendError('something was wrong', 401);
 
         }
     }
@@ -953,8 +965,8 @@ class UserAPIController extends Controller
                     if (in_array($days->id, $arr['supported'])) {
                         $days['check'] = 1;
                         $days['workHours'] = [
-                            'start' => $days->Vendordays->where('id', $arr['vendor_id'])->first()->pivot->start,
-                            'end' => $days->Vendordays->where('id', $arr['vendor_id'])->first()->pivot->end,
+                            'start' => date("g:i A",strtotime($days->Vendordays->where('id', $arr['vendor_id'])->first()->pivot->start)),
+                            'end' => date("g:i A",strtotime($days->Vendordays->where('id', $arr['vendor_id'])->first()->pivot->end)),
                         ];
                     } else
                         $days['check'] = 0;
@@ -977,9 +989,20 @@ class UserAPIController extends Controller
             if ($request->header('devicetoken')) {
                 $vendor = User::where('device_token', $request->header('devicetoken'))->first();
                 if (!empty($vendor)) {
+                    $time_in_24_hour_format  = date("H:i", strtotime("1:30 PM"));
+$days=[];
 
+                    foreach ($request->days as $day){
+                       // return $day['day_id'];
 
-                    $vendor->days()->sync($request->days);
+                        $days[]=[
+          'day_id'=>$day['day_id'],
+          'start'=>date("H:i", strtotime($day['start'])),
+          'end'=>date("H:i", strtotime($day['end'])),
+               ];
+                    }
+
+                    $vendor->days()->sync($days);
                     return $this->sendResponse([], 'Data saved successfully');
                 } else {
                     return $this->sendError('User not found', 401);
@@ -988,7 +1011,7 @@ class UserAPIController extends Controller
                 return $this->sendResponse([], 'Error');
             }
         } catch (\Exception $e) {
-            return $this->sendError('somthing was wrong', 401);
+            return $this->sendError($e->getMessage(), 401);
 
         }
     }
