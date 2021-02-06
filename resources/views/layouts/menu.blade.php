@@ -29,8 +29,8 @@
         </a>
         <!-- Service Provider -->
         <ul class="nav nav-treeview">
-            <li class="nav-item has-treeview {{ Request::is('vendors*') || Request::is('special*')|| Request::is('suggested*') ? 'menu-open' : '' }}">
-                <a href="#" class="nav-link {{ Request::is('vendors*') || Request::is('vendors*') ? 'active' : '' }}"> @if($icons)<i class="nav-icon fa fa-support"></i>@endif
+            <li class="nav-item has-treeview {{ Request::is('vendors*') || Request::is('vendors*') ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ Request::is('vendor*') || Request::is('vendor*') ? 'active' : '' }}"> @if($icons)<i class="nav-icon fa fa-support"></i>@endif
                 @if(LaravelLocalization::getCurrentLocaleDirection() == "rtl")
                     <p>{{trans('lang.vendor')}} <i class="fa fa-angle-left"></i></p>
                 @else
@@ -46,7 +46,7 @@
                     @endcan
                     @can('vendor.index')
                     <li class="nav-item">
-                        <a class="nav-link {{ Request::is('suggested*') ? 'active' : '' }}" href="{!! route('vendor.index') !!}">@if($icons)
+                        <a class="nav-link {{ Request::is('vendor*') ? 'active' : '' }}" href="{!! route('vendor.index') !!}">@if($icons)
                         <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('lang.suggested')}}</p></a>
                     </li>
                     @endcan
@@ -68,8 +68,8 @@
     </li>
 @endcan
     @can('reviews.index')
-    <li class="nav-item has-treeview {{ Request::is('reviews*') || Request::is('reviews*') ? 'menu-open' : '' }}">
-        <a href="#" class="nav-link {{ Request::is('reviews*') || Request::is('reviews*') ? 'active' : '' }}"> @if($icons)
+    <li class="nav-item has-treeview {{ Request::is('reviews*') || Request::is('pending*') ? 'menu-open' : '' }}">
+        <a href="#" class="nav-link {{ Request::is('reviews*') || Request::is('pending*') ? 'active' : '' }}"> @if($icons)
             <i class="nav-icon fa fa-support"></i>@endif
             @if(LaravelLocalization::getCurrentLocaleDirection() == "rtl")
                 <p>{{trans('lang.reviews')}} <i class="fa fa-angle-left"></i></p>
@@ -106,8 +106,8 @@
     </li>
     @endcan
     @can('duration.index')
-    <li class="nav-item has-treeview {{ Request::is('vendorRegistration*') || Request::is('durationOffers*') ? 'menu-open' : '' }}">
-        <a href="#" class="nav-link {{ Request::is('durationOffers*') || Request::is('vendorRegistration*') ? 'active' : '' }}"> @if($icons)
+    <li class="nav-item has-treeview {{ Request::is('vendorRegistration*') || Request::is('durationOffer*') ? 'menu-open' : '' }}">
+        <a href="#" class="nav-link {{ Request::is('vendorRegistration*') || Request::is('durationOffer*') ? 'active' : '' }}"> @if($icons)
                 <i class="nav-icon fa fa-clock-o"></i>@endif
             <p>{{trans('lang.durations')}}<i class="right fa fa-angle-left"></i>
             </p>
@@ -120,7 +120,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('durationOffers*') ? 'active' : '' }}" href="{!! route('durationOffer.index') !!}">@if($icons)
+                    <a class="nav-link {{ Request::is('durationOffer*') ? 'active' : '' }}" href="{!! route('durationOffer.index') !!}">@if($icons)
                             <i class="nav-icon fa fa-clock-o"></i>@endif
                         <p>{{trans('lang.duration_offers')}}</p></a>
                 </li>
@@ -156,8 +156,8 @@
             
 
 @can('users.index')
-    <li class="nav-item has-treeview {{ Request::is('users*') || Request::is('bannedUsers*') ? 'menu-open' : '' }}">
-        <a href="#" class="nav-link {{ Request::is('users*') || Request::is('users*') ? 'active' : '' }}"> @if($icons)
+    <li class="nav-item has-treeview {{ Request::is('superAdmin*') || Request::is('showAdmin*') ? 'menu-open' : '' }}">
+        <a href="#" class="nav-link {{ Request::is('superAdmin*') || Request::is('showAdmin*') ? 'active' : '' }}"> @if($icons)
             <i class="nav-icon fa fa-support"></i>@endif
             @if(LaravelLocalization::getCurrentLocaleDirection() == "rtl")
             <p>{{trans('lang.dashboard_admins')}} <i class="fa fa-angle-left"></i></p>
@@ -168,13 +168,13 @@
         <ul class="nav nav-treeview">
             @can('showAdmin')
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('users*') ? 'active' : '' }}" href="{!! route('showAdmin') !!}">@if($icons)
+                    <a class="nav-link {{ Request::is('showAdmin*') ? 'active' : '' }}" href="{!! route('showAdmin') !!}">@if($icons)
                             <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('lang.normal_admins')}}</p></a>
                 </li>
             @endcan
             @can('superAdmin')
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('users*') ? 'active' : '' }}" href="{!! route('superAdmin') !!}">@if($icons)
+                    <a class="nav-link {{ Request::is('superAdmin*') ? 'active' : '' }}" href="{!! route('superAdmin') !!}">@if($icons)
                             <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('lang.super_admins')}}</p></a>
                 </li>
             @endcan
