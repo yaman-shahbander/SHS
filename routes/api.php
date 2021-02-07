@@ -169,16 +169,19 @@ Route::post('forgot-password', 'API\AuthController@forgot_password');
 //vendor rating API
 Route::post('vendorWithRating', 'API\vendorApiController@index');
 //vendor profile API
-
-
 Route::get('vendorProfile', 'API\vendorApiController@profile');
 //User current balance API
-Route::post('currentBalance', 'API\MoneyAPIController@currentBalance');
+Route::get('currentBalance', 'API\MoneyAPIController@currentBalance');
 //History of all transactions API
-Route::post('transactions', 'API\MoneyAPIController@history');
+Route::get('transactions', 'API\MoneyAPIController@history');
 //Transfer money API
 Route::post('transfer', 'API\MoneyAPIController@transferMoney');
 //Route::resource('filter', 'API\FilterVendorsAPIController');
+
+//Viewed vendor api
+Route::post('ViewVendor', 'API\ViewsAPIController@viewVendor');
+//contacted vendor api
+Route::post('contactVendor', 'API\ContactAPIController@contactVendor');
 
 //FIlter vendors API
 Route::post('getfilter', 'API\FilterVendorsAPIController@index');
@@ -202,11 +205,6 @@ Route::post('vendorRefer', 'API\vendorApiController@vendorRefer');
 Route::get('langCountryCity', 'API\Driver\UserAPIController@langCountryCity');
 //save language, country, and city
 Route::post('savelangCountryCity', 'API\Driver\UserAPIController@savelangCountryCity');
-
-
-
-
-
 //
 Route::resource('restaurants', 'API\RestaurantAPIController');
 
@@ -285,17 +283,3 @@ Route::middleware('auth:api')->group(function () {
 //for dashboard
 Route::post('user/select','UserController@getcity');
 Route::post('subcategory/select','NotificationController@getsubcategory');
-
-
-/*
-if ($request->device_code) {
-            $vednor = User::where('device_code', $request->device_code)->first();
-            if (!empty($vednor)) {
-
-            } else {
-
-            }
-        } else {
-
-        }
-*/

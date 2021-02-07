@@ -698,6 +698,25 @@ class UserAPIController extends Controller
     //     return $q->select(['name', 'description'])->get();
     // })
 
+    /**public function history(Request $request) {
+        if($request->header('devicetoken')) {
+
+            $user = User::where('device_token', $request->header('devicetoken'))->first();
+
+            if (empty($user)) {
+                return $this->sendError('User not found', 401);
+            }
+
+            $transactionsHistory = $user->ToUserName->transform(function($q){
+
+                
+            });
+
+            return $this->sendResponse($transactionsHistory->toArray(), 'History retrieved successfully');
+        }
+        
+        */
+
     public function vendorprofile(Request $request)
     { //for vendor screens
         try {
@@ -718,9 +737,9 @@ class UserAPIController extends Controller
                 'status' => $vendor->status->only('id', 'status_type'),
                 'rating' => round((getRating($vendor) / 20) * 2) / 2,
                 'count_reviews' => count($vendor->clients),
-                'count_contected' => count($vendor->messages->unique('from_id')),
-                'count_views' => 0,
-                'count_favorites' => 0,
+                'count_contacted' => count($vendor->userContacts),
+                'count_views' => count($vendor->userViews),
+                'count_favorites' => count($vendor->homeOwnerFavorite),
                 'reviews' => ($vendor->clientsAPI)->transform(function ($q) {
                     $review = reviews::find($q->pivot->id);
                     return $q = [
