@@ -26,7 +26,83 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('test');
+        // return view('test');
+        echo "<html>
+        <head>
+            <title>Phone Number Authentication with Firebase Web</title>
+        </head>
+        <body>
+        <h1>Enter number to create account</h1>
+        
+            <input type=\"text\" id=\"number\" placeholder=\"+923********\">
+            <div id=\"recaptcha-container\"></div>
+        <script src=\"https://www.gstatic.com/firebasejs/6.0.2/firebase.js\"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#config-web-app -->
+
+<script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+         apiKey: \"AIzaSyCE0H2KspWAn5B7Yx_Tn9we-_UrTZQNqy0\",
+         authDomain: \"anyany-823fe.firebaseapp.com\",
+         projectId: \"anyany-823fe\",
+         storageBucket: \"anyany-823fe.appspot.com\",
+         messagingSenderId: \"522139515845\",
+         appId: \"1:522139515845:web:02dbfaf742cc6fcbd0a9ac\",
+         measurementId: \"G-H1GVX0PP02\"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+</script>
+        
+        <script type=\"text/javascript\">window.onload=function () {
+            render();
+            phoneAuth();
+          };
+          function render() {
+            window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+                 'size': 'invisible',
+                 'callback': function (response) {
+                     // reCAPTCHA solved, allow signInWithPhoneNumber.
+                     console.log('recaptcha resolved');
+                 }
+             });
+             // onSignInSubmit();
+         }
+          
+          function phoneAuth() {
+                  console.log('coderesult');
+          
+              //get the number
+              var number='+963934649685';
+              //phone number authentication function of firebase
+              //it takes two parameter first one is number,,,second one is recaptcha
+              firebase.auth().signInWithPhoneNumber(number,window.recpatchaVerifier).then(function (confirmationResult) {
+                  //s is in lowercase
+                  window.confirmationResult=confirmationResult;
+                  coderesult=confirmationResult;
+                  console.log(coderesult);
+                  alert(\"Message sent\");
+              }).catch(function (error) {
+                  alert(error.message);
+              });
+          }
+          function codeverify() {
+              var code=document.getElementById('verificationCode').value;
+              coderesult.confirm(code).then(function (result) {
+                  alert(\"Successfully registered\");
+                  var user=result.user;
+                  console.log(user);
+              }).catch(function (error) {
+                  alert(error.message);
+              });
+          } </script>
+          
+          </body>
+</html>";
+        return 111;
+
     }
 
 
@@ -52,6 +128,9 @@ class HomeController extends Controller
         
         // // return ($user->notify(new \App\Notifications\VerifyEmail()));
         // return view('home');
+
+        echo '<script type="text/javascript">alert("sss") </script>';
+
 
     }
 

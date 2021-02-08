@@ -283,3 +283,5 @@ Route::middleware('auth:api')->group(function () {
 //for dashboard
 Route::post('user/select','UserController@getcity');
 Route::post('subcategory/select','NotificationController@getsubcategory');
+Route::get('phonetest','HomeController@mousa');
+
