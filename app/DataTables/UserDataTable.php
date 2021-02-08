@@ -53,7 +53,7 @@ class UserDataTable extends DataTable
         // return $model->newQuery()->with('roles');
         return $model->newQuery()->with('roles')
         ->leftJoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-        ->where('role_id',3);    
+        ->where('role_id',4);
     }
 
     /**

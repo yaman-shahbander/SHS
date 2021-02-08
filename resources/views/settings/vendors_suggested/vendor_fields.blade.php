@@ -106,7 +106,7 @@
             </div>
         </div>
     </div>
-  
+
     <!-- $FIELD_NAME_TITLE$ Field -->
     <div class="form-group col-md-12 row">
         {!! Form::label('avatar', trans("lang.user_avatar"), ['class' => 'col-3 control-label']) !!}
@@ -179,8 +179,8 @@
                 $('#city').empty();
                 var data = "id="+_this.val();
 
-                var url = _this.closest('.card-body').data('route');
-                //  console.log(url);
+                var url = _this.closest('.select_cities').data('route');
+                  console.log(url);
 
                 $.post(url , data , function(res){
                     $city=['<option value="0" selected="">select </option>'];

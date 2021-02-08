@@ -27,7 +27,7 @@
             </div>
         </div>
     </div>
-  
+
 
 </div>
 
@@ -41,6 +41,47 @@
         {!! $customFields !!}
     </div>
 @endif
+@prepend('scripts')
+    <script>
+        // In your Javascript (external .js resource or <script> tag)
+        $(document).ready(function () {
+            var _this;
+            // $('#projectinput1').select2();
+            // $('#category').select2()
+
+
+            $('#country').on('change',function(){
+                var _this = $(this);
+                $('#city').empty();
+                var data = "id="+_this.val();
+
+                var url = _this.closest('.select_cities').data('route');
+                //  console.log(url);
+
+                $.post(url , data , function(res){
+                    $city=['<option value="0" selected="">select </option>'];
+                    //   $categoryslt=[];
+
+                    // $menu.push('<option value="none" selected="" disabled="">select Menu Type</option>');
+
+                    for(var i=0 ;i<res.length;i++) {
+                        $city.push('<option value="' + res[i]['id'] + '">' + res[i]['city_name'] + '</option>');
+                        // $categoryslt.push('<li data-value="' + res[i]['id'] + '" class="option null selected">' + res[i]['name1'] + '</li>');
+
+                    }
+
+                    $('#city').empty();
+                    $('#city').append($city);
+
+
+                });
+
+            });
+
+        });
+    </script>
+@endprepend
+
 <!-- Submit Field -->
 <div class="form-group col-12 text-right">
     <button type="submit" class="btn btn-{{setting('theme_color')}}"><i class="fa fa-save"></i> {{trans('lang.save')}} {{trans('lang.user')}}</button>

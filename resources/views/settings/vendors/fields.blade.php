@@ -8,7 +8,7 @@
             {!! Form::label('first name', trans("lang.user_name"), ['class' => 'col-md-3 control-label']) !!}
             <div class="col-md-9">
                 {!! Form::text('name', null,  ['class' => 'form-control','placeholder'=>  trans("lang.user_name_placeholder"),'required']) !!}
-                
+
             </div>
         </div>
 
@@ -20,7 +20,7 @@
             </div>
         </div>
     </div>
-   
+
     <div class="row">
         <!-- Country Field -->
         <div class="form-group col-md-6 row">
@@ -155,7 +155,7 @@
                 $('#city').empty();
                 var data = "id="+_this.val();
 
-                var url = _this.closest('.card-body').data('route');
+                var url = _this.closest('.select_cities').data('route');
                 //  console.log(url);
 
                 $.post(url , data , function(res){

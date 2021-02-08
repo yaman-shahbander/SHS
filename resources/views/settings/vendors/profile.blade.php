@@ -220,9 +220,9 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-3">
-                
+
                     <!-- Profile Image -->
-                    <div class="card">
+                    <div class="card ">
                         <div class="card-header">
                             <h3 class="card-title"><i class="fa fa-user mr-2"></i> {{trans('lang.user_about_me')}}</h3>
                         </div>
@@ -254,7 +254,7 @@
                                         <strong >{{ substr($hour->name_en,0,3)}}</strong>
                                         </div>
                                         <div class="col-md-5">
-                                       
+
                                         <strong style="font-size: 13px;">{{ date("g:i A",strtotime($hour->pivot->start))}}</strong>
                                         </div>
                                         <div class="col-md-4">
@@ -361,7 +361,7 @@
                     @include('adminlte-templates::common.errors')
                     <div class="clearfix"></div>
                     <div class="card">
-                    
+
                         <div class="card-header">
                             <ul class="nav nav-tabs align-items-end card-header-tabs w-100">
                                 <li class="nav-item">
@@ -376,8 +376,8 @@
                                 @endhasrole
                             </ul>
                         </div>
-                        
-                        <div class="card-body">
+
+                        <div class="card-body select_cities" data-route="{{url('api/user/select')}}">
                             {!! Form::model($user, ['route' => ['users.update', $user->id], 'method' => 'patch']) !!}
                             <div class="row">
                                 @include('settings.vendors.fields')
