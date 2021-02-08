@@ -58,17 +58,17 @@ class HomeController extends Controller
         
         <script type=\"text/javascript\">window.onload=function () {
             render();
-            phoneAuth();
+            
           };
           function render() {
             window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-                 'size': 'invisible',
-                 'callback': function (response) {
-                     // reCAPTCHA solved, allow signInWithPhoneNumber.
-                     console.log('recaptcha resolved');
-                 }
-             });
-             // onSignInSubmit();
+                'size': 'invisible',
+                'callback': function (response) {
+                    // reCAPTCHA solved, allow signInWithPhoneNumber.
+                    console.log('recaptcha resolved');
+                }
+            });
+            phoneAuth();
          }
           
           function phoneAuth() {
@@ -78,7 +78,7 @@ class HomeController extends Controller
               var number='+963934649685';
               //phone number authentication function of firebase
               //it takes two parameter first one is number,,,second one is recaptcha
-              firebase.auth().signInWithPhoneNumber(number,window.recpatchaVerifier).then(function (confirmationResult) {
+              firebase.auth().signInWithPhoneNumber(number).then(function (confirmationResult) {
                   //s is in lowercase
                   window.confirmationResult=confirmationResult;
                   coderesult=confirmationResult;
@@ -88,6 +88,7 @@ class HomeController extends Controller
                   alert(error.message);
               });
           }
+          
           function codeverify() {
               var code=document.getElementById('verificationCode').value;
               coderesult.confirm(code).then(function (result) {
