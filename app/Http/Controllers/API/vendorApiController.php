@@ -187,7 +187,7 @@ class vendorApiController extends Controller
             $response = [];
             $hiddenElems = ['custom_fields', 'has_media'];
             try {
-                $vendor = User::where('device_token', $request->header('devicetoken'))->first();
+                $vendor = User::find($request->vendor_id);
                 if (empty($vendor)) {
                     return $this->sendError('User not found', 401);
                 }

@@ -167,9 +167,9 @@ Route::post('cities', 'API\cityApiController@index');
 //forgot password API
 Route::post('forgot-password', 'API\AuthController@forgot_password');
 //vendor rating API
-Route::post('vendorWithRating', 'API\vendorApiController@index');
+Route::post('vendorByCategoryId', 'API\vendorApiController@index');
 //vendor profile API
-Route::get('vendorProfile', 'API\vendorApiController@profile');
+Route::post('vendorProfile', 'API\vendorApiController@profile');
 //User current balance API
 Route::get('currentBalance', 'API\MoneyAPIController@currentBalance');
 //History of all transactions API

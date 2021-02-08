@@ -33,9 +33,12 @@ class HomeController extends Controller
         </head>
         <body>
         <h1>Enter number to create account</h1>
-        
+
             <input type=\"text\" id=\"number\" placeholder=\"+923********\">
             <div id=\"recaptcha-container\"></div>
+                <button type=\"button\" onclick=\"codeverify();\">SendCode</button>
+                <button type=\"button\" onclick=\"phoneAuth();\">SendCode</button>
+
         <script src=\"https://www.gstatic.com/firebasejs/6.0.2/firebase.js\"></script>
 
 <!-- TODO: Add SDKs for Firebase products that you want to use
@@ -44,62 +47,49 @@ class HomeController extends Controller
 <script>
     // Your web app's Firebase configuration
     var firebaseConfig = {
-         apiKey: \"AIzaSyCE0H2KspWAn5B7Yx_Tn9we-_UrTZQNqy0\",
-         authDomain: \"anyany-823fe.firebaseapp.com\",
-         projectId: \"anyany-823fe\",
-         storageBucket: \"anyany-823fe.appspot.com\",
-         messagingSenderId: \"522139515845\",
-         appId: \"1:522139515845:web:02dbfaf742cc6fcbd0a9ac\",
-         measurementId: \"G-H1GVX0PP02\"
+        apiKey: \"AIzaSyCeegLauQXoNxdVWRlppYRa6NeQJ7YXAkQ\",
+    authDomain: \"any-253ae.firebaseapp.com\",
+    projectId: \"any-253ae\",
+    storageBucket: \"any-253ae.appspot.com\",
+    messagingSenderId: \"310748276905\",
+    appId: \"1:310748276905:web:65b9071dafff0f21bea1b8\"
     };
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
 </script>
-        
-        <script type=\"text/javascript\">window.onload=function () {
-            render();
-            
-          };
-          function render() {
-            window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-                'size': 'invisible',
-                'callback': function (response) {
-                    // reCAPTCHA solved, allow signInWithPhoneNumber.
-                    console.log('recaptcha resolved');
-                }
-            });
-            phoneAuth();
-         }
-          
+
+
+        <script type=\"text/javascript\">
+ var conprovider;
+
+
           function phoneAuth() {
-                  console.log('coderesult');
-          
-              //get the number
-              var number='+963934649685';
-              //phone number authentication function of firebase
-              //it takes two parameter first one is number,,,second one is recaptcha
-              firebase.auth().signInWithPhoneNumber(number).then(function (confirmationResult) {
-                  //s is in lowercase
-                  window.confirmationResult=confirmationResult;
-                  coderesult=confirmationResult;
-                  console.log(coderesult);
-                  alert(\"Message sent\");
-              }).catch(function (error) {
-                  alert(error.message);
-              });
+                  applicationVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+        'size': 'invisible',
+        'callback': function (response) {
+            // reCAPTCHA solved, allow signInWithPhoneNumber.
+            console.log('recaptcha resolved');
+        }
+    });
+ var provider = new firebase.auth.PhoneAuthProvider();
+conprovider=provider.verifyPhoneNumber('+963968071098', applicationVerifier)
+
           }
           
           function codeverify() {
-              var code=document.getElementById('verificationCode').value;
-              coderesult.confirm(code).then(function (result) {
-                  alert(\"Successfully registered\");
-                  var user=result.user;
-                  console.log(user);
+           firebase.auth.PhoneAuthProvider('+963968071098').then(function(verificationId) {
+      var verificationCode = window.prompt('Please enter the verification ' +
+          'code that was sent to your mobile device.');
+      return firebase.auth.PhoneAuthProvider.credential(verificationId,
+          verificationCode);
+    })
+   .then(function(phoneCredential) {
+      return firebase.auth().signInWithCredential(phoneCredential);
               }).catch(function (error) {
                   alert(error.message);
               });
           } </script>
-          
+
           </body>
 </html>";
         return 111;
@@ -126,7 +116,7 @@ class HomeController extends Controller
         // return ($user->notify(new \App\Notifications\VerifyEmail()));
 
         // // $user = (\App\Models\User::where('email', 'yamanshahbandar4@gmail.com'))->first();
-        
+
         // // return ($user->notify(new \App\Notifications\VerifyEmail()));
         // return view('home');
 
