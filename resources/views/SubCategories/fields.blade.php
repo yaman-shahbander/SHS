@@ -15,7 +15,7 @@
           <div class="form-group row col-md-6">
             {!! Form::label('name_en', "NameEn", ['class' => 'col-3 control-label ']) !!}
             <div class="col-9">
-              {!! Form::text('name_en', null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder")]) !!}
+            {!! Form::text('name_en', Request::is('*edit') ? $subcategory->name_en : null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder")]) !!}
               <div class="form-text text-muted">
                 {{ trans("lang.category_name_help") }}
               </div>
@@ -42,7 +42,7 @@
         <div class="form-group row col-md-6">
           {!! Form::label('description', trans("lang.category_description"), ['class' => 'col-3 control-label ']) !!}
           <div class="col-9">
-          <textarea name="description" class="form-control form-control-sm" rows="3" cols="50"></textarea>
+          {!! Form::text('description', null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder")]) !!}
 
             <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
           </div>
@@ -52,10 +52,9 @@
       <div class="row">
         <!-- Description AR Field -->
         <div class="form-group row col-md-6">
-          {!! Form::label('description', 'Description AR', ['class' => 'col-3 control-label ']) !!}
+          {!! Form::label('description_ar', 'Description AR', ['class' => 'col-3 control-label ']) !!}
           <div class="col-9">
-          <textarea name="description_ar" class="form-control form-control-sm" rows="3" cols="50"></textarea>
-
+          {!! Form::text('description_ar', Request::is('*edit') ? $subcategory->description_ar : null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder")]) !!}
             <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
           </div>
         </div>
@@ -63,8 +62,7 @@
         <div class="form-group row col-md-6">
           {!! Form::label('description_en', 'Description En', ['class' => 'col-3 control-label ']) !!}
           <div class="col-9">
-            <textarea name="description_en" class="form-control form-control-sm" rows="3" cols="50"></textarea>
-            
+          {!! Form::text('description_en', Request::is('*edit') ? $subcategory->description_en : null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder")]) !!}
             <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
           </div>
         </div>
