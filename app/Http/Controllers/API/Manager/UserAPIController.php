@@ -1040,5 +1040,9 @@ $days=[];
         }
     }
 
+    public function getVendorCities(Request $request) {
+        return "s";
+    }
+
 }
 
