@@ -47,6 +47,9 @@ Route::prefix('homeOwner')->group(function () {
     Route::post('storegmapLocation', 'API\GmapLocationAPIController@store');
 
     Route::post('updategmapLocation', 'API\GmapLocationAPIController@update');
+    //save home owner photo
+    Route::post('photoProfile', 'API\Driver\UserAPIController@backgroundPic');
+
 
     // Route::resource('gmapLocation', 'API\GmapLocationAPIController');
      //select language, country, and city

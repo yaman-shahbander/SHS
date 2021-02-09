@@ -661,4 +661,38 @@ class UserAPIController extends Controller
         }
     }
 
+    public function backgroundPic(Request $request)
+    {
+        try {
+            if (empty($request->header('devicetoken'))) {
+                return $this->sendError('device token not found', 401);
+            }
+
+            $vendor = User::where('device_token', $request->header('devicetoken'))->first();
+
+            if (empty($vendor)) {
+                return $this->sendError('User not found', 401);
+            }
+
+
+            if (!empty ($request->file('avatar'))) {
+                $imageNameAvater = uniqid() . $request->file('avatar')->getClientOriginalName();
+                $request->file('avatar')->move(public_path('storage/Avatar'), $imageNameAvater);
+
+                $vendor->avatar = $imageNameAvater;
+
+                $vendor->save();
+
+
+            }
+
+            return $this->sendResponse([], 'photo Saved successfully');
+        } catch (\Exception $e) {
+            return $this->sendError('something was wrong', 401);
+
+        }
+
+
+    }
+
 }
