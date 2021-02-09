@@ -3,10 +3,10 @@
         <div class="form-group row ">
             {!! Form::label('vendors', "Vendors", ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
-            <select name="vendors" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
+            <select name="vendors" aria-controls="dataTableBuilder" class="form-control form-control-sm" required @if(Request::is('*edit')) readonly @endif>
               <option value="0">select</option>
                 @foreach($vendors as $vendor)
-                  <option value="{{ $vendor->id }}" @if(Request::is('*edit')) @if($notification->category == $category->id) selected @endif @endif>{{ $vendor->name }}</option>
+                  <option value="{{ $vendor->id }}" @if(Request::is('*edit')) @if($offer->user_id == $vendor->id) selected @endif @endif>{{ $vendor->name }}</option>
                  @endforeach
               </select>
               <div class="form-text text-muted">
@@ -19,7 +19,7 @@
           <div class="form-group row ">
             {!! Form::label('offername', "Offer Name", ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
-              {!! Form::text('offername', null ,  ['class' => 'form-control', 'required' => true, 'placeholder'=>  trans("lang.category_name_placeholder")]) !!}
+              {!! Form::text('offername', Request::is('*edit') ? $offer->title : null ,  ['class' => 'form-control', 'required' => true, 'placeholder'=>  trans("lang.category_name_placeholder")]) !!}
               <div class="form-text text-muted">
                 {{ trans("lang.category_name_help") }}
               </div>
@@ -31,7 +31,7 @@
           <div class="form-group row ">
             {!! Form::label('description', "Description", ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
-              {!! Form::text('description', null ,  ['class' => 'form-control', 'required' => true, 'placeholder'=>  "Insert Description"]) !!}
+              {!! Form::text('description', Request::is('*edit') ? $offer->description : null ,  ['class' => 'form-control', 'required' => true, 'placeholder'=>  "Insert Description"]) !!}
               <div class="form-text text-muted">
                  Insert Description
               </div>
@@ -45,7 +45,7 @@
               <select name="category" id="category" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
               <option value="0">select</option>
                 @foreach($categories as $category)
-                  <option value="{{ $category->id }}" @if(Request::is('*edit')) @if($notification->category == $category->id) selected @endif @endif>{{ $category->name }}</option>
+                  <option value="{{ $category->id }}" @if(!empty($category->id)) @if($offer->subcategories->categories->id==$category->id) selected @endif @endif>{{ $category->name }}</option>
                 @endforeach
               </select>
                <div class="form-text text-muted">
@@ -55,14 +55,14 @@
           </div>
 
         <!-- Select subcategory-->
-        <div class="form-group row " style="visibility:hidden" id="sub">
+        <div class="form-group row " Request::is('*edit') ? style="visibility:visible" : style="visibility:hidden" id="sub">
             {!! Form::label('subcategory', "Subcategory", ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
               <select name="subcategory" id="subcategory" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
               <option value="" >select</option>
                 @if(Request::is('*edit'))
                     @foreach($subcategories as $subcategory)
-                            <option value={{$subcategory->id}} @if(!empty($subcategory->id)) @if($notification->subcategory==$subcategory->id) selected @endif @endif>
+                            <option value={{$subcategory->id}} @if(!empty($subcategory->id)) @if($offer->subcategory_id==$subcategory->id) selected @endif @endif>
                                 {{$subcategory->name}}</option>
                     @endforeach
                 @endif
@@ -81,7 +81,7 @@
         <div class="form-group row">
             {!! Form::label('image', "Image", ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
-              {!! Form::file('image' , ['class' => 'form-control', 'required' => true]) !!}
+              {!! Form::file('image' , ['class' => 'form-control']) !!}
               <div class="form-text text-muted">
                  Select Image
               </div>
@@ -128,48 +128,7 @@
           </script> 
 
 
-            <script type="text/javascript">
-              var var15866134771240834480ble = '';
-              @if(isset($subcategory) && $subcategory->hasMedia('image'))
-                      var15866134771240834480ble = {
-                name: "{!! $city->getFirstMedia('image')->name !!}",
-                size: "{!! $city->getFirstMedia('image')->size !!}",
-                type: "{!! $city->getFirstMedia('image')->mime_type !!}",
-                collection_name: "{!! $city->getFirstMedia('image')->collection_name !!}"};
-                      @endif
-              var dz_var15866134771240834480ble = $(".dropzone.image").dropzone({
-                        url: "{!!url('uploads/store')!!}",
-                        addRemoveLinks: true,
-                        maxFiles: 1,
-                        init: function () {
-                          @if(isset($subcategory) && $subcategory->hasMedia('image'))
-                          dzInit(this,var15866134771240834480ble,'{!! url($subcategory->getFirstMediaUrl('image','thumb')) !!}')
-                          @endif
-                        },
-                        accept: function(file, done) {
-                          dzAccept(file,done,this.element,"{!!config('medialibrary.icons_folder')!!}");
-                        },
-                        sending: function (file, xhr, formData) {
-                          dzSending(this,file,formData,'{!! csrf_token() !!}');
-                        },
-                        maxfilesexceeded: function (file) {
-                          dz_var15866134771240834480ble[0].mockFile = '';
-                          dzMaxfile(this,file);
-                        },
-                        complete: function (file) {
-                          dzComplete(this, file, var15866134771240834480ble, dz_var15866134771240834480ble[0].mockFile);
-                          dz_var15866134771240834480ble[0].mockFile = file;
-                        },
-                        removedfile: function (file) {
-                          dzRemoveFile(
-                                  file, var15866134771240834480ble, '{!! url("mscity/remove-media") !!}',
-                                  'image', '{!! isset($city) ? $city->id : 0 !!}', '{!! url("uplaods/clear") !!}', '{!! csrf_token() !!}'
-                          );
-                        }
-                      });
-              dz_var15866134771240834480ble[0].mockFile = var15866134771240834480ble;
-              dropzoneFields['image'] = dz_var15866134771240834480ble;
-            </script>
+            
           @endprepend
         </div>
         

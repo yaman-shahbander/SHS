@@ -52,8 +52,9 @@
         </li>
       </ul>
     </div>
+    <div class="subcategory" data-route="{{url('api/subcategory/select')}}"></div>
     <div class="card-body">
-      {!! Form::model($city, ['route' => ['offers.update', $city->id], 'method' => 'PUT', 'enctype' => "multipart/form-data"]) !!}
+      {!! Form::model($offer, ['route' => ['offers.update', $offer->id], 'method' => 'PUT', 'enctype' => "multipart/form-data"]) !!}
       <div class="row">
         @include('special_offers.fields')
       </div>
