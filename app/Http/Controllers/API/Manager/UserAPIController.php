@@ -305,7 +305,7 @@ class UserAPIController extends Controller
                     'email' => $user->email,
                     'activation_cod' => $user->activation_code,
                     'is_verified' => $user->is_verified == 1 ? true : false,
-                    // 'avatar'=>$user->avatar,
+                    'avatar' => asset('storage/Avatar') . '/' . $user->avatar,
                     'lang' => $user->language,
                     'device_token' => $user->device_token,
                     'phone' => $user->phone,
@@ -343,7 +343,6 @@ class UserAPIController extends Controller
                     ['id' => $user->id,
                         'first_name' => $user->name,
                         'is_verified' => $user->is_verified == 1 ? true : false,
-
                         'email' => $user->email,
                         //'activation_cod'=>$user->activation_code,
                         'avatar' => asset('storage/Avatar') . '/' . $user->avatar,
@@ -631,7 +630,7 @@ class UserAPIController extends Controller
             foreach ($attrs as $attr) {
                 $respone[$i]['id'] = $attr->id;
                 $respone[$i]['name'] = $attr->name;
-                $respone[$i]['avatar'] = $attr->getFirstMediaUrl('avatar', 'icon');
+                $respone[$i]['avatar'] = asset('storage/Avatar').'/'.$attr->avatar;
                 $respone[$i]['last_name'] = $attr->last_name;
                 $respone[$i]['description'] = $attr->description;
                 $respone[$i]['rating'] = round((getRating($attr)/20)*2)/2;
@@ -685,6 +684,8 @@ class UserAPIController extends Controller
 
 
             }
+            $vendor->save();
+
             return $this->sendResponse([], 'photo Saved successfully');
         } catch (\Exception $e) {
             return $this->sendError('something was wrong', 401);
@@ -709,12 +710,12 @@ class UserAPIController extends Controller
 
             $transactionsHistory = $user->ToUserName->transform(function($q){
 
-                
+
             });
 
             return $this->sendResponse($transactionsHistory->toArray(), 'History retrieved successfully');
         }
-        
+
         */
 
     public function vendorprofile(Request $request)
@@ -747,7 +748,7 @@ class UserAPIController extends Controller
                         'name' => $q->name,
                         'rating' => round((getFullRating($review) / 20) * 2) / 2,
                         'description' => $q->pivot->description,
-                        'image' => asset('storage/Avatar') . '/' . $q->avatar,
+                        'avatar' => asset('storage/Avatar') . '/' . $q->avatar,
 
                     ];
                 }),

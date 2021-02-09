@@ -56,14 +56,14 @@ class SpecialOffersController extends Controller
         }
         $vendors = User::whereHas(
             'roles', function($q){
-            $q->where('name', 'Manager');
+            $q->where('name', 'vendor');
         }
         )->get();
       //  $vendor=User::where()->Has()->role('manager')->get();
       //  dd(count($vendors));
        // return ;
         if(count($vendors)!=0) {
-            return view('special_offers.create', ['vendors'=>$vendors,'customFields'=> isset($html) ? $html : false]);
+            return view('special_offers.create', ['users'=>$vendors,'customFields'=> isset($html) ? $html : false]);
         }else{
             return redirect()->back()->with(["error"=> 'Please add category','customFields'=> isset($html) ? $html : false]);
         }
