@@ -41,11 +41,11 @@
           <!-- Select category-->
         <div class="form-group row">
               {!! Form::label('category', "Category", ['class' => 'col-3 control-label text-right']) !!}
-              <div class="col-9">
+              <div class="col-9">  
               <select name="category" id="category" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
               <option value="0">select</option>
                 @foreach($categories as $category)
-                  <option value="{{ $category->id }}" @if(!empty($category->id)) @if($offer->subcategories->categories->id==$category->id) selected @endif @endif>{{ $category->name }}</option>
+                  <option value="{{ $category->id }}" @if (Request::is('*edit')) @if(!empty($category->id)) @if($offer->subcategories->categories->id==$category->id) selected @endif @endif @endif>{{ $category->name }}</option>
                 @endforeach
               </select>
                <div class="form-text text-muted">
