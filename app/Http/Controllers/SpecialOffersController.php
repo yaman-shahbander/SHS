@@ -80,9 +80,9 @@ class SpecialOffersController extends Controller
 
         $input = $request->all();
 
-        
 
-        return $input;
+
+        return dd($input);
         $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->SpecialRepository->model());
 
         try {
