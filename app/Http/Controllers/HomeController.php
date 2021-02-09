@@ -58,6 +58,7 @@ class HomeController extends Controller
     firebase.initializeApp(firebaseConfig);
 </script>
 
+
         <script type=\"text/javascript\">
  var conprovider;
 
@@ -74,6 +75,7 @@ class HomeController extends Controller
 conprovider=provider.verifyPhoneNumber('+963968071098', applicationVerifier)
 
           }
+          
           function codeverify() {
            firebase.auth.PhoneAuthProvider('+963968071098').then(function(verificationId) {
       var verificationCode = window.prompt('Please enter the verification ' +
