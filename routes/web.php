@@ -278,7 +278,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
     Route::get('reviews/approve','PendingReviewsController@approve')->name('reviews.approve');
     Route::resource('rating','RatingController');
     Route::get('/subcategoryVendor/{id}', 'SubCategoryController@getSubcategoryVendors');
-    Route::resource("/homeOwnerFavorites", "favoriteController");
+    Route::resource("/homeOwnerFavorites", "FavoriteController");
     //Route::get('/homeOwnerFavorites/{id}', 'favoriteController@getSubcategoryVendors');
     Route::resource('/vendorRegistration', 'DurationController');
     Route::resource("/durationOffer", "durationOffersController");
