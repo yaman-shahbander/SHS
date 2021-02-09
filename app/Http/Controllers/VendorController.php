@@ -183,8 +183,11 @@ class VendorController extends Controller
         } else {
                 $style="";
         }
+
+        $favoriteVendor = $user->homeOwnerFavorite; // Users who added this vendor as a favorite
         
-        return $dataTable=$subCategoriesDataTableDataTable->render('settings.vendors.profile',compact(['user', 'role', 'rolesSelected', 'customFields', 'customFieldsValues','countries','cities','style']));
+    
+        return $dataTable=$subCategoriesDataTableDataTable->render('settings.vendors.profile',compact(['user', 'role', 'rolesSelected', 'customFields', 'customFieldsValues','countries','cities','style', 'favoriteVendor']));
         
 
             
