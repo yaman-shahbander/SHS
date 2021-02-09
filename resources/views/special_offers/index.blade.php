@@ -31,6 +31,10 @@
           <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-list mr-2"></i>Offer List</a>
         </li>
 
+        <li class="nav-item">
+          <a class="nav-link" href="{!! route('offers.create') !!}"><i class="fa fa-plus mr-2"></i>Create special Offer</a>
+        </li>
+
         @include('layouts.right_toolbar', compact('dataTable'))
 
       </ul>

@@ -14,6 +14,8 @@ use App\Repositories\UploadRepository;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Prettus\Validator\Exceptions\ValidatorException;
+use App\Models\Category;
+
 class SpecialOffersController extends Controller
 {
     /** @var  SpecialOffersRepositry */
@@ -54,19 +56,17 @@ class SpecialOffersController extends Controller
             $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->SpecialRepository->model());
             $html = generateCustomField($customFields);
         }
-        $vendors = User::whereHas(
-            'roles', function($q){
-            $q->where('name', 'vendor');
-        }
-        )->get();
-      //  $vendor=User::where()->Has()->role('manager')->get();
-      //  dd(count($vendors));
-       // return ;
-        if(count($vendors)!=0) {
-            return view('special_offers.create', ['users'=>$vendors,'customFields'=> isset($html) ? $html : false]);
-        }else{
-            return redirect()->back()->with(["error"=> 'Please add category','customFields'=> isset($html) ? $html : false]);
-        }
+
+        $categories = Category::all();
+
+        $vendors = User::whereHas('roles', function($q) {
+            $q->where('role_id', 3);
+        })->get();
+
+        return view('special_offers.create', [
+            'categories' => $categories,
+            'vendors'    => $vendors,
+            'customFields'=> isset($html) ? $html : false]);
     }
 
     /**
@@ -79,7 +79,10 @@ class SpecialOffersController extends Controller
     {
 
         $input = $request->all();
-        $input['user_id']=$input['user'];
+
+        
+
+        return $input;
         $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->SpecialRepository->model());
 
         try {

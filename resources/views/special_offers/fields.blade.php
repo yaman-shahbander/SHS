@@ -1,27 +1,25 @@
 <div style="flex: 50%;max-width: 50%;padding: 0 4px;" class="column">
-
-        <!-- Select country-->
+        <!-- Vendors Field -->
         <div class="form-group row ">
-            {!! Form::label('name', "Country", ['class' => 'col-3 control-label text-right']) !!}
+            {!! Form::label('vendors', "Vendors", ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
-            <select name="user" aria-controls="dataTableBuilder" class="form-control form-control-sm">
-                @foreach($users as $user)
-                    <option  
-                    value="{{ $user->id }}" @if(!empty($offer->user_id)) @if( $offer->user_id==$user->id) selected @endif @endif>
-                    {{ $country->country_name }}</option>
-                @endforeach
-            </select>
-                <div class="form-text text-muted">
-                Select Country
-                </div>
+            <select name="vendors" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
+              <option value="0">select</option>
+                @foreach($vendors as $vendor)
+                  <option value="{{ $vendor->id }}" @if(Request::is('*edit')) @if($notification->category == $category->id) selected @endif @endif>{{ $vendor->name }}</option>
+                 @endforeach
+              </select>
+              <div class="form-text text-muted">
+                Select Vendor
+              </div>
             </div>
-        </div>
+          </div>
         
           <!-- Name Field -->
           <div class="form-group row ">
-            {!! Form::label('description', trans("lang.category_name"), ['class' => 'col-3 control-label text-right']) !!}
+            {!! Form::label('offername', "Offer Name", ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
-              {!! Form::text('description', Request::is('*edit') ? $city->city_name : null  ,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder")]) !!}
+              {!! Form::text('offername', null ,  ['class' => 'form-control', 'required' => true, 'placeholder'=>  trans("lang.category_name_placeholder")]) !!}
               <div class="form-text text-muted">
                 {{ trans("lang.category_name_help") }}
               </div>
@@ -30,13 +28,106 @@
 
           <!-- Description Field -->
 
+          <div class="form-group row ">
+            {!! Form::label('description', "Description", ['class' => 'col-3 control-label text-right']) !!}
+            <div class="col-9">
+              {!! Form::text('description', null ,  ['class' => 'form-control', 'required' => true, 'placeholder'=>  "Insert Description"]) !!}
+              <div class="form-text text-muted">
+                 Insert Description
+              </div>
+            </div>
+          </div>
+
+          <!-- Select category-->
+        <div class="form-group row">
+              {!! Form::label('category', "Category", ['class' => 'col-3 control-label text-right']) !!}
+              <div class="col-9">
+              <select name="category" id="category" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
+              <option value="0">select</option>
+                @foreach($categories as $category)
+                  <option value="{{ $category->id }}" @if(Request::is('*edit')) @if($notification->category == $category->id) selected @endif @endif>{{ $category->name }}</option>
+                @endforeach
+              </select>
+               <div class="form-text text-muted">
+                 select category
+               </div>
+              </div>
+          </div>
+
+        <!-- Select subcategory-->
+        <div class="form-group row " style="visibility:hidden" id="sub">
+            {!! Form::label('subcategory', "Subcategory", ['class' => 'col-3 control-label text-right']) !!}
+            <div class="col-9">
+              <select name="subcategory" id="subcategory" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
+              <option value="" >select</option>
+                @if(Request::is('*edit'))
+                    @foreach($subcategories as $subcategory)
+                            <option value={{$subcategory->id}} @if(!empty($subcategory->id)) @if($notification->subcategory==$subcategory->id) selected @endif @endif>
+                                {{$subcategory->name}}</option>
+                    @endforeach
+                @endif
+              </select>
+              <div class="form-text text-muted">
+                 select subcategory
+               </div>
+            </div>
         </div>
           
         </div>
         <div style="flex: 50%;max-width: 50%;padding: 0 4px;" class="column">
+        
+        <!-- image Field -->
 
+        <div class="form-group row">
+            {!! Form::label('image', "Image", ['class' => 'col-3 control-label text-right']) !!}
+            <div class="col-9">
+              {!! Form::file('image' , ['class' => 'form-control', 'required' => true]) !!}
+              <div class="form-text text-muted">
+                 Select Image
+              </div>
+            </div>
+          </div>
           
           @prepend('scripts')
+
+          <script>
+            $(document).ready(function () {
+                var var1;
+
+                $('#category').on('change',function(){
+                    var var1 = $(this);
+                    $('#subcategory').empty();
+                    $("#sub").css('visibility', "visible");
+
+                    var data = "id="+var1.val();
+
+                    var url = $('.subcategory').data('route');
+                  
+
+                    $.post(url , data , function(res){
+                        $subcategory=['<option value="0" selected="">select </option>'];
+                        //   $categoryslt=[];
+
+                        // $menu.push('<option value="none" selected="" disabled="">select Menu Type</option>');
+
+                        for(var i=0 ;i<res.length;i++) {
+                            $subcategory.push('<option value="' + res[i]['id'] + '">' + res[i]['name'] + '</option>');
+                            // $categoryslt.push('<li data-value="' + res[i]['id'] + '" class="option null selected">' + res[i]['name1'] + '</li>');
+
+                        }
+
+                        $('#subcategory').empty();
+                        $('#subcategory').append($subcategory);
+
+
+                    });
+
+                });
+
+            });
+          </script> 
+
+
             <script type="text/javascript">
               var var15866134771240834480ble = '';
               @if(isset($subcategory) && $subcategory->hasMedia('image'))
@@ -81,9 +172,9 @@
             </script>
           @endprepend
         </div>
-
+        
       <!-- Submit Field -->
         <div class="form-group col-12 text-right">
-          <button type="submit" class="btn btn-{{setting('theme_color')}}" ><i class="fa fa-save"></i> Save City</button>
+          <button type="submit" class="btn btn-{{setting('theme_color')}}" ><i class="fa fa-save"></i> Save Offer</button>
           <a href="{!! route('city.index') !!}" class="btn btn-default"><i class="fa fa-undo"></i> {{trans('lang.cancel')}}</a>
         </div>
