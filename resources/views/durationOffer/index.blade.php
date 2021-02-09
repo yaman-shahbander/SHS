@@ -11,7 +11,7 @@
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><a href="{{url('/dashboard')}}"><i class="fa fa-dashboard"></i> {{trans('lang.dashboard')}}</a></li>
-          <li class="breadcrumb-item"><a href="{!! route('durationOffer.index') !!}">{{trans('lang.duration_offers')}}</a>
+          <li class="breadcrumb-item"><a href="{!! route('vendorRegistration.index') !!}">{{trans('lang.duration_offers')}}</a>
           </li>
           <li class="breadcrumb-item active">{{trans('lang.duration_offers_desc')}}</li>
         </ol>
@@ -20,6 +20,7 @@
   </div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
+
 
 <div class="content">
   <div class="clearfix"></div>

@@ -15,7 +15,7 @@ class AddColumnDurationIdToUsers extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->unsignedBigInteger("duration_id")->nullable();
-            $table->foreign('duration_id')->references('id')->on('durations')->onDelete('cascade');
+            $table->foreign('duration_id')->references('id')->on('durations')->onDelete('set null');
         });
     }
 
