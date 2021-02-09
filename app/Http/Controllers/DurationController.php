@@ -154,16 +154,14 @@ class DurationController extends Controller
     {
         $duration = $this->userRepository->findWithoutFail($id);
 
-        $duration_id = DB::table('users')->select('users.duration_id')->where('users.id', '=', $id)->get();
-
-        $duration_id = $duration_id[0]->duration_id;
-
         if (empty($duration)) {
             Flash::error('Vendor not found');
             return redirect(route('vendorRegistration.index'));
         }
 
-        if ($duration_id == $request->duration){ 
+        $user = User::find($duration->id);
+
+        if ($user->duration_id == $request->duration){ 
 
             $input['start_date'] = $request->start_date; 
 
