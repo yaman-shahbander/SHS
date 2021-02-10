@@ -1041,7 +1041,43 @@ $days=[];
     }
 
     public function getVendorCities(Request $request) {
-        return "s";
+        try {
+            if ($request->header('devicetoken')) {
+
+                $vendor = User::where('device_token', $request->header('devicetoken'))->first();
+
+                if (empty($vendor)) {
+                    return $this->sendError('User not found', 401);
+                }
+
+                $existedCitiesIds = $vendor->vendor_city->transform(function($q) {
+                    return  $q['id']; });
+
+                $response['cities_id'] =  $existedCitiesIds->toArray();
+
+                return $this->sendResponse($response, 'Cities retrieved successfully');
+            }
+        } catch (\Exception $e) {
+            return $this->sendError('Something is wrong', 401);
+        }
+    }
+
+    public function addVendorCities(Request $request) {
+        try {
+
+          $vendor = User::where('device_token', $request->header('devicetoken'))->first();
+
+          if (empty($vendor)) {
+            return $this->sendError('User not found', 401);
+          }
+
+          $vendor->vendor_city()->sync($request->cities);
+
+          return $this->sendResponse([], 'Cities added successfully');
+
+        } catch (\Exception $e) {
+            return $this->sendError('Something is wrong', 401);
+        }
     }
 
 }

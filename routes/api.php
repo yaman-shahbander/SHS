@@ -150,6 +150,9 @@ Route::prefix('vendor')->group(function () {
 
     //Get vendor cities
     Route::get('getVendorCities', 'API\Manager\UserAPIController@getVendorCities');
+
+    //add, update and delete vendor cities
+    Route::post('VendorCitiesavailibility', 'API\Manager\UserAPIController@addVendorCities');
 });
 
 
