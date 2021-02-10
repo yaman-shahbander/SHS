@@ -120,7 +120,39 @@ class AuthController extends Controller
                  if (request('new_number') == $user->phone) {
                      return $this->sendError( 'Phone Number must be different',401);
                 } else {
+                     $user->activation_code = rand(1000, 9999);
+                     $user->save();
+                }
+            } catch (\Exception $ex) {
+                return $this->sendError( 'Error Update Phone Number',401);
 
+            }
+        }
+        return $this->sendResponse(['activation_code'=>$user->activation_code], 'Phone Number Updated Successfully');
+    }
+  }
+    public function verified_change_phone(Request $request)
+    {
+        if($request->header('devicetoken')) {
+        $input = $request->all();
+
+        $user = User::where('device_token', $request->header('devicetoken'))->first();
+
+
+        $rules = array(
+            'new_number' => 'required'
+        );
+
+        $validator = Validator::make($input, $rules);
+
+        if ($validator->fails()) {
+            $response = array("status" => 400, "message" => $validator->errors()->first(), "data" => array());
+        } else {
+            try {
+                 if (request('new_number') == $user->phone) {
+                     return $this->sendError( 'Phone Number must be different',401);
+                } else {
+                     $user->phone =$request->new_number;
                      $user->save();
                 }
             } catch (\Exception $ex) {
