@@ -9,7 +9,7 @@ use App\Models\TransferTransaction;
 use App\Balance;
 use App\Repositories\TransferTransactionRepository;
 use DB;
-use Carbon\Carbon;
+
 
 
 class MoneyAPIController extends Controller
@@ -24,6 +24,23 @@ class MoneyAPIController extends Controller
         $this->TransferTransactionRepository = $TransferTransactionRepo;
     }
 
+    function humanTiming ($time) { 
+        $time = time() - $time; 
+        // to get the time since that moment $time = ($time<1)? 1 : $time; 
+        $tokens = array ( 31536000 => 'year', 
+        2592000 => 'month',
+        604800 => 'week', 
+        86400 => 'day', 
+        3600 => 'hour', 
+        60 => 'minute', 
+        1 => 'second' ); 
+        foreach ($tokens as $unit => $text) { 
+            if ($time < $unit) continue; 
+            $numberOfUnits = floor($time / $unit); 
+            return $numberOfUnits.' '.$text.(($numberOfUnits>1)?'s':''); 
+         } 
+      }
+
     public function history(Request $request) {
         if($request->header('devicetoken')) {
 
@@ -32,65 +49,55 @@ class MoneyAPIController extends Controller
             if (empty($user)) {
                 return $this->sendError('User not found', 401);
             }
-            // date("g:i A"
+            $response = [];
+
             $transactionsHistory = $user->ToUserName->transform(function($q){
-               return $q['created_at']=  Carbon::createFromFormat('Y-m-d H:i:s', $q->pivot->created_at)->format('Y-m-d H:i A');
-               
-            //    strtotime($q->pivot->created_at);
-                // 'amount', 'created_at'
+              $q['amount']       = round($q->pivot->amount,2);
+              $q['payment_id']   = $q->payment_id;
+              $q['payment_time'] = $this->humanTiming(strtotime($q->pivot->created_at));
+              $q['type']         = $q->pivot->type;
+              return $q->only('amount', 'payment_id', 'payment_time', 'type'); 
+           
             });
 
             return $this->sendResponse($transactionsHistory->toArray(), 'History retrieved successfully');
         }
     }
-
-    /*
-    $time = strtotime('2010-04-28 17:25:43'); 
-    echo 'event happened '.humanTiming($time).' ago'; 
-
-    function humanTiming ($time) { 
-    $time = time() - $time; 
-    // to get the time since that moment $time = ($time<1)? 1 : $time; 
-    $tokens = array ( 31536000 => 'year', 
-    2592000 => 'month',
-    604800 => 'week', 
-    86400 => 'day', 
-    3600 => 'hour', 
-    60 => 'minute', 
-    1 => 'second' ); 
-    foreach ($tokens as $unit => $text) { 
-    if ($time < $unit) continue; 
-    $numberOfUnits = floor($time / $unit); 
-    return $numberOfUnits.' '.$text.(($numberOfUnits>1)?'s':''); } 
-    */
+    
 
     public function transferMoney(Request $request) {
-        if($request->header('devicetoken')) {
+        try {
+            if($request->header('devicetoken')) {
 
-            $user = User::where('device_token', $request->header('devicetoken'))->first();
+                $user = User::where('device_token', $request->header('devicetoken'))->first();
 
-            if (empty($user)) {
-                return $this->sendError('User not found', 401);
+                if (empty($user)) {
+                    return $this->sendError('User not found', 401);
+                }
+
+                $vendor = User::where('payment_id', $request->vendor_payment_id)->first();
+
+                if ($vendor->balance_id == null) {
+                    return $this->sendError('There is no balance in vendor account', 401);
+                }
+
+                if ($user->balance_id == null) {
+                    return $this->sendError('There is no balance in your account', 401);
+                }
+                    
+                if ($user->Balance->balance - $request->amount >= 0) {
+                    $user->Balance->balance   = $user->Balance->balance - $request->amount;
+                    $vendor->Balance->balance = $vendor->Balance->balance + $request->amount;
+                    $user->Balance->save();
+                    $vendor->Balance->save();
+                    return $this->sendResponse([], 'Money transfered successfully');
+                } else {
+                    return $this->sendError('There is no enough balance in your account', 401);
+                }
             }
-
-            $response['from_id'] = $user->id;//sender
-            $response['to_id']   = $request->to_id;// Receiver
-            $response['amount']  = $request->amount;// amount
-            $fromUserBalanceID   = $user->balance_id;
-            $toUserBalanceID     = User::find($response['to_id'])->balance_id;
-            $fromUserBalance     = Balance::find($fromUserBalanceID)->balance;
-            $toUserBalance       = Balance::find($toUserBalanceID)->balance;
-            if ($fromUserBalance - $response['amount'] >= 0) {
-                $subtractedAmount = $fromUserBalance - $response['amount'];
-                $addAmountToUser  = $toUserBalance + $response['amount'];
-                DB::table('balances')->where('id', $fromUserBalanceID)->update(['balance' => $subtractedAmount]);
-                DB::table('balances')->where('id', $toUserBalanceID)->update(['balance' => $addAmountToUser]);
-                $transfer = $this->TransferTransactionRepository->create($response);
-                return $this->sendResponse($response, 'Money transfered successfully!');
-            } else {
-                return $this->sendResponse($response, 'failed! Not enough money');
-            }
-        }
+      } catch (\Exception $e) {
+          return $this->sendError('Something is worng', 401);
+      }
     }   
 
     public function currentBalance(Request $request) {

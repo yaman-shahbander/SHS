@@ -310,12 +310,12 @@ class User extends Authenticatable implements HasMedia
     }
 
     public function FromUserName() {
-        return $this->belongsToMany(User::class, 'transfer_transactions',  'to_id','from_id')
+        return $this->belongsToMany(User::class, 'transfer_transactions',  'to_id','from_id')->withPivot('amount', 'type')
         ->withTimestamps();
     }
 
     public function ToUserName() {
-        return $this->belongsToMany(User::class, 'transfer_transactions',  'from_id','to_id')
+        return $this->belongsToMany(User::class, 'transfer_transactions',  'from_id','to_id')->withPivot('amount', 'type')
         ->withTimestamps();
     }
 
