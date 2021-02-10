@@ -30,6 +30,7 @@ use Validator;
 use PHPMailer\PHPMailer\PHPMailer;
 use App\City;
 use App\Models\Day;
+use App\Balance;
 
 class UserAPIController extends Controller
 {
@@ -225,6 +226,23 @@ class UserAPIController extends Controller
             $user->last_name = $request->input('last_name');
             $user->email = $request->input('email');
 //            $user->city_id = $request->input('city_id');
+            while(true) {
+                $payment_id = '#' . rand(1000, 9999) . rand(1000, 9999);
+                if (!(User::where('payment_id', $payment_id)->exists())) {
+                    $user->payment_id = $payment_id;
+                    $user->save();
+                    break;
+                } else continue;
+            }
+
+            $balance = new Balance();
+
+            $balance->balance = 0.0;
+
+            $balance->save();
+
+            $user->balance_id = $balance->id;
+
             $user->is_verified = 0;
 
 

@@ -14,7 +14,7 @@ class AddColumnPaymentIdToUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('payment_id')->nullable();
+            $table->string('payment_id')->nullable()->unique();
         });
     }
 
