@@ -56,7 +56,7 @@ class SpecialOffersController extends Controller
         }
         $vendors = User::whereHas(
             'roles', function($q){
-            $q->where('name', 'Manager');
+            $q->where('name', 'vendor');
         }
         )->get();
       //  $vendor=User::where()->Has()->role('manager')->get();

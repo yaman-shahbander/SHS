@@ -84,100 +84,47 @@
                 </div>
             </div>
         </div>
-    </div>
-     <!-- $FIELD_NAME_TITLE$ Field -->
-     <div class="form-group col-md-12 row">
-        {!! Form::label('avatar', trans("lang.user_avatar"), ['class' => 'col-3 control-label']) !!}
-        <div class="col-9">
-            <div style="width: 100%" class="dropzone avatar" id="avatar" data-field="avatar">
-                <input type="hidden" name="avatar">
-            </div>
-            <a href="#loadMediaModal" data-dropzone="avatar" data-toggle="modal" data-target="#mediaModal" class="btn btn-outline-{{setting('theme_color','primary')}} btn-sm float-right mt-1">{{ trans('lang.media_select')}}</a>
-            <div class="form-text text-muted w-50">
-                {{ trans("lang.user_avatar_help") }}
+        <!-- $FIELD_NAME_TITLE$ Field -->
+        <div class="form-group row col-md-6">
+        {!! Form::label('password', trans("lang.user_avatar"), ['class' => 'col-md-3 control-label']) !!}
+            <div class="col-md-9">
+                <div class="image-upload-one">
+                <div class="center">
+                    <div class="form-input">
+                        <label for="file-ip-1">
+                            <img id="file-ip-1-preview" src="https://i.ibb.co/ZVFsg37/default.png">
+                            <button type="button" class="imgRemove" onclick="myImgRemoveFunctionOne()"></button>
+                        </label>
+                        <input type="file" name="avatar" id="file-ip-1" accept="image/*" onchange="showPreviewOne(event);">
+                    </div>
+                    <small class="small">Use the ↺ icon to reset the image</small>
+                </div>
             </div>
         </div>
     </div>
+</div>
+    
     @prepend('scripts')
-    <script type="text/javascript">
-        var user_avatar = '';
-        @if(isset($user) && $user->hasMedia('avatar'))
-            user_avatar = {
-            name: "{!! $user->getFirstMedia('avatar')->name !!}",
-            size: "{!! $user->getFirstMedia('avatar')->size !!}",
-            type: "{!! $user->getFirstMedia('avatar')->mime_type !!}",
-            collection_name: "{!! $user->getFirstMedia('avatar')->collection_name !!}"
-        };
-                @endif
-        var dz_user_avatar = $(".dropzone.avatar").dropzone({
-                url: "{!!url('uploads/store')!!}",
-                addRemoveLinks: true,
-                maxFiles: 1,
-                init: function () {
-                    @if(isset($user) && $user->hasMedia('avatar'))
-                    dzInit(this, user_avatar, '{!! url($user->getFirstMediaUrl('avatar','thumb')) !!}')
-                    @endif
-                },
-                accept: function (file, done) {
-                    dzAccept(file, done, this.element, "{!!config('medialibrary.icons_folder')!!}");
-                },
-                sending: function (file, xhr, formData) {
-                    dzSending(this, file, formData, '{!! csrf_token() !!}');
-                },
-                maxfilesexceeded: function (file) {
-                    dz_user_avatar[0].mockFile = '';
-                    dzMaxfile(this, file);
-                },
-                complete: function (file) {
-                    dzComplete(this, file, user_avatar, dz_user_avatar[0].mockFile);
-                    dz_user_avatar[0].mockFile = file;
-                },
-                removedfile: function (file) {
-                    dzRemoveFile(
-                        file, user_avatar, '{!! url("users/remove-media") !!}',
-                        'avatar', '{!! isset($user) ? $user->id : 0 !!}', '{!! url("uplaods/clear") !!}', '{!! csrf_token() !!}'
-                    );
-                }
-            });
-        dz_user_avatar[0].mockFile = user_avatar;
-        dropzoneFields['avatar'] = dz_user_avatar;
-    </script>
+   
     <script>
         // In your Javascript (external .js resource or <script> tag)
         $(document).ready(function () {
             var _this;
-            // $('#projectinput1').select2();
-            // $('#category').select2()
-
-
             $('#country').on('change',function(){
                 var _this = $(this);
                 $('#city').empty();
                 var data = "id="+_this.val();
-
                 var url = _this.closest('.card-body').data('route');
-                //  console.log(url);
-
                 $.post(url , data , function(res){
                     $city=['<option value="0" selected="">select </option>'];
-                    //   $categoryslt=[];
-
-                    // $menu.push('<option value="none" selected="" disabled="">select Menu Type</option>');
-
                     for(var i=0 ;i<res.length;i++) {
                         $city.push('<option value="' + res[i]['id'] + '">' + res[i]['city_name'] + '</option>');
                         // $categoryslt.push('<li data-value="' + res[i]['id'] + '" class="option null selected">' + res[i]['name1'] + '</li>');
-
                     }
-
                     $('#city').empty();
                     $('#city').append($city);
-
-
                 });
-
             });
-
         });
     </script>
     @endprepend

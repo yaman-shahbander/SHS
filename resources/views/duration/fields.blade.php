@@ -1,94 +1,37 @@
 @if($customFields)
 <h5 class="col-12 pb-4">{!! trans('lang.main_fields') !!}</h5>
 @endif
-<<<<<<< HEAD
 <div style="flex: 50%;max-width:100%;padding: 0 4px;" class="column">
     <div class="row">
         <!-- Vendor Name Field -->
         <div class="form-group row col-md-6">
-            {!! Form::label('vendor_name', 'Vendor Name', ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important']) !!}
+            {!! Form::label('vendor_name',trans('lang.vendor_name'), ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important']) !!}
             <div class="col-8">
-                {!! Form::text('vendor_name', $duration->name,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'readonly']) !!}
+                {!! Form::text('vendor_name', 'name',  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'readonly']) !!}
             </div>
         </div>
         <!-- Select duration-->
         <div class="form-group row col-md-6">
-            {!! Form::label('Duration', "Duration", ['class' => 'col-3 control-label text-right', 'style' => 'text-align: left !important;']) !!}
+            {!! Form::label('Duration', trans('lang.Duration'), ['class' => 'col-3 control-label text-right', 'style' => 'text-align: left !important;']) !!}
             <div class="col-9">
                 <select name="duration" aria-controls="dataTableBuilder" class="form-control form-control-sm">
                     @foreach($durations as $dur)
-                    <option value="{{ $dur->id }}"
-                    @if(!empty($duration->duration_id)) @if( $duration->duration_id==$dur->id) selected @endif @endif
-                    >{{$dur->duration}}</option>
-                    @endforeach
+                        <option value="{{ $dur->id }}">{{$dur->duration}}</option>
+                    @endforech
                 </select>
                 <div class="form-text text-muted">
                     Select Duration
                 </div>
-=======
-<div style="flex: 50%;max-width: 50%;padding: 0 4px;" class="column">
-<!-- Vendor Name Field -->
-<div class="form-group row ">
-  {!! Form::label('vendor_name', 'Vendor Name', ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important']) !!}
-  <div class="col-8">
-    @if(Request::is('*create'))
-    <select name="vendornameselect" aria-controls="dataTableBuilder" class="form-control form-control-sm">
-        @foreach($vendors as $vendor)
-        <option value="{{ $vendor->id }}">{{ $vendor->name }}</option>
-        @endforeach
-    </select>
-    @else
-         {!! Form::text('vendor_name',  $duration->name ,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'readonly']) !!}
-    @endif
-  </div>
-</div>
-
-<!-- Select duration-->
-<div class="form-group row ">
-    {!! Form::label('Duration', "Duration", ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important;']) !!}
-    <div class="col-8">
-    <select name="duration" aria-controls="dataTableBuilder" class="form-control form-control-sm">
-    @if(Request::is('*create'))
-        @foreach($durations as $duration)
-            <option value="{{ $duration->id }}">{{ $duration->duration }}</option>
-        @endforeach
-    @else
-         @foreach($durations as $dur)
-           <option value="{{ $dur->id }}"
-           @if(!empty($duration->duration_id)) @if( $duration->duration_id==$dur->id) selected @endif @endif
-           >{{  $dur->duration  }}</option>
-         @endforeach
-    @endif
-        
-    </select>
-        <div class="form-text text-muted">
-        Select Duration
-        </div>
-    </div>
-</div>
-
-<!-- Start date-->
-@if(Request::is('*edit'))
-<div class="form-group row ">
-    {!! Form::label('start_date', "Start Date", ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important;']) !!}
-    <div class="col-8">   
-        <div class="input-group date">
-            
-            <input  name="start_date"  type="text" class="form-control datepicker" value = {{ $duration->start_date }}>
-            <div class="input-group-addon">
-                <span class="glyphicon glyphicon-th"></span>
->>>>>>> e4d94ac5de3c75cb653d820ddb8d7ffceffe85be
             </div>
         </div>
     </div>
-<<<<<<< HEAD
     <div class="row">
         <!-- Start date-->
         <div class="form-group row col-md-6">
-            {!! Form::label('start_date', "Start Date", ['class' => 'col-3 control-label text-right', 'style' => 'text-align: left !important;']) !!}
+            {!! Form::label('start_date', trans('lang.start_date'), ['class' => 'col-3 control-label text-right', 'style' => 'text-align: left !important;']) !!}
             <div class="col-9">   
                 <div class="input-group date">
-                    <input  name="start_date"  type="text" class="form-control datepicker" value = {{ $duration->start_date }}>
+                    <input  name="start_date"  type="text" class="form-control datepicker" value ="">
                     <div class="input-group-addon">
                         <span class="glyphicon glyphicon-th"></span>
                     </div>
@@ -97,45 +40,19 @@
         </div>
         <!-- Start date-->
         <div class="form-group row col-md-6">
-            {!! Form::label('expire', "Expire", ['class' => 'col-3 control-label text-right', 'style' => 'text-align: left !important;']) !!}
+            {!! Form::label('expire', trans('lang.expire'), ['class' => 'col-3 control-label text-right', 'style' => 'text-align: left !important;']) !!}
             <div class="col-9">   
                 <div class="input-group date" >
-                    <input name="expire" type="text" class="form-control datepicker" value = {{ $duration->expire }} >
+                    <input name="expire" type="text" class="form-control datepicker" value ="">
                     <div class="input-group-addon">
                         <span class="glyphicon glyphicon-th"></span>
                     </div>
                 </div>  
-=======
-</div>
-
-<!-- Start date-->
-<div class="form-group row ">
-    {!! Form::label('expire', "Expire", ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important;']) !!}
-    <div class="col-8">   
-        <div class="input-group date" >
-            <input name="expire" type="text" class="form-control datepicker" value = {{ $duration->expire }} >
-            <div class="input-group-addon">
-                <span class="glyphicon glyphicon-th"></span>
->>>>>>> e4d94ac5de3c75cb653d820ddb8d7ffceffe85be
             </div>
         </div>
     </div>
-<<<<<<< HEAD
-=======
 </div>
 
-@endif
-
->>>>>>> e4d94ac5de3c75cb653d820ddb8d7ffceffe85be
-
-</div>
-@if($customFields)
-<div class="clearfix"></div>
-<div class="col-12 custom-field-container">
-  <h5 class="col-12 pb-4">{!! trans('lang.custom_field_plural') !!}</h5>
-  {!! $customFields !!}
-</div>
-@endif
 
 @prepend('scripts')
 <script type="text/javascript">
@@ -187,7 +104,7 @@
 
 <!-- Submit Field -->
 <div class="form-group col-12 text-right">
-  <button type="submit" class="btn btn-{{setting('theme_color')}}" ><i class="fa fa-save"></i> Save Duration</button>
+  <button type="submit" class="btn btn-{{setting('theme_color')}}" ><i class="fa fa-save"></i> {{trans('lang.save')}} Duration</button>
   <a href="{!! route('country.index') !!}" class="btn btn-default"><i class="fa fa-undo"></i> {{trans('lang.cancel')}}</a>
 </div>
 

@@ -13,16 +13,15 @@
 <!-- Content Header (Page header) -->
 <div class="content-header">
   <div class="container-fluid">
-    <div class="row mb-2">
-      <div class="col-sm-6">
-        <h1 class="m-0 text-dark">Duration<small class="ml-3 mr-3">|</small><small>Duration Management</small></h1>
+     <div class="col-sm-6">
+        <h1 class="m-0 text-dark">{{trans('lang.durations')}}<small class="ml-3 mr-3">|</small><small>{{trans('lang.duration_desc')}}</small></h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><a href="{{url('/dashboard')}}"><i class="fa fa-dashboard"></i> {{trans('lang.dashboard')}}</a></li>
-          <li class="breadcrumb-item"><a href="{!! route('vendorRegistration.index') !!}">Duration</a>
+          <li class="breadcrumb-item"><a href="{!! route('vendorRegistration.index') !!}">{{trans('lang.durations')}}</a>
           </li>
-          <li class="breadcrumb-item active">Create Duration</li>
+          <li class="breadcrumb-item active">{{trans('lang.duration_table')}}</li>
         </ol>
       </div><!-- /.col -->
     </div><!-- /.row -->
@@ -39,11 +38,11 @@
       <ul class="nav nav-tabs align-items-end card-header-tabs w-100">
         @can('duration.index')
         <li class="nav-item">
-          <a class="nav-link" href="{!! route('vendorRegistration.index') !!}"><i class="fa fa-list mr-2"></i>Duration List</a>
+          <a class="nav-link" href="{!! route('vendorRegistration.index') !!}"><i class="fa fa-list mr-2"></i>{{trans('lang.durations')}}</a>
         </li>
         @endcan
         <li class="nav-item">
-          <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-plus mr-2"></i>Create Duration</a>
+          <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-plus mr-2"></i>{{trans('lang.duration_create')}}</a>
         </li>
       </ul>
     </div>
@@ -66,7 +65,7 @@
 <script src="{{asset('plugins/select2/select2.min.js')}}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{asset('plugins/summernote/summernote-bs4.min.js')}}"></script>
-{{--dropzone--}}
+
 <script src="{{asset('plugins/dropzone/dropzone.js')}}"></script>
 <script type="text/javascript">
     Dropzone.autoDiscover = false;

@@ -33,7 +33,7 @@ class ChangeClientRoleToManager
     {
         if ($event->newRestaurant->active && !$event->oldRestaurant->active){
             foreach ($event->newRestaurant->users as $user){
-                $user->syncRoles(['manager']);
+                $user->syncRoles(['vendor']);
             }
         }
     }

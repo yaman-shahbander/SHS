@@ -234,13 +234,14 @@ class UserController extends Controller
             $user->syncPermissions($permissions);
             $user->customFieldsValues()->createMany(getCustomFieldsValues($customFields, $request));
 
-            if (isset($input['avatar']) && $input['avatar']) {
-                $cacheUpload = $this->uploadRepository->getByUuid($input['avatar']);
-                $mediaItem = $cacheUpload->getMedia('avatar')->first();
-                $mediaItem->copy($user, 'avatar');
+            if (!empty ($request->file('avatar'))) {
+                $imageName = uniqid() . $request->file('avatar')->getClientOriginalName();
+                $request->file('avatar')->move(public_path('storage/Avatar'), $imageName);
+                $user->avatar = $imageName;
+                $user->save();
             }
            // event(new UserRoleChangedEvent($user));
-            dispatch(new SendVerificationEmail($user));
+            // dispatch(new SendVerificationEmail($user));
 
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());

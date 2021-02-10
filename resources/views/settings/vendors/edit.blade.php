@@ -29,7 +29,7 @@
       </ul>
     </div>
     <div class="card-body" data-route="{{url('api/user/select')}}">
-      {!! Form::model($user, ['route' => ['users.update', $user->id], 'method' => 'patch']) !!}
+      {!! Form::model($user, ['route' => ['users.update', $user->id],'enctype'=>"multipart/form-data", 'method' => 'patch']) !!}
       <div class="row">
         @include('settings.users.fields')
       </div>

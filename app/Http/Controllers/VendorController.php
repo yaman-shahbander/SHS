@@ -201,20 +201,20 @@ class VendorController extends Controller
 
     public function store(CreateUserRequest $request)
     {
+        
         if($request->city=="0")
         {
             Flash::warning('please select country and city ');
             return redirect()->back();
         }
         $input = $request->all();
+    
         $input['city_id']=$input['city'];
         $input['user_id']=Auth()->user()->id;
         // return Auth()->user()->id;
+        // $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->vendorRepository->model());
 
-
-        $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->vendorRepository->model());
-
-        $input['roles'] = "manager";
+        $input['roles'] = "vendor";
         $input['password'] = Hash::make($input['password']);
         $input['api_token'] = str_random(60);
 
@@ -222,13 +222,18 @@ class VendorController extends Controller
         try {
             $user = $this->vendorRepository->create($input);
             $user->syncRoles($input['roles']);
-            $user->customFieldsValues()->createMany(getCustomFieldsValues($customFields, $request));
+            // $user->customFieldsValues()->createMany(getCustomFieldsValues($customFields, $request));
 
-            if (isset($input['avatar']) && $input['avatar']) {
-                $cacheUpload = $this->uploadRepository->getByUuid($input['avatar']);
-                $mediaItem = $cacheUpload->getMedia('avatar')->first();
-                $mediaItem->copy($user, 'avatar');
+            if (!empty ($request->file('avatar'))) {
+                $imageName = uniqid() . $request->file('avatar')->getClientOriginalName();
+                $request->file('avatar')->move(public_path('storage/Avatar'), $imageName);
+                $user->avatar = $imageName;
+                $user->save();
             }
+                // $cacheUpload = $this->uploadRepository->getByUuid($input['avatar']);
+                // $mediaItem = $cacheUpload->getMedia('avatar')->first();
+                // $mediaItem->copy($user, 'avatar');
+            
             // event(new UserRoleChangedEvent($user));
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());

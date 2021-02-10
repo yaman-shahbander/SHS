@@ -45,7 +45,7 @@ class GalleriesOfUserCriteria implements CriteriaInterface
     {
         if (auth()->user()->hasRole('admin')) {
             return $model;
-        } elseif (auth()->user()->hasRole('manager')) {
+        } elseif (auth()->user()->hasRole('vendor')) {
             return $model->join('user_restaurants', 'user_restaurants.restaurant_id', '=', 'galleries.restaurant_id')
                 ->groupBy('galleries.id')
                 ->select('galleries.*')

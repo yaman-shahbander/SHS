@@ -5,7 +5,6 @@
 <!-- select2 -->
 <link rel="stylesheet" href="{{asset('plugins/select2/select2.min.css')}}">
 <!-- bootstrap wysihtml5 - text editor -->
-<link rel="stylesheet" href="{{asset('plugins/summernote/summernote-bs4.css')}}">
 {{--dropzone--}}
 <link rel="stylesheet" href="{{asset('plugins/dropzone/bootstrap.min.css')}}">
 @endpush
@@ -15,14 +14,14 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0 text-dark">Banned Users<small class="ml-3 mr-3">|</small><small>Banned Users Management</small></h1>
+        <h1 class="m-0 text-dark">{{trans('lang.banned_users')}}<small class="ml-3 mr-3">|</small><small>{{trans('lang.banned_user_desc')}}</small></h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><a href="{{url('/dashboard')}}"><i class="fa fa-dashboard"></i> {{trans('lang.dashboard')}}</a></li>
-          <li class="breadcrumb-item"><a href="{!! route('bannedUsers.index') !!}">Banned Users</a>
+          <li class="breadcrumb-item"><a href="{!! route('bannedUsers.index') !!}">{{trans('lang.banned_users')}}</a>
           </li>
-          <li class="breadcrumb-item active">Add Banned Users</li>
+          <li class="breadcrumb-item active">{{trans('lang.banned_user_create')}}</li>
         </ol>
       </div><!-- /.col -->
     </div><!-- /.row -->
@@ -39,11 +38,11 @@
       <ul class="nav nav-tabs align-items-end card-header-tabs w-100">
         @can('categories.index')
         <li class="nav-item">
-          <a class="nav-link" href="{!! route('bannedUsers.index') !!}"><i class="fa fa-list mr-2"></i>Banned Users List</a>
+          <a class="nav-link" href="{!! route('bannedUsers.index') !!}"><i class="fa fa-list mr-2"></i>{{trans('lang.banned_user_table')}}</a>
         </li>
         @endcan
         <li class="nav-item">
-          <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-plus mr-2"></i>Add Banned Users</a>
+          <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-plus mr-2"></i>{{trans('lang.banned_user_create')}}</a>
         </li>
       </ul>
     </div>
@@ -65,7 +64,6 @@
 <!-- select2 -->
 <script src="{{asset('plugins/select2/select2.min.js')}}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{{asset('plugins/summernote/summernote-bs4.min.js')}}"></script>
 {{--dropzone--}}
 <script src="{{asset('plugins/dropzone/dropzone.js')}}"></script>
 <script type="text/javascript">

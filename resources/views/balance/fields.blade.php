@@ -1,36 +1,40 @@
 @if($customFields)
 <h5 class="col-12 pb-4">{!! trans('lang.main_fields') !!}</h5>
 @endif
-<div style="flex: 50%;max-width: 50%;padding: 0 4px;" class="column">
+<div style="flex: 50%;max-width: 100%;padding: 0 4px;" class="column">
 
 @if(Request::is('*create'))
-<!-- Select username-->
-<div class="form-group row ">
-    {!! Form::label('nameselect', "Name", ['class' => 'col-3 control-label text-right']) !!}
-    <div class="col-9">
-    <select name="nameselect" aria-controls="dataTableBuilder" class="form-control form-control-sm">
-        @foreach($users as $user)
-            <option
-            value="{{ $user->id }}">
-            {{ $user->name }}</option>
-        @endforeach
-    </select>
-    </div>
+<div class="row">
+  <!-- Select username-->
+  <div class="form-group row col-md-12">
+      {!! Form::label('nameselect',trans('lang.balance_name'), ['class' => 'col-3 control-label ']) !!}
+      <div class="col-9">
+      <select name="nameselect" aria-controls="dataTableBuilder" class="form-control form-control-sm">
+          @foreach($users as $user)
+              <option
+              value="{{ $user->id }}">
+              {{ $user->name }}</option>
+          @endforeach
+      </select>
+      </div>
+  </div>
 </div>
-@else
+  @else
 
   @if(Request::is('*addBalance'))
-    <!-- name Field -->
-    <div class="form-group row ">
-      {!! Form::label('name', "Name", ['class' => 'col-3 control-label text-right']) !!}
-      <div class="col-9">
-        {!! Form::text('name',$user_name ,  ['class' => 'form-control','placeholder'=>  "Insert Balance", 'readonly']) !!}
+  <div class="row">
+      <!-- name Field -->
+      <div class="form-group row col-md-6">
+        {!! Form::label('name', trans('lang.balance_name'), ['class' => 'col-3 control-label  ']) !!}
+        <div class="col-9">
+          {!! Form::text('name',$user_name ,  ['class' => 'form-control','placeholder'=>  "Insert Balance", 'readonly']) !!}
+        </div>
       </div>
-    </div>
+</div>
   @else 
   <!-- name Field -->
-  <div class="form-group row ">
-      {!! Form::label('name', "Name", ['class' => 'col-3 control-label text-right']) !!}
+  <div class="form-group row col-md-6">
+      {!! Form::label('name', trans('lang.balance_name'), ['class' => 'col-3 control-label  ']) !!}
       <div class="col-9">
         {!! Form::text('name',$user_name ,  ['class' => 'form-control','placeholder'=>  "Insert Balance", 'readonly']) !!}
       </div>
@@ -42,7 +46,7 @@
 @if(Request::is('*addBalance'))
 <!-- balance Field -->
 <div class="form-group row ">
-  {!! Form::label('balance', "Balance", ['class' => 'col-3 control-label text-right']) !!}
+  {!! Form::label('balance', trans('lang.balances'), ['class' => 'col-3 control-label  ']) !!}
   <div class="col-9">
     {!! Form::text('balance', Request::is('*edit') ? $balance->balance : null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'readonly']) !!}
   </div>
@@ -50,9 +54,9 @@
 @else
 <!-- balance Field -->
 <div class="form-group row ">
-  {!! Form::label('balance', "Balance", ['class' => 'col-3 control-label text-right']) !!}
+  {!! Form::label('balance', trans('lang.balance'), ['class' => 'col-3 control-label  ']) !!}
   <div class="col-9">
-    {!! Form::text('balance', Request::is('*edit') ? $balance->balance : null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder")]) !!}
+    {!! Form::text('balance', Request::is('*edit') ? $balance->balance : null,  ['class' => 'form-control']) !!}
   </div>
 </div>
 @endif
@@ -61,7 +65,7 @@
 @if(Request::is('*addBalance'))
   <!--add more balance Field -->
   <div class="form-group row ">
-    {!! Form::label('Add', "Add Amount", ['class' => 'col-3 control-label text-right']) !!}
+    {!! Form::label('Add', "Add Amount", ['class' => 'col-3 control-label  ']) !!}
     <div class="col-9">
       {!! Form::text('Add', null,  ['class' => 'form-control','placeholder'=>  "Insert amount"]) !!}
     </div>
@@ -71,7 +75,7 @@
 
 <!-- Description Field -->
 <div class="form-group row " style="display:none">
-            {!! Form::label('description', trans("lang.category_description"), ['class' => 'col-3 control-label text-right']) !!}
+            {!! Form::label('description', trans("lang.category_description"), ['class' => 'col-3 control-label  ']) !!}
             <div class="col-9">
               {!! Form::textarea('description', 'ff', ['class' => 'form-control','placeholder'=>
                trans("lang.category_description_placeholder")  ]) !!}
@@ -139,7 +143,7 @@
 
 
 <!-- Submit Field -->
-<div class="form-group col-12 text-right">
-  <button type="submit" class="btn btn-{{setting('theme_color')}}" ><i class="fa fa-save"></i> Save Balance</button>
+<div class="form-group col-12  ">
+  <button type="submit" class="btn btn-{{setting('theme_color')}}" ><i class="fa fa-save"></i> {{trans('lang.save')}}</button>
   <a href="{!! route('balance.index') !!}" class="btn btn-default"><i class="fa fa-undo"></i> {{trans('lang.cancel')}}</a>
 </div>

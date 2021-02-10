@@ -4,16 +4,16 @@
 <!-- Content Header (Page header) -->
 <div class="content-header">
   <div class="container-fluid">
-    <div class="row mb-2">
+  <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0 text-dark">Banned Users<small class="ml-3 mr-3">|</small><small>Banned Users Management</small></h1>
+        <h1 class="m-0 text-dark">{{trans('lang.banned_users')}}<small class="ml-3 mr-3">|</small><small>{{trans('lang.banned_user_desc')}}</small></h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><a href="{{url('/dashboard')}}"><i class="fa fa-dashboard"></i> {{trans('lang.dashboard')}}</a></li>
-          <li class="breadcrumb-item"><a href="{!! route('bannedUsers.index') !!}">Banned Users</a>
+          <li class="breadcrumb-item"><a href="{!! route('bannedUsers.index') !!}">{{trans('lang.banned_users')}}</a>
           </li>
-          <li class="breadcrumb-item active">Banned Users List</li>
+          <li class="breadcrumb-item active">{{trans('lang.banned_user_create')}}</li>
         </ol>
       </div><!-- /.col -->
     </div><!-- /.row -->
@@ -28,10 +28,10 @@
     <div class="card-header">
       <ul class="nav nav-tabs align-items-end card-header-tabs w-100">
         <li class="nav-item">
-          <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-list mr-2"></i>Banned Users List</a>
+          <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-list mr-2"></i>{{trans('lang.banned_user_table')}}</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{!! route('bannedUsers.create') !!}"><i class="fa fa-plus mr-2"></i>Add Banned User</a>
+          <a class="nav-link" href="{!! route('bannedUsers.create') !!}"><i class="fa fa-plus mr-2"></i>{{trans('lang.banned_user_edit')}}</a>
         </li>
         @include('layouts.right_toolbar', compact('dataTable'))
 
