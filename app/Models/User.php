@@ -310,13 +310,13 @@ class User extends Authenticatable implements HasMedia
     }
 
     public function FromUserName() {
-        return $this->belongsToMany(User::class, 'transfer_transactions', 'from_id', 'to_id')
-        ->withPivot()->withTimestamps();
+        return $this->belongsToMany(User::class, 'transfer_transactions',  'to_id','from_id')->withPivot('amount', 'type')
+        ->withTimestamps();
     }
 
     public function ToUserName() {
-        return $this->belongsToMany(User::class, 'transfer_transactions', 'to_id', 'from_id')
-        ->withPivot()->withTimestamps();
+        return $this->belongsToMany(User::class, 'transfer_transactions',  'from_id','to_id')->withPivot('amount', 'type')
+        ->withTimestamps();
     }
 
     public function coordinates() {
@@ -348,5 +348,27 @@ class User extends Authenticatable implements HasMedia
     //        return $this->gallery->image = asset('storage/gallery') . '/' . $this->gallery->image;
     //    }
 
+    public function vendorViews()
+    {
+        return $this->belongsToMany(User::class,'views','user_id','vendor_id')
+            ->withTimestamps();
+    }
 
+    public function userViews()
+    {
+        return $this->belongsToMany(User::class,'views','vendor_id','user_id')
+            ->withTimestamps();
+    }
+
+    public function vendorContacts()
+    {
+        return $this->belongsToMany(User::class,'contacts','user_id','vendor_id')
+            ->withTimestamps();
+    }
+
+    public function userContacts()
+    {
+        return $this->belongsToMany(User::class,'contacts','vendor_id','user_id')
+            ->withTimestamps();
+    }
 }

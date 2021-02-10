@@ -128,6 +128,8 @@ class CategoryAPIController extends Controller
 
     }
 
+    
+
     /**
      * Update the specified Category in storage.
      *

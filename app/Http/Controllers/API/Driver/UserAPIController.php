@@ -24,6 +24,7 @@ use App\Models\reviews;
 use Validator;
 use PHPMailer\PHPMailer\PHPMailer;
 use App\City;
+use App\Balance;
 
 class UserAPIController extends Controller
 {
@@ -229,6 +230,23 @@ class UserAPIController extends Controller
             $user->last_name = $request->input('last_name');
             $user->email = $request->input('email');
            $user->city_id = $request->input('city_id');
+           while(true) {
+            $payment_id = '#' . rand(1000, 9999) . rand(1000, 9999);
+            if (!(User::where('payment_id', $payment_id)->exists())) {
+                $user->payment_id = $payment_id;
+                $user->save();
+                break;
+            } else continue;
+        }
+
+            $balance = new Balance();
+
+            $balance->balance = 0.0;
+
+            $balance->save();
+
+            $user->balance_id = $balance->id;                           
+
             $user->is_verified = 0;
 
             $user->language = $request->input('lang')==null ? 'en':$request->input('lang','');
@@ -648,10 +666,10 @@ class UserAPIController extends Controller
                     return $this->sendError('User not found', 401);
                 }
 
-                $user->update([
-                    'city_id' => $request->city_id,
-                    'language' => $request->lang
-                ]);
+                $user->notification=$request->notification;
+                $user->city_id=$request->city_id;
+                $user->language=$request->lang;
+                $user->save();
 
                 return $this->sendResponse([], 'Inforamtion saved successfully');;
             }
@@ -659,6 +677,40 @@ class UserAPIController extends Controller
             return $this->sendError('something was wrong', 401);
 
         }
+    }
+
+    public function backgroundPic(Request $request)
+    {
+        try {
+            if (empty($request->header('devicetoken'))) {
+                return $this->sendError('device token not found', 401);
+            }
+
+            $vendor = User::where('device_token', $request->header('devicetoken'))->first();
+
+            if (empty($vendor)) {
+                return $this->sendError('User not found', 401);
+            }
+
+
+            if (!empty ($request->file('avatar'))) {
+                $imageNameAvater = uniqid() . $request->file('avatar')->getClientOriginalName();
+                $request->file('avatar')->move(public_path('storage/Avatar'), $imageNameAvater);
+
+                $vendor->avatar = $imageNameAvater;
+
+                $vendor->save();
+
+
+            }
+
+            return $this->sendResponse([], 'photo Saved successfully');
+        } catch (\Exception $e) {
+            return $this->sendError('something was wrong', 401);
+
+        }
+
+
     }
 
 }

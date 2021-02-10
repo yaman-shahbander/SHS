@@ -14,6 +14,9 @@ use App\Repositories\UploadRepository;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Prettus\Validator\Exceptions\ValidatorException;
+use App\Models\Category;
+use App\subCategory;
+
 class SpecialOffersController extends Controller
 {
     /** @var  SpecialOffersRepositry */
@@ -54,6 +57,7 @@ class SpecialOffersController extends Controller
             $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->SpecialRepository->model());
             $html = generateCustomField($customFields);
         }
+<<<<<<< HEAD
         $vendors = User::whereHas(
             'roles', function($q){
             $q->where('name', 'vendor');
@@ -67,6 +71,19 @@ class SpecialOffersController extends Controller
         }else{
             return redirect()->back()->with(["error"=> 'Please add category','customFields'=> isset($html) ? $html : false]);
         }
+=======
+
+        $categories = Category::all();
+
+        $vendors = User::whereHas('roles', function($q) {
+            $q->where('role_id', 3);
+        })->get();
+
+        return view('special_offers.create', [
+            'categories' => $categories,
+            'vendors'    => $vendors,
+            'customFields'=> isset($html) ? $html : false]);
+>>>>>>> d049c9de0ae97170c2d4dcc12033c22dc7411602
     }
 
     /**
@@ -77,17 +94,35 @@ class SpecialOffersController extends Controller
      */
     public function store(Request $request)
     {
+        $vendor_specialOffer = new specialOffers();
 
-        $input = $request->all();
-        $input['user_id']=$input['user'];
-        $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->SpecialRepository->model());
+        $vendor_specialOffer->user_id = $request->vendors;
 
-        try {
-            $special = $this->SpecialRepository->create($input);
-            $special->customFieldsValues()->createMany(getCustomFieldsValues($customFields, $request));
-        } catch (ValidatorException $e) {
-            Flash::error($e->getMessage());
-        }
+        $vendor_specialOffer->description = $request->description;
+
+        $vendor_specialOffer->title = $request->offername;
+
+        $vendor_specialOffer->subcategory_id = $request->subcategory;
+
+        $vendor_specialOffer->image = "default.png";
+
+        $vendor_specialOffer->save();
+
+        if (!empty ($request->file('image'))) {
+
+            $imageName = uniqid() . $request->file('image')->getClientOriginalName();
+
+            $request->file('image')->move(public_path('storage/specialOffersPic'), $imageName);
+
+            $vendor_specialOffer->update(['image' => $imageName]);
+
+            $response['image'] = asset('storage/specialOffersPic') . '/' .$imageName;
+
+            } else {
+
+                $response['image'] = asset('storage/specialOffersPic') . '/default.jpg' ;
+
+            }
 
         Flash::success(__('lang.saved_successfully', ['operator' => __('lang.category')]));
 
@@ -121,21 +156,27 @@ class SpecialOffersController extends Controller
      */
     public function edit($id)
     {
-        $vendors = User::whereHas(
-            'roles', function($q){
-            $q->where('name', 'Manager');
-        }
-        )->get();
-        $special = $this->SpecialRepository->findWithoutFail($id);
 
-        if (empty($special)) {
+        $offer = $this->SpecialRepository->findWithoutFail($id);
+
+        $categories = Category::all();
+
+        $subcategories = subCategory::all();
+
+        $vendors = User::whereHas('roles', function($q) {
+            $q->where('role_id', 3);
+        })->get();
+
+        if (empty($offer)) {
             Flash::error(__('lang.not_found', ['operator' => __('lang.category')]));
 
             return redirect(route('offers.index'));
         }
 
-
-        return view('special_offers.edit')->with(['special'=> $special,'vendors'=>$vendors]);
+        return view('special_offers.edit')->with("offer" , $offer)
+        ->with('categories', $categories)
+        ->with('vendors', $vendors)
+        ->with('subcategories', $subcategories);
     }
 
     /**
@@ -147,17 +188,36 @@ class SpecialOffersController extends Controller
      */
     public function update($id, Request $request)
     {
-        $special = $this->SpecialRepository->findWithoutFail($id);
-        if (empty($special)) {
-            Flash::error('Offers not found');
+        $offer = $this->SpecialRepository->findWithoutFail($id);
+
+        if (empty($offer)) {
+            Flash::error(__('lang.not_found', ['operator' => __('lang.category')]));
+
             return redirect(route('offers.index'));
         }
-        $input = $request->all();
-        $input['user_id']=$input['user'];
 
-        //  DB::table('cities')->where('id', $id)->update(['city_name' => $input['name']]);
+        $input['user_id']        = $request->vendors;
+
+        $input['description']    = $request->description;
+
+        $input['title']          = $request->offername;
+        
+        $input['subcategory_id'] = $request->subcategory;
+
+        if (!empty ($request->file('image'))) {
+
+            $imageName = uniqid() . $request->file('image')->getClientOriginalName();
+
+            $request->file('image')->move(public_path('storage/specialOffersPic'), $imageName);
+
+            $offer->update(['image' => $imageName]);
+
+            $response['image'] = asset('storage/specialOffersPic') . '/' .$imageName;
+
+        }
+
         try {
-            $special = $this->SpecialRepository->update($input, $id);
+            $offer = $this->SpecialRepository->update($input, $id);
 
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());

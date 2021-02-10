@@ -156,7 +156,6 @@ class SubCategoryController extends Controller
             return redirect(route('subcategory.index'));
         }
 
-
         return view('SubCategories.edit')->with(['subcategory'=> $subcategory,'categories'=>$categories]);
 
     }

@@ -25,7 +25,7 @@
         </li>
       </ul>
     </div>
-    <div class="card-body">
+    <div class="card-body select_cities" data-route="{{url('api/user/select')}}">
       {!! Form::open(['route' => 'vendor.store']) !!}
       <div class="row">
         @include('settings.vendors_suggested.fields')

@@ -15,7 +15,7 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0 text-dark">City<small class="ml-3 mr-3">|</small><small>Offers Management</small></h1>
+        <h1 class="m-0 text-dark">Offer<small class="ml-3 mr-3">|</small><small>Offer Management</small></h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
@@ -39,16 +39,18 @@
       <ul class="nav nav-tabs align-items-end card-header-tabs w-100">
         @can('offers.index')
         <li class="nav-item">
-          <a class="nav-link" href="{!! route('offers.index') !!}"><i class="fa fa-list mr-2"></i>City List</a>
+          <a class="nav-link" href="{!! route('offers.index') !!}"><i class="fa fa-list mr-2"></i>Offer List</a>
         </li>
         @endcan
+
         <li class="nav-item">
-          <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-plus mr-2"></i>Create City</a>
+          <a class="nav-link" href="{!! url()->current() !!}"><i class="fa fa-plus mr-2"></i>Create special Offer</a>
         </li>
       </ul>
     </div>
+    <div class="subcategory" data-route="{{url('api/subcategory/select')}}"></div>
     <div class="card-body">
-      {!! Form::open(['route' => 'offers.store']) !!}
+      {!! Form::open(['route' => 'offers.store', 'method '=> "post", 'enctype' => "multipart/form-data"]) !!}
       <div class="row">
         @include('special_offers.fields')
       </div>

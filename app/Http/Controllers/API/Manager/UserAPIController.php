@@ -30,6 +30,7 @@ use Validator;
 use PHPMailer\PHPMailer\PHPMailer;
 use App\City;
 use App\Models\Day;
+use App\Balance;
 
 class UserAPIController extends Controller
 {
@@ -225,6 +226,23 @@ class UserAPIController extends Controller
             $user->last_name = $request->input('last_name');
             $user->email = $request->input('email');
 //            $user->city_id = $request->input('city_id');
+            while(true) {
+                $payment_id = '#' . rand(1000, 9999) . rand(1000, 9999);
+                if (!(User::where('payment_id', $payment_id)->exists())) {
+                    $user->payment_id = $payment_id;
+                    $user->save();
+                    break;
+                } else continue;
+            }
+
+            $balance = new Balance();
+
+            $balance->balance = 0.0;
+
+            $balance->save();
+
+            $user->balance_id = $balance->id;
+
             $user->is_verified = 0;
 
 
@@ -305,7 +323,7 @@ class UserAPIController extends Controller
                     'email' => $user->email,
                     'activation_cod' => $user->activation_code,
                     'is_verified' => $user->is_verified == 1 ? true : false,
-                    // 'avatar'=>$user->avatar,
+                    'avatar' => asset('storage/Avatar') . '/' . $user->avatar,
                     'lang' => $user->language,
                     'device_token' => $user->device_token,
                     'phone' => $user->phone,
@@ -343,7 +361,6 @@ class UserAPIController extends Controller
                     ['id' => $user->id,
                         'first_name' => $user->name,
                         'is_verified' => $user->is_verified == 1 ? true : false,
-
                         'email' => $user->email,
                         //'activation_cod'=>$user->activation_code,
                         'avatar' => asset('storage/Avatar') . '/' . $user->avatar,
@@ -631,7 +648,7 @@ class UserAPIController extends Controller
             foreach ($attrs as $attr) {
                 $respone[$i]['id'] = $attr->id;
                 $respone[$i]['name'] = $attr->name;
-                $respone[$i]['avatar'] = $attr->getFirstMediaUrl('avatar', 'icon');
+                $respone[$i]['avatar'] = asset('storage/Avatar').'/'.$attr->avatar;
                 $respone[$i]['last_name'] = $attr->last_name;
                 $respone[$i]['description'] = $attr->description;
                 $respone[$i]['rating'] = round((getRating($attr)/20)*2)/2;
@@ -685,6 +702,8 @@ class UserAPIController extends Controller
 
 
             }
+            $vendor->save();
+
             return $this->sendResponse([], 'photo Saved successfully');
         } catch (\Exception $e) {
             return $this->sendError('something was wrong', 401);
@@ -697,6 +716,25 @@ class UserAPIController extends Controller
     // 'reviews'         => ($vendor->clientsAPI)->transform(function($q){
     //     return $q->select(['name', 'description'])->get();
     // })
+
+    /**public function history(Request $request) {
+        if($request->header('devicetoken')) {
+
+            $user = User::where('device_token', $request->header('devicetoken'))->first();
+
+            if (empty($user)) {
+                return $this->sendError('User not found', 401);
+            }
+
+            $transactionsHistory = $user->ToUserName->transform(function($q){
+
+
+            });
+
+            return $this->sendResponse($transactionsHistory->toArray(), 'History retrieved successfully');
+        }
+
+        */
 
     public function vendorprofile(Request $request)
     { //for vendor screens
@@ -718,7 +756,9 @@ class UserAPIController extends Controller
                 'status' => $vendor->status->only('id', 'status_type'),
                 'rating' => round((getRating($vendor) / 20) * 2) / 2,
                 'count_reviews' => count($vendor->clients),
-                'count_contected' => count($vendor->messages->unique('from_id')),
+                'count_contacted' => count($vendor->userContacts),
+                'count_views' => count($vendor->userViews),
+                'count_favorites' => count($vendor->homeOwnerFavorite),
                 'reviews' => ($vendor->clientsAPI)->transform(function ($q) {
                     $review = reviews::find($q->pivot->id);
                     return $q = [
@@ -726,7 +766,7 @@ class UserAPIController extends Controller
                         'name' => $q->name,
                         'rating' => round((getFullRating($review) / 20) * 2) / 2,
                         'description' => $q->pivot->description,
-                        'image' => asset('storage/Avatar') . '/' . $q->avatar,
+                        'avatar' => asset('storage/Avatar') . '/' . $q->avatar,
 
                     ];
                 }),
@@ -789,6 +829,7 @@ class UserAPIController extends Controller
 //                });
                 if($user->city_id==null){
                     $response = [
+                        'notification'=> $user->notification,
                         'lang' => $user->language,
                         'city_id' => '',
                         'country_id' =>  ''
@@ -797,6 +838,7 @@ class UserAPIController extends Controller
                 }
                 else
                 $response = [
+                    'notification'=> $user->notification,
                     'lang' => $user->language,
                     'city_id' => $user->city_id,
                     'country_id' =>  (Country::find($user->cities->country_id))->id
@@ -822,10 +864,10 @@ class UserAPIController extends Controller
                     return $this->sendError('User not found', 401);
                 }
 
-                $user->update([
-                    'city_id' => $request->city_id,
-                    'language' => $request->lang
-                ]);
+                $user->notification=$request->notification;
+                $user->city_id=$request->city_id;
+                $user->language=$request->lang;
+                $user->save();
 
                 return $this->sendResponse([], 'Inforamtion saved successfully');;
             }
@@ -1013,6 +1055,46 @@ $days=[];
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 401);
 
+        }
+    }
+
+    public function getVendorCities(Request $request) {
+        try {
+            if ($request->header('devicetoken')) {
+
+                $vendor = User::where('device_token', $request->header('devicetoken'))->first();
+
+                if (empty($vendor)) {
+                    return $this->sendError('User not found', 401);
+                }
+
+                $existedCitiesIds = $vendor->vendor_city->transform(function($q) {
+                    return  $q['id']; });
+
+                $response['cities_id'] =  $existedCitiesIds->toArray();
+
+                return $this->sendResponse($response, 'Cities retrieved successfully');
+            }
+        } catch (\Exception $e) {
+            return $this->sendError('Something is wrong', 401);
+        }
+    }
+
+    public function addVendorCities(Request $request) {
+        try {
+
+          $vendor = User::where('device_token', $request->header('devicetoken'))->first();
+
+          if (empty($vendor)) {
+            return $this->sendError('User not found', 401);
+          }
+
+          $vendor->vendor_city()->sync($request->cities);
+
+          return $this->sendResponse([], 'Cities added successfully');
+
+        } catch (\Exception $e) {
+            return $this->sendError('Something is wrong', 401);
         }
     }
 

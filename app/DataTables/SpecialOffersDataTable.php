@@ -39,8 +39,14 @@ class SpecialOffersDataTable extends DataTable
             ->editColumn('created_at', function ($special) {
                 return getDateCreatedAtColumn($special, 'created_at');
             })
-            ->editColumn('email', function ($user) {
-                return getEmailColumn($user, 'email');
+            ->editColumn('subcategory_id', function ($special) {
+                return $special->subcategories->name;
+            })
+            ->editColumn('category', function ($special) {
+                return $special->subcategories->categories->name;
+            })
+            ->editColumn('image', function ($special) {
+                return '<img src='. asset('storage/specialOffersPic') . '/' . $special->image.' style="width: 82px; height: 65px !important;">';
             })
             ->addColumn('action', 'special_offers.datatables_actions')
             ->editColumn('user_id', function ($special) {
@@ -50,6 +56,8 @@ class SpecialOffersDataTable extends DataTable
 
         return $dataTable;
     }
+
+    //asset('storage/specialOffersPic') . '/' .$imageName;
 
     /**
      * Get columns.
@@ -70,23 +78,25 @@ class SpecialOffersDataTable extends DataTable
                 'searchable' => false, 'orderable' => false, 'exportable' => false, 'printable' => false,
             ],
             [
-                'data' => 'phone',
-                'title' => 'Phone',
-
+                'data' => 'subcategory_id',
+                'title' => 'subcategory',
             ],
             [
-                'data' => 'email',
-                'title' => 'Email',
-
+                'data' => 'category',
+                'title' => 'category',
+            ],
+            [
+                'data' => 'image',
+                'title' => 'image',
             ],
             [
                 'data' => 'updated_at',
-                'title' => 'Updated At',
+                'title' => 'Updated',
                 'searchable' => false,
             ],
             [
                 'data' => 'created_at',
-                'title' => 'Created At',
+                'title' => 'Created',
                 'searchable' => false,
             ]
 

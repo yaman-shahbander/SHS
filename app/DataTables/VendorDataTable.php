@@ -120,7 +120,7 @@ class VendorDataTable extends DataTable
                 'title' => trans('lang.user_updated_at'),
                 'searchable' => false,
             ]
-            
+
         ];
 
         // TODO custom element generator

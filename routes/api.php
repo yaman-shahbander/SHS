@@ -28,7 +28,8 @@ Route::prefix('homeOwner')->group(function () {
     //Change password
     Route::post('change-password', 'API\AuthController@change_password');
     //change phone
-    Route::post('change-phone', 'API\AuthController@change_phone');
+    Route::post('change_phone', 'API\AuthController@change_phone');
+    Route::post('verify_change_phone', 'API\AuthController@change_phone');
     //My reviews
     Route::get('myReviews', 'API\Driver\UserAPIController@myReviews');
     //Show My favorites(BookMark)
@@ -47,6 +48,9 @@ Route::prefix('homeOwner')->group(function () {
     Route::post('storegmapLocation', 'API\GmapLocationAPIController@store');
 
     Route::post('updategmapLocation', 'API\GmapLocationAPIController@update');
+    //save home owner photo
+    Route::post('photoProfile', 'API\Driver\UserAPIController@backgroundPic');
+
 
     // Route::resource('gmapLocation', 'API\GmapLocationAPIController');
      //select language, country, and city
@@ -144,6 +148,12 @@ Route::prefix('vendor')->group(function () {
 
     //update vendor status
     Route::get('getcategorySubcatory', 'API\Manager\UserAPIController@getcategorySubcatory');
+
+    //Get vendor cities
+    Route::get('getVendorCities', 'API\Manager\UserAPIController@getVendorCities');
+
+    //add, update and delete vendor cities
+    Route::post('VendorCitiesavailibility', 'API\Manager\UserAPIController@addVendorCities');
 });
 
 
@@ -167,18 +177,21 @@ Route::post('cities', 'API\cityApiController@index');
 //forgot password API
 Route::post('forgot-password', 'API\AuthController@forgot_password');
 //vendor rating API
-Route::post('vendorWithRating', 'API\vendorApiController@index');
+Route::post('vendorByCategoryId', 'API\vendorApiController@index');
 //vendor profile API
-
-
-Route::get('vendorProfile', 'API\vendorApiController@profile');
+Route::post('vendorProfile', 'API\vendorApiController@profile');
 //User current balance API
-Route::post('currentBalance', 'API\MoneyAPIController@currentBalance');
+Route::get('currentBalance', 'API\MoneyAPIController@currentBalance');
 //History of all transactions API
-Route::post('transactions', 'API\MoneyAPIController@history');
+Route::get('transactions', 'API\MoneyAPIController@history');
 //Transfer money API
 Route::post('transfer', 'API\MoneyAPIController@transferMoney');
 //Route::resource('filter', 'API\FilterVendorsAPIController');
+
+//Viewed vendor api
+Route::post('ViewVendor', 'API\ViewsAPIController@viewVendor');
+//contacted vendor api
+Route::post('contactVendor', 'API\ContactAPIController@contactVendor');
 
 //FIlter vendors API
 Route::post('getfilter', 'API\FilterVendorsAPIController@index');
@@ -202,12 +215,10 @@ Route::post('vendorRefer', 'API\vendorApiController@vendorRefer');
 Route::get('langCountryCity', 'API\Driver\UserAPIController@langCountryCity');
 //save language, country, and city
 Route::post('savelangCountryCity', 'API\Driver\UserAPIController@savelangCountryCity');
-
-
-
-
-
-//
+//change phone number
+Route::post('change_phone', 'API\AuthController@change_phone');
+//verify change phone number
+Route::post('verify_change_phone', 'API\AuthController@verified_change_phone');
 Route::resource('restaurants', 'API\RestaurantAPIController');
 
 Route::resource('faq_categories', 'API\FaqCategoryAPIController');
@@ -285,17 +296,5 @@ Route::middleware('auth:api')->group(function () {
 //for dashboard
 Route::post('user/select','UserController@getcity');
 Route::post('subcategory/select','NotificationController@getsubcategory');
+Route::get('phonetest','HomeController@mousa');
 
-
-/*
-if ($request->device_code) {
-            $vednor = User::where('device_code', $request->device_code)->first();
-            if (!empty($vednor)) {
-
-            } else {
-
-            }
-        } else {
-
-        }
-*/

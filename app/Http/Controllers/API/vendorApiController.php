@@ -186,17 +186,30 @@ class vendorApiController extends Controller
         if($request->header('devicetoken')) {
             $response = [];
             $hiddenElems = ['custom_fields', 'has_media'];
+            $isFavorite = false;
             try {
-                $vendor = User::where('device_token', $request->header('devicetoken'))->first();
-                if (empty($vendor)) {
+                $user = User::where('device_token', $request->header('devicetoken'))->first();
+                
+                if (empty($user)) {
                     return $this->sendError('User not found', 401);
                 }
+
+                $vendor = User::find($request->vendor_id);
                 $respone = [];
                 $reviewsHiddenColumns = ['custom_fields', 'media', 'has_media'];
                 $attrs = $vendor->clientsAPI->makeHidden($reviewsHiddenColumns);
                 $reviews = [];
                 $i = 0;
 
+                
+                
+                $checkIfFavorite = $user->vendorFavorite->transform(function($q) use ($vendor){
+                    if ($vendor->id == $q->id) 
+                        return $q; 
+                    });
+
+                count($checkIfFavorite) > 0 ? $isFavorite = true : $isFavorite = false;
+          
             foreach($attrs as $attr) {
                 $reviews[$i]['id'] = $attr->id;
                 $reviews[$i]['name'] = $attr->name;
@@ -206,8 +219,6 @@ class vendorApiController extends Controller
                 $i++;
             }
 
-          //  {{ date("g:i A",strtotime($hour->start)) }}
-//round((getRating($vendor)/20)*2)/2
             $respone = [
                 'id'             => $vendor->id,
                 'name'           => $vendor->name,
@@ -227,10 +238,11 @@ class vendorApiController extends Controller
                     return $q->only('name_en', 'name_ar', 'start', 'end');
                 }),
                 'availability'   => $vendor->vendor_city->makeHidden('pivot'),
-                'image'          => $vendor->gallery->transform(function($gallery){
+                'gallery'        => $vendor->gallery->transform(function($gallery){
                                     $gallery['image'] = asset('storage/gallery') . '/' . $gallery['image'];
                                     return $gallery['image'];
-                                })
+                                }),
+                'is_favorite'     =>  $isFavorite                
             ];
                 return $this->sendResponse($respone, 'vendor profile retrieved successfully');
 

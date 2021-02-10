@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnDurationIdToUsers extends Migration
+class AddColumnNotificationToUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,8 @@ class AddColumnDurationIdToUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->unsignedBigInteger("duration_id")->nullable();
-            $table->foreign('duration_id')->references('id')->on('durations')->onDelete('set null');
+            $table->boolean('notification');
+
         });
     }
 

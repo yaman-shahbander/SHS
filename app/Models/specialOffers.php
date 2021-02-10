@@ -48,4 +48,7 @@ class specialOffers extends Model
         return $this->belongsTo(subCategory::class, 'subcategory_id');
     }
 
+    public function getUser() {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

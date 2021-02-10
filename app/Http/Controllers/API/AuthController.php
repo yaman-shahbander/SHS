@@ -104,11 +104,8 @@ class AuthController extends Controller
         if($request->header('devicetoken')) {
         $input = $request->all();
 
-        $userid = User::where('device_token', $request->header('devicetoken'))->get('id');
+        $user = User::where('device_token', $request->header('devicetoken'))->first();
 
-        $userid = $userid[0]->id;
-
-        $useridPhone =(User::find($userid))->phone;
 
         $rules = array(
             'new_number' => 'required'
@@ -120,22 +117,50 @@ class AuthController extends Controller
             $response = array("status" => 400, "message" => $validator->errors()->first(), "data" => array());
         } else {
             try {
-                 if (request('new_number') == $useridPhone) {
-                    $response = array("status" => 400, "message" => "Please enter a phone number which is not similar then current phone number.", "data" => array());
+                 if (request('new_number') == $user->phone) {
+                     return $this->sendError( 'Phone Number must be different',401);
                 } else {
-                    User::where('id', $userid)->update(['phone' => $input['new_number']]);
-                    $response = array("status" => 200, "message" => "phone number updated successfully.", "data" => array());
+                     $user->activation_code = rand(1000, 9999);
+                     $user->save();
                 }
             } catch (\Exception $ex) {
-                if (isset($ex->errorInfo[2])) {
-                    $msg = $ex->errorInfo[2];
-                } else {
-                    $msg = $ex->getMessage();
-                }
-                $response = array("status" => 400, "message" => $msg, "data" => array());
+                return $this->sendError( 'Error Update Phone Number',401);
+
             }
         }
-        return $this->sendResponse($response, 'Phone Number Updated Successfully');
+        return $this->sendResponse(['activation_code'=>$user->activation_code], 'Phone Number Updated Successfully');
+    }
+  }
+    public function verified_change_phone(Request $request)
+    {
+        if($request->header('devicetoken')) {
+        $input = $request->all();
+
+        $user = User::where('device_token', $request->header('devicetoken'))->first();
+
+
+        $rules = array(
+            'new_number' => 'required'
+        );
+
+        $validator = Validator::make($input, $rules);
+
+        if ($validator->fails()) {
+            $response = array("status" => 400, "message" => $validator->errors()->first(), "data" => array());
+        } else {
+            try {
+                 if (request('new_number') == $user->phone) {
+                     return $this->sendError( 'Phone Number must be different',401);
+                } else {
+                     $user->phone =$request->new_number;
+                     $user->save();
+                }
+            } catch (\Exception $ex) {
+                return $this->sendError( 'Error Update Phone Number',401);
+
+            }
+        }
+        return $this->sendResponse([], 'Phone Number Updated Successfully');
     }
   }
 }
