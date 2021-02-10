@@ -28,7 +28,8 @@ Route::prefix('homeOwner')->group(function () {
     //Change password
     Route::post('change-password', 'API\AuthController@change_password');
     //change phone
-    Route::post('change-phone', 'API\AuthController@change_phone');
+    Route::post('change_phone', 'API\AuthController@change_phone');
+    Route::post('verify_change_phone', 'API\AuthController@change_phone');
     //My reviews
     Route::get('myReviews', 'API\Driver\UserAPIController@myReviews');
     //Show My favorites(BookMark)
@@ -214,7 +215,10 @@ Route::post('vendorRefer', 'API\vendorApiController@vendorRefer');
 Route::get('langCountryCity', 'API\Driver\UserAPIController@langCountryCity');
 //save language, country, and city
 Route::post('savelangCountryCity', 'API\Driver\UserAPIController@savelangCountryCity');
-//
+//change phone number
+Route::post('change_phone', 'API\AuthController@change_phone');
+//verify change phone number
+Route::post('verify_change_phone', 'API\AuthController@verified_change_phone');
 Route::resource('restaurants', 'API\RestaurantAPIController');
 
 Route::resource('faq_categories', 'API\FaqCategoryAPIController');
