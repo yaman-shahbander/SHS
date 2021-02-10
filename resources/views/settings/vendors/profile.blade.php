@@ -353,6 +353,27 @@
                         </div>
                     <!-- /.card -->
 
+                    <!-- users who added this vendor as a favorite-->
+                    <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title"><i class="fa fa-list mr-2"></i> service provider</h3>
+                                <h6 style="font-size:11px"><i>Users who added this as a favorite </i></h6>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                 <div class="row">
+                                @foreach($favoriteVendor as $favorite)
+                                <div class="col-md-12">
+                                    <strong>
+                                    <i class="fa fa-user mr-2"></i>{{ $favorite->name }} </strong>
+                                </div>
+                                @endforeach
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                    <!-- /.card -->
+
                 </div>
 
                 <!-- /.col -->

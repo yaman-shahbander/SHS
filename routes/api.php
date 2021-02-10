@@ -148,6 +148,12 @@ Route::prefix('vendor')->group(function () {
 
     //update vendor status
     Route::get('getcategorySubcatory', 'API\Manager\UserAPIController@getcategorySubcatory');
+
+    //Get vendor cities
+    Route::get('getVendorCities', 'API\Manager\UserAPIController@getVendorCities');
+
+    //add, update and delete vendor cities
+    Route::post('VendorCitiesavailibility', 'API\Manager\UserAPIController@addVendorCities');
 });
 
 
