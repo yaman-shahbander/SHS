@@ -1,6 +1,6 @@
 <!-- Id Field -->
 <div class="form-group row col-6">
-  {!! Form::label('id', 'Id:', ['class' => 'col-3 control-label text-right']) !!}
+  {!! Form::label('id', trans('lang.user_id'), ['class' => 'col-3 control-label text-right']) !!}
   <div class="col-9">
     <p>{!! $user->id !!}</p>
   </div>
@@ -32,7 +32,7 @@
 
 <!-- Api Token Field -->
 <div class="form-group row col-6">
-  {!! Form::label('api_token', 'Api Token:', ['class' => 'col-3 control-label text-right']) !!}
+  {!! Form::label('api_token', trans('lang.user_api_token'), ['class' => 'col-3 control-label text-right']) !!}
   <div class="col-9">
     <p>{!! $user->api_token !!}</p>
   </div>
@@ -48,7 +48,7 @@
 
 <!-- Role Id Field -->
 <div class="form-group row col-6">
-  {!! Form::label('role_id', 'Role Id:', ['class' => 'col-3 control-label text-right']) !!}
+  {!! Form::label('role_id', trans('lang.user_role_id'), ['class' => 'col-3 control-label text-right']) !!}
   <div class="col-9">
     <p>{!! $user->role_id !!}</p>
   </div>
@@ -56,7 +56,7 @@
 
 <!-- Remember Token Field -->
 <div class="form-group row col-6">
-  {!! Form::label('remember_token', 'Remember Token:', ['class' => 'col-3 control-label text-right']) !!}
+  {!! Form::label('remember_token', trans('lang.user_remember_token'), ['class' => 'col-3 control-label text-right']) !!}
   <div class="col-9">
     <p>{!! $user->remember_token !!}</p>
   </div>
@@ -64,7 +64,7 @@
 
 <!-- Created At Field -->
 <div class="form-group row col-6">
-  {!! Form::label('created_at', 'Created At:', ['class' => 'col-3 control-label text-right']) !!}
+  {!! Form::label('created_at', trans('lang.user_created_at'), ['class' => 'col-3 control-label text-right']) !!}
   <div class="col-9">
     <p>{!! $user->created_at !!}</p>
   </div>
@@ -72,7 +72,7 @@
 
 <!-- Updated At Field -->
 <div class="form-group row col-6">
-  {!! Form::label('updated_at', 'Updated At:', ['class' => 'col-3 control-label text-right']) !!}
+  {!! Form::label('updated_at', trans('lang.user_updated_at'), ['class' => 'col-3 control-label text-right']) !!}
   <div class="col-9">
     <p>{!! $user->updated_at !!}</p>
   </div>

@@ -6,13 +6,13 @@
   @endcan
 
   @can('balance.add')
-  <a data-toggle="tooltip" data-placement="bottom" title="Add Balance" href="{{ route('balance.add', $id) }}" class='btn btn-link'>
+  <a data-toggle="tooltip" data-placement="bottom" title="{{trans('lang.balance_create)}}" href="{{ route('balance.add', $id) }}" class='btn btn-link'>
     <i class="fa fa-plus"></i>
   </a>
   @endcan
 
   @can('balance.edit')
-  <a data-toggle="tooltip" data-placement="bottom" title="Edit Balance" href="{{ route('balance.edit', $id) }}" class='btn btn-link'>
+  <a data-toggle="tooltip" data-placement="bottom" title="{{trans('lang.balance_edit)}}" href="{{ route('balance.edit', $id) }}" class='btn btn-link'>
     <i class="fa fa-edit"></i>
   </a>
   @endcan

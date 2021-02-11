@@ -30,7 +30,7 @@ class RolesTableSeeder extends Seeder
             1 => 
             array (
                 'id' => 3,
-                'name' => 'manager',
+                'name' => 'vendor',
                 'guard_name' => 'web',
                 'default' => 0,
                 'created_at' => '2019-09-07 22:41:38',

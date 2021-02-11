@@ -22,6 +22,6 @@ class ManagersCriteria implements CriteriaInterface
      */
     public function apply($model, RepositoryInterface $repository)
     {
-        return $model->whereHas("roles", function($q){ $q->where("name", "manager"); });
+        return $model->whereHas("roles", function($q){ $q->where("name", "vendor"); });
     }
 }

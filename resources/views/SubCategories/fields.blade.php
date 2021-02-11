@@ -67,65 +67,25 @@
           </div>
         </div>
       </div>   
-
       <div class="row">
-        <!-- Image Field -->
-        <div class="form-group row col-md-12">
-            {!! Form::label('image', trans("lang.category_image"), ['class' => 'col-2 control-label ']) !!}
-            <div class="col-10">
-              <div style="width: 100%" class="dropzone image" id="image" data-field="image">
-                <input type="hidden" name="image">
-              </div>
-              <a href="#loadMediaModal" data-dropzone="image" data-toggle="modal" data-target="#mediaModal" class="btn btn-outline-{{setting('theme_color','primary')}} btn-sm float-right mt-1">{{ trans('lang.media_select')}}</a>
-              <div class="form-text text-muted w-50">
-                {{ trans("lang.category_image_help") }}
-              </div>
+        <!-- $FIELD_NAME_TITLE$ Field -->
+        <div class="form-group row col-md-6">
+            {!! Form::label('password', trans("lang.user_avatar"), ['class' => 'col-md-3 control-label']) !!}
+            <div class="col-md-9">
+                <div class="image-upload-one">
+                <div class="center">
+                    <div class="form-input">
+                        <label for="file-ip-1">
+                            <img id="file-ip-1-preview" src="https://i.ibb.co/ZVFsg37/default.png">
+                            <button type="button" class="imgRemove" onclick="myImgRemoveFunctionOne()"></button>
+                        </label>
+                        <input type="file" name="avatar" id="file-ip-1" accept="image/*" onchange="showPreviewOne(event);">
+                    </div>
+                    <small class="small">Use the ↺ icon to reset the image</small>
+                </div>
             </div>
         </div>
-          @prepend('scripts')
-            <script type="text/javascript">
-              var var15866134771240834480ble = '';
-              @if(isset($subcategory) && $subcategory->hasMedia('image'))
-                      var15866134771240834480ble = {
-                name: "{!! $subcategory->getFirstMedia('image')->name !!}",
-                size: "{!! $subcategory->getFirstMedia('image')->size !!}",
-                type: "{!! $subcategory->getFirstMedia('image')->mime_type !!}",
-                collection_name: "{!! $subcategory->getFirstMedia('image')->collection_name !!}"};
-                      @endif
-              var dz_var15866134771240834480ble = $(".dropzone.image").dropzone({
-                        url: "{!!url('uploads/store')!!}",
-                        addRemoveLinks: true,
-                        maxFiles: 1,
-                        init: function () {
-                          @if(isset($subcategory) && $subcategory->hasMedia('image'))
-                          dzInit(this,var15866134771240834480ble,'{!! url($subcategory->getFirstMediaUrl('image','thumb')) !!}')
-                          @endif
-                        },
-                        accept: function(file, done) {
-                          dzAccept(file,done,this.element,"{!!config('medialibrary.icons_folder')!!}");
-                        },
-                        sending: function (file, xhr, formData) {
-                          dzSending(this,file,formData,'{!! csrf_token() !!}');
-                        },
-                        maxfilesexceeded: function (file) {
-                          dz_var15866134771240834480ble[0].mockFile = '';
-                          dzMaxfile(this,file);
-                        },
-                        complete: function (file) {
-                          dzComplete(this, file, var15866134771240834480ble, dz_var15866134771240834480ble[0].mockFile);
-                          dz_var15866134771240834480ble[0].mockFile = file;
-                        },
-                        removedfile: function (file) {
-                          dzRemoveFile(
-                                  file, var15866134771240834480ble, '{!! url("msubcategory/remove-media") !!}',
-                                  'image', '{!! isset($subcategory) ? $subcategory->id : 0 !!}', '{!! url("uplaods/clear") !!}', '{!! csrf_token() !!}'
-                          );
-                        }
-                      });
-              dz_var15866134771240834480ble[0].mockFile = var15866134771240834480ble;
-              dropzoneFields['image'] = dz_var15866134771240834480ble;
-            </script>
-          @endprepend
+        
       </div>
 </div>
       <!-- Submit Field -->

@@ -81,17 +81,22 @@ class CategoryController extends Controller
         }else{
             $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->categoryRepository->model());
             try {
-                $category = $this->categoryRepository->create($input);
-                $category->customFieldsValues()->createMany(getCustomFieldsValues($customFields, $request));
-                if (isset($input['image']) && $input['image']) {
-                    $cacheUpload = $this->uploadRepository->getByUuid($input['image']);
-                    $mediaItem = $cacheUpload->getMedia('image')->first();
-                    $mediaItem->copy($category, 'image');
-                }
+               
+                if($request->file('avatar')->extension()=="png"){
+                    $category = $this->categoryRepository->create($input);
+                    $category->customFieldsValues()->createMany(getCustomFieldsValues($customFields, $request));
+                    if (!empty ($request->file('avatar'))) {
+                        $imageName = uniqid() . $request->file('avatar')->getClientOriginalName();
+                        $request->file('avatar')->move(public_path('storage/category'), $imageName);
+                    }
+                    Flash::success(__('lang.saved_successfully', ['operator' => __('lang.category')]));
+                } else{
+                    Flash::error('The image must have a png extension');
+                }              
+                
             } catch (ValidatorException $e) {
                 Flash::error($e->getMessage());
             }
-            Flash::success(__('lang.saved_successfully', ['operator' => __('lang.category')]));
             return redirect(route('categories.index'));
         }
     }

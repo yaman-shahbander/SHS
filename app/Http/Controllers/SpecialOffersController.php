@@ -57,6 +57,21 @@ class SpecialOffersController extends Controller
             $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->SpecialRepository->model());
             $html = generateCustomField($customFields);
         }
+<<<<<<< HEAD
+        $vendors = User::whereHas(
+            'roles', function($q){
+            $q->where('name', 'vendor');
+        }
+        )->get();
+      //  $vendor=User::where()->Has()->role('manager')->get();
+      //  dd(count($vendors));
+       // return ;
+        if(count($vendors)!=0) {
+            return view('special_offers.create', ['vendors'=>$vendors,'customFields'=> isset($html) ? $html : false]);
+        }else{
+            return redirect()->back()->with(["error"=> 'Please add category','customFields'=> isset($html) ? $html : false]);
+        }
+=======
 
         $categories = Category::all();
 
@@ -68,6 +83,7 @@ class SpecialOffersController extends Controller
             'categories' => $categories,
             'vendors'    => $vendors,
             'customFields'=> isset($html) ? $html : false]);
+>>>>>>> d049c9de0ae97170c2d4dcc12033c22dc7411602
     }
 
     /**
