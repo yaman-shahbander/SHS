@@ -83,14 +83,48 @@ class TransferTransactionController extends Controller
     public function store(Request $request)
     {
          $input = $request->all();
-         $fromUserBalanceID = User::find($input['fromUser'])->balance_id;
-         $toUserBalanceID   = User::find($input['toUser'])->balance_id;
+         $fromUser = User::find($input['fromUser']);
+         $toUser = User::find($input['toUser']);
+
+         $fromUserBalanceID = $fromUser->balance_id;
+
+         if ($fromUser->id == $toUser->id) {
+            Flash::Error(__('Transfer failed! User can\'t be the same', ['operator' => __('lang.category')]));
+            return redirect(route('transfer.index'));
+         }
+
+         if ($fromUserBalanceID == null) {
+            Flash::Error(__('Transfer failed! User ('. $fromUser->name .') doesn\'t have balance account', ['operator' => __('lang.category')]));
+            return redirect(route('transfer.index'));
+         }
+
+         $toUserBalanceID   = $toUser->balance_id;
+
+         if ($toUserBalanceID == null) {
+            Flash::Error(__('Transfer failed! User ('. $toUser->name .') doesn\'t have balance account', ['operator' => __('lang.category')]));
+            return redirect(route('transfer.index'));
+         }
+
+         $input['amount']  = $input['amount'];
+
+         if (empty($input['amount'])) {
+            Flash::Error(__('Transfer failed! amount should have a value', ['operator' => __('lang.category')]));
+            return redirect(route('transfer.index'));
+         }
+
+         if ($input['amount'] < 0) {
+            Flash::Error(__('Transfer failed! amount should not be negative', ['operator' => __('lang.category')]));
+            return redirect(route('transfer.index'));
+         }
+
+         
+
          $fromUserBalance   = Balance::find($fromUserBalanceID)->balance;
          $toUserBalance     = Balance::find($toUserBalanceID)->balance;
 
          $input['from_id'] = $input['fromUser'];
          $input['to_id']   = $input['toUser'];
-         $input['amount']  = $input['amount'];
+         
 
          if ($fromUserBalance - $input['amount'] >= 0) {
 
