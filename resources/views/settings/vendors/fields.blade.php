@@ -1,6 +1,13 @@
+<style>
+    .control-label {
+        padding-left: 27px;
+    }
+</style>
+
 @if($customFields)
-    <h5 class="col-12 pb-4">{!! trans('lang.main_fields') !!}</h5>
+    <h5 class="col-12 pb-4 control-label">{!! trans('lang.main_fields') !!}</h5>
 @endif
+
 <div style="flex: 50%;max-width: 100%;padding: 0 4px;" class="column">
     <div class="row">
         <!-- Name Field -->
@@ -87,7 +94,7 @@
     </div>
      <!-- $FIELD_NAME_TITLE$ Field -->
      <div class="form-group col-md-12 row">
-        {!! Form::label('avatar', trans("lang.user_avatar"), ['class' => 'col-3 control-label']) !!}
+        {!! Form::label('avatar', trans("lang.user_avatar"), ['class' => 'col-3', 'style' => 'padding-left:20px']) !!}
         <div class="col-9">
             <div style="width: 100%" class="dropzone avatar" id="avatar" data-field="avatar">
                 <input type="hidden" name="avatar">
@@ -99,6 +106,47 @@
         </div>
     </div>
     @prepend('scripts')
+
+    <script>
+        // In your Javascript (external .js resource or <script> tag)
+        $(document).ready(function () {
+            var _this;
+            // $('#projectinput1').select2();
+            // $('#category').select2()
+
+
+            $('#country').on('change',function(){
+                var _this = $(this);
+                $('#city').empty();
+                var data = "id="+_this.val();
+
+                var url = _this.closest('.select_cities').data('route');
+                //  console.log(url);
+
+                $.post(url , data , function(res){
+                    $city=['<option value="0" selected="">select </option>'];
+                    //   $categoryslt=[];
+
+                    // $menu.push('<option value="none" selected="" disabled="">select Menu Type</option>');
+
+                    for(var i=0 ;i<res.length;i++) {
+                        $city.push('<option value="' + res[i]['id'] + '">' + res[i]['city_name'] + '</option>');
+                        // $categoryslt.push('<li data-value="' + res[i]['id'] + '" class="option null selected">' + res[i]['name1'] + '</li>');
+
+                    }
+
+                    $('#city').empty();
+                    $('#city').append($city);
+
+
+                });
+
+            });
+
+        });
+    </script>
+
+
     <script type="text/javascript">
         var user_avatar = '';
         @if(isset($user) && $user->hasMedia('avatar'))
@@ -142,44 +190,7 @@
         dz_user_avatar[0].mockFile = user_avatar;
         dropzoneFields['avatar'] = dz_user_avatar;
     </script>
-    <script>
-        // In your Javascript (external .js resource or <script> tag)
-        $(document).ready(function () {
-            var _this;
-            // $('#projectinput1').select2();
-            // $('#category').select2()
-
-
-            $('#country').on('change',function(){
-                var _this = $(this);
-                $('#city').empty();
-                var data = "id="+_this.val();
-
-                var url = _this.closest('.select_cities').data('route');
-                //  console.log(url);
-
-                $.post(url , data , function(res){
-                    $city=['<option value="0" selected="">select </option>'];
-                    //   $categoryslt=[];
-
-                    // $menu.push('<option value="none" selected="" disabled="">select Menu Type</option>');
-
-                    for(var i=0 ;i<res.length;i++) {
-                        $city.push('<option value="' + res[i]['id'] + '">' + res[i]['city_name'] + '</option>');
-                        // $categoryslt.push('<li data-value="' + res[i]['id'] + '" class="option null selected">' + res[i]['name1'] + '</li>');
-
-                    }
-
-                    $('#city').empty();
-                    $('#city').append($city);
-
-
-                });
-
-            });
-
-        });
-    </script>
+    
     @endprepend
 
 
