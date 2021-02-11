@@ -1,6 +1,13 @@
+<style>
+    .control-label {
+        padding-left: 27px;
+    }
+</style>
+
 @if($customFields)
-    <h5 class="col-12 pb-4">{!! trans('lang.main_fields') !!}</h5>
+    <h5 class="col-12 pb-4 control-label">{!! trans('lang.main_fields') !!}</h5>
 @endif
+
 <div style="flex: 50%;max-width: 100%;padding: 0 4px;" class="column">
     <div class="row">
         <!-- Name Field -->
@@ -84,6 +91,7 @@
                 </div>
             </div>
         </div>
+
         <!-- $FIELD_NAME_TITLE$ Field -->
         <div class="form-group row col-md-6">
         {!! Form::label('password', trans("lang.user_avatar"), ['class' => 'col-md-3 control-label']) !!}
@@ -99,29 +107,33 @@
                     </div>
                     <small class="small">Use the ↺ icon to reset the image</small>
                 </div>
+
             </div>
         </div>
     </div>
 </div>
     
     @prepend('scripts')
-   
+
     <script>
         // In your Javascript (external .js resource or <script> tag)
         $(document).ready(function () {
             var _this;
+
+
             $('#country').on('change',function(){
                 var _this = $(this);
                 $('#city').empty();
                 var data = "id="+_this.val();
-<<<<<<< HEAD
+
                 var url = _this.closest('.card-body').data('route');
-=======
+
 
                 var url = _this.closest('.select_cities').data('route');
                 //  console.log(url);
 
->>>>>>> d049c9de0ae97170c2d4dcc12033c22dc7411602
+
+
                 $.post(url , data , function(res){
                     $city=['<option value="0" selected="">select </option>'];
                     for(var i=0 ;i<res.length;i++) {
@@ -134,6 +146,7 @@
             });
         });
     </script>
+
     @endprepend
 
 

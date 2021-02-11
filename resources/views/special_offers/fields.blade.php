@@ -3,7 +3,7 @@
         <div class="form-group row ">
             {!! Form::label('vendors', "Vendors", ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
-            <select name="vendors" aria-controls="dataTableBuilder" class="form-control form-control-sm" required @if(Request::is('*edit')) readonly @endif>
+            <select name="vendors" aria-controls="dataTableBuilder" class="form-control form-control-sm" required @if(Request::is('*edit')) disabled @endif>
               <option value="0">select</option>
                 @foreach($vendors as $vendor)
                   <option value="{{ $vendor->id }}" @if(Request::is('*edit')) @if($offer->user_id == $vendor->id) selected @endif @endif>{{ $vendor->name }}</option>
@@ -55,7 +55,7 @@
           </div>
 
         <!-- Select subcategory-->
-        <div class="form-group row " Request::is('*edit') ? style="visibility:visible" : style="visibility:hidden" id="sub">
+        <div class="form-group row " @if(Request::is('*edit')) style="visibility:visible" @else style="visibility:hidden" @endif id="sub">
             {!! Form::label('subcategory', "Subcategory", ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
               <select name="subcategory" id="subcategory" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>

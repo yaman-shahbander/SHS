@@ -58,16 +58,7 @@
             </div>
         </div>
         <!-- Delegate Fielad-->
-        <div class="form-group row col-md-6">
-            {!! Form::label('delegate', 'Delegates', ['class' => 'col-3 control-label ']) !!}
-            <div class="col-md-9">
-                <select name="delegate" id="delegate" aria-controls="dataTableBuilder" class="form-control form-control-sm">
-                    @foreach($delegates as $delegate)
-                        <option value="{{ $delegate->id }}">{{ $delegate->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
+
     </div>
     <div class="row">
         <!-- Email Field -->
@@ -98,17 +89,44 @@
         <div class="form-group col-md-6 row">
             {!! Form::label('name', 'Vendor', ['class' => 'col-3 control-label']) !!}
             <div class="col-md-9">
-                <select name="user_id" id="user_id" aria-controls="dataTableBuilder" class="form-control form-control-sm">
-                    @foreach($users as $user)
-                        <option value="{{ $user->id }}">{{ $user->name }}</option>
-                    @endforeach
+                <select name="user_id" id="user_id" aria-controls="dataTableBuilder" class="form-control form-control-sm" disabled>
+                    
+                        <option value="{{ $sugg_user->id }}">{{ $sugg_user->name }}</option>
+                    
                 </select>
             </div>
         </div>
     </div>
 
     <!-- $FIELD_NAME_TITLE$ Field -->
-    <div class="form-group col-md-12 row">
+
+
+    <div class="row">
+
+                                                <div class="box">
+
+
+                                                    <div class="content">
+
+                                                        <!-- Custom File Uploader  -->
+
+                                                        <div class="left">
+                                                            <img id="img-uploaded" class="img2" src="{{asset('app-assets/img/350x350.png')}}" alt="your image" />
+                                                        </div>
+                                                        <div class="right">
+
+                                                            <input type="text" class="img-path newimg" placeholder="Image Path">
+                                                            <span class="file-wrapper">
+  <input type="file" name="avatar" id="imgInp" class="uploader newimg" required />
+  <span class="btn2 btn-large btn-alpha">Upload Image</span>
+</span>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+    {{--<div class="form-group col-md-12 row">
         {!! Form::label('avatar', trans("lang.user_avatar"), ['class' => 'col-3 control-label']) !!}
         <div class="col-md-9">
             <div style="width: 100%" class="dropzone avatar" id="avatar" data-field="avatar">
@@ -119,7 +137,7 @@
                 {{ trans("lang.user_avatar_help") }}
             </div>
         </div>
-    </div>
+    </div>--}}
     @prepend('scripts')
     <script type="text/javascript">
         var user_avatar = '';
@@ -204,6 +222,7 @@
 
         });
     </script>
+    
     @endprepend
 
 

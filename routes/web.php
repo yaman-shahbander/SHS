@@ -253,7 +253,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
     ]);
 
     Route::resource('suggested/vendor', 'VendorsSuggestedController');
-    Route::post('store_vendors_suggested','VendorsSuggestedController@store_vendors_suggested')->name('store_vendors_suggested');
+    Route::post('store_vendors_suggested/{id}','VendorsSuggestedController@store_vendors_suggested')->name('store_vendors_suggested');
     Route::resource('country', 'CountryController')->except([
         'show'
     ]);

@@ -183,7 +183,7 @@ Route::post('vendorProfile', 'API\vendorApiController@profile');
 //User current balance API
 Route::get('currentBalance', 'API\MoneyAPIController@currentBalance');
 //History of all transactions API
-Route::get('transactions', 'API\MoneyAPIController@history');
+Route::get('historyOfTransactions', 'API\MoneyAPIController@history');
 //Transfer money API
 Route::post('transfer', 'API\MoneyAPIController@transferMoney');
 //Route::resource('filter', 'API\FilterVendorsAPIController');

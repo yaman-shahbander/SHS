@@ -84,10 +84,11 @@ class CategoryController extends Controller
                
                 if($request->file('avatar')->extension()=="png"){
                     $category = $this->categoryRepository->create($input);
-                    $category->customFieldsValues()->createMany(getCustomFieldsValues($customFields, $request));
-                    if (!empty ($request->file('avatar'))) {
-                        $imageName = uniqid() . $request->file('avatar')->getClientOriginalName();
-                        $request->file('avatar')->move(public_path('storage/category'), $imageName);
+                    $category->customFieldsValues()->createMany(getCustomFieldsValues($customFields, $request));    
+                    if (isset($input['image']) && $input['image']) {
+                        $cacheUpload = $this->uploadRepository->getByUuid($input['image']);
+                        $mediaItem = $cacheUpload->getMedia('image')->first();
+                        $mediaItem->copy($category, 'image');
                     }
                     Flash::success(__('lang.saved_successfully', ['operator' => __('lang.category')]));
                 } else{
