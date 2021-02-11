@@ -603,8 +603,11 @@ class UserAPIController extends Controller
                 $respone[$i]['avatar'] =asset('storage/Avatar').'/'.$attr->avatar;
                 $respone[$i]['last_name'] = $attr->last_name;
                 $respone[$i]['description'] = $attr->pivot->description;
-                $respone[$i]['rating'] = round((myReviewRating($attr)/20)*2)/2;
-                $respone[$i]['distance'] = $attr->coordinates!=null ? distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)) : 'No coordinates provided for the current vendor';
+                $respone[$i]['rating'] = sprintf("%.1f",round((myReviewRating($attr)/20)*2)/2);
+                $respone[$i]['latitude'] = $attr->coordinates!=null? $attr->coordinates->latitude:'No coordinates provided for the current vendor';
+                $respone[$i]['longitude'] = $attr->coordinates!=null? $attr->coordinates->longitude:'No coordinates provided for the current vendor';
+
+                $respone[$i]['distance'] = $attr->coordinates!=null && $userLatitude !=null? round(distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)),2) : 'No coordinates provided for the current vendor';
 
                 //  $respone[$i]['distance'] = $attr->coordinates ? distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)) : 'No coordinates provided for the current vendor';
                 $i++;
@@ -651,8 +654,11 @@ class UserAPIController extends Controller
                 $respone[$i]['avatar'] = asset('storage/Avatar').'/'.$attr->avatar;
                 $respone[$i]['last_name'] = $attr->last_name;
                 $respone[$i]['description'] = $attr->description;
-                $respone[$i]['rating'] = round((getRating($attr)/20)*2)/2;
-                $respone[$i]['distance'] = $attr->coordinates!=null ? distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)) : 'No coordinates provided for the current vendor';
+                $respone[$i]['rating'] = sprintf("%.1f",round((getRating($attr)/20)*2)/2);
+                $respone[$i]['latitude'] = $attr->coordinates!=null? $attr->coordinates->latitude:'No coordinates provided for the current vendor';
+                $respone[$i]['longitude'] = $attr->coordinates!=null? $attr->coordinates->longitude:'No coordinates provided for the current vendor';
+
+                $respone[$i]['distance'] = $attr->coordinates!=null && $userLatitude !=null? round(distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)),2) : 'No coordinates provided for the current vendor';
                 $i++;
             }
             return $this->sendResponse($respone, 'history retrieved successfully');
@@ -754,7 +760,7 @@ class UserAPIController extends Controller
                 'background' =>asset('storage/vendors_background').'/'.($vendor->background_profile==null?'background.jpg':$vendor->background_profile),
                 'first_name' => $vendor->name,
                 'status' => $vendor->status->only('id', 'status_type'),
-                'rating' => round((getRating($vendor) / 20) * 2) / 2,
+                'rating' => sprintf("%.1f",round((getRating($vendor) / 20) * 2) / 2),
                 'count_reviews' => count($vendor->clients),
                 'count_contacted' => count($vendor->userContacts),
                 'count_views' => count($vendor->userViews),
@@ -764,7 +770,7 @@ class UserAPIController extends Controller
                     return $q = [
                         'id' => $q->pivot->id,
                         'name' => $q->name,
-                        'rating' => round((getFullRating($review) / 20) * 2) / 2,
+                        'rating' => sprintf("%.1f",round((getFullRating($review) / 20) * 2) / 2),
                         'description' => $q->pivot->description,
                         'avatar' => asset('storage/Avatar') . '/' . $q->avatar,
 
@@ -971,11 +977,11 @@ class UserAPIController extends Controller
                 $review = reviews::find($request->review_id);
 
                 $response = [
-                    'price_rating' => round(($review->price_rating / 20) * 2) / 2,
-                    'service_rating' => round(($review->service_rating / 20) * 2) / 2,
-                    'speed_rating' => round(($review->speed_rating / 20) * 2) / 2,
-                    'trust_rating' => round(($review->trust_rating / 20) * 2) / 2,
-                    'knowledge_rating' => round(($review->knowledge_rating / 20) * 2) / 2,
+                    'price_rating' => sprintf("%.1f",round(($review->price_rating / 20) * 2) / 2),
+                    'service_rating' => sprintf("%.1f",round(($review->service_rating / 20) * 2) / 2),
+                    'speed_rating' => sprintf("%.1f",round(($review->speed_rating / 20) * 2) / 2),
+                    'trust_rating' => sprintf("%.1f",round(($review->trust_rating / 20) * 2) / 2),
+                    'knowledge_rating' => sprintf("%.1f",round(($review->knowledge_rating / 20) * 2) / 2),
                     'reply' => $review->reply,
                 ];
 

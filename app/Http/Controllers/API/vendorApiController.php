@@ -31,6 +31,14 @@ class vendorApiController extends Controller
                 if (empty($user)) {
                     return $this->sendError('User not found', 401);
                 }
+                try{
+                    $userLatitude = $user->coordinates->latitude;
+                    $userLongitude = $user->coordinates->longitude;
+                }
+                catch (\Exception $e){
+                    $userLatitude = null;
+                    $userLongitude = null;
+                }
                 $id = $request->id; //subcategory id
 
                 $userID = $user->id; // user id
@@ -80,19 +88,22 @@ class vendorApiController extends Controller
 
                     }
 //  return $featuredVendor;
+//                    $respone[$i]['distance'] = $attr->coordinates!=null ? distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)) : 'No coordinates provided for the current vendor';
+                    $respone['featuredVendor']=
 
-
-                    $respone[]=
-                        [
-                            'featuredVendor'=>[
+                            [
                                 'id' => $featuredVendor[0]->id,
                                 'name' => $featuredVendor[0]->name,
                                 'email' => $featuredVendor[0]->email,
-                                'rating' => round((getRating($featuredVendor[0])/20)*2)/2,
+                                'latitude' =>$featuredVendor[0]->coordinates!=null? $featuredVendor[0]->coordinates->latitude:'No coordinates provided for the current vendor',
+                                'longitude' => $featuredVendor[0]->coordinates!=null? $featuredVendor[0]->coordinates->longitude:'No coordinates provided for the current vendor',
+                                'rating' => sprintf("%.1f",round((getRating($featuredVendor[0])/20)*2,2)/2),
                                 'description' => $featuredVendor[0]->description,
-                                'avatar' => $featuredVendor[0]->getFirstMediaUrl('avatar', 'icon')
-                            ]];
+                                'distance' =>$featuredVendor[0]->coordinates!=null && $userLatitude !=null? round(distance(floatval($userLatitude), floatval($userLongitude), floatval($featuredVendor[0]->coordinates->latitude), floatval($featuredVendor[0]->coordinates->longitude)),2) : 'No coordinates provided for the current vendor',
+                                'avatar' => asset('storage/Avatar').'/'.$featuredVendor[0]->avatar
+                            ];
                 }
+//                asset('storage/Avatar').'/'.$attr->avatar;
                 catch (\Exception $e){
                     return $e->getMessage();}
 
@@ -134,13 +145,18 @@ class vendorApiController extends Controller
 
 
                 foreach ($vendors as $vendor) {
-                    $respone[] = [
+                    $respone['vendor_list'][] = [
                         'id' => $vendor->id,
                         'name' => $vendor->name,
                         'email' => $vendor->email,
-                        'rating' => round((getRating($vendor)/20)*2)/2,
+                        'rating' => sprintf("%.1f",(round((getRating($vendor)/20)*2)/2)),
                         'description' => $vendor->description,
-                        'avatar' => $vendor->getFirstMediaUrl('avatar', 'icon')
+                        'latitude' => $vendor->coordinates!=null? $vendor->coordinates->latitude:'No coordinates provided for the current vendor',
+                        'longitude' => $vendor->coordinates!=null? $vendor->coordinates->longitude:'No coordinates provided for the current vendor',
+
+                        'distance' =>$vendor->coordinates!=null && $userLatitude !=null? round(distance(floatval($userLatitude), floatval($userLongitude), floatval($vendor->coordinates->latitude), floatval($vendor->coordinates->longitude)),2) : 'No coordinates provided for the current vendor',
+
+                        'avatar' => asset('storage/Avatar').'/'.$vendor->avatar
                     ];
                 }
 
@@ -189,7 +205,7 @@ class vendorApiController extends Controller
             $isFavorite = false;
             try {
                 $user = User::where('device_token', $request->header('devicetoken'))->first();
-                
+
                 if (empty($user)) {
                     return $this->sendError('User not found', 401);
                 }
@@ -201,15 +217,15 @@ class vendorApiController extends Controller
                 $reviews = [];
                 $i = 0;
 
-                
-                
+
+
                 $checkIfFavorite = $user->vendorFavorite->transform(function($q) use ($vendor){
-                    if ($vendor->id == $q->id) 
-                        return $q; 
+                    if ($vendor->id == $q->id)
+                        return $q;
                     });
 
                 count($checkIfFavorite) > 0 ? $isFavorite = true : $isFavorite = false;
-          
+
             foreach($attrs as $attr) {
                 $reviews[$i]['id'] = $attr->id;
                 $reviews[$i]['name'] = $attr->name;
@@ -223,7 +239,7 @@ class vendorApiController extends Controller
                 'id'             => $vendor->id,
                 'name'           => $vendor->name,
                 'email'          => $vendor->email,
-                'rating'         => round((getRating($vendor)/20)*2)/2,
+                'rating'         => sprintf("%.1f",round((getRating($vendor)/20)*2)/2),
                 'description'    => $vendor->description,
                 'phone'          => $vendor->phone,
                 'avatar'         => asset('storage/Avatar').'/'.$vendor->avatar,
@@ -242,7 +258,7 @@ class vendorApiController extends Controller
                                     $gallery['image'] = asset('storage/gallery') . '/' . $gallery['image'];
                                     return $gallery['image'];
                                 }),
-                'is_favorite'     =>  $isFavorite                
+                'is_favorite'     =>  $isFavorite
             ];
                 return $this->sendResponse($respone, 'vendor profile retrieved successfully');
 

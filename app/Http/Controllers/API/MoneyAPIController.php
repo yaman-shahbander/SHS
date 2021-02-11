@@ -15,30 +15,23 @@ use DB;
 class MoneyAPIController extends Controller
 {
 
-    /** @var  CategoryRepository */
-    private $TransferTransactionRepository;
 
-    public function __construct(TransferTransactionRepository $TransferTransactionRepo)
-    {
-        parent::__construct();
-        $this->TransferTransactionRepository = $TransferTransactionRepo;
-    }
 
-    function humanTiming ($time) { 
-        $time = time() - $time; 
-        // to get the time since that moment $time = ($time<1)? 1 : $time; 
-        $tokens = array ( 31536000 => 'year', 
+    function humanTiming ($time) {
+        $time = time() - $time;
+        // to get the time since that moment $time = ($time<1)? 1 : $time;
+        $tokens = array ( 31536000 => 'year',
         2592000 => 'month',
-        604800 => 'week', 
-        86400 => 'day', 
-        3600 => 'hour', 
-        60 => 'minute', 
-        1 => 'second' ); 
-        foreach ($tokens as $unit => $text) { 
-            if ($time < $unit) continue; 
-            $numberOfUnits = floor($time / $unit); 
-            return $numberOfUnits.' '.$text.(($numberOfUnits>1)?'s':''); 
-         } 
+        604800 => 'week',
+        86400 => 'day',
+        3600 => 'hour',
+        60 => 'minute',
+        1 => 'second' );
+        foreach ($tokens as $unit => $text) {
+            if ($time < $unit) continue;
+            $numberOfUnits = floor($time / $unit);
+            return $numberOfUnits.' '.$text.(($numberOfUnits>1)?'s':'');
+         }
       }
 
     public function history(Request $request) {
@@ -56,14 +49,14 @@ class MoneyAPIController extends Controller
               $q['payment_id']   = $q->payment_id;
               $q['payment_time'] = $this->humanTiming(strtotime($q->pivot->created_at));
               $q['type']         = $q->pivot->type;
-              return $q->only('amount', 'payment_id', 'payment_time', 'type'); 
-           
+              return $q->only('amount', 'payment_id', 'payment_time', 'type');
+
             });
 
             return $this->sendResponse($transactionsHistory->toArray(), 'History retrieved successfully');
         }
     }
-    
+
 
     public function transferMoney(Request $request) {
         try {
@@ -84,12 +77,21 @@ class MoneyAPIController extends Controller
                 if ($user->balance_id == null) {
                     return $this->sendError('There is no balance in your account', 401);
                 }
-                    
+                if ($user->payment_id == $request->vendor_payment_id) {
+                    return $this->sendError('you cant transfer money to yourself ', 401);
+                }
+
                 if ($user->Balance->balance - $request->amount >= 0) {
                     $user->Balance->balance   = $user->Balance->balance - $request->amount;
                     $vendor->Balance->balance = $vendor->Balance->balance + $request->amount;
                     $user->Balance->save();
                     $vendor->Balance->save();
+
+                    $transfer=[['from_id'=>$user->id,'to_id'=>$vendor->id,'amount'=>$request->amount]];
+
+                    $user->ToUserName()->attach($transfer);
+
+
                     return $this->sendResponse([], 'Money transfered successfully');
                 } else {
                     return $this->sendError('There is no enough balance in your account', 401);
@@ -98,7 +100,7 @@ class MoneyAPIController extends Controller
       } catch (\Exception $e) {
           return $this->sendError('Something is worng', 401);
       }
-    }   
+    }
 
     public function currentBalance(Request $request) {
         try {
@@ -113,7 +115,7 @@ class MoneyAPIController extends Controller
                 $userBalance   = $user->Balance;
 
 
-                if ($userBalance == null) return $this->sendError([], 'No balance for the current user');
+                if ($userBalance == null) return $this->sendError( 'No balance for the current user',401);
 
                 $response = [
                     'balance' => $userBalance->balance
@@ -125,5 +127,5 @@ class MoneyAPIController extends Controller
         return $this->sendError('Error', 401);
     }
   }
-   
+
 }
