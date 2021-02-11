@@ -229,7 +229,6 @@ class UserAPIController extends Controller
             $user->name = $request->input('first_name');
             $user->last_name = $request->input('last_name');
             $user->email = $request->input('email');
-           $user->city_id = $request->input('city_id');
            while(true) {
             $payment_id = '#' . rand(1000, 9999) . rand(1000, 9999);
             if (!(User::where('payment_id', $payment_id)->exists())) {
@@ -245,7 +244,7 @@ class UserAPIController extends Controller
 
             $balance->save();
 
-            $user->balance_id = $balance->id;                           
+            $user->balance_id = $balance->id;
 
             $user->is_verified = 0;
 
@@ -515,8 +514,8 @@ class UserAPIController extends Controller
             $userLongitude = $user->coordinates->longitude;
                 }
                 catch (\Exception $e){
-                   // return $this->sendError('You have to turn on gps', 401);
-
+                    $userLatitude = null;
+                    $userLongitude = null;
                 }
             $reviewsHiddenColumns = ['custom_fields', 'media', 'has_media'];
             $attrs = $user->vendorsAPI->makeHidden($reviewsHiddenColumns); // vendors I reviewd
@@ -528,12 +527,16 @@ class UserAPIController extends Controller
                 $respone[$i]['avatar'] =asset('storage/Avatar').'/'.$attr->avatar;
                 $respone[$i]['last_name'] = $attr->last_name;
                 $respone[$i]['description'] = $attr->pivot->description;
-                $respone[$i]['rating'] = round((myReviewRating($attr)/20)*2)/2;
-                $respone[$i]['distance'] = $attr->coordinates!=null ? distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)) : 'No coordinates provided for the current vendor';
+                $respone[$i]['rating'] = sprintf("%.1f",round((myReviewRating($attr)/20)*2)/2);
+                $respone[$i]['latitude'] = $attr->coordinates!=null? $attr->coordinates->latitude:'No coordinates provided for the current vendor';
+                $respone[$i]['longitude'] = $attr->coordinates!=null? $attr->coordinates->longitude:'No coordinates provided for the current vendor';
+
+                $respone[$i]['distance'] = $attr->coordinates!=null && $userLatitude !=null? round(distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)),2) : 'No coordinates provided for the current vendor';
 
                 //  $respone[$i]['distance'] = $attr->coordinates ? distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)) : 'No coordinates provided for the current vendor';
                 $i++;
             }
+
 
             return $this->sendResponse($respone, 'reviews retrieved successfully');
             }
@@ -563,8 +566,8 @@ class UserAPIController extends Controller
                 $userLongitude = $user->coordinates->longitude;
             }
             catch (\Exception $e){
-                //   return $this->sendError(, 401);
-
+                $userLatitude = null;
+                $userLongitude = null;
             }
             $HiddenColumns = ['custom_fields', 'media', 'has_media', 'pivot'];
             $attrs = $user->homeOwnerHistoryAPI->makeHidden($HiddenColumns);
@@ -576,8 +579,11 @@ class UserAPIController extends Controller
                 $respone[$i]['avatar'] =asset('storage/Avatar').'/'.$attr->avatar;
                 $respone[$i]['last_name'] = $attr->last_name;
                 $respone[$i]['description'] = $attr->description;
-                $respone[$i]['rating'] = round((getRating($attr)/20)*2)/2;
-                $respone[$i]['distance'] = $attr->coordinates!=null ? distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)) : 'No coordinates provided for the current vendor';
+                $respone[$i]['rating'] = sprintf("%.1f",round((getRating($attr)/20)*2)/2);
+                $respone[$i]['latitude'] = $attr->coordinates!=null? $attr->coordinates->latitude:'No coordinates provided for the current vendor';
+                $respone[$i]['longitude'] = $attr->coordinates!=null? $attr->coordinates->longitude:'No coordinates provided for the current vendor';
+
+                $respone[$i]['distance'] = $attr->coordinates!=null && $userLatitude !=null? round(distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)),2) : 'No coordinates provided for the current vendor';
                 $i++;
             }
             return $this->sendResponse($respone, 'history retrieved successfully');

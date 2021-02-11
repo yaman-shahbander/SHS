@@ -37,7 +37,10 @@ class bookmarkAPIController extends Controller
                     $respone[$i]['avatar'] = asset('storage/Avatar').'/'.$attr->avatar;
                     $respone[$i]['last_name'] = $attr->last_name;
                     $respone[$i]['description'] = $attr->description;
-                    $respone[$i]['rating'] = round((getRating($attr)/20)*2)/2;
+                    $respone[$i]['rating'] = sprintf("%.1f",round((getRating($attr)/20)*2)/2);
+                    $respone[$i]['latitude'] = $attr->coordinates!=null? $attr->coordinates->latitude:'No coordinates provided for the current vendor';
+                    $respone[$i]['longitude'] = $attr->coordinates!=null? $attr->coordinates->longitude:'No coordinates provided for the current vendor';
+
                     $respone[$i]['distance'] = $attr->coordinates!=null ? distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)) : 'No coordinates provided for the current vendor';
                     $i++;
                 }
@@ -57,14 +60,14 @@ class bookmarkAPIController extends Controller
                 $user = User::where('device_token', $request->header('devicetoken'))->first();
                 if (empty($user)) {
                     return $this->sendError('User not found', 401);
-                } 
+                }
                 if (!$user->vendorFavoriteAPI->contains($request->vendor_id)) {
                     $user->vendorFavoriteAPI()->attach($request->vendor_id);
                     return $this->sendResponse([], 'The user added succesfully');
                 } else {
                     return $this->sendResponse([], 'The user is already in favorite list');
                 }
-                
+
             } catch (\Exception $e) {
                     return $this->sendError($e->getMessage(), 401);
             }
@@ -77,14 +80,14 @@ class bookmarkAPIController extends Controller
                 $user = User::where('device_token', $request->header('devicetoken'))->first();
                 if (empty($user)) {
                     return $this->sendError('User not found', 401);
-                } 
+                }
                 if ($user->vendorFavoriteAPI->contains($request->vendor_id)) {
                     $user->vendorFavoriteAPI()->detach($request->vendor_id);
                     return $this->sendResponse([], 'The user removed succesfully');
                 } else {
                     return $this->sendResponse([], 'The user is not in favorite list');
                 }
-                
+
             } catch (\Exception $e) {
                     return $this->sendError($e->getMessage(), 401);
             }
