@@ -15,8 +15,6 @@ use DB;
 class MoneyAPIController extends Controller
 {
 
-
-
     function humanTiming ($time) {
         $time = time() - $time;
         // to get the time since that moment $time = ($time<1)? 1 : $time;
@@ -70,24 +68,50 @@ class MoneyAPIController extends Controller
 
                 $vendor = User::where('payment_id', $request->vendor_payment_id)->first();
 
-                if ($vendor->balance_id == null) {
-                    return $this->sendError('There is no balance in vendor account', 401);
-                }
+                $amount  = strip_tags($request->amount);
 
-                if ($user->balance_id == null) {
-                    return $this->sendError('There is no balance in your account', 401);
+                //If the field has any character
+                if(preg_match('/[a-zA-Z]/', $amount)) { 
+                    return $this->sendError('The field must contain only numbers', 401);
+                 }
+                 
+                 //If the field has any special character
+                 if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $amount)) { 
+                    return $this->sendError('The field must contain only numbers', 401);
                 }
+                // Transfering to the same user
                 if ($user->payment_id == $request->vendor_payment_id) {
                     return $this->sendError('you cant transfer money to yourself ', 401);
                 }
 
-                if ($user->Balance->balance - $request->amount >= 0) {
-                    $user->Balance->balance   = $user->Balance->balance - $request->amount;
-                    $vendor->Balance->balance = $vendor->Balance->balance + $request->amount;
+                //Vendor has no balance account
+                if ($vendor->balance_id == null) {
+                    return $this->sendError('There is no balance in vendor account', 401);
+                }
+
+                //homeowner has no balance account
+                if ($user->balance_id == null) {
+                    return $this->sendError('There is no balance in your account', 401);
+                }
+
+                //amount is empty
+                if (empty($amount)) {
+                    return $this->sendError('Transfer failed! amount should have a value', 401);
+                 }
+
+                 //amount should not be negative
+                 if ($amount < 0) {
+                    return $this->sendError('Transfer failed! amount should not be negative', 401);
+                 } 
+                
+
+                if ($user->Balance->balance - $amount >= 0) {
+                    $user->Balance->balance   = $user->Balance->balance - $amount;
+                    $vendor->Balance->balance = $vendor->Balance->balance + $amount;
                     $user->Balance->save();
                     $vendor->Balance->save();
 
-                    $transfer=[['from_id'=>$user->id,'to_id'=>$vendor->id,'amount'=>$request->amount]];
+                    $transfer=[['from_id'=>$user->id,'to_id'=>$vendor->id,'amount'=>$amount]];
 
                     $user->ToUserName()->attach($transfer);
 
@@ -98,7 +122,7 @@ class MoneyAPIController extends Controller
                 }
             }
       } catch (\Exception $e) {
-          return $this->sendError('Something is worng', 401);
+          return $this->sendError('Something is wrong', 401);
       }
     }
 

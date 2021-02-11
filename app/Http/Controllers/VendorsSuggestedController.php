@@ -18,6 +18,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use App\Repositories\UserRepository;
+use App\Balance;
 
 class VendorsSuggestedController extends Controller
 {
@@ -107,8 +108,7 @@ class VendorsSuggestedController extends Controller
         }
         $countries=Country::all();
         $users=User::all();
-        $delegates=Delegate::all();
-        
+        $sugg_user=User::find($vendor->user_id);
 //        $cities=City::all();
         $role = $this->roleRepository->pluck('name', 'name');
         // $rolesSelected = $user->getRoleNames()->toArray();
@@ -119,7 +119,7 @@ class VendorsSuggestedController extends Controller
             ->with('countries',$countries)
             ->with('role',$role)
             ->with('users',$users)
-            ->with('delegates',$delegates)
+            ->with('sugg_user',$sugg_user)
             ->with('rolesSelected',$rolesSelected);
     }
     /**
@@ -208,35 +208,68 @@ class VendorsSuggestedController extends Controller
         return redirect(route('vendor.index'));
     }
 
-    public function store_vendors_suggested(Request $request)
+    public function store_vendors_suggested( $id,Request $request)
     {
+      
         if($request->city=="0")
         {
             Flash::warning('please select country and city ');
             return redirect()->back();
         }
-        $input = $request->all();
+        $input = $request->all();    
+        // $input['city_id']=$input['city'];   
+        $input['password'] = Hash::make($input['password']);       
+        while(true) {
+            $payment_id = '#' . rand(1000, 9999) . rand(1000, 9999);
+            if (!(User::where('payment_id', $payment_id)->exists())) {
+               
+             
+                break;
+            } else continue;
+        }       
+        $input['language'] = $request->input('lang') == null ? '' : $request->input('lang', '');
+        $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');      
+        $input['payment_id'] = $payment_id;
+        $balance = new Balance();
+        $balance->balance = 0.0;
+        $balance->save();
+        $input['balance_id'] = $balance->id;
+        $input['is_verified'] = 0;
+        $token = openssl_random_pseudo_bytes(16);
+        $user = $this->userRepository->create($input);
+        $user->save();
+
+        //Convert the binary data into hexadecimal representation.
+        $token = bin2hex($user->id . $token);
+        $input['device_token'] = $token;
+        $user = $this->userRepository->update($input,$user->id);
        
-        // $input['city_id']=$input['city'];
-        $input['user_id']=$input['user_id'];
-        $input['delegate_id']=$input['delegate'];
-        $input['password'] = Hash::make($input['password']);
-        $input['api_token'] = str_random(60);
-      
+        $user->assignRole('vendor');
+
         try {
-            // $user = $this->userRepository->create($input);
-            if (isset($input['avatar'])) {
-                $cacheUpload = $this->uploadRepository->getByUuid($input['avatar']);
-                dd($cacheUpload);
-                $mediaItem = $cacheUpload->getMedia('avatar')->first();
-                $mediaItem->copy($user, 'avatar');
+         
+            if ($request->file('avatar')) {
+                $imageName = uniqid() . $request->file('avatar')->getClientOriginalName();
+
+                $request->file('avatar')->move(public_path('storage/Avatar'), $imageName);
+
+                $user->avatar = $imageName;
+                $user->save();
+
+
             }
+           
+           
+             vendors_suggested::find($id)->delete();
+            
+    
+            
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }
         Flash::success('saved successfully.');
 
-        return redirect(route('users.index'));
+        return redirect(route('vendors.index'));
     }
 
 }

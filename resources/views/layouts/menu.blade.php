@@ -19,8 +19,8 @@
 @endcan
     <!-- vondors -->
     @can('vendors.index')
-    <li class="nav-item has-treeview {{ Request::is('vendors*') || Request::is('vendor*') ? 'menu-open' : '' }}">
-        <a href="#" class="nav-link {{ Request::is('vendors*') || Request::is('vendor*') ? 'active' : '' }}"> @if($icons)<i class="nav-icon fa fa-support"></i>@endif
+    <li class="nav-item has-treeview {{ Request::is('vendors*') || Request::is('suggested/vendor*') ? 'menu-open' : '' }}">
+        <a href="#" class="nav-link {{ Request::is('vendors*') || Request::is('suggested/vendor*') ? 'active' : '' }}"> @if($icons)<i class="nav-icon fa fa-support"></i>@endif
         @if(LaravelLocalization::getCurrentLocaleDirection() == "rtl")
             <p>{{trans('lang.vendors')}} <i class="fa fa-angle-left"></i></p>
         @else
@@ -36,7 +36,7 @@
             @endcan
             @can('vendor.index')
             <li class="nav-item">
-                <a class="nav-link {{ Request::is('vendor*') ? 'active' : '' }}" href="{!! route('vendor.index') !!}">@if($icons)
+                <a class="nav-link {{ Request::is('suggested/vendor*') ? 'active' : '' }}" href="{!! route('vendor.index') !!}">@if($icons)
                 <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('lang.suggested')}}</p></a>
             </li>
             @endcan

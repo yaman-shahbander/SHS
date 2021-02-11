@@ -93,7 +93,7 @@ class TransferTransactionController extends Controller
             return redirect(route('transfer.index'));
          }
 
-         if (preg_match('/[^a-z[0-9]*\.[0-9]* _]+/i', $input['amount'])) {
+         if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $input['amount'])) {
             Flash::Error(__('Transfer failed! field must only contain numbers', ['operator' => __('lang.category')]));
             return redirect(route('transfer.index'));
         }
@@ -225,7 +225,7 @@ class TransferTransactionController extends Controller
             return redirect(route('transfer.index'));
          }
 
-         if (preg_match('/[^a-z[0-9]*\.[0-9]* _]+/i', $input['amount'])) {
+         if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $input['amount'])) {
             Flash::Error(__('Transfer failed! field must only contain numbers', ['operator' => __('lang.category')]));
             return redirect(route('transfer.index'));
         }

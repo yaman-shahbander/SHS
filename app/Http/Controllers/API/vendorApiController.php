@@ -82,7 +82,7 @@ class vendorApiController extends Controller
 
                     }
                     else{
-                        return $maxBalanceId;
+                       
 
                         $featuredVendor='';
 
@@ -135,6 +135,7 @@ class vendorApiController extends Controller
                         $vendors = $featuredVendor->merge($vendorsSpecialOffers);
 
                         $vendors = $vendors->merge($Allvendors);
+                        
 
                     }
                 }
@@ -142,7 +143,7 @@ class vendorApiController extends Controller
                     $vendors=$Allvendors;
                 }
 //return $featuredVendor;
-
+$vendors=$vendors->where('city_id',$user->city_id);
 
                 foreach ($vendors as $vendor) {
                     $respone['vendor_list'][] = [

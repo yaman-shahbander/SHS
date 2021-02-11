@@ -920,7 +920,7 @@ return [
     'duration_offers_created_at_help' => 'Insert Created At',
     'duration_offers_created_at_placeholder' => 'Insert Created At',
     'duration_offers_delete' => 'Delete',
-    'duration_offers_desc' => 'Duration Offers Managment',
+    'duration_offers_desc' => 'Duration Offers',
     'duration_offers_edit' => 'Duration Offers Edit',
     'duration_offers_name' => 'Duration Offers Name',
     'balances'=>'Balances',

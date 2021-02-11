@@ -99,16 +99,15 @@ class SubCategoryController extends Controller
         $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->subcategoryRepository->model());
         try {
             if($request->file('avatar')->extension()=="png"){
-                $subcategory = $this->subcategoryRepository->create($input);
-                $subcategory->customFieldsValues()->createMany(getCustomFieldsValues($customFields, $request));
-                if (!empty ($request->file('avatar'))) {
-                    $imageName = uniqid() . $request->file('avatar')->getClientOriginalName();
-                    $request->file('avatar')->move(public_path('storage/category'), $imageName);
-                }
+                if (isset($input['image']) && $input['image']) {
+                    $cacheUpload = $this->uploadRepository->getByUuid($input['image']);
+                    $mediaItem = $cacheUpload->getMedia('image')->first();
+                    $mediaItem->copy($subcategory, 'image');
                 Flash::success(__('lang.saved_successfully', ['operator' => __('lang.category')]));
             } else{
                 Flash::error('The image must have a png extension');
-            }  
+            } 
+          } 
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }

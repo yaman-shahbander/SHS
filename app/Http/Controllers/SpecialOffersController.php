@@ -240,7 +240,7 @@ class SpecialOffersController extends Controller
 
         $this->SpecialRepository->delete($id);
 
-        Flash::success(__('lang.deleted_successfully', ['operator' => __('lang.category')]));
+        Flash::success(__('Offer Deleted Successfully', ['operator' => __('lang.category')]));
 
         return redirect(route('offers.index'));
     }
