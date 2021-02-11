@@ -273,6 +273,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
     Route::resource('bannedUsers', 'BannedUsersController')->except([
         'show'
     ]);
+    Route::get('banned','BannedUsersController@banned');
     Route::resource('pending/reviews','PendingReviewsController');
     Route::resource('reviews/approved','ReviewsController');
     Route::get('reviews/approve','PendingReviewsController@approve')->name('reviews.approve');
