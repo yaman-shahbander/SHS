@@ -86,6 +86,18 @@ class TransferTransactionController extends Controller
          $fromUser = User::find($input['fromUser']);
          $toUser = User::find($input['toUser']);
 
+         $input['amount']  = strip_tags($input['amount']);
+
+         if(preg_match('/[a-zA-Z]/', $input['amount'])) {
+            Flash::Error(__('Transfer failed! field must only contain numbers', ['operator' => __('lang.category')]));
+            return redirect(route('transfer.index'));
+         }
+
+         if (preg_match('/[^a-z[0-9]*\.[0-9]* _]+/i', $input['amount'])) {
+            Flash::Error(__('Transfer failed! field must only contain numbers', ['operator' => __('lang.category')]));
+            return redirect(route('transfer.index'));
+        }
+
          $fromUserBalanceID = $fromUser->balance_id;
 
          if ($fromUser->id == $toUser->id) {
@@ -105,8 +117,6 @@ class TransferTransactionController extends Controller
             return redirect(route('transfer.index'));
          }
 
-         $input['amount']  = $input['amount'];
-
          if (empty($input['amount'])) {
             Flash::Error(__('Transfer failed! amount should have a value', ['operator' => __('lang.category')]));
             return redirect(route('transfer.index'));
@@ -115,9 +125,7 @@ class TransferTransactionController extends Controller
          if ($input['amount'] < 0) {
             Flash::Error(__('Transfer failed! amount should not be negative', ['operator' => __('lang.category')]));
             return redirect(route('transfer.index'));
-         }
-
-         
+         }     
 
          $fromUserBalance   = Balance::find($fromUserBalanceID)->balance;
          $toUserBalance     = Balance::find($toUserBalanceID)->balance;
@@ -210,6 +218,18 @@ class TransferTransactionController extends Controller
 
          $fromUserBalanceID = $fromUser->balance_id;
 
+         $input['amount']  = strip_tags($input['amount']);
+
+         if(preg_match('/[a-zA-Z]/', $input['amount'])) {
+            Flash::Error(__('Transfer failed! field must only contain numbers', ['operator' => __('lang.category')]));
+            return redirect(route('transfer.index'));
+         }
+
+         if (preg_match('/[^a-z[0-9]*\.[0-9]* _]+/i', $input['amount'])) {
+            Flash::Error(__('Transfer failed! field must only contain numbers', ['operator' => __('lang.category')]));
+            return redirect(route('transfer.index'));
+        }
+
          if ($fromUser->id == $toUser->id) {
             Flash::Error(__('Transfer failed! User can\'t be the same', ['operator' => __('lang.category')]));
             return redirect(route('transfer.index'));
@@ -226,8 +246,6 @@ class TransferTransactionController extends Controller
             Flash::Error(__('Transfer failed! User ('. $toUser->name .') doesn\'t have balance account', ['operator' => __('lang.category')]));
             return redirect(route('transfer.index'));
          }
-
-         $input['amount']  = $input['amount'];
 
          if (empty($input['amount'])) {
             Flash::Error(__('Transfer failed! amount should have a value', ['operator' => __('lang.category')]));

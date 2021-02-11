@@ -60,7 +60,7 @@
 <div class="form-group row ">
   {!! Form::label('amount', "amount", ['class' => 'col-3 control-label text-right']) !!}
   <div class="col-9">
-    {!! Form::text('amount', Request::is('*edit') ? null : null,  ['class' => 'form-control','placeholder'=>  'Insert amount']) !!}
+    {!! Form::number('amount', Request::is('*edit') ? null : null,  ['class' => 'form-control','placeholder'=>  'Insert amount', 'step' => "0.01"]) !!}
   </div>
 </div>
 

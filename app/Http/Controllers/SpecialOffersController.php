@@ -80,6 +80,14 @@ class SpecialOffersController extends Controller
      */
     public function store(Request $request)
     {
+
+        if($request->vendors=="0")
+        {
+            Flash::error('please select service providor');
+            return redirect(route('offers.create'));
+
+
+        }
         $vendor_specialOffer = new specialOffers();
 
         $vendor_specialOffer->user_id = $request->vendors;
@@ -203,9 +211,9 @@ class SpecialOffersController extends Controller
         }
 
         try {
-            return $offer = $this->SpecialRepository->update($input, $id);
+             $offer = $this->SpecialRepository->update($input, $id);
 
-        } catch (ValidatorException $e) {
+        } catch (\Exception $e) {
             Flash::error($e->getMessage());
         }
 
