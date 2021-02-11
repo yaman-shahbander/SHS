@@ -58,6 +58,7 @@ class SpecialOffersController extends Controller
             $html = generateCustomField($customFields);
         }
 
+
         $categories = Category::all();
 
         $vendors = User::whereHas('roles', function($q) {
@@ -68,6 +69,7 @@ class SpecialOffersController extends Controller
             'categories' => $categories,
             'vendors'    => $vendors,
             'customFields'=> isset($html) ? $html : false]);
+
     }
 
     /**
@@ -201,7 +203,7 @@ class SpecialOffersController extends Controller
         }
 
         try {
-            $offer = $this->SpecialRepository->update($input, $id);
+            return $offer = $this->SpecialRepository->update($input, $id);
 
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());

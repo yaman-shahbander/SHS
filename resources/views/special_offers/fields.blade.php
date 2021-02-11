@@ -55,7 +55,7 @@
           </div>
 
         <!-- Select subcategory-->
-        <div class="form-group row " Request::is('*edit') ? style="visibility:visible" : style="visibility:hidden" id="sub">
+        <div class="form-group row " @if(Request::is('*edit')) style="visibility:visible" @else style="visibility:hidden" @endif id="sub">
             {!! Form::label('subcategory', "Subcategory", ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
               <select name="subcategory" id="subcategory" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>

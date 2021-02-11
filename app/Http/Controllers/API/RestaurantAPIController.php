@@ -125,7 +125,7 @@ class RestaurantAPIController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-        if (auth()->user()->hasRole('manager')) {
+        if (auth()->user()->hasRole('vendor')) {
             $input['users'] = [auth()->id()];
         }
         $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->restaurantRepository->model());

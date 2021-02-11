@@ -6,10 +6,60 @@
   <link rel="stylesheet" href="{{asset('plugins/iCheck/flat/blue.css')}}">
   <!-- select2 -->
   <link rel="stylesheet" href="{{asset('plugins/select2/select2.min.css')}}">
-  <!-- bootstrap wysihtml5 - text editor -->
-{{--  <link rel="stylesheet" href="{{asset('plugins/summernote/summernote-bs4.css')}}">--}}
-  {{--dropzone--}}
-  <link rel="stylesheet" href="{{asset('plugins/dropzone/bootstrap.min.css')}}">
+  <style>
+ 
+
+ .center {
+   display:inline;
+   margin: 3px;
+ }
+
+ .form-input {
+   width:100px;
+   padding:3px;
+   background:#fff;
+   border:2px dashed #427bff;
+ }
+ .form-input input {
+   display:none;
+ }
+ .form-input label {
+   display:block;
+   /* width:100px; */
+   height: auto;
+   max-height: 100px;
+   background:#333;
+   border-radius:10px;
+   cursor:pointer;
+ }
+
+ .form-input img {
+   width:90px;
+   height: 100px;
+   margin: 2px;
+   opacity: .4;
+ }
+
+ .imgRemove{
+   position: relative;
+   bottom: 114px;
+   left: 68%;
+   background-color: transparent;
+   border: none;
+   font-size: 30px;
+   outline: none;
+ }
+ .imgRemove::after{
+   content: ' \21BA';
+   color: #fff;
+   font-weight: 900;
+   border-radius: 8px;
+   cursor: pointer;
+ }
+ .small{
+   color: firebrick;
+ } 
+ </style>
 
 <link rel="stylesheet" href="{{asset('flag.css')}}"/>
 
@@ -31,7 +81,7 @@
       </ul>
     </div>
     <div class="card-body" data-route="{{url('api/user/select')}}">
-      {!! Form::open(['route' => 'users.store']) !!}
+      {!! Form::open(['route' => 'users.store','files' => true,'method' => 'post']) !!}
       <div class="row">
         @include('settings.users.fields')
       </div>
@@ -47,14 +97,23 @@
 <script src="{{asset('plugins/iCheck/icheck.min.js')}}"></script>
 <!-- select2 -->
 <script src="{{asset('plugins/select2/select2.min.js')}}"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-{{--<script src="{{asset('plugins/summernote/summernote-bs4.min.js')}}"></script>--}}
-{{--dropzone--}}
-<script src="{{asset('plugins/dropzone/dropzone.js')}}"></script>
-<script type="text/javascript">
-    Dropzone.autoDiscover = false;
-    var dropzoneFields = [];
+
+
+<script>
+
+function showPreviewOne(event){
+  if(event.target.files.length > 0){
+    let src = URL.createObjectURL(event.target.files[0]);
+    let preview = document.getElementById("file-ip-1-preview");
+    preview.src = src;
+    preview.style.display = "block";
+  } 
+}
+function myImgRemoveFunctionOne() {
+  document.getElementById("file-ip-1-preview").src = "https://i.ibb.co/ZVFsg37/default.png";
+}
+
 </script>
-{{--  for select--}}
+
 
 @endpush

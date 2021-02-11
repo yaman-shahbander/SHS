@@ -18,55 +18,38 @@
     </li>
 @endcan
     <!-- vondors -->
-@can('vendors.index')
-    <li class="nav-item has-treeview {{ Request::is('vendors*') || Request::is('special*')|| Request::is('suggested*') ? 'menu-open' : '' }}">
-        <a href="#" class="nav-link {{ Request::is('vendors*') || Request::is('vendors*') ? 'active' : '' }}"> @if($icons)<i class="nav-icon fa fa-support"></i>@endif
+    @can('vendors.index')
+    <li class="nav-item has-treeview {{ Request::is('vendors*') || Request::is('vendor*') ? 'menu-open' : '' }}">
+        <a href="#" class="nav-link {{ Request::is('vendors*') || Request::is('vendor*') ? 'active' : '' }}"> @if($icons)<i class="nav-icon fa fa-support"></i>@endif
         @if(LaravelLocalization::getCurrentLocaleDirection() == "rtl")
             <p>{{trans('lang.vendors')}} <i class="fa fa-angle-left"></i></p>
         @else
             <p>{{trans('lang.vendors')}} <i class="right fa fa-angle-left"></i></p>
         @endif
         </a>
-        <!-- Service Provider -->
         <ul class="nav nav-treeview">
-            <li class="nav-item has-treeview {{ Request::is('vendors*') || Request::is('vendors*') ? 'menu-open' : '' }}">
-                <a href="#" class="nav-link {{ Request::is('vendor*') || Request::is('vendor*') ? 'active' : '' }}"> @if($icons)<i class="nav-icon fa fa-support"></i>@endif
-                @if(LaravelLocalization::getCurrentLocaleDirection() == "rtl")
-                    <p>{{trans('lang.vendor')}} <i class="fa fa-angle-left"></i></p>
-                @else
-                    <p>{{trans('lang.vendor')}}<i class="right fa fa-angle-left"></i></p>
-                @endif
-                </a>
-                <ul class="nav nav-treeview">
-                    @can('vendors.index')
-                    <li class="nav-item">
-                        <a class="nav-link {{ Request::is('vendors*') ? 'active' : '' }}" href="{!! route('vendors.index') !!}">@if($icons)
-                        <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('lang.vendor')}}</p></a>
-                    </li>
-                    @endcan
-                    @can('vendor.index')
-                    <li class="nav-item">
-                        <a class="nav-link {{ Request::is('vendor*') ? 'active' : '' }}" href="{!! route('vendor.index') !!}">@if($icons)
-                        <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('lang.suggested')}}</p></a>
-                    </li>
-                    @endcan
-                   
-                </ul>
+            @can('vendors.index')
+            <li class="nav-item">
+                <a class="nav-link {{ Request::is('vendors*') ? 'active' : '' }}" href="{!! route('vendors.index') !!}">@if($icons)
+                <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('lang.vendor')}}</p></a>
             </li>
-           
-        
-
-            @can('sales_man.index')
+            @endcan
+            @can('vendor.index')
+            <li class="nav-item">
+                <a class="nav-link {{ Request::is('vendor*') ? 'active' : '' }}" href="{!! route('vendor.index') !!}">@if($icons)
+                <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('lang.suggested')}}</p></a>
+            </li>
+            @endcan
+            
+        </ul>
+    </li>
+    @endcan
+ @can('sales_man.index')
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('sales_man*') ? 'active' : '' }}" href="{!! route('sales_man.index') !!}">@if($icons)
                     <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('lang.delegates')}}</p></a>
                 </li>
             @endcan
-            
-        </ul>
-        
-    </li>
-@endcan
     @can('reviews.index')
     <li class="nav-item has-treeview {{ Request::is('reviews*') || Request::is('pending*') ? 'menu-open' : '' }}">
         <a href="#" class="nav-link {{ Request::is('reviews*') || Request::is('pending*') ? 'active' : '' }}"> @if($icons)

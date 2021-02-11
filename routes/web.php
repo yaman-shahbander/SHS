@@ -94,7 +94,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
             Route::get('vendors','VendorController@index')->name('vendors.index');
             /*Route::get('vendor/{id}','VendorController@show_vendor');*/
             Route::get('vendors/create','VendorController@create')->name('vendors.create');
-            Route::post('vendors/store','VendorController@store')->name('vendors.store');
+            Route::any('vendors/store','VendorController@store')->name('vendors.store');
         });
 
         Route::group(['middleware' => ['permission:permissions.index']], function () {

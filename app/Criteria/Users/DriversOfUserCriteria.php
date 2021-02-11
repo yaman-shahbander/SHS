@@ -30,7 +30,7 @@ class DriversOfUserCriteria implements CriteriaInterface
     {
         if(auth()->user()->hasRole('admin')){
             return $model->whereHas("roles", function($q){ $q->where("name", "driver"); });
-        }else if (auth()->user()->hasRole('manager')){
+        }else if (auth()->user()->hasRole('vendor')){
             // restaurants of this user
             $restaurantsIds = array_column(auth()->user()->restaurants->toArray(), 'id');
 

@@ -11,7 +11,7 @@
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><a href="{{url('/dashboard')}}"><i class="fa fa-dashboard"></i> {{trans('lang.dashboard')}}</a></li>
-          <li class="breadcrumb-item"><a href="{!! route('vendorRegistration.index') !!}">{{trans('lang.duration')}}</a>
+          <li class="breadcrumb-item"><a href="{!! route('vendorRegistration.index') !!}">{{trans('lang.durations')}}</a>
           </li>
           <li class="breadcrumb-item active">{{trans('lang.duration_edit')}}</li>
         </ol>

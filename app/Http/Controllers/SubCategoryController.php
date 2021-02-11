@@ -49,11 +49,7 @@ class SubCategoryController extends Controller
     public function index(SubCategoriesDataTable $subcategoryDataTable)
     {            
         $categories = subCategory::all();
-//     return view('SubCategories.index',compact('categories'));
         return $subcategoryDataTable->render('SubCategories.index');
-
-
-
     }
 
     /**
@@ -69,13 +65,8 @@ class SubCategoryController extends Controller
             $html = generateCustomField($customFields);
         }
         $categories=Category::all();
-        if(count($categories)!=0) {
-
-            //  $categories = Category::
-//        whereDoesntHave('children')
-            //    where('brand_id', $brands->first()->id)->orderby('parent_id')->get();
-
-
+        if(count($categories)!=0) 
+        {
             return view('SubCategories.create', ['categories'=>$categories,'customFields'=> isset($html) ? $html : false]);
         }else{
             return redirect()->back()->with(["error"=> 'Please add category','customFields'=> isset($html) ? $html : false]);
@@ -91,92 +82,39 @@ class SubCategoryController extends Controller
     public function store(Request $request)
     {
         if ($request->category == "0") {
-            // var_dump($request->brand);
             Flash::error('Please select category');
-
             return redirect()->back();
-            //
-
         }
         $subcategories = subCategory::where('name', $request->name)->get();
          foreach ($subcategories as $category) {
-
-                if ($category->category_id == $request->category) {
-                    Flash::error('this category is exist');
-
-                    return redirect()->back();
-                       }
-//
-//
+            if ($category->category_id == $request->category) {
+                Flash::error('this category is exist');
+                return redirect()->back();
+            }
         }
         $input = $request->all();
-         $input['category_id']=$input['category'];
-         $input['name']=$input['name'];
-         $input['name_en']=$input['name_en'];
+        $input['category_id']=$input['category'];
+        $input['name']=$input['name'];
+        $input['name_en']=$input['name_en'];
         $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->subcategoryRepository->model());
-
         try {
-            $subcategory = $this->subcategoryRepository->create($input);
-            $subcategory->customFieldsValues()->createMany(getCustomFieldsValues($customFields, $request));
-            //return getCustomFieldsValues($customFields, $request);
-            if (isset($input['image']) && $input['image']) {
-                $cacheUpload = $this->uploadRepository->getByUuid($input['image']);
-                $mediaItem = $cacheUpload->getMedia('image')->first();
-                $mediaItem->copy($subcategory, 'image');
-            }
+            if($request->file('avatar')->extension()=="png"){
+                $subcategory = $this->subcategoryRepository->create($input);
+                $subcategory->customFieldsValues()->createMany(getCustomFieldsValues($customFields, $request));
+                if (!empty ($request->file('avatar'))) {
+                    $imageName = uniqid() . $request->file('avatar')->getClientOriginalName();
+                    $request->file('avatar')->move(public_path('storage/category'), $imageName);
+                }
+                Flash::success(__('lang.saved_successfully', ['operator' => __('lang.category')]));
+            } else{
+                Flash::error('The image must have a png extension');
+            }  
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }
-
-        Flash::success(__('lang.saved_successfully', ['operator' => __('lang.category')]));
-
         return redirect(route('subcategory.create'));
 
 
-//
-//        try {
-//
-//            if ($request->category == "0") {
-//                // var_dump($request->brand);
-//                return redirect()->back()->with("error", 'please select category');
-//                //
-//
-//            }
-//            $subcategories = subCategory::where('name', $request->name)->get();
-//            foreach ($subcategories as $category) {
-//
-//                if ($category->category_id == $request->category) {
-//                    return redirect()->back()->with("error", 'this category is exist');
-//                }
-//
-//
-//            }
-//
-//            $subcategory = new subCategory();
-//            $subcategory->category_id = $request->category;
-//            $subcategory->description = $request->description;
-//            $subcategory->name = $request->name;
-//
-//            if ($subcategory->save()) {
-//                Flash::success(__('lang.saved_successfully', ['operator' => __('lang.category')]));
-//
-//                return redirect()->back();
-//
-//            } else {
-//                Flash::error('Somthings wrong');
-//
-//                return redirect()->back();
-//            }
-//
-//
-//        }
-//        catch (\Exception $e) {
-//            Flash::error($e->getMessage());
-//
-//
-//            return redirect()->back();
-//
-//        }
     }
 
     /**
