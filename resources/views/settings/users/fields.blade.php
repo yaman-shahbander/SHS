@@ -92,18 +92,26 @@
     <div class="row">
         <!-- $FIELD_NAME_TITLE$ Field -->
         <div class="form-group row col-md-6">
-            {!! Form::label('password', trans("lang.user_avatar"), ['class' => 'col-md-3 control-label']) !!}
+        {!! Form::label('avatar', trans("lang.user_avatar"), ['class' => 'col-md-3 control-label', 'style' => 'font-size:15px']) !!}
             <div class="col-md-9">
-                <div class="image-upload-one">
-                <div class="center">
-                    <div class="form-input">
-                        <label for="file-ip-1">
-                            <img id="file-ip-1-preview" src="https://i.ibb.co/ZVFsg37/default.png">
-                            <button type="button" class="imgRemove" onclick="myImgRemoveFunctionOne()"></button>
-                        </label>
-                        <input type="file" name="avatar" id="file-ip-1" accept="image/*" onchange="showPreviewOne(event);">
+                <!-- $FIELD_NAME_TITLE$ Field -->
+                <div class="row">
+                    <div class="box">
+                        <div class="content">
+
+                <!-- Custom File Uploader  -->
+
+                    <div class="left">
+                      <img id="img-uploaded" class="img2" src="{{asset('storage/Avatar/avatar.png')}}" alt="your image" />
                     </div>
-                    <small class="small">Use the ↺ icon to reset the image</small>
+                    
+                     <div class="right">
+
+                      <input type="text" class="img-path newimg" placeholder="Image Path">
+                      <span class="file-wrapper">
+                      <input type="file" name="avatar" id="imgInp" class="uploader newimg"  />
+                      <span class="btn2 btn-large btn-alpha">Upload Image</span>
+                     </span>
                 </div>
             </div>
         </div>

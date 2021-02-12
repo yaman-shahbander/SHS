@@ -14,7 +14,7 @@
               </div>
             </div>
           </div>
-        
+
           <!-- Name Field -->
           <div class="form-group row ">
             {!! Form::label('offername', "Offer Name", ['class' => 'col-3 control-label text-right']) !!}

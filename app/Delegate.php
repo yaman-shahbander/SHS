@@ -11,7 +11,7 @@ class Delegate extends Model
     public $fillable = [
         'name',
         'phone',
-        'balance'
+        'balance_id'
     ];
 
     public static $rules = [
@@ -44,4 +44,8 @@ class Delegate extends Model
     public function Userdelegate() {
         return $this->hasOne(User::class, 'delegate_id');
       }
+
+      public function Balance() {
+        return $this->belongsTo(Balance::class, 'balance_id');
+    }
 }

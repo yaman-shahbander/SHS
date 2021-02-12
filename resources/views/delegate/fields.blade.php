@@ -30,7 +30,7 @@
         <div class="form-group row col-md-6">
             {!! Form::label('balance', 'Balance', ['class' => 'col-4 control-label text-right']) !!}
             <div class="col-8">
-                {!! Form::number('balance', null,  ['class' => 'form-control','placeholder'=>  'Balance','required']) !!}
+                {!! Form::number('balance', Request::is('*edit') ? $saleMan->Balance->balance : null,  ['class' => 'form-control','placeholder'=>  'Balance']) !!}
                 <div class="form-text text-muted">
                 default 0
                 </div>

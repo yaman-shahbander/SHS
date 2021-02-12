@@ -103,41 +103,30 @@
 
     <div class="row">
 
-                                                <div class="box">
+    <div class="box">
 
 
-                                                    <div class="content">
+        <div class="content">
 
-                                                        <!-- Custom File Uploader  -->
+            <!-- Custom File Uploader  -->
 
-                                                        <div class="left">
-                                                            <img id="img-uploaded" class="img2" src="{{asset('app-assets/img/350x350.png')}}" alt="your image" />
-                                                        </div>
+<div class="left">
+    <img id="img-uploaded" class="img2" src="{{asset('storage/Avatar/avatar.png')}}" alt="your image" />
+</div>
                                                         <div class="right">
 
-                                                            <input type="text" class="img-path newimg" placeholder="Image Path">
-                                                            <span class="file-wrapper">
-  <input type="file" name="avatar" id="imgInp" class="uploader newimg" required />
+<input type="text" class="img-path newimg" placeholder="Image Path">
+<span class="file-wrapper">
+  <input type="file" name="avatar" id="imgInp" class="uploader newimg"  />
   <span class="btn2 btn-large btn-alpha">Upload Image</span>
 </span>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-
-                                            </div>
-    {{--<div class="form-group col-md-12 row">
-        {!! Form::label('avatar', trans("lang.user_avatar"), ['class' => 'col-3 control-label']) !!}
-        <div class="col-md-9">
-            <div style="width: 100%" class="dropzone avatar" id="avatar" data-field="avatar">
-                <input type="hidden" name="avatar">
-            </div>
-            <a href="#loadMediaModal" data-dropzone="avatar" data-toggle="modal" data-target="#mediaModal" class="btn btn-outline-{{setting('theme_color','primary')}} btn-sm float-right mt-1">{{ trans('lang.media_select')}}</a>
-            <div class="form-text text-muted w-50">
-                {{ trans("lang.user_avatar_help") }}
-            </div>
         </div>
-    </div>--}}
+
+    </div>
+</div>
+
+</div>
+
     @prepend('scripts')
     <script type="text/javascript">
         var user_avatar = '';

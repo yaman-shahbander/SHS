@@ -10,7 +10,60 @@
     <link rel="stylesheet" href="{{asset('plugins/dropzone/bootstrap.min.css')}}">
 @endpush
 @section('css_custom')
-    <style>body {
+<style>
+.center {
+   display:inline;
+   margin: 3px;
+ }
+
+ .form-input {
+   width:100px;
+   padding:3px;
+   background:#fff;
+   border:2px dashed #427bff;
+ }
+ .form-input input {
+   display:none;
+ }
+ .form-input label {
+   display:block;
+   /* width:100px; */
+   height: auto;
+   max-height: 100px;
+   background:#333;
+   border-radius:10px;
+   cursor:pointer;
+ }
+
+ .form-input img {
+   width:90px;
+   height: 100px;
+   margin: 2px;
+   opacity: .4;
+ }
+
+ .imgRemove{
+   position: relative;
+   bottom: 114px;
+   left: 68%;
+   background-color: transparent;
+   border: none;
+   font-size: 30px;
+   outline: none;
+ }
+ .imgRemove::after{
+   content: ' \21BA';
+   color: #fff;
+   font-weight: 900;
+   border-radius: 8px;
+   cursor: pointer;
+ }
+ .small{
+   color: firebrick;
+ } 
+
+
+ body {
             background-color: #eee
         }
 
@@ -55,7 +108,8 @@
         }
 
         .wish {
-            color: #35b69f
+            color: #35b69f;
+            font-size: 16px;
         }
 
         .user-feed {
@@ -68,6 +122,7 @@
             position: relative;
             display: inline-block;
             color: transparent;
+            margin-left: 20px;
         }
 
         .stars-container:before {
@@ -93,7 +148,14 @@
             position: relative;
             left: 65px;
             margin-bottom: 4px;
+            
         }
+
+        .space {
+            margin-left: 15px;
+        }
+
+        
         .stars-0:after { width: 0%; }
         .stars-1:after { width: 1%; }
         .stars-2:after { width: 2%; }
@@ -195,8 +257,260 @@
         .stars-98:after { width: 98%; }
         .stars-99:after { width: 99%; }
         .stars-100:after { width: 100; }
+        .own-padding {
+            padding-top:0px !important;    
+            width: 787px !important;
+            padding-left: 0px !important; 
+            margin-left: -9px !important;
+        }
+        .box-profile .custom-star-edit {
+           
+            margin-left: -11px !important;
+       }
+ 
 
-    </style>
+  .center {
+    display:inline;
+    margin: 3px;
+  }
+
+  .form-input {
+    width:100px;
+    padding:3px;
+    background:#fff;
+    border:2px dashed #427bff;
+  }
+  .form-input input {
+    display:none;
+  }
+  .form-input label {
+    display:block;
+    /* width:100px; */
+    height: auto;
+    max-height: 100px;
+    background:#333;
+    border-radius:10px;
+    cursor:pointer;
+  }
+
+  .form-input img {
+    width:90px;
+    height: 100px;
+    margin: 2px;
+    opacity: .4;
+  }
+
+  .imgRemove{
+    position: relative;
+    bottom: 114px;
+    left: 68%;
+    background-color: transparent;
+    border: none;
+    font-size: 30px;
+    outline: none;
+  }
+  .imgRemove::after{
+    content: ' \21BA';
+    color: #fff;
+    font-weight: 900;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .small{
+    color: firebrick;
+  } 
+    [type="file"] {
+        height: 0;
+        overflow: hidden;
+        width: 0;
+    }
+
+    [type="file"] + label {
+        background: #f15d22;
+        border: none;
+        border-radius: 5px;
+        color: #fff;
+        cursor: pointer;
+        display: inline-block;
+        font-family: 'Poppins', sans-serif;
+        font-size: inherit;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        outline: none;
+        padding: 1rem 50px;
+        position: relative;
+        -webkit-transition: all 0.3s;
+        transition: all 0.3s;
+        vertical-align: middle;
+    }
+    [type="file"] + label:hover {
+        background-color: #d3460d;
+    }
+    [type="file"] + label.btn-2 {
+        background-color: #54944c;
+
+        overflow: hidden;
+    }
+    [type="file"] + label.btn-2::before {
+        color: #fff;
+        content: "\f382";
+        font-family: "Font Awesome 5 Pro";
+        font-size: 100%;
+        height: 100%;
+        right: 130%;
+        line-height: 3.3;
+        position: absolute;
+        top: 0px;
+        -webkit-transition: all 0.3s;
+        transition: all 0.3s;
+    }
+    [type="file"] + label.btn-2:hover {
+        background-color: #497f42;
+    }
+    [type="file"] + label.btn-2:hover::before {
+        right: 75%;
+    }
+
+
+    /****** IGNORE ******/
+
+
+
+
+    /****** CODE ******/
+
+    .file-upload{display:block;text-align:center;font-family: Helvetica, Arial, sans-serif;font-size: 12px;}
+    .file-upload .file-select{display:block;border: 2px solid #dce4ec;color: #34495e;cursor:pointer;height:40px;line-height:40px;text-align:left;background:#FFFFFF;overflow:hidden;position:relative;}
+    .file-upload .file-select .file-select-button{background:#dce4ec;padding:0 10px;display:inline-block;height:40px;line-height:40px;}
+    .file-upload .file-select .file-select-name{line-height:40px;display:inline-block;padding:0 10px;float: right;}
+    .file-upload .file-select:hover{border-color:#962eaf;transition:all .2s ease-in-out;-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out;-o-transition:all .2s ease-in-out;}
+    .file-upload .file-select:hover .file-select-button{background:#962eaf;color:#FFFFFF;transition:all .2s ease-in-out;-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out;-o-transition:all .2s ease-in-out;}
+    .file-upload.active .file-select{border-color:#3fa46a;transition:all .2s ease-in-out;-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out;-o-transition:all .2s ease-in-out;}
+    .file-upload.active .file-select .file-select-button{background:#3fa46a;color:#FFFFFF;transition:all .2s ease-in-out;-moz-transition:all .2s ease-in-out;-webkit-transition:all .2s ease-in-out;-o-transition:all .2s ease-in-out;}
+    .file-upload .file-select input[type=file]{z-index:100;cursor:pointer;position:absolute;height:100%;width:100%;top:0;left:0;opacity:0;filter:alpha(opacity=0);}
+    .file-upload .file-select.file-select-disabled{opacity:0.65;}
+    .file-upload .file-select.file-select-disabled:hover{cursor:default;display:block;border: 2px solid #dce4ec;color: #34495e;cursor:pointer;height:40px;line-height:40px;margin-top:5px;text-align:left;background:#FFFFFF;overflow:hidden;position:relative;}
+    .file-upload .file-select.file-select-disabled:hover .file-select-button{background:#dce4ec;color:#666666;padding:0 10px;display:inline-block;height:40px;line-height:40px;}
+    .file-upload .file-select.file-select-disabled:hover .file-select-name{line-height:40px;display:inline-block;padding:0 10px;}
+
+
+
+
+
+
+
+
+    .box {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        display: block;
+        max-width: 30em;
+
+        border-radius: 4px;
+    }
+    .box .content {
+        padding: 1em;
+    }
+    .btn2 {
+        color: #fff;
+        background-color: #007bff;
+        border: 1px solid #007bff;
+        text-align: center;
+        display: inline-block;
+        vertical-align: middle;
+        white-space: nowrap;
+        margin: 0.6em 0.6em .6em 0;
+        padding: 0.35em .7em 0.4em;
+        text-decoration: none;
+        width: auto;
+        position: relative;
+        border-radius: 4px;
+        user-select: none;
+        outline: none;
+        -webkit-transition: all, 0.25s, ease-in;
+        -moz-transition: all, 0.25s, ease-in;
+        transition: all, 0.25s, ease-in;
+    }
+    .btn2:hover, button:hover {
+        background-color: #ddd;
+        color: #333;
+        -webkit-transition: all, 0.25s, ease-in;
+        -moz-transition: all, 0.25s, ease-in;
+        transition: all, 0.25s, ease-in;
+    }
+    .btn2:active, button:active {
+        background-color: #ccc;
+        box-shadow: 0 !important;
+        top: 2px;
+        -webkit-transition: background-color, 0.2s, linear;
+        -moz-transition: background-color, 0.2s, linear;
+        transition: background-color, 0.2s, linear;
+        box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    }
+
+
+
+    .newimg {
+        border: 2px solid #eee;
+        padding: 1em .25em;
+        width: 96%;
+        color: #999;
+        border-radius: 4px;
+        height: 45px;
+    }
+
+    .left, .right {
+        display: table-cell;
+        vertical-align: middle;
+    }
+
+    .left {
+        width: 9em;
+        min-width: 6em;
+        padding-right: 1em;
+    }
+    .left .img2 {
+        width: 88%;
+    }
+
+    .img-holder {
+        display: block;
+        vertical-align: middle;
+        width: 2em;
+        height: 2em;
+    }
+    .img-holder .img2 {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .file-wrapper {
+        cursor: pointer;
+        display: inline-block;
+        overflow: hidden;
+        position: relative;
+    }
+    .file-wrapper:hover .btn {
+        background-color: #33adff !important;
+    }
+
+    .file-wrapper .newimg {
+        cursor: pointer;
+        font-size: 100px;
+        height: 100%;
+        filter: alpha(opacity=1);
+        -moz-opacity: 0.01;
+        opacity: 0.01;
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 9;
+    }
+
+
+</style>
+
+
     @endsection
 @section('content')
     <!-- Content Header (Page header) -->
@@ -267,51 +581,6 @@
                         </div>
                     <!-- /.card -->
 
-                <!-- sub-categories vendor offers-->
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title"><i class="fa fa-list mr-2"></i>{{trans('lang.subcategory')}}</h3>
-                            </div>
-                            <!-- /.card-header -->
-                            <div class="card-body">
-                                 <div class="row">
-                                @foreach($user->subcategories as $subcategory)
-                                        <div class="col-md-6">
-                                        <strong>{{ $subcategory->name }}</strong>
-                                        </div>
-                                @endforeach
-                                </div>
-                            </div>
-                            <!-- /.card-body -->
-                        </div>
-                    <!-- /.card -->
-
-
-                    <!-- vendor special-offers-->
-                    <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title"><i class="fa fa-list mr-2"></i>Special Offers</h3>
-                            </div>
-                            <!-- /.card-header -->
-                            <div class="card-body">
-                                 <div class="row">
-                                @foreach($user->specialOffers as $specialOffer)
-                                    <div class="col-md-5">
-                                        <strong>{{ $specialOffer->image }}</strong>
-                                    </div>
-                                    <div class="col-md-7">
-                                            <strong>{{ $specialOffer->title }}</strong>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <strong>{{ $specialOffer->description }}</strong>
-                                    </div>
-                                @endforeach
-                                </div>
-                            </div>
-                            <!-- /.card-body -->
-                        </div>
-                    <!-- /.card -->
-
                     <!-- available-->
                     <div class="card">
                         <div class="card-header">
@@ -322,7 +591,7 @@
                             <div class="row">
                             @foreach($user->vendor_city as $city)
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-6" style="margin-bottom: 8px;">
                                         <strong>{{ $city->city_name}}</strong>
                                     </div>
 
@@ -333,46 +602,9 @@
                     </div>
                     <!-- /.card -->
 
-                    <!-- favorites-->
-                    <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title"><i class="fa fa-list mr-2"></i>Favorite service providers</h3>
-                            </div>
-                            <!-- /.card-header -->
-                            <div class="card-body">
-                                 <div class="row">
-                                @foreach($user->vendorFavorite as $favorite)
-                                        <div class="col-md-12">
-                                        <strong><a data-toggle="tooltip" data-placement="bottom" title="Vendor Profile" href="{{ route('vendors.profile', ['id'=>$favorite->id]) }}" class='btn btn-link'>
-                                        <i class="fa fa-user mr-2"></i>{{ $favorite->name }} </a></strong>
-                                        </div>
-                                @endforeach
-                                </div>
-                            </div>
-                            <!-- /.card-body -->
-                        </div>
-                    <!-- /.card -->
+                    
 
-                    <!-- users who added this vendor as a favorite-->
-                    <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title"><i class="fa fa-list mr-2"></i> service provider</h3>
-                                <h6 style="font-size:11px"><i>Users who added this as a favorite </i></h6>
-                            </div>
-                            <!-- /.card-header -->
-                            <div class="card-body">
-                                 <div class="row">
-                                @foreach($favoriteVendor as $favorite)
-                                <div class="col-md-12">
-                                    <strong>
-                                    <i class="fa fa-user mr-2"></i>{{ $favorite->name }} </strong>
-                                </div>
-                                @endforeach
-                                </div>
-                            </div>
-                            <!-- /.card-body -->
-                        </div>
-                    <!-- /.card -->
+                   
 
                 </div>
 
@@ -413,42 +645,213 @@
                     </div>
 
                 </div>
+<div class="row">
+<div class="col-md-6">
+        <!-- users who added this vendor as a favorite-->
+        <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fa fa-list mr-2"></i> service provider</h3>
+                    <h6 style="font-size:11px"><i>Users who added this as a favorite </i></h6>
+                </div>
+                <!-- /.card-header -->
                 <div class="card-body">
-                    <div class="container mt-5 mb-5">
+                        <div class="row">
+                    @foreach($favoriteVendor as $favorite)
+                    <div class="col-md-12">
+                        <strong>
+                        <i class="fa fa-user mr-2"></i>{{ $favorite->name }} </strong>
+                    </div>
+                    @endforeach
+                    </div>
+                </div>
+                <!-- /.card-body -->
+            </div>
+        <!-- /.card -->
+</div>
+                    
+<div class="col-md-6">
+
+<!-- favorites-->
+<div class="card">
+        <div class="card-header">
+            <h3 class="card-title"><i class="fa fa-list mr-2"></i>Favorite service providers</h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+                <div class="row">
+            @foreach($user->vendorFavorite as $favorite)
+                    <div class="col-md-12">
+                    <strong><a data-toggle="tooltip" data-placement="bottom" title="Vendor Profile" href="{{ route('vendors.profile', ['id'=>$favorite->id]) }}" class='btn btn-link'>
+                    <i class="fa fa-user mr-2"></i>{{ $favorite->name }} </a></strong>
+                    </div>
+            @endforeach
+            </div>
+        </div>
+        <!-- /.card-body -->
+    </div>
+<!-- /.card -->
+</div> 
+</div>
+
+<div class="row">
+     <div class="col-md-12">
+        <!-- vendor special-offers-->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa fa-list mr-2"></i>Special Offers</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                    <div class="row">
+                @foreach($user->specialOffers as $specialOffer)
+                        <div class="col-md-4" style="margin-bottom: 13px; ">
+                            <strong><img style="border-radius:8px" width='100%' height='100px' src="{{ asset('storage/specialOffersPic/' . $specialOffer->image)  }}" alt="Image not found"></strong>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="col-md-12">
+                                <h5><i>{{ $specialOffer->title }}</i></h5>
+                            </div>
+                            <div class="col-md-12">
+                                <p style="color:#9a969e"><strong>{{ $specialOffer->description }}</strong></p>
+                            </div>
+                        </div>
+                    
+                @endforeach
+                </div>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    <!-- /.card -->
+    </div>
+</div>
+                <div class="card-body own-padding">
+                    <div class="container mt-5 mb-5" style="margin-bottom:0px !important">
                         <div class="row height d-flex justify-content-center align-items-center">
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="p-3">
-                                        <h6>Ratings</h6>
+                                        <h6>Reviews <span style="font-size: 12px;color: #777;">(Users who reviewd me)</span></h6>
                                     </div>
                                     <div class="mt-2">
 
-@foreach($user->clients as $client)
-    @if($client->pivot->approved==1)
-                                            <?php
-                                            $sum = 0;
-                                            $sum += $client->pivot->price_rating+$client->pivot->service_rating+$client->pivot->trust_rating+$client->pivot->speed_rating+$client->pivot->knowledge_rating;
-                                            if($sum!=0)
+                   @foreach($user->clients as $client)
+                    @if($client->pivot->approved==1)
+                        <?php
+                        $sum = 0;
+                        $sum += $client->pivot->price_rating+$client->pivot->service_rating+$client->pivot->trust_rating+$client->pivot->speed_rating+$client->pivot->knowledge_rating;
+                        if($sum!=0)
 
-                                        $sum=$sum/(5);
-                                            ?>
-                                        <div class="d-flex flex-row p-3"> <img src="https://i.imgur.com/agRGhBc.jpg" width="40" height="40" class="rounded-circle mr-3">
-                                            <div class="w-100">
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div class="d-flex flex-row align-items-center"> <span class="mr-2">{{$client->name}}</span> <div id="fixture">{{$sum}}</div> </div> <small>{{$client->pivot->created_at}}</small>
-                                                </div>
-                                                <p class="text-justify comment-text mb-0">{{$client->pivot->description}}</p>
-                                                <div class="d-flex flex-row user-feed" style="display: block !important"> <span class="wish" >
-                                                        Quality Rating</span><div id="fixture">{{$client->pivot->service_rating}}</div>
-                                                    <span class="wish">    &nbsp;&nbsp;Price Rating</span><div id="fixture">{{$client->pivot->price_rating}}</div>
-                                                       <span class="wish"> &nbsp;&nbsp;Speed Rating</span><div id="fixture">{{$client->pivot->speed_rating}}</div>
-                                                       <span class="wish"> &nbsp;&nbsp;Trust Rating</span><div id="fixture">{{$client->pivot->trust_rating}}</div>
-                                                       <span class="wish"> &nbsp;&nbsp;Knowledge Rating</span><div id="fixture">{{$client->pivot->knowledge_rating}}</div></span>
-                                                    </div>
-                                            </div>
-                                        </div>
+                    $sum=$sum/(5);
+                        ?>
+                    <div class="d-flex flex-row p-3" style="display: block !important;">
+
+                    <div class="pic-name">
+                    <img src="https://i.imgur.com/agRGhBc.jpg" width="40" height="40" class="rounded-circle mr-3" style="float:left">
+                    <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex flex-row align-items-center"> <span class="mr-2">{{$client->name}}</span> <div id="fixture" >{{$sum}}</div> </div> <small>{{$client->pivot->created_at}}</small>
+                            </div>
+                    </div> 
+                
+                        <div class="w-100">
+                        </div>    
+                            <p class="text-justify comment-text mb-0">{{$client->pivot->description}}</p>
+                            <div class="d-flex flex-row user-feed" >
+                                 <div class="space">
+                                    <span class="wish">Quality Rating</span>
+                                    <div id="fixture">{{$client->pivot->service_rating}}</div>
+                                 </div>
+                                 <div class="space">
+                                    <span class="wish">&nbsp;&nbsp;Price Rating</span>
+                                    <div id="fixture">{{$client->pivot->price_rating}}</div>
+                                 </div>
+                                 <div class="space">
+                                    <span class="wish">&nbsp;&nbsp;Speed Rating</span>
+                                    <div id="fixture">{{$client->pivot->speed_rating}}</div>
+                                 </div>
+                                 <div class="space">
+                                    <span class="wish">&nbsp;&nbsp;Trust Rating</span>
+                                    <div id="fixture">{{$client->pivot->trust_rating}}</div>
+                                 </div>
+                                 <div class="space">
+                                    <span class="wish">&nbsp;&nbsp;Knowledge Rating</span>
+                                    <div id="fixture">{{$client->pivot->knowledge_rating}}</div>
+                                 </div>
+                                    
+                               
+                        </div>
+                    </div>
                                             @endif
-    @endforeach
+                                         @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+
+                <!-- Users I reviewd -->
+
+
+                <div class="card-body own-padding">
+                    <div class="container mt-5 mb-5"  style="margin-top: 0px !important;">
+                        <div class="row height d-flex justify-content-center align-items-center">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="p-3">
+                                        <h6>Reviews <span style="font-size: 12px;color: #777;">(Service Providers I reviewd)</span></h6>
+                                    </div>
+                                    <div class="mt-2">
+
+                   @foreach($user->vendors as $client)
+                    @if($client->pivot->approved==1)
+                        <?php
+                        $sum = 0;
+                        $sum += $client->pivot->price_rating+$client->pivot->service_rating+$client->pivot->trust_rating+$client->pivot->speed_rating+$client->pivot->knowledge_rating;
+                        if($sum!=0)
+
+                    $sum=$sum/(5);
+                        ?>
+                    <div class="d-flex flex-row p-3" style="display: block !important;">
+
+                    <div class="pic-name">
+                    <img src="https://i.imgur.com/agRGhBc.jpg" width="40" height="40" class="rounded-circle mr-3" style="float:left">
+                    <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex flex-row align-items-center"> <span class="mr-2">{{$client->name}}</span> <div id="fixture" >{{$sum}}</div> </div> <small>{{$client->pivot->created_at}}</small>
+                            </div>
+                    </div> 
+                
+                        <div class="w-100">
+                        </div>    
+                            <p class="text-justify comment-text mb-0">{{$client->pivot->description}}</p>
+                            <div class="d-flex flex-row user-feed" >
+                                 <div class="space">
+                                    <span class="wish">Quality Rating</span>
+                                    <div id="fixture">{{$client->pivot->service_rating}}</div>
+                                 </div>
+                                 <div class="space">
+                                    <span class="wish">&nbsp;&nbsp;Price Rating</span>
+                                    <div id="fixture">{{$client->pivot->price_rating}}</div>
+                                 </div>
+                                 <div class="space">
+                                    <span class="wish">&nbsp;&nbsp;Speed Rating</span>
+                                    <div id="fixture">{{$client->pivot->speed_rating}}</div>
+                                 </div>
+                                 <div class="space">
+                                    <span class="wish">&nbsp;&nbsp;Trust Rating</span>
+                                    <div id="fixture">{{$client->pivot->trust_rating}}</div>
+                                 </div>
+                                 <div class="space">
+                                    <span class="wish">&nbsp;&nbsp;Knowledge Rating</span>
+                                    <div id="fixture">{{$client->pivot->knowledge_rating}}</div>
+                                 </div>
+                                    
+                               
+                        </div>
+                    </div>
+                                            @endif
+                                         @endforeach
                                     </div>
                                 </div>
                             </div>
@@ -477,18 +880,7 @@
     </script>
 @endpush
 @section('script')
-{{--<script>--}}
-{{--    $(function() {--}}
-{{--        function addScore(score, $domElement) {--}}
-{{--            $("<span class='stars-container'>")--}}
-{{--                .addClass("stars-" + score.toString())--}}
-{{--                .text("★★★★★")--}}
-{{--                .appendTo($domElement);--}}
-{{--        }--}}
 
-{{--        addScore(88, $("#fixture"));--}}
-{{--    });--}}
-{{--</script>--}}
 <script>
 
     $(function() {
@@ -514,4 +906,55 @@
     });
 
 </script>
+
+
+<script>
+var h=1;
+        /*----------------------------------------
+        Upload btn
+        ------------------------------------------*/
+        var SITE = SITE || {};
+
+SITE.fileInputs = function() {
+    var $this = $(this),
+        $val = $this.val(),
+        valArray = $val.split('\\'),
+        newVal = valArray[valArray.length-1],
+        $button = $this.siblings('.btn2'),
+        $fakeFile = $this.siblings('.file-holder');
+    if(newVal !== '') {
+        $button.text('Photo Chosen');
+        if($fakeFile.length === 0) {
+
+            $('.newimg.img-path').val(newVal);
+        } else {
+            $fakeFile.text(newVal);
+        }
+    }
+};
+
+
+$('.file-wrapper input[type=file]').bind('change focus click', SITE.fileInputs);
+
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        var tmppath = URL.createObjectURL(event.target.files[0]);
+
+        reader.onload = function (e) {
+            $('#img-uploaded').attr('src', e.target.result);
+
+        }
+
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+$(".uploader").change(function(){
+    readURL(this);
+});
+
+    </script>
+
+
     @endsection
