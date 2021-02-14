@@ -697,11 +697,11 @@
      <div class="col-md-12">
         <!-- vendor special-offers-->
         <div class="card">
-            <div class="card-header">
+            <div class="card-header" style="background-color: #e4e4e4">
                 <h3 class="card-title"><i class="fa fa-list mr-2"></i>Special Offers</h3>
             </div>
             <!-- /.card-header -->
-            <div class="card-body">
+            <div class="card-body" style="background-color: #ececec">
                     <div class="row">
                 @foreach($user->specialOffers as $specialOffer)
                         <div class="col-md-4" style="margin-bottom: 13px; ">
@@ -709,7 +709,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="col-md-12">
-                                <h5><i>{{ $specialOffer->title }}</i></h5>
+                                <h5><i><strong>{{ $specialOffer->title }}</strong></i></h5>
                             </div>
                             <div class="col-md-12">
                                 <p style="color:#9a969e"><strong>{{ $specialOffer->description }}</strong></p>

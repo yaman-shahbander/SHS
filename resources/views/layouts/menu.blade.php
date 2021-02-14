@@ -367,12 +367,10 @@
 
 
     <li class="nav-item has-treeview {{
-    (Request::is('settings*') ||
-     Request::is('users*')) && !Request::is('settings/mobile*')
+    Request::is('settings*')
         ? 'menu-open' : '' }}">
         <a href="#" class="nav-link {{
-        (Request::is('settings*') ||
-         Request::is('users*')) && !Request::is('settings/mobile*')
+        Request::is('settings*')
           ? 'active' : '' }}"> @if($icons)<i class="nav-icon fa fa-cogs"></i>@endif
             <p>{{trans('lang.app_setting')}} <i class="right fa fa-angle-left"></i>
             </p>
