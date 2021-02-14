@@ -245,6 +245,7 @@ class UserController extends Controller
             $user = $this->vendorRepository->update($input,$user->id);
         
              $user->assignRole('homeowner');
+             $user->assignRole($request->roles);
 
 
         try {
@@ -387,6 +388,10 @@ class UserController extends Controller
 
             $user = $this->userRepository->update($input,$id);
 
+            DB::table('model_has_roles')->where('model_id', $user->id)->delete();
+
+            $user->assignRole($request->roles);
+
         try {
    
             if ($request->file('avatar')) {
@@ -425,6 +430,11 @@ class UserController extends Controller
             return redirect(route('users.index'));
         }
         $user = $this->userRepository->findWithoutFail($id);
+
+        if ($user->balance_id != null) {
+            Balance::find($user->balance_id)->delete();
+        }
+        
 
         if (empty($user)) {
             Flash::error('User not found');

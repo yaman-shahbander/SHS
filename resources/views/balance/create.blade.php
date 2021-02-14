@@ -1,3 +1,5 @@
+
+
 @extends('layouts.app')
 @push('css_lib')
 <!-- iCheck -->
@@ -50,7 +52,7 @@
     <div class="card-body">
       {!! Form::open(['route' => 'balance.store']) !!}
       <div class="row">
-        @include('balance.fields')
+         @include('balance.fields')
       </div>
       {!! Form::close() !!}
       <div class="clearfix"></div>

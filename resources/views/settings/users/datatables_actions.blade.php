@@ -27,8 +27,7 @@
             'title' => trans('lang.user_delete'),
             'type' => 'submit',
             'class' => 'btn btn-link text-danger',
-            'onclick' => "swal({title: ".trans('lang.error').", confirmButtonText: ".trans('lang.ok').",
-                                    text: data.message,type: 'error', confirmButtonClass: 'btn-danger'});"
+            'onclick' => "return confirm('Are you sure?')"
             ]) !!}
 @endif
     

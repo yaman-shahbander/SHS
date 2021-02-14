@@ -185,6 +185,10 @@ class DelegateController extends Controller
             return redirect(route('sales_man.index'));
         }
 
+        if ($salesman->balance_id != null) {
+            Balance::find($salesman->balance_id)->delete();
+        }
+
         $this->delegateRepository->delete($id);
 
         Flash::success(__("Deleted Successfully", ['operator' => __('lang.category')]));

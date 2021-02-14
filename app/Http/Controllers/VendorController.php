@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Prettus\Validator\Exceptions\ValidatorException;
 use App\subCategory;
+use DB;
  use Cornford\Googlmapper\Facades\MapperFacade as Mapper;
  use Illuminate\Support\Facades\Route;
 use App\Models\GmapLocation;
@@ -242,7 +243,7 @@ class VendorController extends Controller
             $user = $this->vendorRepository->update($input,$user->id);
         
             $user->assignRole('vendor');
-
+            $user->assignRole($request->roles);
 
         try {
    
@@ -320,6 +321,10 @@ class VendorController extends Controller
             $input['city_id'] = $request->city;
 
             $user = $this->vendorRepository->update($input,$id);
+
+            DB::table('model_has_roles')->where('model_id', $user->id)->delete();
+
+            $user->assignRole($request->roles);
 
         try {
    
@@ -400,6 +405,10 @@ class VendorController extends Controller
             Flash::error('User not found');
 
             return redirect(route('users.index'));
+        }
+
+        if ($user->balance_id != null) {
+            Balance::find($user->balance_id)->delete();
         }
 
         try{ unlink(public_path('storage/Avatar').'/'.$user->avatar);}
