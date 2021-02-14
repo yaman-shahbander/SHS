@@ -91,10 +91,9 @@
                 </div>
             </div>
         </div>
-
         <!-- $FIELD_NAME_TITLE$ Field -->
         <div class="form-group row col-md-6">
-        {!! Form::label('password', trans("lang.user_avatar"), ['class' => 'col-md-3 control-label']) !!}
+            {!! Form::label('password', trans("lang.user_avatar"), ['class' => 'col-md-3 control-label']) !!}
             <div class="col-md-9">
                 <div class="image-upload-one">
                 <div class="center">
@@ -107,10 +106,10 @@
                     </div>
                     <small class="small">Use the ↺ icon to reset the image</small>
                 </div>
-
             </div>
         </div>
     </div>
+    
 </div>
     
     @prepend('scripts')

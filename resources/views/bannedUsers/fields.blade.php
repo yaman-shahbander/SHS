@@ -69,8 +69,8 @@
 
        
  <!-- Description Field -->
- <div class="col-md-6">
-   <div class="form-group row col-md-12">
+  <div class="col-md-6">
+    <div class="form-group row col-md-12">
       {!! Form::label('description', trans("lang.category_description"), ['class' => 'col-3 control-label text-right']) !!}
       <div class="col-9">
         {!! Form::textarea('description', null, ['class' => 'form-control','style' => 'height: 150px;', 'placeholder'=>
@@ -78,7 +78,7 @@
         <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
       </div>
     </div>
- </div>
+  </div>
 </div>
       <!-- Submit Field -->
         <div class="form-group col-12 text-right">

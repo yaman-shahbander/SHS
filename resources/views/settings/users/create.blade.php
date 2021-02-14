@@ -11,7 +11,7 @@
 
  .center {
    display:inline;
-   margin: 3px;
+   /* margin: 3px; */
  }
 
  .form-input {

@@ -9,7 +9,7 @@
 
  .center {
    display:inline;
-   margin: 3px;
+   /* margin: 3px; */
  }
 
  .form-input {
@@ -58,6 +58,22 @@
    color: firebrick;
  } 
  </style>
+ <style>
+
+.content {
+  padding: 10px;
+}
+#view {
+  color: red;
+  cursor: pointer;
+}
+.hidden-content {
+  display: none;
+}
+.hidden-content .active {
+  display: block;
+}
+</style>
 @endpush
 @section('content')
     <!-- Content Header (Page header) -->

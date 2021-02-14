@@ -9,6 +9,7 @@ use App\Repositories\CustomFieldRepository;
 use App\Http\Requests\CreateCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Repositories\BannedUsersRepository;
+use App\Repositories\UserRepository;
 use App\Repositories\UploadRepository;
 use Flash;
 use Illuminate\Support\Facades\Log;
@@ -26,6 +27,7 @@ class BannedUsersController extends Controller
 
     /** @var  CategoryRepository */
     private $BannedUsersRepository;
+    private $usersRepository;
 
     /**
      * @var CustomFieldRepository
@@ -37,12 +39,15 @@ class BannedUsersController extends Controller
      */
     private $uploadRepository;
 
-    public function __construct(BannedUsersRepository $BannedUsersRepo, CustomFieldRepository $customFieldRepo, UploadRepository $uploadRepo)
+    public function __construct(BannedUsersRepository $BannedUsersRepo, CustomFieldRepository $customFieldRepo, UploadRepository $uploadRepo,
+    UserRepository $usersRepo)
     {
         parent::__construct();
         $this->BannedUsersRepository = $BannedUsersRepo;
         $this->customFieldRepository = $customFieldRepo;
         $this->uploadRepository = $uploadRepo;
+        $this->usersRepository = $usersRepo;
+        
     }
 
     public function index(BannedUsersDataTable $BannedUsersDataTable)
@@ -191,7 +196,6 @@ class BannedUsersController extends Controller
      */
     public function destroy($id)
     {
-        
         $bannedUser = $this->BannedUsersRepository->findWithoutFail($id);
         if (empty($bannedUser)) {
             Flash::error('user not found');
@@ -204,5 +208,13 @@ class BannedUsersController extends Controller
         Flash::success(__('lang.deleted_successfully', ['operator' => __('lang.category')]));
 
         return redirect(route('bannedUsers.index'));
+    }
+    public function banned($id){
+        $banne_id = $this->usersRepository->findWithoutFail($id);
+        $user=$this->BannedUsersRepository()->create([
+            'user_id'=>$banne_id,
+            'description'=>'',
+        ]);
+
     }
 }

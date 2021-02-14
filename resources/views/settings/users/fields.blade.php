@@ -95,21 +95,84 @@
             {!! Form::label('password', trans("lang.user_avatar"), ['class' => 'col-md-3 control-label']) !!}
             <div class="col-md-9">
                 <div class="image-upload-one">
-                <div class="center">
-                    <div class="form-input">
-                        <label for="file-ip-1">
-                            <img id="file-ip-1-preview" src="https://i.ibb.co/ZVFsg37/default.png">
-                            <button type="button" class="imgRemove" onclick="myImgRemoveFunctionOne()"></button>
-                        </label>
-                        <input type="file" name="avatar" id="file-ip-1" accept="image/*" onchange="showPreviewOne(event);">
+                    <div class="center">
+                        <div class="form-input">
+                            <label for="file-ip-1">
+                                <img id="file-ip-1-preview" src="https://i.ibb.co/ZVFsg37/default.png">
+                                <button type="button" class="imgRemove" onclick="myImgRemoveFunctionOne()"></button>
+                            </label>
+                            <input type="file" name="avatar" id="file-ip-1" accept="image/*" onchange="showPreviewOne(event);">
+                        </div>
+                        <small class="small">Use the ↺ icon to reset the image</small>
                     </div>
-                    <small class="small">Use the ↺ icon to reset the image</small>
                 </div>
             </div>
         </div>
     </div>
+    @can('sales_man.index')
+    <div class="row">
+        <div class="content col-md-12">
+            <div class="view"><i class="fa fa-ban" style="font-size:30px;color:red;" aria-hidden="true"></i>{{trans("lang.banned_users")}}</div>
+        </div>
+        <div class="hidden-content col-md-12">
+            <div class="row">
+                <!-- Select Ban forever-->
+                <div class="form-group row col-md-6">
+                    {!! Form::label('banValue', trans('lang.ban_forever'), ['class' => 'col-3 control-label']) !!}
+                    <div class="col-md-9">
+                        <select name="banValue" aria-controls="dataTableBuilder" class="form-control form-control-sm">
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                        </select>
+                        <div class="form-text text-muted">
+                        Select Value
+                        </div>
+                    </div>
+                </div>
+                <!-- temporary_ban Field -->
+                <div class="form-group row col-md-6">
+                    {!! Form::label('temp_ban', trans('lang.temp_ban'), ['class' => 'col-3 control-label']) !!}
+                    <div class="col-md-9">
+                        {!! Form::date('temp_ban', null ,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder")]) !!}
+                       
+                        <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
+                    </div>    
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group row col-md-6">
+                <!-- Description Field -->
+                    <div class="form-group row col-md-12">
+                        {!! Form::label('description', trans("lang.category_description"), ['class' => 'col-3 control-label']) !!}
+                        <div class="col-9">
+                            {!! Form::textarea('description', null, ['class' => 'form-control','style' => 'height: 150px;', 'placeholder'=>
+                            trans("lang.category_description_placeholder")  ]) !!}
+                            <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endcan
     @prepend('scripts')
     
+    <script>
+
+$(document).ready(function(){
+    $(".hidden-content").hide();
+    $(".view").on('click', function(){
+
+        $(this).parents().parents().find(".hidden-content").slideToggle(500).toggleClass("active");
+
+        if($(this).parents().parents().siblings().find(".hidden-content").hasClass('active')){
+            $(this).parents().parents().siblings().find(".hidden-content").removeClass('active');
+            $(this).parents().parents().siblings().find(".hidden-content").hide();
+        }
+    });
+});
+
+ </script>
     <script>
         // In your Javascript (external .js resource or <script> tag)
         $(document).ready(function () {

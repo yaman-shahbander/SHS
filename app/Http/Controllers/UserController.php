@@ -346,6 +346,7 @@ class UserController extends Controller
      */
     public function update($id, UpdateUserRequest $request)
     {
+        // dd($request->input());
         if (env('APP_DEMO', false)) {
             Flash::warning('This is only demo app you can\'t change this section ');
             return redirect(route('users.profile'));
@@ -405,7 +406,15 @@ class UserController extends Controller
                 $user->customFieldsValues()
                     ->updateOrCreate(['custom_field_id' => $value['custom_field_id']], $value);
             }
-           // event(new UserRoleChangedEvent($user));
+
+            if(!empty($request->temp_ban)){
+                $user=$this->BannedUsersRepository()->create([
+                    'user_id'=>$id,
+                    'description'=>$request->description,
+                    'banValue'=>$request->banValue,
+                    'temp_ban'=>$request->temp_ban,
+                ]);
+            }
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }
