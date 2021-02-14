@@ -219,7 +219,7 @@
       </ul>
     </div>
     <div class="card-body select_cities" data-route="{{url('api/user/select')}}">
-      {!! Form::open(['route' => ['store_vendors_suggested',$vendor->id]]) !!}
+      {!! Form::open(['route' => ['store_vendors_suggested',$vendor->id], 'enctype' => "multipart/form-data"]) !!}
       <div class="row">
         @include('settings.vendors_suggested.vendor_fields')
       </div>

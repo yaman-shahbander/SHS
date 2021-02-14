@@ -9,6 +9,8 @@ use App\Repositories\DelegateRepository;
 use App\Repositories\CustomFieldRepository;
 use App\DataTables\DelegateDataTable;
 use Flash;
+use App\Balance;
+
 class DelegateController extends Controller
 {
     /** @var  delegateRepository */
@@ -64,27 +66,30 @@ class DelegateController extends Controller
 
         $input = $request->all();
         $input['name']=$input['name'];
+
         $input['phone']=$input['phone'];
-        $input['balance']=$input['balance'];
 
-        $checkDelegateName = Delegate::where('name', $request->name)->get();
+        $checkDelegateName = Delegate::where('phone', $request->phone)->first();
 
-        if (count($checkDelegateName) > 0) { 
+        if (!empty($checkDelegateName)) { 
             Flash::error('this Delegate is exist');
-            return redirect()->route('delegate.index');
+            return redirect()->route('sales_man.index');
         }
 
-        $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->delegateRepository->model());
         try {
-            $country = $this->delegateRepository->create($input);
-            $country->customFieldsValues()->createMany(getCustomFieldsValues($customFields, $request));
-            
+            $balance = new Balance();
+            $request->balance == null ? $balance->balance = 0.0 : $balance->balance =$request->balance;
+            $balance->save();
+            $input['balance_id'] = $balance->id;
+            unset($input['balance']);
+            $salesMan = $this->delegateRepository->create($input);
+
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }
         Flash::success(__('lang.saved_successfully', ['operator' => __('lang.dalegate')]));
 
-        return redirect(route('delegate.index'));
+        return redirect(route('sales_man.index'));
     }
 
     /**
@@ -112,9 +117,18 @@ class DelegateController extends Controller
      * @param  \App\Delegate  $delegate
      * @return \Illuminate\Http\Response
      */
-    public function edit(Delegate $delegate)
+    public function edit($id)
     {
-        //
+        $saleMan = $this->delegateRepository->findWithoutFail($id);
+
+
+        if (empty($saleMan)) {
+            Flash::error('Salesman not found');
+
+            return redirect(route('sales_man.index'));
+        }
+        
+        return view('delegate.edit')->with('saleMan', $saleMan)->with("customFields", isset($html) ? $html : false);
     }
 
     /**
@@ -124,9 +138,35 @@ class DelegateController extends Controller
      * @param  \App\Delegate  $delegate
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Delegate $delegate)
+    public function update($id, Request $request)
     {
-        //
+        $input = $request->all();
+        $input['name']=$input['name'];
+
+        $input['phone']=$input['phone'];
+
+        $checkDelegateName = Delegate::where('phone', $request->phone)->first();
+
+        
+        if (!empty($checkDelegateName)) { 
+            if ($id != $checkDelegateName->id) {
+            Flash::error('this Delegate is exist');
+            return redirect()->route('sales_man.index');
+            }
+        }
+
+        try {
+            unset($input['balance']);
+            $salesMan = $this->delegateRepository->update($input, $id);
+            $salesMan->Balance->balance=$request->balance == null ? 0.0 : $request->balance;
+            $salesMan->Balance->save();
+
+        } catch (ValidatorException $e) {
+            Flash::error($e->getMessage());
+        }
+        Flash::success(__('Salesman updated successfully', ['operator' => __('lang.dalegate')]));
+
+        return redirect(route('sales_man.index'));
     }
 
     /**
@@ -135,8 +175,24 @@ class DelegateController extends Controller
      * @param  \App\Delegate  $delegate
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Delegate $delegate)
+    public function destroy($id)
     {
-        //
+        $salesman = $this->delegateRepository->findWithoutFail($id);
+
+        if (empty($salesman)) {
+            Flash::error('Salesman not found');
+
+            return redirect(route('sales_man.index'));
+        }
+
+        if ($salesman->balance_id != null) {
+            Balance::find($salesman->balance_id)->delete();
+        }
+
+        $this->delegateRepository->delete($id);
+
+        Flash::success(__("Deleted Successfully", ['operator' => __('lang.category')]));
+
+        return redirect(route('sales_man.index'));
     }
 }

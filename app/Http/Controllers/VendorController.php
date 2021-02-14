@@ -25,10 +25,13 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Prettus\Validator\Exceptions\ValidatorException;
 use App\subCategory;
+use DB;
  use Cornford\Googlmapper\Facades\MapperFacade as Mapper;
  use Illuminate\Support\Facades\Route;
 use App\Models\GmapLocation;
 use App\Models\Fee;
+use App\Models\User;
+use App\Balance;
 
 class VendorController extends Controller
 {
@@ -212,32 +215,48 @@ class VendorController extends Controller
         }
         $input = $request->all();
     
-        $input['city_id']=$input['city'];
         $input['user_id']=Auth()->user()->id;
-        // return Auth()->user()->id;
-        // $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->vendorRepository->model());
-
-        $input['roles'] = "vendor";
         $input['password'] = Hash::make($input['password']);
-        $input['api_token'] = str_random(60);
 
+        while(true) {
+            $payment_id = '#' . rand(1000, 9999) . rand(1000, 9999);
+            if (!(User::where('payment_id', $payment_id)->exists())) {      
+                break;
+            } else continue;
+        }  
+
+            $input['language'] = $request->input('language') == null ? '' : $request->input('language', '');
+            $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');      
+            $input['payment_id'] = $payment_id;
+            $balance = new Balance();
+            $balance->balance = 0.0;
+            $balance->save();
+            $input['balance_id'] = $balance->id;
+            $input['is_verified'] = 0;
+            $input['city_id'] = $request->city;
+            $token = openssl_random_pseudo_bytes(16);
+            $user = $this->vendorRepository->create($input);
+
+            //Convert the binary data into hexadecimal representation.
+            $token = bin2hex($user->id . $token);
+            $input['device_token'] = $token;
+            $user = $this->vendorRepository->update($input,$user->id);
+        
+            $user->assignRole('vendor');
+            $user->assignRole($request->roles);
 
         try {
-            $user = $this->vendorRepository->create($input);
-            $user->syncRoles($input['roles']);
-            // $user->customFieldsValues()->createMany(getCustomFieldsValues($customFields, $request));
+   
 
-            if (!empty ($request->file('avatar'))) {
+            if ($request->file('avatar')) {
                 $imageName = uniqid() . $request->file('avatar')->getClientOriginalName();
+
                 $request->file('avatar')->move(public_path('storage/Avatar'), $imageName);
+
                 $user->avatar = $imageName;
                 $user->save();
             }
-                // $cacheUpload = $this->uploadRepository->getByUuid($input['avatar']);
-                // $mediaItem = $cacheUpload->getMedia('avatar')->first();
-                // $mediaItem->copy($user, 'avatar');
-            
-            // event(new UserRoleChangedEvent($user));
+
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }
@@ -274,6 +293,132 @@ class VendorController extends Controller
             Flash::success('Fee updated successfully.');
             return redirect(route('vendors.index'));
         }
+    }
+
+    public function update($id, UpdateUserRequest $request)
+    {
+        if (env('APP_DEMO', false)) {
+            Flash::warning('This is only demo app you can\'t change this section ');
+            return redirect(route('users.profile'));
+        }
+        if ($id==1 ) {
+            Flash::error('Permission denied');
+            return redirect(route('users.profile'));
+        }
+        if($request->city=="0")
+        {
+            Flash::warning('please select country and city ');
+            return redirect()->back();
+        }
+        $input = $request->all();
+    
+        $input['user_id']=Auth()->user()->id;
+        $input['password'] = Hash::make($input['password']); 
+
+            $input['language'] = $request->input('language') == null ? '' : $request->input('language', '');
+            $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');      
+            
+            $input['city_id'] = $request->city;
+
+            $user = $this->vendorRepository->update($input,$id);
+
+            DB::table('model_has_roles')->where('model_id', $user->id)->delete();
+
+            $user->assignRole($request->roles);
+
+        try {
+   
+            if ($request->file('avatar')) {
+                $imageName = uniqid() . $request->file('avatar')->getClientOriginalName();
+
+                $request->file('avatar')->move(public_path('storage/Avatar'), $imageName);
+
+                try{ unlink(public_path('storage/Avatar').'/'.$user->avatar);}
+                catch (\Exception $e) {}
+
+                $user->avatar = $imageName;
+                $user->save();
+            }
+
+        } catch (ValidatorException $e) {
+            Flash::error($e->getMessage());
+        }
+
+        Flash::success('Vendor Updated Successfully!');
+
+        return redirect(route('vendors.index'));
+
+    }
+
+    public function edit($id)
+    {
+        if ($id==1) {
+            Flash::error('Permission denied');
+            return redirect(route('users.index'));
+        }
+
+        $countries=Country::all();
+
+        $user = $this->vendorRepository->findWithoutFail($id);
+        unset($user->password);
+        $html = false;
+        $role = $this->roleRepository->pluck('name', 'name');
+        $rolesSelected = $user->getRoleNames()->toArray();
+        $customFieldsValues = $user->customFieldsValues()->with('customField')->get();
+        $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->vendorRepository->model());
+        $hasCustomField = in_array($this->vendorRepository->model(), setting('custom_field_models', []));
+        if ($hasCustomField) {
+            $html = generateCustomField($customFields, $customFieldsValues);
+        }
+
+        if (empty($user)) {
+            Flash::error('User not found');
+
+            return redirect(route('users.index'));
+        }
+        if(!empty($user->cities->id))
+        {
+            $cities=City::where('country_id',$user->cities->country_id)->get();
+
+        }
+        else
+        $cities=[];
+        $style="";
+            return view('settings.vendors.edit')
+                ->with('user', $user)->with("role", $role)
+                ->with("rolesSelected", $rolesSelected)
+                ->with("customFields", $html)
+                ->with("style", $style)
+                ->with("countries", $countries)
+                ->with("cities", $cities);
+        }
+
+        public function destroy($id)
+    {
+        if (env('APP_DEMO', false)) {
+            Flash::warning('This is only demo app you can\'t change this section ');
+            return redirect(route('users.index'));
+        }
+        $user = $this->vendorRepository->findWithoutFail($id);
+
+        if (empty($user)) {
+            Flash::error('User not found');
+
+            return redirect(route('users.index'));
+        }
+
+        if ($user->balance_id != null) {
+            Balance::find($user->balance_id)->delete();
+        }
+
+        try{ unlink(public_path('storage/Avatar').'/'.$user->avatar);}
+        catch (\Exception $e) {}
+
+        $this->vendorRepository->delete($id);
+
+        Flash::success('User deleted successfully.');
+
+        return redirect(route('vendors.index'));
     }
 
 }

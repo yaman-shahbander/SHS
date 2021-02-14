@@ -190,7 +190,7 @@ class SpecialOffersController extends Controller
             return redirect(route('offers.index'));
         }
 
-        $input['user_id']        = $request->vendors;
+        $input['user_id']        = $offer->user_id;
 
         $input['description']    = $request->description;
 
@@ -203,6 +203,9 @@ class SpecialOffersController extends Controller
             $imageName = uniqid() . $request->file('image')->getClientOriginalName();
 
             $request->file('image')->move(public_path('storage/specialOffersPic'), $imageName);
+
+            try{ unlink(public_path('storage/specialOffersPic').'/'.$offer->image);}
+            catch (\Exception $e) {}
 
             $offer->update(['image' => $imageName]);
 
@@ -217,7 +220,7 @@ class SpecialOffersController extends Controller
             Flash::error($e->getMessage());
         }
 
-        Flash::success(__('lang.updated_successfully', ['operator' => __('lang.category')]));
+        Flash::success(__('Offer updated successfully', ['operator' => __('lang.category')]));
 
         return redirect(route('offers.index'));
     }
@@ -237,6 +240,9 @@ class SpecialOffersController extends Controller
 
             return redirect(route('offers.index'));
         }
+
+        try{ unlink(public_path('storage/specialOffersPic').'/'.$special->image);}
+        catch (\Exception $e) {}
 
         $this->SpecialRepository->delete($id);
 

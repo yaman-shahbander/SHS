@@ -1,8 +1,31 @@
-@extends('layouts.settings.default')
+@extends('layouts.app')
 @section('settings_title',trans('lang.user_table'))
-@section('settings_content')
+@section('content')
+  <!-- Content Header (Page header) -->
+
+  <div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">Home Owner<small class="ml-3 mr-3">|</small><small>Home Owner settings</small></h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{{url('/dashboard')}}"><i class="fa fa-dashboard"></i> {{trans('lang.dashboard')}}</a></li>
+          <li class="breadcrumb-item"><a href="{!! route('favorites.index') !!}">Home Owners</a>
+          </li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+
   @include('flash::message')
-  
+
+  <div class="content">
+  <div class="clearfix"></div>
   <div class="card">
     <div class="card-header">
       <ul class="nav nav-tabs align-items-end card-header-tabs w-100">
@@ -20,6 +43,8 @@
       <div class="clearfix"></div>
     </div>
   </div>
+</div>
+</div>
 </div>
 @endsection
 

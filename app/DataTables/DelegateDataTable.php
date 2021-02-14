@@ -46,9 +46,9 @@ class DelegateDataTable extends DataTable
 //            ->editColumn('phone', function ($delegate) {
 //                return delegatePhone($delegate);
 //            })
-//            ->editColumn('balance', function ($delegate) {
-//                return delegateBalance($delegate);
-//            })
+           ->editColumn('balance_id', function ($delegate) {
+               return $delegate->Balance->balance;
+           })
             ->rawColumns(array_merge($columns, ['action']));
         return $dataTable;
     }
@@ -71,7 +71,7 @@ class DelegateDataTable extends DataTable
                 'title' => 'Phone',
             ],
             [
-                'data' => 'balance',
+                'data' => 'balance_id',
                 'title' => 'Balance',
             ],
             [

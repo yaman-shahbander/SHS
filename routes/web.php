@@ -91,10 +91,11 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
         });
 
         Route::group(['middleware' => ['permission:vendors.index']],function(){
-            Route::get('vendors','VendorController@index')->name('vendors.index');
+          //  Route::get('vendors','VendorController@index')->name('vendors.index');
             /*Route::get('vendor/{id}','VendorController@show_vendor');*/
-            Route::get('vendors/create','VendorController@create')->name('vendors.create');
-            Route::any('vendors/store','VendorController@store')->name('vendors.store');
+           // Route::get('vendors/create','VendorController@create')->name('vendors.create');
+            Route::resource('vendors','VendorController');///
+          //  Route::any('vendors/store','VendorController@store')->name('vendors.store');
         });
 
         Route::group(['middleware' => ['permission:permissions.index']], function () {

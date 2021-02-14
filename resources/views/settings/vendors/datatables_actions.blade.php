@@ -1,8 +1,8 @@
-{!! Form::open(['route' => ['users.destroy', $id], 'method' => 'delete']) !!}
+{!! Form::open(['route' => ['vendors.destroy', $id], 'method' => 'delete']) !!}
 <div class='btn-group btn-group-sm'>
     {{--<a data-toggle="tooltip" data-placement="bottom" title="{{trans('lang.user_edit')}}" href="{{ route('users.show', $id) }}" class='btn btn-link'>--}}
         {{--<i class="fa fa-eye"></i> </a>--}}
-    <a data-toggle="tooltip" data-placement="bottom" title="{{trans('lang.vendor_edit')}}" href="{{ route('users.edit', $id) }}" class='btn btn-link'>
+    <a data-toggle="tooltip" data-placement="bottom" title="{{trans('lang.vendor_edit')}}" href="{{ route('vendors.edit', $id) }}" class='btn btn-link'>
         <i class="fa fa-edit"></i> </a>
     {!! Form::button('<i class="fa fa-trash"></i>', [
     'data-toggle' => 'tooltip',

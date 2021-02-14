@@ -210,66 +210,63 @@ class VendorsSuggestedController extends Controller
 
     public function store_vendors_suggested( $id,Request $request)
     {
-      
-        if($request->city=="0")
-        {
-            Flash::warning('please select country and city ');
-            return redirect()->back();
-        }
-        $input = $request->all();    
-        // $input['city_id']=$input['city'];   
-        $input['password'] = Hash::make($input['password']);       
-        while(true) {
-            $payment_id = '#' . rand(1000, 9999) . rand(1000, 9999);
-            if (!(User::where('payment_id', $payment_id)->exists())) {
-               
-             
-                break;
-            } else continue;
-        }       
-        $input['language'] = $request->input('lang') == null ? '' : $request->input('lang', '');
-        $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');      
-        $input['payment_id'] = $payment_id;
-        $balance = new Balance();
-        $balance->balance = 0.0;
-        $balance->save();
-        $input['balance_id'] = $balance->id;
-        $input['is_verified'] = 0;
-        $token = openssl_random_pseudo_bytes(16);
-        $user = $this->userRepository->create($input);
-        $user->save();
-
-        //Convert the binary data into hexadecimal representation.
-        $token = bin2hex($user->id . $token);
-        $input['device_token'] = $token;
-        $user = $this->userRepository->update($input,$user->id);
-       
-        $user->assignRole('vendor');
-
         try {
-         
-            if ($request->file('avatar')) {
-                $imageName = uniqid() . $request->file('avatar')->getClientOriginalName();
-
-                $request->file('avatar')->move(public_path('storage/Avatar'), $imageName);
-
-                $user->avatar = $imageName;
-                $user->save();
-
-
+      
+            if($request->city=="0")
+            {
+                Flash::warning('please select country and city ');
+                return redirect()->back();
             }
-           
-           
-             vendors_suggested::find($id)->delete();
+            $input = $request->all();    
+  
+            $input['password'] = Hash::make($input['password']);       
+            while(true) {
+                $payment_id = '#' . rand(1000, 9999) . rand(1000, 9999);
+                if (!(User::where('payment_id', $payment_id)->exists())) {      
+                    break;
+                } else continue;
+            }       
+            $input['language'] = $request->input('language') == null ? '' : $request->input('language', '');
+            $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');      
+            $input['payment_id'] = $payment_id;
+            $balance = new Balance();
+            $balance->balance = 0.0;
+            $balance->save();
+            $input['balance_id'] = $balance->id;
+            $input['is_verified'] = 0;
+            $input['city_id'] = $request->city;
+            $token = openssl_random_pseudo_bytes(16);
+            $user = $this->userRepository->create($input);
+
+            //Convert the binary data into hexadecimal representation.
+            $token = bin2hex($user->id . $token);
+            $input['device_token'] = $token;
+            $user = $this->userRepository->update($input,$user->id);
+        
+            $user->assignRole('vendor');
+
+            try {
+                if ($request->file('avatar')) {
+                    $imageName = uniqid() . $request->file('avatar')->getClientOriginalName();
+
+                    $request->file('avatar')->move(public_path('storage/Avatar'), $imageName);
+
+                    $user->avatar = $imageName;
+                    $user->save();
+                }
             
-    
-            
+                vendors_suggested::find($id)->delete();   
+                
+            } catch (ValidatorException $e) {
+                Flash::error($e->getMessage());
+            }
+            Flash::success('saved successfully.');
+
+            return redirect(route('vendors.index'));
         } catch (ValidatorException $e) {
-            Flash::error($e->getMessage());
-        }
-        Flash::success('saved successfully.');
-
-        return redirect(route('vendors.index'));
-    }
-
+        Flash::error($e->getMessage());
+    return redirect(route('vendors.index'));
+   }
+ }
+ 
 }

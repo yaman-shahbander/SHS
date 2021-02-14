@@ -40,6 +40,10 @@ use Illuminate\Support\Facades\Route;
 use App\Models\GmapLocation;
 use DB;
 use App\Jobs\SendVerificationEmail;
+use App\Models\User;
+use App\Balance;
+
+
 class UserController extends Controller
 {
     /** @var  UserRepository */
@@ -212,36 +216,49 @@ class UserController extends Controller
             return redirect()->back();
         }
         $input = $request->all();
-        $input['city_id']=$input['city'];
+    
         $input['user_id']=Auth()->user()->id;
-       // return Auth()->user()->id;
-
-
-        $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->userRepository->model());
-
-        $input['roles'] = isset($input['roles']) ? $input['roles'] : [];
         $input['password'] = Hash::make($input['password']);
-        $input['api_token'] = str_random(60);
+
+        while(true) {
+            $payment_id = '#' . rand(1000, 9999) . rand(1000, 9999);
+            if (!(User::where('payment_id', $payment_id)->exists())) {      
+                break;
+            } else continue;
+        }  
+
+            $input['language'] = $request->input('language') == null ? '' : $request->input('language', '');
+            $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');      
+            $input['payment_id'] = $payment_id;
+            $balance = new Balance();
+            $balance->balance = 0.0;
+            $balance->save();
+            $input['balance_id'] = $balance->id;
+            $input['is_verified'] = 0;
+            $input['city_id'] = $request->city;
+            $token = openssl_random_pseudo_bytes(16);
+            $user = $this->vendorRepository->create($input);
+
+            //Convert the binary data into hexadecimal representation.
+            $token = bin2hex($user->id . $token);
+            $input['device_token'] = $token;
+            $user = $this->vendorRepository->update($input,$user->id);
+        
+             $user->assignRole('homeowner');
+             $user->assignRole($request->roles);
 
 
         try {
-            $user = $this->userRepository->create($input);
-            $role_id=DB::table('roles')->where('name',$input['roles'])->pluck('id');
-            
-            $permissions=DB::table('role_has_permissions')->where('role_id', $role_id)->pluck('permission_id');
-  
-            $user->syncRoles($input['roles']);
-            $user->syncPermissions($permissions);
-            $user->customFieldsValues()->createMany(getCustomFieldsValues($customFields, $request));
+   
 
-            if (!empty ($request->file('avatar'))) {
+            if ($request->file('avatar')) {
                 $imageName = uniqid() . $request->file('avatar')->getClientOriginalName();
+
                 $request->file('avatar')->move(public_path('storage/Avatar'), $imageName);
+
                 $user->avatar = $imageName;
                 $user->save();
             }
-           // event(new UserRoleChangedEvent($user));
-            // dispatch(new SendVerificationEmail($user));
 
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
@@ -360,53 +377,37 @@ class UserController extends Controller
             Flash::warning('please select country and city ');
             return redirect()->back();
         }
-        $user = $this->userRepository->findWithoutFail($id);
-
-
-        if (empty($user)) {
-            Flash::error('User not found');
-            return redirect(route('users.profile'));
-        }
-        $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->userRepository->model());
-
         $input = $request->all();
-        $input['city_id']=$input['city'];
+    
         $input['user_id']=Auth()->user()->id;
-        //return $input['user_id'];
+        $input['password'] = Hash::make($input['password']); 
 
-        if (!auth()->user()->can('permissions.index')) {
-            unset($input['roles']);
-        } else {
-        $input['roles'] = isset($input['roles']) ? $input['roles'] : [];
-        }
-        if (empty($input['password'])) {
-            unset($input['password']);
-        } else {
-            $input['password'] = Hash::make($input['password']);
-        }
+            $input['language'] = $request->input('language') == null ? '' : $request->input('language', '');
+            $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');      
+            
+            $input['city_id'] = $request->city;
+
+            $user = $this->userRepository->update($input,$id);
+
+            DB::table('model_has_roles')->where('model_id', $user->id)->delete();
+
+            $user->assignRole($request->roles);
+
         try {
-            $user = $this->userRepository->update($input, $id);
-            if (empty($user)) {
-                Flash::error('User not found');
-                return redirect(route('users.profile'));
-            }
-            if (isset($input['avatar']) && $input['avatar']) {
-                $cacheUpload = $this->uploadRepository->getByUuid($input['avatar']);
-                $mediaItem = $cacheUpload->getMedia('avatar')->first();
-                $mediaItem->copy($user, 'avatar');
-            }
-            if (auth()->user()->can('permissions.index')) {
-                $role_id=DB::table('roles')->where('name',$input['roles'])->pluck('id');
-                $permissions=DB::table('role_has_permissions')->where('role_id', $role_id)->pluck('permission_id');
-                $user->syncRoles($input['roles']);
-                $user->syncPermissions($permissions);
+   
+            if ($request->file('avatar')) {
+                $imageName = uniqid() . $request->file('avatar')->getClientOriginalName();
+
+                $request->file('avatar')->move(public_path('storage/Avatar'), $imageName);
+
+                try{ unlink(public_path('storage/Avatar').'/'.$user->avatar);}
+                catch (\Exception $e) {}
+
+                $user->avatar = $imageName;
+                $user->save();
             }
 
-            foreach (getCustomFieldsValues($customFields, $request) as $value) {
-                $user->customFieldsValues()
-                    ->updateOrCreate(['custom_field_id' => $value['custom_field_id']], $value);
-            }
-
+<<<<<<< HEAD
             if(!empty($request->temp_ban)){
                 $user=$this->BannedUsersRepository()->create([
                     'user_id'=>$id,
@@ -415,14 +416,15 @@ class UserController extends Controller
                     'temp_ban'=>$request->temp_ban,
                 ]);
             }
+=======
+>>>>>>> c70d37ff20804d6ef78af024db54ffe05d5ffef2
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }
 
+        Flash::success('User Updated Successfully!');
 
-        Flash::success('User updated successfully.');
-
-        return redirect()->back();
+        return redirect(route('users.index'));
 
     }
 
@@ -441,11 +443,19 @@ class UserController extends Controller
         }
         $user = $this->userRepository->findWithoutFail($id);
 
+        if ($user->balance_id != null) {
+            Balance::find($user->balance_id)->delete();
+        }
+        
+
         if (empty($user)) {
             Flash::error('User not found');
 
             return redirect(route('users.index'));
         }
+
+        try{ unlink(public_path('storage/Avatar').'/'.$user->avatar);}
+        catch (\Exception $e) {}
 
         $this->userRepository->delete($id);
 

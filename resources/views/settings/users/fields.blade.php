@@ -24,7 +24,7 @@
     <div class="row">
         <!-- Country Field -->
         <div class="form-group col-md-6 row">
-            {!! Form::label('name', trans('lang.country'), ['class' => 'col-3 control-label']) !!}
+            {!! Form::label('country', trans('lang.country'), ['class' => 'col-3 control-label']) !!}
             <div class="col-md-9">
                 <select name="country" id="country" aria-controls="dataTableBuilder" class="form-control form-control-sm">
                     <option value="0" selected> Select</option>
@@ -92,8 +92,9 @@
     <div class="row">
         <!-- $FIELD_NAME_TITLE$ Field -->
         <div class="form-group row col-md-6">
-            {!! Form::label('password', trans("lang.user_avatar"), ['class' => 'col-md-3 control-label']) !!}
+        {!! Form::label('avatar', trans("lang.user_avatar"), ['class' => 'col-md-3 control-label', 'style' => 'font-size:15px']) !!}
             <div class="col-md-9">
+<<<<<<< HEAD
                 <div class="image-upload-one">
                     <div class="center">
                         <div class="form-input">
@@ -105,6 +106,26 @@
                         </div>
                         <small class="small">Use the ↺ icon to reset the image</small>
                     </div>
+=======
+                <!-- $FIELD_NAME_TITLE$ Field -->
+                <div class="row">
+                    <div class="box">
+                        <div class="content">
+
+                <!-- Custom File Uploader  -->
+
+                    <div class="left">
+                      <img id="img-uploaded" class="img2" src="{{asset('storage/Avatar/avatar.png')}}" alt="your image" />
+                    </div>
+                    
+                     <div class="right">
+
+                      <input type="text" class="img-path newimg" placeholder="Image Path">
+                      <span class="file-wrapper">
+                      <input type="file" name="avatar" id="imgInp" class="uploader newimg"  />
+                      <span class="btn2 btn-large btn-alpha">Upload Image</span>
+                     </span>
+>>>>>>> c70d37ff20804d6ef78af024db54ffe05d5ffef2
                 </div>
             </div>
         </div>

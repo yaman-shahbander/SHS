@@ -29,7 +29,7 @@
       </ul>
     </div>
     <div class="card-body" data-route="{{url('api/user/select')}}">
-      {!! Form::model($user, ['route' => ['users.update', $user->id], 'method' => 'patch']) !!}
+      {!! Form::model($saleMan, ['route' => ['sales_man.update', $saleMan->id], 'method' => 'patch']) !!}
       <div class="row">
         @include('delegate.fields')
       </div>
