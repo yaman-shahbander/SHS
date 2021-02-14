@@ -13,7 +13,7 @@ class CreateNotificationsTable_ extends Migration
      */
     public function up()
     {
-//        Schema::dropIfExists('notifications');
+//  /      Schema::dropIfExists('notifications');
 //        Schema::dropIfExists('notification_types');
 //        Schema::create('notifications', function (Blueprint $table) {
 //            $table->uuid('id')->primary();
