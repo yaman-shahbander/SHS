@@ -279,7 +279,7 @@
     <div class="card-body" data-route="{{url('api/user/select')}}">
       {!! Form::model($user, ['route' => ['vendors.update', $user->id],'enctype'=>"multipart/form-data", 'method' => 'patch']) !!}
       <div class="row">
-        @include('settings.users.fields')
+        @include('settings.vendors.fields')
       </div>
       {!! Form::close() !!}
       <div class="clearfix"></div>

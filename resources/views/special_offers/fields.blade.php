@@ -79,15 +79,41 @@
         <!-- image Field -->
 
         <div class="form-group row">
-            {!! Form::label('image', "Image", ['class' => 'col-3 control-label text-right']) !!}
-            <div class="col-9">
-              {!! Form::file('image' , ['class' => 'form-control']) !!}
-              <div class="form-text text-muted">
-                 Select Image
-              </div>
+        {!! Form::label('image', "Image", ['class' => 'col-md-3 control-label', 'style' => 'font-size:15px']) !!}
+            <div class="col-md-9">
+
+                <!-- $FIELD_NAME_TITLE$ Field -->
+                <div class="row">
+                    <div class="box">
+                        <div class="content">
+
+                <!-- Custom File Uploader  -->
+
+                    <div class="left">
+                        @if(Request::is('*edit'))
+                            @if($offer->image != null ) 
+                                <img id="img-uploaded" class="img2" src="{{asset('storage/specialOffersPic' . "/" . $offer->image)}}" alt="your image" />
+                            @endif
+                        @else
+                            <img id="img-uploaded" class="img2" src="{{asset('storage/Avatar/avatar.png')}}" alt="your image" />
+                        @endif
+                      
+                    </div>
+
+                     <div class="right">
+
+                      <input type="text" class="img-path newimg" placeholder="Image Path">
+                      <span class="file-wrapper">
+                      <input type="file" name="image" id="imgInp" class="uploader newimg"  />
+                      <span class="btn2 btn-large btn-alpha">Upload Image</span>
+                     </span>
+                </div>
             </div>
-          </div>
-          
+        </div>
+
+        </div>
+     </div>
+  </div>     
           @prepend('scripts')
 
           <script>

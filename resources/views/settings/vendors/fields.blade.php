@@ -79,6 +79,15 @@
                 {!! Form::password('password', ['class' => 'form-control','placeholder'=>  trans("lang.user_password_placeholder")]) !!}
             </div>
         </div>
+
+        <!-- Roles Field -->
+        <div class="form-group col-md-6 row">
+            {!! Form::label('roles[]', trans("lang.user_role_id"),['class' => 'col-3 control-label']) !!}
+            <div class="col-md-9">
+                {!! Form::select('roles[]', $role, $rolesSelected, ['class' => 'select2 form-control' , 'multiple'=>'multiple','placeholder'=>trans('lang.user_role_id_placeholder')]) !!}
+            </div>
+        </div>
+
     </div>
     <div class="row">
         <!-- Language Field -->
@@ -93,7 +102,6 @@
         </div>
         <!-- $FIELD_NAME_TITLE$ Field -->
         <div class="form-group row col-md-6">
-            {!! Form::label('password', trans("lang.user_avatar"), ['class' => 'col-md-3 control-label']) !!}
         {!! Form::label('avatar', trans("lang.user_avatar"), ['class' => 'col-md-3 control-label', 'style' => 'font-size:15px']) !!}
             <div class="col-md-9">
                 <!-- $FIELD_NAME_TITLE$ Field -->
@@ -104,7 +112,14 @@
                 <!-- Custom File Uploader  -->
 
                     <div class="left">
-                      <img id="img-uploaded" class="img2" src="{{asset('storage/Avatar/avatar.png')}}" alt="your image" />
+                        @if(Request::is('*edit'))
+                            @if($user->avatar != null ) 
+                                <img id="img-uploaded" class="img2" src="{{asset('storage/Avatar' . "/" . $user->avatar)}}" alt="your image" />
+                            @endif
+                        @else
+                            <img id="img-uploaded" class="img2" src="{{asset('storage/Avatar/avatar.png')}}" alt="your image" />
+                        @endif
+                      
                     </div>
 
                      <div class="right">
@@ -114,7 +129,7 @@
                       <input type="file" name="avatar" id="imgInp" class="uploader newimg"  />
                       <span class="btn2 btn-large btn-alpha">Upload Image</span>
                      </span>
-                </div>
+                   </div>
             </div>
         </div>
     </div>

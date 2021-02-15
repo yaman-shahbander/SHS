@@ -73,16 +73,6 @@
     </li>
     @endcan
 
-<<<<<<< HEAD
-    @can('sales_man.index')
-        <li class="nav-item">
-            <a class="nav-link {{ Request::is('sales_man*') ? 'active' : '' }}" href="{!! route('sales_man.index') !!}">@if($icons)
-            <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('lang.delegates')}}</p></a>
-        </li>
-    @endcan
-
-=======
->>>>>>> 8bd7866e26ba762b7bc316c5c9d9928764ba9912
 
     @can('users.index')
     <li class="nav-item">
