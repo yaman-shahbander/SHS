@@ -103,7 +103,14 @@
                 <!-- Custom File Uploader  -->
 
                     <div class="left">
-                      <img id="img-uploaded" class="img2" src="{{asset('storage/Avatar/avatar.png')}}" alt="your image" />
+                        @if(Request::is('*edit'))
+                            @if($user->avatar != null ) 
+                                <img id="img-uploaded" class="img2" src="{{asset('storage/Avatar' . "/" . $user->avatar)}}" alt="your image" />
+                            @endif
+                        @else
+                            <img id="img-uploaded" class="img2" src="{{asset('storage/Avatar/avatar.png')}}" alt="your image" />
+                        @endif
+                      
                     </div>
 
                      <div class="right">
