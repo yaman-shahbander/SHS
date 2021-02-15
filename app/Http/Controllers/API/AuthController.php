@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+
     public function forgot_password(Request $request)
     {
         $input = $request->all();
