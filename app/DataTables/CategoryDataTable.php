@@ -35,7 +35,7 @@ class CategoryDataTable extends DataTable
         $columns = array_column($this->getColumns(), 'data');
         $dataTable = $dataTable
             ->editColumn('image', function ($category) {
-                return getMediaColumn($category, 'image');
+                return '<img width="80px" height="80px" src='. asset('storage/categoriesPic'). '/' . $category->image . '>';
             })
             ->editColumn('updated_at', function ($category) {
                 return getDateColumn($category, 'updated_at');

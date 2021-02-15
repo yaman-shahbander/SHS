@@ -407,7 +407,7 @@ class UserController extends Controller
                 $user->save();
             }
 
-<<<<<<< HEAD
+
             if(!empty($request->temp_ban)){
                 $user=$this->BannedUsersRepository()->create([
                     'user_id'=>$id,
@@ -416,8 +416,7 @@ class UserController extends Controller
                     'temp_ban'=>$request->temp_ban,
                 ]);
             }
-=======
->>>>>>> c70d37ff20804d6ef78af024db54ffe05d5ffef2
+
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }

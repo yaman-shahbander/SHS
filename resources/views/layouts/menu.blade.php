@@ -72,14 +72,7 @@
         </ul>
     </li>
     @endcan
-<<<<<<< HEAD
-    @can('sales_man.index')
-        <li class="nav-item">
-            <a class="nav-link {{ Request::is('sales_man*') ? 'active' : '' }}" href="{!! route('sales_man.index') !!}">@if($icons)
-            <i class="nav-icon fa fa-folder"></i>@endif<p>{{trans('lang.delegates')}}</p></a>
-        </li>
-    @endcan
-=======
+
 
     @can('users.index')
     <li class="nav-item">
@@ -116,7 +109,7 @@
     </li>
     @endcan
 
->>>>>>> c70d37ff20804d6ef78af024db54ffe05d5ffef2
+
     @can('reviews.index')
     <li class="nav-item has-treeview {{ Request::is('reviews*') || Request::is('pending*') ? 'menu-open' : '' }}">
         <a href="#" class="nav-link {{ Request::is('reviews*') || Request::is('pending*') ? 'active' : '' }}"> @if($icons)

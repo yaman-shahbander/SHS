@@ -42,6 +42,7 @@ class Category extends Model implements HasMedia
         'name_ar',
         'description',
         'description_en',
+        'image'
     ];
 
     /**

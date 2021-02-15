@@ -38,7 +38,7 @@ class SubCategoriesDataTable extends DataTable
                 return "<a href=". url("/subcategoryVendor/".$subcategory->id) .">" . $subcategory->name . "</a>";
             })
             ->editColumn('image', function ($subcategory) {
-                return getMediaColumn($subcategory, 'image');
+                return '<img width="80px" height="80px" src='. asset('storage/subcategoriesPic'). '/' . $subcategory->image . '>'; 
             })
             ->editColumn('updated_at', function ($subcategory) {
                 return getDateColumn($subcategory, 'updated_at');
