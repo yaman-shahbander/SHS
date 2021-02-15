@@ -84,28 +84,24 @@ class vendorApiController extends Controller
                     else{
                        
 
-                        $featuredVendor=null;
+                        $featuredVendor='';
 
                     }
 //  return $featuredVendor;
 //                    $respone[$i]['distance'] = $attr->coordinates!=null ? distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)) : 'No coordinates provided for the current vendor';
-
-if($maxBalanceId!=0){
                     $respone['featuredVendor']=
 
                             [
                                 'id' => $featuredVendor[0]->id,
                                 'name' => $featuredVendor[0]->name,
                                 'email' => $featuredVendor[0]->email,
-                                'latitude' =>$featuredVendor[0]->coordinates!=null? $featuredVendor[0]->coordinates->latitude:null,
-                                'longitude' => $featuredVendor[0]->coordinates!=null? $featuredVendor[0]->coordinates->longitude:null,
+                                'latitude' =>$featuredVendor[0]->coordinates!=null? $featuredVendor[0]->coordinates->latitude:'No coordinates provided for the current vendor',
+                                'longitude' => $featuredVendor[0]->coordinates!=null? $featuredVendor[0]->coordinates->longitude:'No coordinates provided for the current vendor',
                                 'rating' => sprintf("%.1f",round((getRating($featuredVendor[0])/20)*2,2)/2),
                                 'description' => $featuredVendor[0]->description,
-                                'distance' =>$featuredVendor[0]->coordinates!=null && $userLatitude !=null? round(distance(floatval($userLatitude), floatval($userLongitude), floatval($featuredVendor[0]->coordinates->latitude), floatval($featuredVendor[0]->coordinates->longitude))) : null,
+                                'distance' =>$featuredVendor[0]->coordinates!=null && $userLatitude !=null? round(distance(floatval($userLatitude), floatval($userLongitude), floatval($featuredVendor[0]->coordinates->latitude), floatval($featuredVendor[0]->coordinates->longitude)),2) : 'No coordinates provided for the current vendor',
                                 'avatar' => asset('storage/Avatar').'/'.$featuredVendor[0]->avatar
                             ];
-}
-                            
                 }
 //                asset('storage/Avatar').'/'.$attr->avatar;
                 catch (\Exception $e){
@@ -121,26 +117,25 @@ if($maxBalanceId!=0){
 //                });
 //return $featuredVendor;
                 try{
-                     if ($userSetting->vendor_filter == 1) { // Vendors with special offers first
-
-                        $vendorsSpecialOffers = User::whereHas('specialOffers', function ($query) use ($id) {
-                            $query->where('subcategory_id', $id);
-                        })->get();
-
-                        
-
-                        $vendors = $Allvendors;
-                        
-
-                    }
-                   else { // Availibility first
+                    if ($userSetting->vendor_filter == 2) { // Availibility first
 
                         $vendorsAvailability = User::whereHas('subcategories', function ($query) use ($id) {
                             $query->where('subcategory_id', $id);
                         })->orderBy('status_id')->get();
 
-                        $vendors = $vendorsAvailability;
+                        $vendors = $featuredVendor->merge($vendorsAvailability);
 
+
+                    } else if ($userSetting->vendor_filter == 1) { // Vendors with special offers first
+
+                        $vendorsSpecialOffers = User::whereHas('specialOffers', function ($query) use ($id) {
+                            $query->where('subcategory_id', $id);
+                        })->get();
+
+                        $vendors = $featuredVendor->merge($vendorsSpecialOffers);
+
+                        $vendors = $vendors->merge($Allvendors);
+                        
 
                     }
                 }
@@ -157,10 +152,10 @@ $vendors=$vendors->where('city_id',$user->city_id);
                         'email' => $vendor->email,
                         'rating' => sprintf("%.1f",(round((getRating($vendor)/20)*2)/2)),
                         'description' => $vendor->description,
-                        'latitude' => $vendor->coordinates!=null? $vendor->coordinates->latitude:null,
-                        'longitude' => $vendor->coordinates!=null? $vendor->coordinates->longitude:null,
+                        'latitude' => $vendor->coordinates!=null? $vendor->coordinates->latitude:'No coordinates provided for the current vendor',
+                        'longitude' => $vendor->coordinates!=null? $vendor->coordinates->longitude:'No coordinates provided for the current vendor',
 
-                        'distance' =>$vendor->coordinates!=null && $userLatitude !=null? round(distance(floatval($userLatitude), floatval($userLongitude), floatval($vendor->coordinates->latitude), floatval($vendor->coordinates->longitude))) : null,
+                        'distance' =>$vendor->coordinates!=null && $userLatitude !=null? round(distance(floatval($userLatitude), floatval($userLongitude), floatval($vendor->coordinates->latitude), floatval($vendor->coordinates->longitude)),2) : 'No coordinates provided for the current vendor',
 
                         'avatar' => asset('storage/Avatar').'/'.$vendor->avatar
                     ];
@@ -255,13 +250,9 @@ $vendors=$vendors->where('city_id',$user->city_id);
                 'reviews_count'  => count($reviews),
                 'reviews'        => $reviews,
                 'working_hours'  => $vendor->daysApi->transform(function($q){
-                    $q['check'] =1;
-                    
-                    $q['name'] =$q['name_en'];
-                    $q['workHours'] = [
-                    'start' => date("g:i A",strtotime($q->start)),
-                    'end' => date("g:i A",strtotime($q->end))];
-                    return $q->only('id','name', 'check', 'workHours');
+                    $q['start'] = date("g:i A",strtotime($q->start));
+                    $q['end'] = date("g:i A",strtotime($q->end));
+                    return $q->only('name_en', 'name_ar', 'start', 'end');
                 }),
                 'availability'   => $vendor->vendor_city->makeHidden('pivot'),
                 'gallery'        => $vendor->gallery->transform(function($gallery){
@@ -280,8 +271,6 @@ $vendors=$vendors->where('city_id',$user->city_id);
             return $this->sendError('nothing to process', 401);
 
     }
-    
-
 
     public function categorySubCatFunc(Request $request) {
 
@@ -483,8 +472,8 @@ $vendors=$vendors->where('city_id',$user->city_id);
                 }
                 $response = [
                     'coordinates'        => [
-                        'latitude'  => $user->coordinates==null?null:$user->coordinates->latitude,
-                        'longitude' => $user->coordinates==null?null:$user->coordinates->longitude
+                        'latitude'  => $user->coordinates==null?'no coordinates':$user->coordinates->latitude,
+                        'longitude' => $user->coordinates==null?'no coordinates':$user->coordinates->longitude
                      ],
                     'address'        => $user->address,
                     'website'        => $user->website,
@@ -515,10 +504,10 @@ $vendors=$vendors->where('city_id',$user->city_id);
                         $coordinates->user_id = $user->id;
                         $coordinates->save();
                     }
-                    $user->coordinates->latitude = $request->input('latitude') == null ? null : $request->input('latitude');
+                    $user->coordinates->latitude = $request->input('latitude') == null ? '' : $request->input('latitude', '');
                     // $user->coordinates->latitude  = $request->latitude;
                     // $user->coordinates->longitude = $request->longitude;
-                    $user->coordinates->longitude = $request->input('longitude') == null ? null : $request->input('longitude');
+                    $user->coordinates->longitude = $request->input('longitude') == null ? '' : $request->input('longitude', '');
 
                     $user->address = $request->input('address') == null ? '' : $request->input('address', '');
 
@@ -533,8 +522,8 @@ $vendors=$vendors->where('city_id',$user->city_id);
                         'coordinates' =>
                             [
 
-                                'latitude' => $user->coordinates == null ? null : $user->coordinates->latitude,
-                                'longitude' => $user->coordinates == null ? null : $user->coordinates->longitude
+                                'latitude' => $user->coordinates == null ? 'no coordinates' : $user->coordinates->latitude,
+                                'longitude' => $user->coordinates == null ? 'no coordinates' : $user->coordinates->longitude
 
                             ],
                         'address' => $user->address,

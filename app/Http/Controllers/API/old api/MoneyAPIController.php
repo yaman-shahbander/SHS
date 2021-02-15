@@ -142,8 +142,7 @@ class MoneyAPIController extends Controller
                 if ($userBalance == null) return $this->sendError( 'No balance for the current user',401);
 
                 $response = [
-                    'balance' => $userBalance->balance,
-                    'payment_id'=>$user->payment_id
+                    'balance' => $userBalance->balance
                 ];
 
                 return $this->sendResponse($response, 'Balance retrieved successfuly!');

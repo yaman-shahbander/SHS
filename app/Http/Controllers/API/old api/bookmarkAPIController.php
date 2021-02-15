@@ -24,26 +24,24 @@ class bookmarkAPIController extends Controller
                     $userLongitude = $user->coordinates->longitude;
                 }
                 catch (\Exception $e){
-                    $userLatitude=null;
-$userLongitude=null;
+                    //   return $this->sendError(, 401);
+
                 }
                 $HiddenColumns = ['custom_fields', 'media', 'has_media', 'pivot'];
                 $attrs = $user->vendorFavoriteAPI->makeHidden($HiddenColumns);
                 $respone = [];
                 $i = 0;
-                                  //  return dd($attrs);
-
                 foreach ($attrs as $attr) {
                     $respone[$i]['id'] = $attr->id;
                     $respone[$i]['name'] = $attr->name;
                     $respone[$i]['avatar'] = asset('storage/Avatar').'/'.$attr->avatar;
-                    $respone[$i]['email'] = $attr->email;
+                    $respone[$i]['last_name'] = $attr->last_name;
                     $respone[$i]['description'] = $attr->description;
                     $respone[$i]['rating'] = sprintf("%.1f",round((getRating($attr)/20)*2)/2);
-                    $respone[$i]['latitude'] = $attr->coordinates!=null? $attr->coordinates->latitude:null;
-                    $respone[$i]['longitude'] = $attr->coordinates!=null? $attr->coordinates->longitude:null;
+                    $respone[$i]['latitude'] = $attr->coordinates!=null? $attr->coordinates->latitude:'No coordinates provided for the current vendor';
+                    $respone[$i]['longitude'] = $attr->coordinates!=null? $attr->coordinates->longitude:'No coordinates provided for the current vendor';
 
-                    $respone[$i]['distance'] = $attr->coordinates!=null ? round(distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude))) : null;
+                    $respone[$i]['distance'] = $attr->coordinates!=null ? distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)) : 'No coordinates provided for the current vendor';
                     $i++;
                 }
                 return $this->sendResponse($respone, 'favorites retrieved successfully');
