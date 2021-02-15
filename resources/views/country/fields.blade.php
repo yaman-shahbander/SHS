@@ -7,7 +7,7 @@
     <div class="form-group row col-md-6">
       {!! Form::label('name', trans("lang.category_name"), ['class' => 'col-3 control-label text-right']) !!}
       <div class="col-9">
-        {!! Form::text('name', Request::is('*edit') ? $country->country_name : null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder")]) !!}
+        {!! Form::text('name', Request::is('*edit') ? $country->country_name : null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'required']) !!}
         <div class="form-text text-muted">
           Country Name
         </div>
@@ -17,7 +17,7 @@
       <div class="form-group row col-md-6">
       {!! Form::label('name_en', "Name En", ['class' => 'col-3 control-label text-right']) !!}
       <div class="col-9">
-        {!! Form::text('name_en', Request::is('*edit') ? $country->country_name : null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder")]) !!}
+        {!! Form::text('name_en', Request::is('*edit') ? $country->country_name : null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'required']) !!}
         <div class="form-text text-muted">
           Country Name
         </div>

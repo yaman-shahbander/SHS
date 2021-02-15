@@ -5,7 +5,7 @@
         <div class="form-group row col-md-6">
           {!! Form::label('name', trans("lang.category_name"), ['class' => 'col-3 control-label text-right']) !!}
           <div class="col-9">
-            {!! Form::text('name', Request::is('*edit') ? $city->city_name : null  ,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder")]) !!}
+            {!! Form::text('name', Request::is('*edit') ? $city->city_name : null  ,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'required']) !!}
             <div class="form-text text-muted">
               {{ trans("lang.category_name_help") }}
             </div>
@@ -15,7 +15,7 @@
           <div class="form-group row col-md-6">
           {!! Form::label('name_en', 'Name En', ['class' => 'col-3 control-label text-right']) !!}
           <div class="col-9">
-            {!! Form::text('name_en', Request::is('*edit') ? $city->city_name : null  ,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder")]) !!}
+            {!! Form::text('name_en', Request::is('*edit') ? $city->city_name : null  ,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'required']) !!}
             <div class="form-text text-muted">
               {{ trans("lang.category_name_help") }}
             </div>
@@ -27,7 +27,7 @@
         <div class="form-group row col-md-6">
             {!! Form::label('name', "Country", ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
-            <select name="country" aria-controls="dataTableBuilder" class="form-control form-control-sm">
+            <select name="country" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
                 @foreach($countries as $country)
                     <option  
                     value="{{ $country->id }}" @if(!empty($city->country_id)) @if( $city->country_id==$country->id) selected @endif @endif>

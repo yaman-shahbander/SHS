@@ -19,7 +19,7 @@
           <div class="form-group row ">
             {!! Form::label('offername', "Offer Name", ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
-              {!! Form::text('offername', Request::is('*edit') ? $offer->title : null ,  ['class' => 'form-control', 'required' => true, 'placeholder'=>  trans("lang.category_name_placeholder")]) !!}
+              {!! Form::text('offername', Request::is('*edit') ? $offer->title : null ,  ['class' => 'form-control', 'required' => true, 'placeholder'=>  trans("lang.category_name_placeholder"), 'required']) !!}
               <div class="form-text text-muted">
                 {{ trans("lang.category_name_help") }}
               </div>
@@ -31,7 +31,7 @@
           <div class="form-group row ">
             {!! Form::label('description', "Description", ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
-              {!! Form::text('description', Request::is('*edit') ? $offer->description : null ,  ['class' => 'form-control', 'required' => true, 'placeholder'=>  "Insert Description"]) !!}
+              {!! Form::text('description', Request::is('*edit') ? $offer->description : null ,  ['class' => 'form-control', 'required' => true, 'placeholder'=>  "Insert Description", 'required']) !!}
               <div class="form-text text-muted">
                  Insert Description
               </div>

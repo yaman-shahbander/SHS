@@ -8,7 +8,7 @@
         <div class="form-group col-md-6 row">
             {!! Form::label('first name', trans("lang.user_name"), ['class' => 'col-md-3 control-label']) !!}
             <div class="col-md-9">
-                {!! Form::text('name', null,  ['class' => 'form-control','placeholder'=>  trans("lang.user_name_placeholder"),'required']) !!}
+                {!! Form::text('name', null,  ['class' => 'form-control','placeholder'=>  trans("lang.user_name_placeholder"), 'required']) !!}
 
             </div>
         </div>
@@ -17,7 +17,7 @@
         <div class="form-group col-md-6 row">
             {!! Form::label('last name', trans("lang.last_name"), ['class' => 'col-3 control-label']) !!}
             <div class="col-md-9">
-                {!! Form::text('last_name', null,  ['class' => 'form-control','placeholder'=>  trans('lang.last_name_placeholder')]) !!}
+                {!! Form::text('last_name', null,  ['class' => 'form-control','placeholder'=>  trans('lang.last_name_placeholder'), 'required']) !!}
             </div>
         </div>
     </div>
@@ -26,7 +26,7 @@
         <div class="form-group col-md-6 row">
             {!! Form::label('country', trans('lang.country'), ['class' => 'col-3 control-label']) !!}
             <div class="col-md-9">
-                <select name="country" id="country" aria-controls="dataTableBuilder" class="form-control form-control-sm">
+                <select name="country" id="country" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
                     <option value="0" selected> Select</option>
 
                 @foreach($countries as $country)
@@ -41,7 +41,7 @@
         <div class="form-group col-md-6 row">
             {!! Form::label('City', trans('lang.city'), ['class' => 'col-3 control-label']) !!}
             <div class="col-md-9">
-                <select name="city" id="city" aria-controls="dataTableBuilder" class="form-control form-control-sm">
+                <select name="city" id="city" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
                     <option value="0" >select</option>
 
                 @if(!empty($cities))
@@ -59,7 +59,7 @@
         <div class="form-group col-md-6 row">
             {!! Form::label('Language', trans('lang.app_setting_mobile_language'), ['class' => 'col-3 control-label']) !!}
             <div class="col-md-9">
-                {!! Form::text('language', null,  ['class' => 'form-control','placeholder'=> trans('lang.app_setting_mobile_language'),'required']) !!}
+                {!! Form::text('language', null,  ['class' => 'form-control','placeholder'=> trans('lang.app_setting_mobile_language'), 'required']) !!}
             </div>
         </div>
         @can('permissions.index')
@@ -77,7 +77,7 @@
         <div class="form-group col-md-6 row">
             {!! Form::label('email', trans("lang.user_email"), ['class' => 'col-3 control-label']) !!}
             <div class="col-md-9">
-                {!! Form::text('email', null,  ['class' => 'form-control','placeholder'=>  trans("lang.user_email_placeholder")]) !!}
+                {!! Form::text('email', null,  ['class' => 'form-control','placeholder'=>  trans("lang.user_email_placeholder"), 'required']) !!}
             </div>
         </div>
 
@@ -85,7 +85,7 @@
         <div class="form-group col-md-6 row">
             {!! Form::label('password', trans("lang.user_password"), ['class' => 'col-md-3 control-label']) !!}
             <div class="col-md-9">
-                {!! Form::password('password', ['class' => 'form-control','placeholder'=>  trans("lang.user_password_placeholder")]) !!}
+                {!! Form::password('password', ['class' => 'form-control','placeholder'=>  trans("lang.user_password_placeholder"), 'required']) !!}
             </div>
         </div>
     </div>

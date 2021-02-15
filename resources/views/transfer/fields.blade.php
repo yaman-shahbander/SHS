@@ -18,7 +18,7 @@
             @endforeach
         </select>
     @else 
-         <select name="fromUser" aria-controls="dataTableBuilder" class="form-control form-control-sm">
+         <select name="fromUser" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
             @foreach($users as $user)
                 <option
                 value="{{ $user->id }}"  @if(!empty($transfer->from_id)) @if( $transfer->from_id==$user->id) selected @endif @endif>
@@ -43,7 +43,7 @@
                 @endforeach
             </select>
     @else 
-        <select name="toUser" aria-controls="dataTableBuilder" class="form-control form-control-sm">
+        <select name="toUser" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
                 @foreach($users as $user)
                     <option
                     value="{{ $user->id }}"  @if(!empty($transfer->to_id)) @if( $transfer->to_id==$user->id) selected  @endif @endif>
@@ -60,7 +60,7 @@
 <div class="form-group row ">
   {!! Form::label('amount', "amount", ['class' => 'col-3 control-label text-right']) !!}
   <div class="col-9">
-    {!! Form::number('amount', Request::is('*edit') ? null : null,  ['class' => 'form-control','placeholder'=>  'Insert amount', 'step' => "0.01"]) !!}
+    {!! Form::number('amount', Request::is('*edit') ? null : null,  ['class' => 'form-control','placeholder'=>  'Insert amount', 'step' => "0.01", 'required']) !!}
   </div>
 </div>
 
