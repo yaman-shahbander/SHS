@@ -6,7 +6,7 @@
         @if(Request::is('*create'))
               {!! Form::label('nameselect',trans('lang.balance_name'), ['class' => 'col-4 control-label ']) !!}
               <div class="col-8">
-                <select name="nameselect" aria-controls="dataTableBuilder" class="form-control form-control-sm">
+                <select name="nameselect" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
                     @foreach($users as $user)
                         <option
                         value="{{ $user->id }}">
@@ -42,7 +42,7 @@
     <div class="form-group row col-md-12">
             {!! Form::label('balance', trans('lang.balance'), ['class' => 'col-4 control-label  ']) !!}
             <div class="col-8">
-              {!! Form::text('balance', Request::is('*edit') ? $balance->balance : null,  ['class' => 'form-control', 'placeholder'=>  "Insert Balance"]) !!}
+              {!! Form::text('balance', Request::is('*edit') ? $balance->balance : null,  ['class' => 'form-control', 'placeholder'=>  "Insert Balance", 'required']) !!}
             </div>
         </div>
     @endif
@@ -53,7 +53,7 @@
   <div class="form-group row col-md-12">
     {!! Form::label('Add', "Add Amount", ['class' => 'col-4 control-label  ']) !!}
     <div class="col-8">
-      {!! Form::text('Add', null,  ['class' => 'form-control','placeholder'=>  "Insert amount"]) !!}
+      {!! Form::text('Add', null,  ['class' => 'form-control','placeholder'=>  "Insert amount", 'required']) !!}
     </div>
   </div>
   @endif

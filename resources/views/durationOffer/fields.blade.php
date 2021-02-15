@@ -7,14 +7,14 @@
     <div class="form-group row col-md-6">
       {!! Form::label('duration_name', "Duration Name", ['class' => 'col-4 control-label ']) !!}
       <div class="col-8">
-        {!! Form::text('duration_name', Request::is('*edit') ? $duration->duration : null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder")]) !!}
+        {!! Form::text('duration_name', Request::is('*edit') ? $duration->duration : null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'required']) !!}
       </div>
     </div>
     <!-- duration in number Field -->
     <div class="form-group row col-md-6">
       {!! Form::label('duration_in_number', "Duration In Number", ['class' => 'col-4 control-label']) !!}
       <div class="col-8">
-        {!! Form::text('duration_in_number', Request::is('*edit') ? $duration->duration_in_num : null,  ['class' => 'form-control','placeholder'=>  "Insert Number"]) !!}
+        {!! Form::text('duration_in_number', Request::is('*edit') ? $duration->duration_in_num : null,  ['class' => 'form-control','placeholder'=>  "Insert Number", 'required']) !!}
       </div>
     </div>
   </div>
@@ -24,7 +24,7 @@
     <div class="form-group row col-md-6">
       {!! Form::label('discount', "Discount", ['class' => 'col-4 control-label ']) !!}
       <div class="col-8">
-        {!! Form::text('discount', Request::is('*edit') ? $duration->discount : null,  ['class' => 'form-control','placeholder'=>  "Insert discount in percentage"]) !!}
+        {!! Form::text('discount', Request::is('*edit') ? $duration->discount : null,  ['class' => 'form-control','placeholder'=>  "Insert discount in percentage", 'required']) !!}
         <div class="form-text text-muted">
           In % value
         </div>
