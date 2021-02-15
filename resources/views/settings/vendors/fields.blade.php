@@ -93,11 +93,8 @@
         </div>
         <!-- $FIELD_NAME_TITLE$ Field -->
         <div class="form-group row col-md-6">
-<<<<<<< HEAD
             {!! Form::label('password', trans("lang.user_avatar"), ['class' => 'col-md-3 control-label']) !!}
-=======
         {!! Form::label('avatar', trans("lang.user_avatar"), ['class' => 'col-md-3 control-label', 'style' => 'font-size:15px']) !!}
->>>>>>> c70d37ff20804d6ef78af024db54ffe05d5ffef2
             <div class="col-md-9">
                 <!-- $FIELD_NAME_TITLE$ Field -->
                 <div class="row">
@@ -109,7 +106,7 @@
                     <div class="left">
                       <img id="img-uploaded" class="img2" src="{{asset('storage/Avatar/avatar.png')}}" alt="your image" />
                     </div>
-                    
+
                      <div class="right">
 
                       <input type="text" class="img-path newimg" placeholder="Image Path">
@@ -121,16 +118,13 @@
             </div>
         </div>
     </div>
-<<<<<<< HEAD
-    
-=======
 
-          
+
+
         </div>
     </div>
->>>>>>> c70d37ff20804d6ef78af024db54ffe05d5ffef2
 </div>
-    
+
     @prepend('scripts')
 
     <script>

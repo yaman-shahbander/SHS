@@ -82,7 +82,7 @@ class UserController extends Controller
      * @return Response
      */
     public function index(UserDataTable $userDataTable)
-    {   
+    {
 
         return $userDataTable->render('settings.users.index');
     }
@@ -128,7 +128,7 @@ class UserController extends Controller
     public function userprofile(Request $request,SubCategoriesVendorDataTable $subCategoriesDataTableDataTable)
     {
         $countries=Country::all();
-        
+
         $user = $this->userRepository->findWithoutFail($request->id);
         unset($user->password);
         $customFields = false;
@@ -152,7 +152,7 @@ class UserController extends Controller
         $user->rating=getRating($user);
 
         $userCoordinates =  GmapLocation::where('user_id', $request->id)->first();
-        
+
         if(!empty($userCoordinates)) {
             Mapper::map(
                 $userCoordinates->latitude,
@@ -169,9 +169,9 @@ class UserController extends Controller
         } else {
                 $style="";
         }
-        
+
         return $dataTable=$subCategoriesDataTableDataTable->render('settings.users.profile',compact(['user', 'role', 'rolesSelected', 'customFields', 'customFieldsValues','countries','cities','style']));
-        
+
     }
 
     /**
@@ -184,7 +184,7 @@ class UserController extends Controller
         $countries=Country::all();
 //        $cities=City::all();
         $role = $this->roleRepository->pluck('name', 'name');
-        
+
         $rolesSelected = [];
         $hasCustomField = in_array($this->userRepository->model(), setting('custom_field_models', []));
         if ($hasCustomField) {
@@ -216,19 +216,19 @@ class UserController extends Controller
             return redirect()->back();
         }
         $input = $request->all();
-    
+
         $input['user_id']=Auth()->user()->id;
         $input['password'] = Hash::make($input['password']);
 
         while(true) {
             $payment_id = '#' . rand(1000, 9999) . rand(1000, 9999);
-            if (!(User::where('payment_id', $payment_id)->exists())) {      
+            if (!(User::where('payment_id', $payment_id)->exists())) {
                 break;
             } else continue;
-        }  
+        }
 
             $input['language'] = $request->input('language') == null ? '' : $request->input('language', '');
-            $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');      
+            $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');
             $input['payment_id'] = $payment_id;
             $balance = new Balance();
             $balance->balance = 0.0;
@@ -243,13 +243,13 @@ class UserController extends Controller
             $token = bin2hex($user->id . $token);
             $input['device_token'] = $token;
             $user = $this->vendorRepository->update($input,$user->id);
-        
+
              $user->assignRole('homeowner');
              $user->assignRole($request->roles);
 
 
         try {
-   
+
 
             if ($request->file('avatar')) {
                 $imageName = uniqid() . $request->file('avatar')->getClientOriginalName();
@@ -378,13 +378,13 @@ class UserController extends Controller
             return redirect()->back();
         }
         $input = $request->all();
-    
+
         $input['user_id']=Auth()->user()->id;
-        $input['password'] = Hash::make($input['password']); 
+        $input['password'] = Hash::make($input['password']);
 
             $input['language'] = $request->input('language') == null ? '' : $request->input('language', '');
-            $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');      
-            
+            $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');
+
             $input['city_id'] = $request->city;
 
             $user = $this->userRepository->update($input,$id);
@@ -394,7 +394,7 @@ class UserController extends Controller
             $user->assignRole($request->roles);
 
         try {
-   
+
             if ($request->file('avatar')) {
                 $imageName = uniqid() . $request->file('avatar')->getClientOriginalName();
 
@@ -407,17 +407,9 @@ class UserController extends Controller
                 $user->save();
             }
 
-<<<<<<< HEAD
-            if(!empty($request->temp_ban)){
-                $user=$this->BannedUsersRepository()->create([
-                    'user_id'=>$id,
-                    'description'=>$request->description,
-                    'banValue'=>$request->banValue,
-                    'temp_ban'=>$request->temp_ban,
-                ]);
-            }
-=======
->>>>>>> c70d37ff20804d6ef78af024db54ffe05d5ffef2
+
+
+
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }
@@ -446,7 +438,7 @@ class UserController extends Controller
         if ($user->balance_id != null) {
             Balance::find($user->balance_id)->delete();
         }
-        
+
 
         if (empty($user)) {
             Flash::error('User not found');
@@ -500,6 +492,16 @@ class UserController extends Controller
     {
         return $userDataTable->render('settings.users.superAdmin');
     }
-    
-   
+
+
 }
+
+
+//if(!empty($request->temp_ban)){
+//    $user=$this->BannedUsersRepository()->create([
+//        'user_id'=>$id,
+//        'description'=>$request->description,
+//        'banValue'=>$request->banValue,
+//        'temp_ban'=>$request->temp_ban,
+//    ]);
+//}

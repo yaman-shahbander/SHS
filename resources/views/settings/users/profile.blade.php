@@ -54,10 +54,8 @@
  }
  .small{
    color: firebrick;
- } 
-<<<<<<< HEAD
- </style>
- <style>
+ }
+
 
 .content {
   padding: 10px;
@@ -72,7 +70,7 @@
 .hidden-content .active {
   display: block;
 }
-=======
+
 
 
  body {
@@ -160,14 +158,14 @@
             position: relative;
             left: 65px;
             margin-bottom: 4px;
-            
+
         }
 
         .space {
             margin-left: 15px;
         }
 
-        
+
         .stars-0:after { width: 0%; }
         .stars-1:after { width: 1%; }
         .stars-2:after { width: 2%; }
@@ -270,16 +268,16 @@
         .stars-99:after { width: 99%; }
         .stars-100:after { width: 100; }
         .own-padding {
-            padding-top:0px !important;    
+            padding-top:0px !important;
             width: 787px !important;
-            padding-left: 0px !important; 
+            padding-left: 0px !important;
             margin-left: -9px !important;
         }
         .box-profile .custom-star-edit {
-           
+
             margin-left: -11px !important;
        }
- 
+
 
   .center {
     display:inline;
@@ -330,7 +328,7 @@
   }
   .small{
     color: firebrick;
-  } 
+  }
     [type="file"] {
         height: 0;
         overflow: hidden;
@@ -520,7 +518,6 @@
     }
 
 
->>>>>>> c70d37ff20804d6ef78af024db54ffe05d5ffef2
 </style>
 @endpush
 @section('content')
@@ -554,7 +551,7 @@
                                 <img src="{{$user->getFirstMediaUrl('avatar','icon')}}" class="profile-user-img img-fluid img-circle" alt="{{$user->name}}">
                             </div>
                             <h3 class="profile-username text-center">{{$user->name}}</h3>
-                           
+
                             <p class="text-muted text-center">{{implode(', ',$rolesSelected)}}</p>
                             <a class="btn btn-outline-{{setting('theme_color')}} btn-block" href="mailto:{{$user->email}}"><i class="fa fa-envelope mr-2"></i>{{$user->email}}
                             </a>
@@ -606,7 +603,7 @@
                     @include('adminlte-templates::common.errors')
                     <div class="clearfix"></div>
                     <div class="card">
-                    
+
                         <div class="card-header">
                             <ul class="nav nav-tabs align-items-end card-header-tabs w-100">
                                 <li class="nav-item">
@@ -621,7 +618,7 @@
                                 @endhasrole
                             </ul>
                         </div>
-                        
+
                         <div class="card-body">
                             {!! Form::model($user, ['route' => ['users.update', $user->id], 'method' => 'patch']) !!}
                             <div class="row">
@@ -661,10 +658,10 @@
                     <div class="d-flex justify-content-between align-items-center">
                                 <div class="d-flex flex-row align-items-center"> <span class="mr-2">{{$client->name}}</span> <div id="fixture" >{{$sum}}</div> </div> <small>{{$client->pivot->created_at}}</small>
                             </div>
-                    </div> 
-                
+                    </div>
+
                         <div class="w-100">
-                        </div>    
+                        </div>
                             <p class="text-justify comment-text mb-0">{{$client->pivot->description}}</p>
                             <div class="d-flex flex-row user-feed" >
                                  <div class="space">
@@ -687,8 +684,8 @@
                                     <span class="wish">&nbsp;&nbsp;Knowledge Rating</span>
                                     <div id="fixture">{{$client->pivot->knowledge_rating}}</div>
                                  </div>
-                                    
-                               
+
+
                         </div>
                     </div>
                                             @endif
@@ -717,7 +714,7 @@ function showPreviewOne(event){
     let preview = document.getElementById("file-ip-1-preview");
     preview.src = src;
     preview.style.display = "block";
-  } 
+  }
 }
 function myImgRemoveFunctionOne() {
   document.getElementById("file-ip-1-preview").src = "https://i.ibb.co/ZVFsg37/default.png";

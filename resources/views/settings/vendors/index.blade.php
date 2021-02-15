@@ -1,4 +1,4 @@
-@extends('layouts.settings.vendors_default')
+@extends('layouts.app')
 @section('css_custom')
   <style>
 
@@ -131,7 +131,7 @@
   </style>
   @endsection
 
-@extends('layouts.app')
+
 @section('settings_title',trans('lang.user_table'))
 @section('content')
   <!-- Content Header (Page header) -->
