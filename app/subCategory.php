@@ -24,7 +24,9 @@ class subCategory extends Model implements HasMedia
         'description',
         'name_ar',
         'description_en',
-        'category_id'
+        'category_id',
+        'image',
+        'name_ar'
     ];
     public static $rules = [
         'name' => 'required',

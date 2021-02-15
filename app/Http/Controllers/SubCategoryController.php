@@ -98,19 +98,21 @@ class SubCategoryController extends Controller
         $input['name_en']=$input['name_en'];
         $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->subcategoryRepository->model());
         try {
-            if($request->file('avatar')->extension()=="png"){
-                if (isset($input['image']) && $input['image']) {
-                    $cacheUpload = $this->uploadRepository->getByUuid($input['image']);
-                    $mediaItem = $cacheUpload->getMedia('image')->first();
-                    $mediaItem->copy($subcategory, 'image');
-                Flash::success(__('lang.saved_successfully', ['operator' => __('lang.category')]));
-            } else{
-                Flash::error('The image must have a png extension');
-            } 
-          } 
+            $subcategory = $this->subcategoryRepository->create($input);
+            if($request->file('categoryImage')) {
+
+                $imageName = uniqid() . $request->file('categoryImage')->getClientOriginalName();
+
+                $request->file('categoryImage')->move(public_path('storage/subcategoriesPic'), $imageName);
+
+                $subcategory->update(['image' => $imageName]);   
+            }   
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }
+
+        Flash::success(__('Subcategory saved successfully', ['operator' => __('lang.category')]));
+
         return redirect(route('subcategory.create'));
 
 
@@ -168,7 +170,7 @@ class SubCategoryController extends Controller
     public function update($id, UpdateSubCategoryRequest $request)
     {
         $subcategory = $this->subcategoryRepository->findWithoutFail($id);
-//return $subcategory;
+
         if (empty($subcategory)) {
             Flash::error('Category not found');
             return redirect(route('subcategory.index'));
@@ -180,10 +182,13 @@ class SubCategoryController extends Controller
         try {
             $subcategory = $this->subcategoryRepository->update($input, $id);
 
-            if (isset($input['image']) && $input['image']) {
-                $cacheUpload = $this->uploadRepository->getByUuid($input['image']);
-                $mediaItem = $cacheUpload->getMedia('image')->first();
-                $mediaItem->copy($subcategory, 'image');
+            if(!empty($request->file('categoryImage'))) {
+
+                $imageName = uniqid() . $request->file('categoryImage')->getClientOriginalName();
+
+                $request->file('categoryImage')->move(public_path('storage/subcategoriesPic'), $imageName);
+
+                $subcategory->update(['image' => $imageName]);
             }
 
         } catch (ValidatorException $e) {

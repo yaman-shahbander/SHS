@@ -409,7 +409,6 @@ class UserController extends Controller
 
 
 
-
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }

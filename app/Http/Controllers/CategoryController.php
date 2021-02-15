@@ -73,28 +73,30 @@ class CategoryController extends Controller
     public function store(CreateCategoryRequest $request)
     {
         $input = $request->all();
-        $input['name']=$input['name'];
-        $input['name_en']=$input['name_en'];
-        $category=$this->categoryRepository->where('name',$input['name'])->first();
+        $input['name']    = $input['name'];
+        $input['name_en'] = $input['name_en'];
+        $category = $this->categoryRepository->where('name',$input['name'])->first();
         if(!empty($category)){
             Flash::error(__('lang.error', ['operator' => __('lang.category')]));
-        }else{
+        } else {
             $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->categoryRepository->model());
             try {
+
+                $category = $this->categoryRepository->create($input);
                
-                if($request->file('avatar')->extension()=="png"){
-                    $category = $this->categoryRepository->create($input);
-                    $category->customFieldsValues()->createMany(getCustomFieldsValues($customFields, $request));    
-                    if (isset($input['image']) && $input['image']) {
-                        $cacheUpload = $this->uploadRepository->getByUuid($input['image']);
-                        $mediaItem = $cacheUpload->getMedia('image')->first();
-                        $mediaItem->copy($category, 'image');
-                    }
-                    Flash::success(__('lang.saved_successfully', ['operator' => __('lang.category')]));
-                } else{
-                    Flash::error('The image must have a png extension');
-                }              
+                if($request->file('categoryImage')) {
+
+                    $imageName = uniqid() . $request->file('categoryImage')->getClientOriginalName();
+
+                    $request->file('categoryImage')->move(public_path('storage/categoriesPic'), $imageName);
+
+                    $category->update(['image' => $imageName]);
+
+                    
+                }   
                 
+                Flash::success(__('lang.saved_successfully', ['operator' => __('lang.category')]));
+
             } catch (ValidatorException $e) {
                 Flash::error($e->getMessage());
             }
@@ -145,7 +147,6 @@ class CategoryController extends Controller
         if ($hasCustomField) {
             $html = generateCustomField($customFields, $customFieldsValues);
         }
-
         return view('categories.edit')->with('category', $category)->with("customFields", isset($html) ? $html : false);
     }
 
@@ -172,14 +173,15 @@ class CategoryController extends Controller
         try {
             $category = $this->categoryRepository->update($input, $id);
 
-            if (isset($input['image']) && $input['image']) {
-                $cacheUpload = $this->uploadRepository->getByUuid($input['image']);
-                $mediaItem = $cacheUpload->getMedia('image')->first();
-                $mediaItem->copy($category, 'image');
-            }
-            foreach (getCustomFieldsValues($customFields, $request) as $value) {
-                $category->customFieldsValues()
-                    ->updateOrCreate(['custom_field_id' => $value['custom_field_id']], $value);
+            if(!empty($request->file('categoryImage'))) {
+
+                $imageName = uniqid() . $request->file('categoryImage')->getClientOriginalName();
+
+                $request->file('categoryImage')->move(public_path('storage/categoriesPic'), $imageName);
+
+                $category->update(['image' => $imageName]);
+
+                
             }
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
