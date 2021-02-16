@@ -44,6 +44,10 @@ class PendingReviewsController extends Controller
      */
     public function index(PendingReviewDataTable $reviewDataTable)
     {
+        if(!auth()->user()->hasPermissionTo('pending.index')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         return $reviewDataTable->render('pending_reviews.index');
     }
 
@@ -97,6 +101,10 @@ class PendingReviewsController extends Controller
     public function edit($id)
     {
 
+        if(!auth()->user()->hasPermissionTo('pending.edit')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $pendingReview = $this->reviewRepository->findWithoutFail($id);
        // return $subcategory;
 
@@ -121,6 +129,10 @@ class PendingReviewsController extends Controller
      */
     public function approve(Request $request)
     {
+        if(!auth()->user()->hasPermissionTo('pending.approve')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
        // return dd($request->id);
        $review = reviews::find($request->id);
 
@@ -146,6 +158,11 @@ class PendingReviewsController extends Controller
 
 
         public function update($id,Request $request){
+
+            if(!auth()->user()->hasPermissionTo('pending.update')){
+                return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            }
+
             $review = $this->reviewRepository->findWithoutFail($id);
 //$review = reviews::find($id);
 
@@ -183,6 +200,11 @@ class PendingReviewsController extends Controller
      */
     public function destroy($id)
     {
+        if(!auth()->user()->hasPermissionTo('pending.destroy')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
+
         $review = $this->reviewRepository->findWithoutFail($id);
 
         if (empty($review)) {

@@ -45,6 +45,10 @@ class CategoryController extends Controller
      */
     public function index(CategoryDataTable $categoryDataTable)
     {
+        if(!auth()->user()->hasPermissionTo('categories.index')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         return $categoryDataTable->render('categories.index');
     }
 
@@ -55,6 +59,10 @@ class CategoryController extends Controller
      */
     public function create()
     {
+        if(!auth()->user()->hasPermissionTo('categories.create')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $hasCustomField = in_array($this->categoryRepository->model(), setting('custom_field_models', []));
         if ($hasCustomField) {
             $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->categoryRepository->model());
@@ -72,6 +80,10 @@ class CategoryController extends Controller
      */
     public function store(CreateCategoryRequest $request)
     {
+        if(!auth()->user()->hasPermissionTo('categories.store')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $input = $request->all();
         $input['name']    = $input['name'];
         $input['name_en'] = $input['name_en'];
@@ -133,6 +145,10 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
+        if(!auth()->user()->hasPermissionTo('categories.edit')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $category = $this->categoryRepository->findWithoutFail($id);
 
 
@@ -160,6 +176,10 @@ class CategoryController extends Controller
      */
     public function update($id, UpdateCategoryRequest $request)
     {
+        if(!auth()->user()->hasPermissionTo('categories.update')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $category = $this->categoryRepository->findWithoutFail($id);
 
         if (empty($category)) {
@@ -201,6 +221,11 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
+
+        if(!auth()->user()->hasPermissionTo('categories.destroy')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $category = $this->categoryRepository->findWithoutFail($id);
 
         if (empty($category)) {

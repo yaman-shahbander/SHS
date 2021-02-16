@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{{setting('app_name','Adminy')}} | {{trans('auth.login')}}</title>
+    <title>Smart Home Services</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -15,8 +15,9 @@
     <!-- iCheck -->
     <link rel="stylesheet" href="{{asset('plugins/iCheck/flat/blue.css')}}">
 <!-- Google Font: Poppins -->
-    <<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,400i,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,400i,700" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('css/custom.css')}}">
+    <link rel="icon" type="image/png" href="https://localhost/SHS/public/images/english_logo_inverted.png">
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">

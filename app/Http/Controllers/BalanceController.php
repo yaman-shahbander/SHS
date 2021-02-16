@@ -48,6 +48,10 @@ class BalanceController extends Controller
     
     public function index(BalanceDataTable $balanceDataTable)
     {
+        if(!auth()->user()->hasPermissionTo('balance.index')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         return $balanceDataTable->render('balance.index');
     }
 
@@ -58,6 +62,11 @@ class BalanceController extends Controller
      */
     public function create()
     {
+
+        if(!auth()->user()->hasPermissionTo('balance.create')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $hasCustomField = in_array($this->balanceRepository->model(), setting('custom_field_models', []));
         if ($hasCustomField) {
             $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->balanceRepository->model());
@@ -79,6 +88,10 @@ class BalanceController extends Controller
      */
     public function store(Request $request)
     {
+
+        if(!auth()->user()->hasPermissionTo('balance.store')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
 
         $latestBalanceId = DB::table('balances')->latest('id')->first("id");
         $latestBalanceIdPlusOne = ($latestBalanceId->id + 1);
@@ -124,6 +137,10 @@ class BalanceController extends Controller
      */
     public function edit($id)
     {
+        if(!auth()->user()->hasPermissionTo('balance.edit')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $balance_id = User::find($id)->balance_id;
 
         $user_name = User::find($id)->name;
@@ -154,6 +171,10 @@ class BalanceController extends Controller
      */
     public function update($id ,Request $request)
     {
+
+        if(!auth()->user()->hasPermissionTo('balance.update')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
         
         $balance = $this->balanceRepository->findWithoutFail($id);
 
@@ -187,6 +208,11 @@ class BalanceController extends Controller
      */
     public function destroy($id)
     {
+
+        if(!auth()->user()->hasPermissionTo('balance.destroy')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $balance_id = User::find($id)->balance_id;
 
         $this->balanceRepository->delete($balance_id);
@@ -197,6 +223,11 @@ class BalanceController extends Controller
     }
 
     public function addBalance($id) {
+
+        if(!auth()->user()->hasPermissionTo('balance.add')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $balance_id = User::find($id)->balance_id;
         
         $user_name = User::find($id)->name;
@@ -220,6 +251,12 @@ class BalanceController extends Controller
     }
 
     public function balanceaddUpdate($id ,Request $request) {
+
+        if(!auth()->user()->hasPermissionTo('balance.addupdate')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
+
         $balance = $this->balanceRepository->findWithoutFail($id); 
 
         if (empty($balance)) {

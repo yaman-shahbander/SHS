@@ -42,6 +42,10 @@ class SpecialOffersController extends Controller
 
     public function index(SpecialOffersDataTable $SpecialDataTable)
     {
+        if(!auth()->user()->hasPermissionTo('offers.index')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         return $SpecialDataTable->render('special_offers.index');
     }
 
@@ -52,6 +56,10 @@ class SpecialOffersController extends Controller
      */
     public function create()
     {
+        if(!auth()->user()->hasPermissionTo('offers.create')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $hasCustomField = in_array($this->SpecialRepository->model(), setting('custom_field_models', []));
         if ($hasCustomField) {
             $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->SpecialRepository->model());
@@ -80,6 +88,10 @@ class SpecialOffersController extends Controller
      */
     public function store(Request $request)
     {
+
+        if(!auth()->user()->hasPermissionTo('offers.store')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
 
         if($request->vendors=="0")
         {
@@ -151,6 +163,10 @@ class SpecialOffersController extends Controller
     public function edit($id)
     {
 
+        if(!auth()->user()->hasPermissionTo('offers.edit')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $offer = $this->SpecialRepository->findWithoutFail($id);
 
         $categories = Category::all();
@@ -182,6 +198,10 @@ class SpecialOffersController extends Controller
      */
     public function update($id, Request $request)
     {
+        if(!auth()->user()->hasPermissionTo('offers.update')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $offer = $this->SpecialRepository->findWithoutFail($id);
 
         if (empty($offer)) {
@@ -233,6 +253,10 @@ class SpecialOffersController extends Controller
      */
     public function destroy($id)
     {
+        if(!auth()->user()->hasPermissionTo('offers.destroy')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $special = $this->SpecialRepository->findWithoutFail($id);
 
         if (empty($special)) {

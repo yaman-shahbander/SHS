@@ -52,6 +52,9 @@ class BannedUsersController extends Controller
 
     public function index(BannedUsersDataTable $BannedUsersDataTable)
     {
+        if(!auth()->user()->hasPermissionTo('bannedUsers.index')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
         return $BannedUsersDataTable->render('bannedUsers.index');
     }
 
@@ -62,6 +65,9 @@ class BannedUsersController extends Controller
      */
     public function create()
     {
+        if(!auth()->user()->hasPermissionTo('bannedUsers.create')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
         $hasCustomField = in_array($this->BannedUsersRepository->model(), setting('custom_field_models', []));
         if ($hasCustomField) {
             $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->BannedUsersRepository->model());
@@ -83,6 +89,9 @@ class BannedUsersController extends Controller
      */
     public function store(Request $request)
     {
+        if(!auth()->user()->hasPermissionTo('bannedUsers.store')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
         if ($request->username == "0") {
             Flash::error('Please select username');
             return redirect()->back();
@@ -120,6 +129,7 @@ class BannedUsersController extends Controller
      */
     public function show($id)
     {
+
         $bannedUser = $this->BannedUsersRepository->findWithoutFail($id);
 
         if (empty($bannedUser)) {
@@ -139,6 +149,9 @@ class BannedUsersController extends Controller
      */
     public function edit($id)
     {
+        if(!auth()->user()->hasPermissionTo('bannedUsers.edit')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
         $bannedUsers = $this->BannedUsersRepository->findWithoutFail($id);
 
 
@@ -165,6 +178,10 @@ class BannedUsersController extends Controller
      */
     public function update($id ,Request $request)
     {
+        if(!auth()->user()->hasPermissionTo('bannedUsers.update')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $bannedUser = $this->BannedUsersRepository->findWithoutFail($id);
 
         if (empty($bannedUser)) {
@@ -196,6 +213,10 @@ class BannedUsersController extends Controller
      */
     public function destroy($id)
     {
+        if(!auth()->user()->hasPermissionTo('bannedUsers.destroy')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $bannedUser = $this->BannedUsersRepository->findWithoutFail($id);
         if (empty($bannedUser)) {
             Flash::error('user not found');

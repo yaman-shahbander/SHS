@@ -54,6 +54,10 @@ class durationOffersController extends Controller
     
     public function index(DurationOfeersDataTable $durationOffersDataTable)
     {
+        if(!auth()->user()->hasPermissionTo('durationOffer.index')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         return $durationOffersDataTable->render('durationOffer.index');
     }
 
@@ -64,6 +68,10 @@ class durationOffersController extends Controller
      */
     public function create()
     {
+        if(!auth()->user()->hasPermissionTo('durationOffer.create')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $hasCustomField = in_array($this->durationRepository->model(), setting('custom_field_models', []));
         if ($hasCustomField) {
             $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->durationRepository->model());
@@ -80,6 +88,10 @@ class durationOffersController extends Controller
      */
     public function store(Request $request)
     {
+        if(!auth()->user()->hasPermissionTo('durationOffer.store')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $input = $request->all();
         $input['duration'] = $request->duration_name;
         $input['duration_in_num'] = $request->duration_in_number;
@@ -114,6 +126,10 @@ class durationOffersController extends Controller
      */
     public function edit($id)
     {
+        if(!auth()->user()->hasPermissionTo('durationoffer.edit')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $duration = $this->durationRepository->findWithoutFail($id);
 
 
@@ -135,6 +151,10 @@ class durationOffersController extends Controller
      */
     public function update($id, request $request)
     {
+        if(!auth()->user()->hasPermissionTo('durationOffer.update')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $duration = $this->durationRepository->findWithoutFail($id);
 
         if (empty($duration)) {
@@ -170,6 +190,10 @@ class durationOffersController extends Controller
      */
     public function destroy($id)
     {
+        if(!auth()->user()->hasPermissionTo('durationOffer.destroy')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $duration = $this->durationRepository->findWithoutFail($id);
 
         if (empty($duration)) {

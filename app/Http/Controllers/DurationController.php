@@ -53,6 +53,10 @@ class DurationController extends Controller
     
     public function index(durationDataTable $durationRepository)
     {
+        if(!auth()->user()->hasPermissionTo('duration.index')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         return $durationRepository->render('duration.index');
     }
 
@@ -63,6 +67,10 @@ class DurationController extends Controller
      */
     public function create()
     {
+        if(!auth()->user()->hasPermissionTo('duration.create')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $hasCustomField = in_array($this->durationRepository->model(), setting('custom_field_models', []));
         if ($hasCustomField) {
             $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->durationRepository->model());
@@ -84,6 +92,11 @@ class DurationController extends Controller
      */
     public function store(Request $request)
     {
+
+        if(!auth()->user()->hasPermissionTo('duration.store')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $input = [];
 
         $input['id']              = $request->vendornameselect;
@@ -129,6 +142,10 @@ class DurationController extends Controller
      */
     public function edit($id)
     {
+        if(!auth()->user()->hasPermissionTo('duration.edit')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $duration = $this->userRepository->findWithoutFail($id);
 
 
@@ -152,6 +169,12 @@ class DurationController extends Controller
      */
     public function update($id, request $request)
     {
+
+        if(!auth()->user()->hasPermissionTo('duration.update')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
+
         $duration = $this->userRepository->findWithoutFail($id);
 
         if (empty($duration)) {

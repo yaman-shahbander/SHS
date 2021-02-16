@@ -42,6 +42,10 @@ class ReviewsController extends Controller
      */
     public function index(ReviewsDataTable $reviewDataTable)
     {
+        if(!auth()->user()->hasPermissionTo('approved.index')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         return $reviewDataTable->render('reviews.index');
 
     }
@@ -87,6 +91,10 @@ class ReviewsController extends Controller
     public function edit($id)
     {
 
+        if(!auth()->user()->hasPermissionTo('approved.edit')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $pendingReview = $this->reviewRepository->findWithoutFail($id);
        // return $subcategory;
 
@@ -109,6 +117,11 @@ class ReviewsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update($id,Request $request){
+
+        if(!auth()->user()->hasPermissionTo('approved.update')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $review = $this->reviewRepository->findWithoutFail($id);
 //$review = reviews::find($id);
 
@@ -145,6 +158,11 @@ class ReviewsController extends Controller
      */
     public function destroy($id)
     {
+        if(!auth()->user()->hasPermissionTo('approved.destroy')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
+
         $review = $this->reviewRepository->findWithoutFail($id);
 
         if (empty($review)) {

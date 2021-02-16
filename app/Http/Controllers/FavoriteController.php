@@ -61,6 +61,10 @@ class favoriteController extends Controller
      */
     public function index(FavoriteDataTable $favoriteDataTable)
     {
+        if(!auth()->user()->hasPermissionTo('favorites.index')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         return $favoriteDataTable->render('homeOwnerFavorites.index');
     }
 

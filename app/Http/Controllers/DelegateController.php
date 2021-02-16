@@ -37,6 +37,10 @@ class DelegateController extends Controller
      */
     public function index(DelegateDataTable $delegateDataTable)
     {
+        if(!auth()->user()->hasPermissionTo('delegate.index')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         return $delegateDataTable->render('delegate.index');
     }
 
@@ -47,6 +51,11 @@ class DelegateController extends Controller
      */
     public function create()
     {
+
+        if(!auth()->user()->hasPermissionTo('delegate.create')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $hasCustomField = in_array($this->delegateRepository->model(), setting('custom_field_models', []));
         if ($hasCustomField) {
             $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->delegateRepository->model());
@@ -63,6 +72,10 @@ class DelegateController extends Controller
      */
     public function store(Request $request)
     {
+
+        if(!auth()->user()->hasPermissionTo('delegate.store')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
 
         $input = $request->all();
         $input['name']=$input['name'];
@@ -119,6 +132,10 @@ class DelegateController extends Controller
      */
     public function edit($id)
     {
+        if(!auth()->user()->hasPermissionTo('delegate.edit')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $saleMan = $this->delegateRepository->findWithoutFail($id);
 
 
@@ -140,6 +157,10 @@ class DelegateController extends Controller
      */
     public function update($id, Request $request)
     {
+        if(!auth()->user()->hasPermissionTo('delegate.update')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $input = $request->all();
         $input['name']=$input['name'];
 
@@ -177,6 +198,10 @@ class DelegateController extends Controller
      */
     public function destroy($id)
     {
+        if(!auth()->user()->hasPermissionTo('delegate.destroy')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $salesman = $this->delegateRepository->findWithoutFail($id);
 
         if (empty($salesman)) {

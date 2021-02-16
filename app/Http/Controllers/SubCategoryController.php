@@ -47,7 +47,11 @@ class SubCategoryController extends Controller
      * @return Response
      */
     public function index(SubCategoriesDataTable $subcategoryDataTable)
-    {            
+    {           
+        if(!auth()->user()->hasPermissionTo('subcategory.index')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $categories = subCategory::all();
         return $subcategoryDataTable->render('SubCategories.index');
     }
@@ -59,6 +63,10 @@ class SubCategoryController extends Controller
      */
     public function create()
     {
+        if(!auth()->user()->hasPermissionTo('subcategory.create')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $hasCustomField = in_array($this->subcategoryRepository->model(), setting('custom_field_models', []));
         if ($hasCustomField) {
             $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->subcategoryRepository->model());
@@ -81,6 +89,10 @@ class SubCategoryController extends Controller
      */
     public function store(Request $request)
     {
+        if(!auth()->user()->hasPermissionTo('subcategory.store')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         if ($request->category == "0") {
             Flash::error('Please select category');
             return redirect()->back();
@@ -145,6 +157,10 @@ class SubCategoryController extends Controller
      */
     public function edit($id)
     {
+        if(!auth()->user()->hasPermissionTo('subcategory.edit')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $categories=Category::all();
 
         $subcategory = $this->subcategoryRepository->findWithoutFail($id);
@@ -169,6 +185,10 @@ class SubCategoryController extends Controller
      */
     public function update($id, UpdateSubCategoryRequest $request)
     {
+        if(!auth()->user()->hasPermissionTo('subcategory.update')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $subcategory = $this->subcategoryRepository->findWithoutFail($id);
 
         if (empty($subcategory)) {
@@ -208,6 +228,10 @@ class SubCategoryController extends Controller
      */
     public function destroy($id)
     {
+        if(!auth()->user()->hasPermissionTo('subcategory.destroy')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $subcategory = $this->subcategoryRepository->findWithoutFail($id);
 
         if (empty($subcategory)) {

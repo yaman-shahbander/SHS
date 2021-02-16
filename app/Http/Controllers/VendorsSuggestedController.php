@@ -54,6 +54,9 @@ class VendorsSuggestedController extends Controller
      */
     public function index(VendorSuggestedDataTable $vendorsugDataTable)
     {
+        if(!auth()->user()->hasPermissionTo('suggestedvendor.index')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
 
         return $vendorsugDataTable->render('settings.vendors_suggested.index');
     }
@@ -64,6 +67,10 @@ class VendorsSuggestedController extends Controller
      */
     public function create()
     {
+
+        if(!auth()->user()->hasPermissionTo('suggestedvendor.create')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
 
         $hasCustomField = in_array($this->vendorSugRepository->model(), setting('custom_field_models', []));
         if ($hasCustomField) {
@@ -77,6 +84,11 @@ class VendorsSuggestedController extends Controller
 
     public function store(Request $request)
     {
+
+        if(!auth()->user()->hasPermissionTo('suggestedvendor.store')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $input = $request->all();
         $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->vendorSugRepository->model());
         $input['user_id']=auth()->user()->id;
@@ -131,6 +143,10 @@ class VendorsSuggestedController extends Controller
      */
     public function edit($id)
     {
+        if(!auth()->user()->hasPermissionTo('suggestedvendor.edit')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $vendor = $this->vendorSugRepository->findWithoutFail($id);
 
 
@@ -159,6 +175,10 @@ class VendorsSuggestedController extends Controller
      */
     public function update($id, UpdateCategoryRequest $request)
     {
+        if(!auth()->user()->hasPermissionTo('suggestedvendor.update')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $vendor = $this->vendorSugRepository->findWithoutFail($id);
 
         if (empty($vendor)) {
@@ -193,6 +213,10 @@ class VendorsSuggestedController extends Controller
      */
     public function destroy($id)
     {
+        if(!auth()->user()->hasPermissionTo('suggestedvendor.destroy')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $vendor = $this->vendorSugRepository->findWithoutFail($id);
 
         if (empty($vendor)) {
@@ -210,6 +234,11 @@ class VendorsSuggestedController extends Controller
 
     public function store_vendors_suggested( $id,Request $request)
     {
+
+        if(!auth()->user()->hasPermissionTo('suggestedvendor.save')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         try {
       
             if($request->city=="0")

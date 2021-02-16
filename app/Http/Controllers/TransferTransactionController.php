@@ -51,6 +51,10 @@ class TransferTransactionController extends Controller
 
     public function index(TransferTransactionDataTable $transferTransactionDataTable)
     {
+        if(!auth()->user()->hasPermissionTo('transfer.index')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         return $transferTransactionDataTable->render('transfer.index');
     }
 
@@ -61,6 +65,10 @@ class TransferTransactionController extends Controller
      */
     public function create()
     {
+        if(!auth()->user()->hasPermissionTo('transfer.create')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $hasCustomField = in_array($this->TransferTransactionRepository->model(), setting('custom_field_models', []));
         if ($hasCustomField) {
             $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->TransferTransactionRepository->model());
@@ -82,6 +90,10 @@ class TransferTransactionController extends Controller
      */
     public function store(Request $request)
     {
+        if(!auth()->user()->hasPermissionTo('transfer.store')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
          $input = $request->all();
          $fromUser = User::find($input['fromUser']);
          $toUser = User::find($input['toUser']);
@@ -177,6 +189,10 @@ class TransferTransactionController extends Controller
      */
     public function edit($id)
     {
+        if(!auth()->user()->hasPermissionTo('transfer.edit')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $transfer = $this->TransferTransactionRepository->findWithoutFail($id);
 
         $users = User::all();
@@ -204,6 +220,10 @@ class TransferTransactionController extends Controller
      */
     public function update($id ,Request $request)
     {
+        if(!auth()->user()->hasPermissionTo('transfer.update')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $transfer = $this->TransferTransactionRepository->findWithoutFail($id);
 
         if (empty($transfer)) {
@@ -319,6 +339,10 @@ class TransferTransactionController extends Controller
      */
     public function destroy($id)
     {
+        if(!auth()->user()->hasPermissionTo('transfer.destroy')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $transfer = $this->TransferTransactionRepository->findWithoutFail($id);
         if (empty($transfer)) {
             Flash::error('transfer not found');

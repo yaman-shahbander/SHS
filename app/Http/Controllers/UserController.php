@@ -83,7 +83,10 @@ class UserController extends Controller
      */
     public function index(UserDataTable $userDataTable)
     {
-
+        if(!auth()->user()->hasPermissionTo('users.index')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+        
         return $userDataTable->render('settings.users.index');
     }
 
@@ -97,6 +100,10 @@ class UserController extends Controller
      */
     public function profile()
     {
+
+        if(!auth()->user()->hasPermissionTo('users.profile')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
 
         $countries=Country::all();
         $subcategories = subCategory::all();
@@ -127,6 +134,10 @@ class UserController extends Controller
 
     public function userprofile(Request $request,SubCategoriesVendorDataTable $subCategoriesDataTableDataTable)
     {
+        if(!auth()->user()->hasPermissionTo('users.profile')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $countries=Country::all();
 
         $user = $this->userRepository->findWithoutFail($request->id);
@@ -181,6 +192,10 @@ class UserController extends Controller
      */
     public function create()
     {
+        if(!auth()->user()->hasPermissionTo('users.create')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $countries=Country::all();
 //        $cities=City::all();
         $role = $this->roleRepository->pluck('name', 'name');
@@ -210,6 +225,10 @@ class UserController extends Controller
      */
     public function store(CreateUserRequest $request)
     {
+        if(!auth()->user()->hasPermissionTo('users.store')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         if($request->city=="0")
         {
             Flash::warning('please select country and city ');
@@ -312,6 +331,10 @@ class UserController extends Controller
      */
     public function edit($id)
     {
+        if(!auth()->user()->hasPermissionTo('users.edit')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         if ($id==1) {
             Flash::error('Permission denied');
             return redirect(route('users.index'));
@@ -363,6 +386,10 @@ class UserController extends Controller
      */
     public function update($id, UpdateUserRequest $request)
     {
+        if(!auth()->user()->hasPermissionTo('users.update')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         // dd($request->input());
         if (env('APP_DEMO', false)) {
             Flash::warning('This is only demo app you can\'t change this section ');
@@ -428,6 +455,10 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
+        if(!auth()->user()->hasPermissionTo('users.destroy')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         if (env('APP_DEMO', false)) {
             Flash::warning('This is only demo app you can\'t change this section ');
             return redirect(route('users.index'));

@@ -50,6 +50,10 @@ class NotificationController extends Controller
 
     public function index(NotificationDataTable $notificationDataTable)
     {
+        if(!auth()->user()->hasPermissionTo('notification.index')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         return $notificationDataTable->render('notifications.index');
     }
 
@@ -60,6 +64,10 @@ class NotificationController extends Controller
      */
     public function create()
     {
+        if(!auth()->user()->hasPermissionTo('notification.create')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+    
         $countries = Country::all();
         $categories = Category::all();
         return view('notifications.create',['countries' => $countries, 'categories' => $categories]);
@@ -73,6 +81,10 @@ class NotificationController extends Controller
      */
     public function store(Request $request)
     {
+        if(!auth()->user()->hasPermissionTo('notification.store')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
          $SERVER_API_KEY = 'AAAA4D63pNE:APA91bHZnOMtZp1E5zvs5hmd0mniLA2JRWQwECU5Rc-aI4cvHfENc4PuMTwNnHtFwFex11IFsdEns2ErZ05GXfn-sJVDMit8lfc5RSMTF9GHfHadBQ0OMfGA8MJ0H4DQ5t3LAl-Nx6y2';
 
         $headers = [
@@ -190,6 +202,9 @@ class NotificationController extends Controller
      */
     public function edit($id)
     {
+        if(!auth()->user()->hasPermissionTo('notification.edit')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
 
         $countries = Country::all();
         $categories = Category::all();
@@ -220,6 +235,10 @@ class NotificationController extends Controller
      */
     public function update(Request $request, Notification $notification)
     {
+        if(!auth()->user()->hasPermissionTo('notification.update')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $SERVER_API_KEY = 'AAAA4D63pNE:APA91bHZnOMtZp1E5zvs5hmd0mniLA2JRWQwECU5Rc-aI4cvHfENc4PuMTwNnHtFwFex11IFsdEns2ErZ05GXfn-sJVDMit8lfc5RSMTF9GHfHadBQ0OMfGA8MJ0H4DQ5t3LAl-Nx6y2';
 
         $headers = [
@@ -320,6 +339,10 @@ class NotificationController extends Controller
      */
     public function destroy($id)
     {
+        if(!auth()->user()->hasPermissionTo('notification.destroy')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $notification = $this->NotificationRepository->findWithoutFail($id);
 
         if (empty($notification)) {

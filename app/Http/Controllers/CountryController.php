@@ -47,6 +47,10 @@ class CountryController extends Controller
 
     public function index(countryDataTable $countryDataTable)
     {
+        if(!auth()->user()->hasPermissionTo('country.index')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         return $countryDataTable->render('country.index');
     }
 
@@ -57,6 +61,10 @@ class CountryController extends Controller
      */
     public function create()
     {
+        if(!auth()->user()->hasPermissionTo('country.create')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $hasCustomField = in_array($this->countryRepository->model(), setting('custom_field_models', []));
         if ($hasCustomField) {
             $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->countryRepository->model());
@@ -73,6 +81,10 @@ class CountryController extends Controller
      */
     public function store(Request $request)
     {
+        if(!auth()->user()->hasPermissionTo('country.store')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $input = $request->all();
         $input['country_name']=$input['name'];
 
@@ -123,6 +135,10 @@ class CountryController extends Controller
      */
     public function edit($id)
     {
+        if(!auth()->user()->hasPermissionTo('country.edit')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $country = $this->countryRepository->findWithoutFail($id);
 
 
@@ -152,6 +168,10 @@ class CountryController extends Controller
      */
     public function update($id, request $request)
     {
+        if(!auth()->user()->hasPermissionTo('country.update')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $country = $this->countryRepository->findWithoutFail($id);
 
         if (empty($country)) {
@@ -186,6 +206,11 @@ class CountryController extends Controller
      */
     public function destroy($id)
     {
+
+        if(!auth()->user()->hasPermissionTo('country.destroy')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $country = $this->countryRepository->findWithoutFail($id);
 
         if (empty($country)) {
@@ -196,7 +221,7 @@ class CountryController extends Controller
 
         $this->countryRepository->delete($id);
 
-        Flash::success(__('lang.deleted_successfully', ['operator' => __('lang.category')]));
+        Flash::success(__('Country deleted successfully', ['operator' => __('lang.category')]));
 
         return redirect(route('country.index'));
     }

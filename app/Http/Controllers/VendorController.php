@@ -79,6 +79,9 @@ class VendorController extends Controller
 
     public function index(VendorDataTable $vendorDataTable)
     {
+        if(!auth()->user()->hasPermissionTo('vendors.index')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
 
         return $vendorDataTable->render('settings.vendors.index');
     }
@@ -114,6 +117,10 @@ class VendorController extends Controller
 
     public function create()
     {
+        if(!auth()->user()->hasPermissionTo('vendors.create')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $countries=Country::all();
 //        $cities=City::all();
         $role = $this->roleRepository->pluck('name', 'name');
@@ -144,6 +151,10 @@ class VendorController extends Controller
      */
     public function profile(Request $request,SubCategoriesVendorDataTable $subCategoriesDataTableDataTable)
     {
+        if(!auth()->user()->hasPermissionTo('vendors.profile')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $countries=Country::all();
         
         $user = $this->vendorRepository->findWithoutFail($request->id);
@@ -207,6 +218,10 @@ class VendorController extends Controller
 
     public function store(CreateUserRequest $request)
     {
+
+        if(!auth()->user()->hasPermissionTo('vendors.store')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
         
         if($request->city=="0")
         {
@@ -267,6 +282,11 @@ class VendorController extends Controller
     }
 
     public function featuredfeeFunction() {
+
+        if(!auth()->user()->hasPermissionTo('vendors.fee')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $count = count(Fee::all()); // if there is an old fee value
         if ($count > 0) { 
             $value = Fee::all('fee_amount');
@@ -279,6 +299,11 @@ class VendorController extends Controller
     }
 
     public function savefeeFunction(Request $request) {
+
+        if(!auth()->user()->hasPermissionTo('vendors.feeSave')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         $check = Fee::all();
         if(count($check) == 0) {
             $newfee = new Fee;
@@ -338,6 +363,10 @@ class VendorController extends Controller
 
     public function update($id, UpdateUserRequest $request)
     {
+        if(!auth()->user()->hasPermissionTo('vendors.update')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         if (env('APP_DEMO', false)) {
             Flash::warning('This is only demo app you can\'t change this section ');
             return redirect(route('users.profile'));
@@ -393,6 +422,10 @@ class VendorController extends Controller
 
     public function edit($id)
     {
+        if(!auth()->user()->hasPermissionTo('vendors.edit')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+
         if ($id==1) {
             Flash::error('Permission denied');
             return redirect(route('users.index'));
@@ -435,7 +468,11 @@ class VendorController extends Controller
         }
 
         public function destroy($id)
-    {
+        {
+            if(!auth()->user()->hasPermissionTo('vendors.destroy')){
+                return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            }
+
         if (env('APP_DEMO', false)) {
             Flash::warning('This is only demo app you can\'t change this section ');
             return redirect(route('users.index'));
