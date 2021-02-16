@@ -293,7 +293,10 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
     Route::resource('/notification', 'NotificationController');
     Route::get('/fee', 'VendorController@featuredfeeFunction')->name('vendor.fee');
     Route::post('/feeSave', 'VendorController@savefeeFunction')->name('fee.save');
-    Route::get('/mousa', 'HomeController@mousa');
+    Route::resource('/adminsBoard', 'AdminController');
+    Route::post('adminsBoard/profile', 'AdminController@adminprofile')->name('admin.profile');
+    Route::resource('/superAdminsBoard', 'SuperAdminController');
+    Route::post('superAdminsBoard/profile', 'SuperAdminController@superadminAdminProfile')->name('superadmin.profile');
 
     Route::post('/sendmail',[
         'as' => 'sendmail',

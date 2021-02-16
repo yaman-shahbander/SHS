@@ -70,25 +70,7 @@
 
             </form>
 
-            @if(setting('enable_facebook',false) || setting('enable_google',false) || setting('enable_twitter',false))
-                <div class="social-auth-links text-center mb-3">
-                    <p style="text-transform: uppercase">- {{__('lang.or')}} -</p>
-                    @if(setting('enable_facebook',false))
-                        <a href="{{url('login/facebook')}}" class="btn btn-block btn-facebook">
-                            <i class="fa fa-facebook mr-2"></i> {{__('auth.login_facebook')}}
-                        </a>
-                    @endif
-                    @if(setting('enable_google',false))
-                        <a href="{{url('login/google')}}" class="btn btn-block btn-google"> <i class="fa fa-google-plus mr-2"></i> {{__('auth.login_google')}}
-                        </a>
-                    @endif
-                    @if(setting('enable_twitter',false))
-                        <a href="{{url('login/twitter')}}" class="btn btn-block btn-twitter"> <i class="fa fa-twitter mr-2"></i> {{__('auth.login_twitter')}}
-                        </a>
-                    @endif
-                </div>
-                <!-- /.social-auth-links -->
-            @endif
+           
 
             <p class="mb-1 text-center">
                 <a href="{{ url('/password/reset') }}">{{__('auth.forgot_password')}}</a>

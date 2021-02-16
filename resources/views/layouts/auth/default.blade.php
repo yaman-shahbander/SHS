@@ -25,7 +25,7 @@
 <body class="hold-transition login-page">
 <div class="login-box">
     <div class="login-logo">
-        <a href="{{ url('/') }}"><img src="/" alt="SHS"></a>
+        <a href="{{ url('/') }}"><img src={{ asset('/images/english_logo_inverted.png') }} alt="SHS"></a>
     </div>
     <!-- /.login-logo -->
     <div class="card">
