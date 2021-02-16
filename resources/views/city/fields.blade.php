@@ -27,7 +27,7 @@
         <div class="form-group row col-md-6">
             {!! Form::label('name', "Country", ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
-            <select name="country" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
+            <select name="country" id="brand" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
                 @foreach($countries as $country)
                     <option  
                     value="{{ $country->id }}" @if(!empty($city->country_id)) @if( $city->country_id==$country->id) selected @endif @endif>

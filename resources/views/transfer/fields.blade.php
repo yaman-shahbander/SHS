@@ -10,7 +10,7 @@
     {!! Form::label('fromUser', "From Name", ['class' => 'col-3 control-label text-right']) !!}
     <div class="col-9">
     @if(Request::is('*edit'))
-        <select name="fromUser" aria-controls="dataTableBuilder" class="form-control form-control-sm" disabled>
+        <select name="fromUser" id="brand" aria-controls="dataTableBuilder" class="form-control form-control-sm" disabled>
             @foreach($users as $user)
                 <option
                 value="{{ $user->id }}"  @if(!empty($transfer->from_id)) @if( $transfer->from_id==$user->id) selected @endif @endif>
@@ -18,7 +18,7 @@
             @endforeach
         </select>
     @else 
-         <select name="fromUser" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
+         <select name="fromUser"  id="brand" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
             @foreach($users as $user)
                 <option
                 value="{{ $user->id }}"  @if(!empty($transfer->from_id)) @if( $transfer->from_id==$user->id) selected @endif @endif>
@@ -35,7 +35,7 @@
     {!! Form::label('toUser', "To Name", ['class' => 'col-3 control-label text-right']) !!}
     <div class="col-9">
     @if(Request::is('*edit'))
-        <select name="toUser" aria-controls="dataTableBuilder" class="form-control form-control-sm" disabled>
+        <select name="toUser" id="brand1" aria-controls="dataTableBuilder" class="form-control form-control-sm" disabled>
                 @foreach($users as $user)
                     <option
                     value="{{ $user->id }}"  @if(!empty($transfer->to_id)) @if( $transfer->to_id==$user->id) selected  @endif @endif>
@@ -43,7 +43,7 @@
                 @endforeach
             </select>
     @else 
-        <select name="toUser" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
+        <select name="toUser" id="brand1" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
                 @foreach($users as $user)
                     <option
                     value="{{ $user->id }}"  @if(!empty($transfer->to_id)) @if( $transfer->to_id==$user->id) selected  @endif @endif>

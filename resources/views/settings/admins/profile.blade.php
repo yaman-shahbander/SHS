@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="{{asset('plugins/iCheck/flat/blue.css')}}">
     <!-- select2 -->
     <link rel="stylesheet" href="{{asset('plugins/select2/select2.min.css')}}">
+    <link rel="stylesheet" href="{{asset('/css/nice-select2.css')}}">
     <style>
 .center {
    display:inline;
@@ -620,9 +621,9 @@
                         </div>
 
                         <div class="card-body">
-                            {!! Form::model($user, ['route' => ['users.update', $user->id], 'method' => 'patch']) !!}
+                            {!! Form::model($user, ['route' => ['adminsBoard.update', $user->id], 'method' => 'patch']) !!}
                             <div class="row">
-                                @include('settings.users.fields')
+                                @include('settings.admins.fields')
                             </div>
                             {!! Form::close() !!}
                             <div class="clearfix"></div>
@@ -798,5 +799,13 @@ $(".uploader").change(function(){
 });
 
     </script>
+
+
+<script src="{{asset('/js/nice-select2.js')}}"></script>
+
+<script>
+    var options = {searchable: true};
+    NiceSelect.bind(document.getElementById("country"), options);
+</script>
 
 @endpush

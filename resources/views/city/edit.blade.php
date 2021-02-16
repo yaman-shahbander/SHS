@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="{{asset('plugins/summernote/summernote-bs4.css')}}">
 {{--dropzone--}}
 <link rel="stylesheet" href="{{asset('plugins/dropzone/bootstrap.min.css')}}">
+<link rel="stylesheet" href="{{asset('/css/nice-select2.css')}}">
 @endpush
 @section('content')
 <!-- Content Header (Page header) -->
@@ -76,5 +77,12 @@
 <script type="text/javascript">
     Dropzone.autoDiscover = false;
     var dropzoneFields = [];
+</script>
+
+<script src="{{asset('/js/nice-select2.js')}}"></script>
+
+<script>
+    var options = {searchable: true};
+    NiceSelect.bind(document.getElementById("brand"), options);
 </script>
 @endpush

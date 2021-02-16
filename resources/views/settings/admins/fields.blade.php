@@ -26,7 +26,7 @@
         <div class="form-group col-md-6 row">
             {!! Form::label('country', trans('lang.country'), ['class' => 'col-3 control-label']) !!}
             <div class="col-md-9">
-                <select name="country" id="country" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
+                <select name="country" id="country" aria-controls="dataTableBuilder" class="form-control form-control-sm" required >
                     <option value="0" selected> Select</option>
 
                 @foreach($countries as $country)

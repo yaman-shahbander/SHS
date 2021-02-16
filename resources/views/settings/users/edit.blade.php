@@ -8,7 +8,7 @@
 {{--<link rel="stylesheet" href="{{asset('plugins/summernote/summernote-bs4.css')}}">--}}
 {{--dropzone--}}
 <link rel="stylesheet" href="{{asset('plugins/dropzone/bootstrap.min.css')}}">
-
+<link rel="stylesheet" href="{{asset('/css/nice-select2.css')}}">
 
 <style>
  
@@ -352,4 +352,11 @@ $(".uploader").change(function(){
 });
 
     </script>
+
+<script src="{{asset('/js/nice-select2.js')}}"></script>
+
+<script>
+    var options = {searchable: true};
+    NiceSelect.bind(document.getElementById("country"), options);
+</script>
 @endpush

@@ -5,7 +5,7 @@
     <div class="form-group row col-md-12">
         {!! Form::label('username', trans('lang.banned_user_name'), ['class' => 'col-3 control-label text-right']) !!}
         <div class="col-9">
-        <select name="username" aria-controls="dataTableBuilder" class="form-control form-control-sm">
+        <select name="username" id="brand" aria-controls="dataTableBuilder" class="form-control form-control-sm">
             @if(Request::is('*create'))
               @foreach($users as $user)
                   <option value="{{ $user->id }}" @if(!empty($bannedUser->user_id)) @if( $bannedUser->user_id==$user->id) selected @endif @endif>

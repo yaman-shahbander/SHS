@@ -27,7 +27,7 @@
         <div class="form-group row col-md-6">
             {!! Form::label('name', "Category", ['class' => 'col-3 control-label ']) !!}
             <div class="col-9">
-              <select name="category" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
+              <select name="category" id="brand" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
                   @foreach($categories as $category)
                       <option value="{{ $category->id }}" @if(!empty($subcategory->category_id)) @if( $subcategory->category_id==$category->id) selected @endif @endif>
                       {{ $category->name }}</option>
