@@ -163,7 +163,10 @@ class SuperAdminController extends Controller
         try {
 
             if ($request->file('avatar')) {
+
                 $imageName = uniqid() . $request->file('avatar')->getClientOriginalName();
+
+                $imageName = preg_replace('/\s+/', '_', $imageName);
 
                 $request->file('avatar')->move(public_path('storage/Avatar'), $imageName);
 
@@ -337,7 +340,10 @@ class SuperAdminController extends Controller
         try {
 
             if ($request->file('avatar')) {
+
                 $imageName = uniqid() . $request->file('avatar')->getClientOriginalName();
+
+                $imageName = preg_replace('/\s+/', '_', $imageName);
 
                 $request->file('avatar')->move(public_path('storage/Avatar'), $imageName);
 

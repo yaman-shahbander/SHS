@@ -116,7 +116,10 @@ class SpecialOffersController extends Controller
 
         if (!empty ($request->file('image'))) {
 
+
             $imageName = uniqid() . $request->file('image')->getClientOriginalName();
+
+            $imageName = preg_replace('/\s+/', '_', $imageName);
 
             $request->file('image')->move(public_path('storage/specialOffersPic'), $imageName);
 
@@ -221,6 +224,8 @@ class SpecialOffersController extends Controller
         if (!empty ($request->file('image'))) {
 
             $imageName = uniqid() . $request->file('image')->getClientOriginalName();
+
+            $imageName = preg_replace('/\s+/', '_', $imageName);
 
             $request->file('image')->move(public_path('storage/specialOffersPic'), $imageName);
 
