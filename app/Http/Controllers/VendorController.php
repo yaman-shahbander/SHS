@@ -282,14 +282,55 @@ class VendorController extends Controller
         $check = Fee::all();
         if(count($check) == 0) {
             $newfee = new Fee;
-            $newfee->fee_amount = $request->fee_amount;
+
+            $amount  = strip_tags($request->fee_amount);
+
+            if(preg_match('/[a-zA-Z]/', $amount)) {
+                Flash::Error(__('Transfer failed! field must only contain numbers', ['operator' => __('lang.category')]));
+                return redirect(route('vendors.index'));
+             }
+
+
+             if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $amount)) {
+                Flash::Error(__('Transfer failed! field must only contain numbers', ['operator' => __('lang.category')]));
+                return redirect(route('vendors.index'));
+            }
+            
+            if ($amount < 0) {
+                Flash::Error(__('Transfer failed! amount should not be negative', ['operator' => __('lang.category')]));
+                return redirect(route('vendors.index'));
+             }
+
+            $newfee->fee_amount = $amount;
+
             $newfee->save();
+
             Flash::success('Fee saved successfully.');
             return redirect(route('vendors.index'));
         } else {
+
+            $amount  = strip_tags($request->fee_amount);
+
+            if(preg_match('/[a-zA-Z]/', $amount)) {
+                Flash::Error(__('Transfer failed! field must only contain numbers', ['operator' => __('lang.category')]));
+                return redirect(route('vendors.index'));
+             }
+
+
+             if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $amount)) {
+                Flash::Error(__('Transfer failed! field must only contain numbers', ['operator' => __('lang.category')]));
+                return redirect(route('vendors.index'));
+            }
+            
+            if ($amount < 0) {
+                Flash::Error(__('Transfer failed! amount should not be negative', ['operator' => __('lang.category')]));
+                return redirect(route('vendors.index'));
+             }
+
             Fee::first()->update([
-                'fee_amount' => $request->fee_amount
+                'fee_amount' => $amount
             ]);
+
             Flash::success('Fee updated successfully.');
             return redirect(route('vendors.index'));
         }

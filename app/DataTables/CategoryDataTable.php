@@ -38,7 +38,7 @@ class CategoryDataTable extends DataTable
                 if ($category->image != null) {
                     return '<img width="80px" height="80px" src='. asset('storage/categoriesPic'). '/' . $category->image . '>';
                 } else {
-                    return '<img width="80px" height="80px" src='. asset("storage/categoriesPic/default.jpg") . '>';
+                    return '<img width="80px" height="80px" src='. asset("storage/categoriesPic/default.png") . '>';
                 }
                 
             })

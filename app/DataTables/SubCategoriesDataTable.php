@@ -41,7 +41,7 @@ class SubCategoriesDataTable extends DataTable
                 if ($subcategory->image != null) {
                     return '<img width="80px" height="80px" src='. asset('storage/subcategoriesPic'). '/' . $subcategory->image . '>'; 
                 } else {
-                    return '<img width="80px" height="80px" src='. asset("storage/subcategoriesPic/default.jpg") . '>';
+                    return '<img width="80px" height="80px" src='. asset("storage/subcategoriesPic/default.png") . '>';
                 }
                 
             })
