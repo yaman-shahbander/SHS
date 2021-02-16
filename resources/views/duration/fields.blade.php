@@ -12,7 +12,7 @@
   {!! Form::label('vendor_name', 'Vendor Name', ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important']) !!}
   <div class="col-8">
     @if(Request::is('*create'))
-    <select name="vendornameselect" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
+    <select name="vendornameselect" id ="brand" aria-controls="dataTableBuilder" class="form-control form-control-sm" required  >
         @foreach($vendors as $vendor)
         <option value="{{ $vendor->id }}">{{ $vendor->name }}</option>
         @endforeach
@@ -27,7 +27,7 @@
 <div class="form-group row ">
     {!! Form::label('Duration', "Duration", ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important;']) !!}
     <div class="col-8">
-    <select name="duration" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
+    <select name="duration" id ="brand1" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
     @if(Request::is('*create'))
         @foreach($durations as $duration)
             <option value="{{ $duration->id }}">{{ $duration->duration }}</option>

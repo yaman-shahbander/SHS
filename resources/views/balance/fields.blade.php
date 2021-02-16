@@ -6,7 +6,7 @@
         @if(Request::is('*create'))
               {!! Form::label('nameselect',trans('lang.balance_name'), ['class' => 'col-4 control-label ']) !!}
               <div class="col-8">
-                <select name="nameselect" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
+                <select name="nameselect" id="brand" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
                     @foreach($users as $user)
                         <option
                         value="{{ $user->id }}">

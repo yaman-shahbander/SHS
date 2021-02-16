@@ -19,8 +19,8 @@
 @endcan
 
 @can('users.index')
-    <li class="nav-item has-treeview {{ Request::is('superAdmin*') || Request::is('showAdmin*') ? 'menu-open' : '' }}">
-        <a href="#" class="nav-link {{ Request::is('superAdmin*') || Request::is('showAdmin*') ? 'active' : '' }}"> @if($icons)
+    <li class="nav-item has-treeview {{ Request::is('superAdminsBoard*') || Request::is('adminsBoard*') ? 'menu-open' : '' }}">
+        <a href="#" class="nav-link {{ Request::is('superAdminsBoard*') || Request::is('adminsBoard*') ? 'active' : '' }}"> @if($icons)
             <i class="nav-icon fa fa-users"></i>@endif
             @if(LaravelLocalization::getCurrentLocaleDirection() == "rtl")
             <p>{{trans('lang.dashboard_admins')}} <i class="fa fa-angle-left"></i></p>
@@ -31,13 +31,13 @@
         <ul class="nav nav-treeview">
             @can('showAdmin')
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('showAdmin*') ? 'active' : '' }}" href="{!! route('showAdmin') !!}">@if($icons)
+                    <a class="nav-link {{ Request::is('adminsBoard*') ? 'active' : '' }}" href="{!! route('adminsBoard.index') !!}">@if($icons)
                             <i class="nav-icon fa fa-user"></i>@endif<p>{{trans('lang.normal_admins')}}</p></a>
                 </li>
             @endcan
             @can('superAdmin.index')
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('superAdmin*') ? 'active' : '' }}" href="{!! route('superAdmin') !!}">@if($icons)
+                    <a class="nav-link {{ Request::is('superAdminsBoard*') ? 'active' : '' }}" href="{!! route('superAdminsBoard.index') !!}">@if($icons)
                             <i class="nav-icon fa fa-user"></i>@endif<p>{{trans('lang.super_admins')}}</p></a>
                 </li>
             @endcan

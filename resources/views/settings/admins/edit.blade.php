@@ -265,20 +265,20 @@
     <div class="card-header">
       <ul class="nav nav-tabs align-items-end card-header-tabs w-100">
         <li class="nav-item">
-          <a class="nav-link" href="{!! route('users.index') !!}"><i class="fa fa-list mr-2"></i>{{trans('lang.user_table')}}</a>
+          <a class="nav-link" href="{!! route('adminsBoard.index') !!}"><i class="fa fa-list mr-2"></i>Admins List</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{!! route('users.create') !!}"><i class="fa fa-plus mr-2"></i>{{trans('lang.user_create')}}</a>
+          <a class="nav-link" href="{!! route('adminsBoard.create') !!}"><i class="fa fa-plus mr-2"></i>Create Admin</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-pencil mr-2"></i>{{trans('lang.user_edit')}}</a>
+          <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-pencil mr-2"></i>Edit Admin</a>
         </li>
       </ul>
     </div>
     <div class="card-body" data-route="{{url('api/user/select')}}">
-      {!! Form::model($user, ['route' => ['users.update', $user->id], 'method' => 'patch']) !!}
+      {!! Form::model($user, ['route' => ['adminsBoard.update', $user->id],'enctype'=>"multipart/form-data" , 'method' => 'patch']) !!}
       <div class="row">
-        @include('settings.users.fields')
+        @include('settings.admins.fields')
       </div>
       {!! Form::close() !!}
       <div class="clearfix"></div>

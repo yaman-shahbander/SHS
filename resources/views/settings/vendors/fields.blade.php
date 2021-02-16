@@ -76,7 +76,7 @@
         <div class="form-group col-md-6 row">
             {!! Form::label('password', trans("lang.user_password"), ['class' => 'col-md-3 control-label']) !!}
             <div class="col-md-9">
-                {!! Form::password('password', ['class' => 'form-control','placeholder'=>  trans("lang.user_password_placeholder"), 'required']) !!}
+                {!! Form::password('password', ['class' => 'form-control','placeholder'=>  trans("lang.user_password_placeholder")]) !!}
             </div>
         </div>
 

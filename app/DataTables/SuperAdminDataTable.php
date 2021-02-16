@@ -38,7 +38,7 @@ class SuperAdminDataTable extends DataTable
             ->editColumn('avatar', function ($user) {
                 return getMediaColumn($user, 'avatar', 'img-circle elevation-2');
             })
-            ->addColumn('action', 'settings.users.datatables_actions')
+            ->addColumn('action', 'settings.superadmins.datatables_actions')
             ->rawColumns(array_merge($columns, ['action']));
     }
 

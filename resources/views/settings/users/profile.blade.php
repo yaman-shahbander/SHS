@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="{{asset('plugins/iCheck/flat/blue.css')}}">
     <!-- select2 -->
     <link rel="stylesheet" href="{{asset('plugins/select2/select2.min.css')}}">
+    <link rel="stylesheet" href="{{asset('/css/nice-select2.css')}}">
     <style>
 .center {
    display:inline;
@@ -798,5 +799,12 @@ $(".uploader").change(function(){
 });
 
     </script>
+
+<script src="{{asset('/js/nice-select2.js')}}"></script>
+
+<script>
+    var options = {searchable: true};
+    NiceSelect.bind(document.getElementById("country"), options);
+</script>
 
 @endpush

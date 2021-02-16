@@ -1,16 +1,13 @@
-@extends('layouts.app')
+@extends('layouts.settings.default')
 @push('css_lib')
-<!-- iCheck -->
-<link rel="stylesheet" href="{{asset('plugins/iCheck/flat/blue.css')}}">
-<!-- select2 -->
-<link rel="stylesheet" href="{{asset('plugins/select2/select2.min.css')}}">
-<!-- bootstrap wysihtml5 - text editor -->
-<link rel="stylesheet" href="{{asset('plugins/summernote/summernote-bs4.css')}}">
-{{--dropzone--}}
-<link rel="stylesheet" href="{{asset('plugins/dropzone/bootstrap.min.css')}}">
-<link rel="stylesheet" href="{{asset('/css/nice-select2.css')}}">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 
-<style>
+  <!-- iCheck -->
+  <link rel="stylesheet" href="{{asset('plugins/iCheck/flat/blue.css')}}">
+  <!-- select2 -->
+  <link rel="stylesheet" href="{{asset('plugins/select2/select2.min.css')}}">
+  <link rel="stylesheet" href="{{asset('/css/nice-select2.css')}}">
+  <style>
  
 
  .center {
@@ -253,6 +250,9 @@
 
 
 </style>
+
+<link rel="stylesheet" href="{{asset('flag.css')}}"/>
+
 @endpush
 @section('content')
 <!-- Content Header (Page header) -->
@@ -260,14 +260,13 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0 text-dark">Offer<small class="ml-3 mr-3">|</small><small>Offer Management</small></h1>
+        <h1 class="m-0 text-dark">Super Admins<small class="ml-3 mr-3">|</small><small>Super Admins Settings</small></h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><a href="{{url('/dashboard')}}"><i class="fa fa-dashboard"></i> {{trans('lang.dashboard')}}</a></li>
-          <li class="breadcrumb-item"><a href="{!! route('offers.index') !!}">Offer</a>
+          <li class="breadcrumb-item"><a href="{!! route('superAdminsBoard.index') !!}">Super Admins</a>
           </li>
-          <li class="breadcrumb-item active">Edit Offers</li>
         </ol>
       </div><!-- /.col -->
     </div><!-- /.row -->
@@ -282,47 +281,31 @@
   <div class="card">
     <div class="card-header">
       <ul class="nav nav-tabs align-items-end card-header-tabs w-100">
-        @can('offers.index')
         <li class="nav-item">
-          <a class="nav-link" href="{!! route('offers.index') !!}"><i class="fa fa-list mr-2"></i>Offer list</a>
+          <a class="nav-link" href="{!! route('superAdminsBoard.index') !!}"><i class="fa fa-list mr-2"></i>Admins List</a>
         </li>
-        @endcan
-        @can('offers.create')
         <li class="nav-item">
-          <a class="nav-link" href="{!! route('offers.create') !!}"><i class="fa fa-plus mr-2"></i>Create special Offer</a>
-        </li>
-        @endcan
-        <li class="nav-item">
-          <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-pencil mr-2"></i>Edit Offer</a>
+          <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-plus mr-2"></i>Create Admin</a>
         </li>
       </ul>
     </div>
-    <div class="subcategory" data-route="{{url('api/subcategory/select')}}"></div>
-    <div class="card-body">
-      {!! Form::model($offer, ['route' => ['offers.update', $offer->id], 'method' => 'PUT', 'enctype' => "multipart/form-data"]) !!}
+    <div class="card-body" data-route="{{url('api/user/select')}}">
+      {!! Form::open(['route' => 'superAdminsBoard.store','files' => true, 'enctype'=>"multipart/form-data", 'method' => 'post']) !!}
       <div class="row">
-        @include('special_offers.fields')
+        @include('settings.superadmins.fields')
       </div>
       {!! Form::close() !!}
       <div class="clearfix"></div>
     </div>
   </div>
 </div>
-@include('layouts.media_modal')
+@include('layouts.media_modal',['collection'=>null])
 @endsection
 @push('scripts_lib')
 <!-- iCheck -->
 <script src="{{asset('plugins/iCheck/icheck.min.js')}}"></script>
 <!-- select2 -->
 <script src="{{asset('plugins/select2/select2.min.js')}}"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{{asset('plugins/summernote/summernote-bs4.min.js')}}"></script>
-{{--dropzone--}}
-<script src="{{asset('plugins/dropzone/dropzone.js')}}"></script>
-<script type="text/javascript">
-    Dropzone.autoDiscover = false;
-    var dropzoneFields = [];
-</script>
 
 
 <script>
@@ -372,19 +355,10 @@ $(".uploader").change(function(){
 });
 
     </script>
+<script src="{{asset('/js/nice-select2.js')}}"></script>
 
 <script>
     var options = {searchable: true};
-    NiceSelect.bind(document.getElementById("brand"), options);
-</script>
-
-<script>
-    var options = {searchable: true};
-    NiceSelect.bind(document.getElementById("category"), options);
-</script>
-
-<script>
-    var options = {searchable: true};
-    NiceSelect.bind(document.getElementById("subcategory"), options);
+    NiceSelect.bind(document.getElementById("country"), options);
 </script>
 @endpush

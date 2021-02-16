@@ -17,7 +17,7 @@
 <!-- Google Font: Poppins -->
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,400i,700" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('css/custom.css')}}">
-    <link rel="icon" type="image/png" href="https://localhost/SHS/public/images/english_logo_inverted.png">
+    <link rel="icon" type="image/png" href="{{ asset('/images/english_logo_inverted.png') }}">
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">

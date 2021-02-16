@@ -4,17 +4,11 @@
     <link rel="stylesheet" href="{{asset('plugins/iCheck/flat/blue.css')}}">
     <!-- select2 -->
     <link rel="stylesheet" href="{{asset('plugins/select2/select2.min.css')}}">
-    <!-- bootstrap wysihtml5 - text editor -->
-
-    {{--dropzone--}}
-    <link rel="stylesheet" href="{{asset('plugins/dropzone/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{asset('/css/nice-select2.css')}}">
-@endpush
-@section('css_custom')
-<style>
+    <style>
 .center {
    display:inline;
-   margin: 3px;
+   /* margin: 3px; */
  }
 
  .form-input {
@@ -61,7 +55,23 @@
  }
  .small{
    color: firebrick;
- } 
+ }
+
+
+.content {
+  padding: 10px;
+}
+#view {
+  color: red;
+  cursor: pointer;
+}
+.hidden-content {
+  display: none;
+}
+.hidden-content .active {
+  display: block;
+}
+
 
 
  body {
@@ -149,14 +159,14 @@
             position: relative;
             left: 65px;
             margin-bottom: 4px;
-            
+
         }
 
         .space {
             margin-left: 15px;
         }
 
-        
+
         .stars-0:after { width: 0%; }
         .stars-1:after { width: 1%; }
         .stars-2:after { width: 2%; }
@@ -259,16 +269,16 @@
         .stars-99:after { width: 99%; }
         .stars-100:after { width: 100; }
         .own-padding {
-            padding-top:0px !important;    
+            padding-top:0px !important;
             width: 787px !important;
-            padding-left: 0px !important; 
+            padding-left: 0px !important;
             margin-left: -9px !important;
         }
         .box-profile .custom-star-edit {
-           
+
             margin-left: -11px !important;
        }
- 
+
 
   .center {
     display:inline;
@@ -319,7 +329,7 @@
   }
   .small{
     color: firebrick;
-  } 
+  }
     [type="file"] {
         height: 0;
         overflow: hidden;
@@ -510,9 +520,7 @@
 
 
 </style>
-
-
-    @endsection
+@endpush
 @section('content')
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -535,9 +543,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-3">
-
-                    <!-- Profile Image -->
-                    <div class="card ">
+                    <div class="card">
                         <div class="card-header">
                             <h3 class="card-title"><i class="fa fa-user mr-2"></i> {{trans('lang.user_about_me')}}</h3>
                         </div>
@@ -546,69 +552,52 @@
                                 <img src="{{$user->getFirstMediaUrl('avatar','icon')}}" class="profile-user-img img-fluid img-circle" alt="{{$user->name}}">
                             </div>
                             <h3 class="profile-username text-center">{{$user->name}}</h3>
-                            <p id="fixture" class="text-muted custom-star-edit">
-                            {{ $user->rating }}</p>
+
                             <p class="text-muted text-center">{{implode(', ',$rolesSelected)}}</p>
                             <a class="btn btn-outline-{{setting('theme_color')}} btn-block" href="mailto:{{$user->email}}"><i class="fa fa-envelope mr-2"></i>{{$user->email}}
                             </a>
                         </div>
                         <!-- /.card-body -->
                     </div>
-                    <!-- /.card -->
-
-                    <!-- About Me Box -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title"><i class="fa fa-list mr-2"></i>Working Hours</h3>
-                            </div>
-                            <!-- /.card-header -->
-                            <div class="card-body ">
-                                @foreach($user->days as $hour)
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                        <strong >{{ substr($hour->name_en,0,3)}}</strong>
-                                        </div>
-                                        <div class="col-md-5">
-
-                                        <strong style="font-size: 13px;">{{ date("g:i A",strtotime($hour->pivot->start))}}</strong>
-                                        </div>
-                                        <div class="col-md-4">
-                                        <strong style="font-size: 13px;">{{ date("g:i A",strtotime($hour->pivot->end)) }}</strong>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                            <!-- /.card-body -->
-                        </div>
-                    <!-- /.card -->
 
                     <!-- available-->
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title"><i class="fa fa-list mr-2"></i>Available Cities</h3>
+                            <h3 class="card-title"><i class="fa fa-list mr-2"></i>Residence City</h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body ">
                             <div class="row">
-                            @foreach($user->vendor_city as $city)
-
                                     <div class="col-md-6" style="margin-bottom: 8px;">
-                                        <strong>{{ $city->city_name}}</strong>
+                                        <strong>{{ $user->cities->city_name}}</strong>
                                     </div>
-
-                            @endforeach
                             </div>
                         </div>
                         <!-- /.card-body -->
                     </div>
                     <!-- /.card -->
 
-                    
-
-                   
+                    <!-- favorites-->
+                    <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title"><i class="fa fa-list mr-2"></i>Favorite service providers</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                 <div class="row">
+                                @foreach($user->vendorFavorite as $favorite)
+                                        <div class="col-md-12">
+                                        <strong><a data-toggle="tooltip" data-placement="bottom" title="Vendor Profile" href="{{ route('vendors.profile', ['id'=>$favorite->id]) }}" class='btn btn-link'>
+                                        <i class="fa fa-user mr-2"></i>{{ $favorite->name }} </a></strong>
+                                        </div>
+                                @endforeach
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                    <!-- /.card -->
 
                 </div>
-
                 <!-- /.col -->
                 <div class="col-md-9">
                     @include('flash::message')
@@ -624,118 +613,37 @@
                                 @hasrole('client')
                                 <div class="ml-auto d-inline-flex">
                                     <li class="nav-item">
-                                        <a class="nav-link pt-1" href="{!! route('restaurants.create') !!}"><i class="fa fa-check-o"></i> {{trans('lang.app_setting_become_restaurant_owner')}}</a>
+                                        <a class="nav-link pt-1" href="#"><i class="fa fa-check-o"></i> {{trans('lang.app_setting_become_restaurant_owner')}}</a>
                                     </li>
                                 </div>
                                 @endhasrole
                             </ul>
                         </div>
 
-                        <div class="card-body select_cities" data-route="{{url('api/user/select')}}">
-                            {!! Form::model($user, ['route' => ['users.update', $user->id], 'method' => 'patch']) !!}
+                        <div class="card-body">
+                            {!! Form::model($user, ['route' => ['adminsBoard.update', $user->id], 'method' => 'patch']) !!}
                             <div class="row">
-                                @include('settings.vendors.fields')
+                                @include('settings.admins.fields')
                             </div>
                             {!! Form::close() !!}
                             <div class="clearfix"></div>
                         </div>
-                        <div class="card-body">
-                            @include('settings.vendors.table')
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
-
-                </div>
-<div class="row">
-<div class="col-md-6">
-        <!-- users who added this vendor as a favorite-->
-        <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title"><i class="fa fa-list mr-2"></i> service provider</h3>
-                    <h6 style="font-size:11px"><i>Users who added this as a favorite </i></h6>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                        <div class="row">
-                    @foreach($favoriteVendor as $favorite)
-                    <div class="col-md-12">
-                        <strong>
-                        <i class="fa fa-user mr-2"></i>{{ $favorite->name }} </strong>
-                    </div>
-                    @endforeach
                     </div>
                 </div>
-                <!-- /.card-body -->
             </div>
-        <!-- /.card -->
-</div>
-                    
-<div class="col-md-6">
-
-<!-- favorites-->
-<div class="card">
-        <div class="card-header">
-            <h3 class="card-title"><i class="fa fa-list mr-2"></i>Favorite service providers</h3>
-        </div>
-        <!-- /.card-header -->
-        <div class="card-body">
-                <div class="row">
-            @foreach($user->vendorFavorite as $favorite)
-                    <div class="col-md-12">
-                    <strong><a data-toggle="tooltip" data-placement="bottom" title="Vendor Profile" href="{{ route('vendors.profile', ['id'=>$favorite->id]) }}" class='btn btn-link'>
-                    <i class="fa fa-user mr-2"></i>{{ $favorite->name }} </a></strong>
-                    </div>
-            @endforeach
-            </div>
-        </div>
-        <!-- /.card-body -->
-    </div>
-<!-- /.card -->
-</div> 
-</div>
-
-<div class="row">
-     <div class="col-md-12">
-        <!-- vendor special-offers-->
-        <div class="card">
-            <div class="card-header" style="background-color: #e4e4e4">
-                <h3 class="card-title"><i class="fa fa-list mr-2"></i>Special Offers</h3>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body" style="background-color: #ececec">
-                    <div class="row">
-                @foreach($user->specialOffers as $specialOffer)
-                        <div class="col-md-4" style="margin-bottom: 13px; ">
-                            <strong><img style="border-radius:8px" width='100%' height='100px' src="{{ asset('storage/specialOffersPic/' . $specialOffer->image)  }}" alt="Image not found"></strong>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="col-md-12">
-                                <h5><i><strong>{{ $specialOffer->title }}</strong></i></h5>
-                            </div>
-                            <div class="col-md-12">
-                                <p style="color:#9a969e"><strong>{{ $specialOffer->description }}</strong></p>
-                            </div>
-                        </div>
-                    
-                @endforeach
-                </div>
-            </div>
-            <!-- /.card-body -->
-        </div>
-    <!-- /.card -->
     </div>
 </div>
-                <div class="card-body own-padding">
-                    <div class="container mt-5 mb-5" style="margin-bottom:0px !important">
+            <div class="card-body own-padding">
+                    <div class="container mt-5 mb-5">
                         <div class="row height d-flex justify-content-center align-items-center">
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="p-3">
-                                        <h6>Reviews <span style="font-size: 12px;color: #777;">(Users who reviewd me)</span></h6>
+                                        <h6>My Reviews <span style="font-size: 12px;color: #777;">(All reviews that the user did for vendors)</span></h6>
                                     </div>
                                     <div class="mt-2">
 
-                   @foreach($user->clients as $client)
+                @foreach($user->vendors as $client)
                     @if($client->pivot->approved==1)
                         <?php
                         $sum = 0;
@@ -751,10 +659,10 @@
                     <div class="d-flex justify-content-between align-items-center">
                                 <div class="d-flex flex-row align-items-center"> <span class="mr-2">{{$client->name}}</span> <div id="fixture" >{{$sum}}</div> </div> <small>{{$client->pivot->created_at}}</small>
                             </div>
-                    </div> 
-                
+                    </div>
+
                         <div class="w-100">
-                        </div>    
+                        </div>
                             <p class="text-justify comment-text mb-0">{{$client->pivot->description}}</p>
                             <div class="d-flex flex-row user-feed" >
                                  <div class="space">
@@ -777,12 +685,12 @@
                                     <span class="wish">&nbsp;&nbsp;Knowledge Rating</span>
                                     <div id="fixture">{{$client->pivot->knowledge_rating}}</div>
                                  </div>
-                                    
-                               
+
+
                         </div>
                     </div>
                                             @endif
-                                         @endforeach
+    @endforeach
                                     </div>
                                 </div>
                             </div>
@@ -790,78 +698,6 @@
                     </div>
                     <div class="clearfix"></div>
                 </div>
-
-
-                <!-- Users I reviewd -->
-
-
-                <div class="card-body own-padding">
-                    <div class="container mt-5 mb-5"  style="margin-top: 0px !important;">
-                        <div class="row height d-flex justify-content-center align-items-center">
-                            <div class="col-md-12">
-                                <div class="card">
-                                    <div class="p-3">
-                                        <h6>Reviews <span style="font-size: 12px;color: #777;">(Service Providers I reviewd)</span></h6>
-                                    </div>
-                                    <div class="mt-2">
-
-                   @foreach($user->vendors as $client)
-                    @if($client->pivot->approved==1)
-                        <?php
-                        $sum = 0;
-                        $sum += $client->pivot->price_rating+$client->pivot->service_rating+$client->pivot->trust_rating+$client->pivot->speed_rating+$client->pivot->knowledge_rating;
-                        if($sum!=0)
-
-                    $sum=$sum/(5);
-                        ?>
-                    <div class="d-flex flex-row p-3" style="display: block !important;">
-
-                    <div class="pic-name">
-                    <img src="https://i.imgur.com/agRGhBc.jpg" width="40" height="40" class="rounded-circle mr-3" style="float:left">
-                    <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex flex-row align-items-center"> <span class="mr-2">{{$client->name}}</span> <div id="fixture" >{{$sum}}</div> </div> <small>{{$client->pivot->created_at}}</small>
-                            </div>
-                    </div> 
-                
-                        <div class="w-100">
-                        </div>    
-                            <p class="text-justify comment-text mb-0">{{$client->pivot->description}}</p>
-                            <div class="d-flex flex-row user-feed" >
-                                 <div class="space">
-                                    <span class="wish">Quality Rating</span>
-                                    <div id="fixture">{{$client->pivot->service_rating}}</div>
-                                 </div>
-                                 <div class="space">
-                                    <span class="wish">&nbsp;&nbsp;Price Rating</span>
-                                    <div id="fixture">{{$client->pivot->price_rating}}</div>
-                                 </div>
-                                 <div class="space">
-                                    <span class="wish">&nbsp;&nbsp;Speed Rating</span>
-                                    <div id="fixture">{{$client->pivot->speed_rating}}</div>
-                                 </div>
-                                 <div class="space">
-                                    <span class="wish">&nbsp;&nbsp;Trust Rating</span>
-                                    <div id="fixture">{{$client->pivot->trust_rating}}</div>
-                                 </div>
-                                 <div class="space">
-                                    <span class="wish">&nbsp;&nbsp;Knowledge Rating</span>
-                                    <div id="fixture">{{$client->pivot->knowledge_rating}}</div>
-                                 </div>
-                                    
-                               
-                        </div>
-                    </div>
-                                            @endif
-                                         @endforeach
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-
-            </div>
         </div>
     </section>
     @include('layouts.media_modal',['collection'=>null])
@@ -871,16 +707,22 @@
     <script src="{{asset('plugins/iCheck/icheck.min.js')}}"></script>
     <!-- select2 -->
     <script src="{{asset('plugins/select2/select2.min.js')}}"></script>
-    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script>
 
-    {{--dropzone--}}
-    <script src="{{asset('plugins/dropzone/dropzone.js')}}"></script>
-    <script type="text/javascript">
-        Dropzone.autoDiscover = false;
-        var dropzoneFields = [];
-    </script>
-@endpush
-@section('script')
+function showPreviewOne(event){
+  if(event.target.files.length > 0){
+    let src = URL.createObjectURL(event.target.files[0]);
+    let preview = document.getElementById("file-ip-1-preview");
+    preview.src = src;
+    preview.style.display = "block";
+  }
+}
+function myImgRemoveFunctionOne() {
+  document.getElementById("file-ip-1-preview").src = "https://i.ibb.co/ZVFsg37/default.png";
+}
+
+</script>
+
 
 <script>
 
@@ -907,6 +749,7 @@
     });
 
 </script>
+
 
 
 <script>
@@ -965,4 +808,4 @@ $(".uploader").change(function(){
     NiceSelect.bind(document.getElementById("country"), options);
 </script>
 
-    @endsection
+@endpush
