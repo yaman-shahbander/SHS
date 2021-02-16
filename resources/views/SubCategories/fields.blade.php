@@ -86,7 +86,7 @@
                       @if(Request::is('*edit') && $subcategory->image != null)
                         <img id="img-uploaded" class="img2" src="{{asset('storage/subcategoriesPic' ."/" . $subcategory->image)}}" alt="your image" />
                       @else
-                        <img id="img-uploaded" class="img2" src="{{asset('storage/Avatar/avatar.png')}}" alt="your image" />
+                        <img id="img-uploaded" class="img2" src="{{asset('storage/subcategoriesPic/default.png')}}" alt="your image" />
                       @endif
                     </div>
                     

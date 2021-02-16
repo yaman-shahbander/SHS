@@ -46,7 +46,12 @@ class SpecialOffersDataTable extends DataTable
                 return $special->subcategories->categories->name;
             })
             ->editColumn('image', function ($special) {
-                return '<img src='. asset('storage/specialOffersPic') . '/' . $special->image.' style="width: 82px; height: 65px !important;">';
+                if ($special->image != null) {
+                    return '<img src='. asset('storage/specialOffersPic') . '/' . $special->image.' style="width: 82px; height: 65px !important;">';
+                } else {
+                    return '<img width="80px" height="80px" src='. asset("storage/specialOffersPic/default.jpg") . '>';
+                }
+                
             })
             ->addColumn('action', 'special_offers.datatables_actions')
             ->editColumn('user_id', function ($special) {

@@ -95,7 +95,7 @@
                                 <img id="img-uploaded" class="img2" src="{{asset('storage/specialOffersPic' . "/" . $offer->image)}}" alt="your image" />
                             @endif
                         @else
-                            <img id="img-uploaded" class="img2" src="{{asset('storage/Avatar/avatar.png')}}" alt="your image" />
+                            <img id="img-uploaded" class="img2" src="{{asset('storage/specialOffersPic/default.png')}}" alt="your image" />
                         @endif
                       
                     </div>

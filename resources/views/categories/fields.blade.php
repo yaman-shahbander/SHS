@@ -70,7 +70,7 @@
                       @if(Request::is('*edit') && $category->image != null)
                         <img id="img-uploaded" class="img2" src="{{asset('storage/categoriesPic' ."/" . $category->image)}}" alt="your image" />
                       @else
-                        <img id="img-uploaded" class="img2" src="{{asset('storage/Avatar/avatar.png')}}" alt="your image" />
+                        <img id="img-uploaded" class="img2" src="{{asset('storage/categoriesPic/default.jpg')}}" alt="your image" />
                       @endif
                     </div>
                     
