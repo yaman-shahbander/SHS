@@ -43,7 +43,7 @@ $userLongitude=null;
                     $respone[$i]['latitude'] = $attr->coordinates!=null? $attr->coordinates->latitude:null;
                     $respone[$i]['longitude'] = $attr->coordinates!=null? $attr->coordinates->longitude:null;
 
-                    $respone[$i]['distance'] = $attr->coordinates!=null ? round(distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude))) : null;
+                    $respone[$i]['distance'] = $attr->coordinates!=null ? round(distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)),2) : null;
                     $i++;
                 }
                 return $this->sendResponse($respone, 'favorites retrieved successfully');

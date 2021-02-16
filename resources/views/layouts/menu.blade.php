@@ -35,7 +35,7 @@
                             <i class="nav-icon fa fa-user"></i>@endif<p>{{trans('lang.normal_admins')}}</p></a>
                 </li>
             @endcan
-            @can('superAdmin')
+            @can('superAdmin.index')
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('superAdmin*') ? 'active' : '' }}" href="{!! route('superAdmin') !!}">@if($icons)
                             <i class="nav-icon fa fa-user"></i>@endif<p>{{trans('lang.super_admins')}}</p></a>
@@ -88,7 +88,7 @@
         </li>
     @endcan
 
- @can('sales_man.index')
+ @can('delegate.index')
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('sales_man*') ? 'active' : '' }}" href="{!! route('sales_man.index') !!}">@if($icons)
                     <i class="nav-icon fa fa-handshake-o"></i>@endif<p>{{trans('lang.delegates')}}</p></a>

@@ -36,7 +36,7 @@ class SubCategoryController extends Controller
             $i=0;
             foreach ($subcategories as $subcategory)
             {
-                try{    $response[$i]['photo']=$subcategory->media[0]->getUrlAttribute();
+                try{    $response[$i]['photo']=asset('storage/subcategoriesPic').'/'.($subcategory->image==null?'image_default.png':$subcategory->image);
                 }
                 catch (\Exception $e) {
                     $response[$i]['photo']=url('images/image_default.png');

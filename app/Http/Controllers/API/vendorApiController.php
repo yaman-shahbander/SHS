@@ -82,7 +82,7 @@ class vendorApiController extends Controller
 
                     }
                     else{
-                       
+
 
                         $featuredVendor=null;
 
@@ -105,7 +105,7 @@ if($maxBalanceId!=0){
                                 'avatar' => asset('storage/Avatar').'/'.$featuredVendor[0]->avatar
                             ];
 }
-                            
+
                 }
 //                asset('storage/Avatar').'/'.$attr->avatar;
                 catch (\Exception $e){
@@ -127,10 +127,10 @@ if($maxBalanceId!=0){
                             $query->where('subcategory_id', $id);
                         })->get();
 
-                        
+
 
                         $vendors = $Allvendors;
-                        
+
 
                     }
                    else { // Availibility first
@@ -160,7 +160,7 @@ $vendors=$vendors->where('city_id',$user->city_id);
                         'latitude' => $vendor->coordinates!=null? $vendor->coordinates->latitude:null,
                         'longitude' => $vendor->coordinates!=null? $vendor->coordinates->longitude:null,
 
-                        'distance' =>$vendor->coordinates!=null && $userLatitude !=null? round(distance(floatval($userLatitude), floatval($userLongitude), floatval($vendor->coordinates->latitude), floatval($vendor->coordinates->longitude))) : null,
+                        'distance' =>$vendor->coordinates!=null && $userLatitude !=null? round(distance(floatval($userLatitude), floatval($userLongitude), floatval($vendor->coordinates->latitude), floatval($vendor->coordinates->longitude)),2) : null,
 
                         'avatar' => asset('storage/Avatar').'/'.$vendor->avatar
                     ];
@@ -256,7 +256,7 @@ $vendors=$vendors->where('city_id',$user->city_id);
                 'reviews'        => $reviews,
                 'working_hours'  => $vendor->daysApi->transform(function($q){
                     $q['check'] =1;
-                    
+
                     $q['name'] =$q['name_en'];
                     $q['workHours'] = [
                     'start' => date("g:i A",strtotime($q->start)),
@@ -280,7 +280,7 @@ $vendors=$vendors->where('city_id',$user->city_id);
             return $this->sendError('nothing to process', 401);
 
     }
-    
+
 
 
     public function categorySubCatFunc(Request $request) {

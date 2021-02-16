@@ -27,72 +27,8 @@ class HomeController extends Controller
     public function index()
     {
         // return view('test');
-        echo "<html>
-        <head>
-            <title>Phone Number Authentication with Firebase Web</title>
-        </head>
-        <body>
-        <h1>Enter number to create account</h1>
 
-            <input type=\"text\" id=\"number\" placeholder=\"+923********\">
-            <div id=\"recaptcha-container\"></div>
-                <button type=\"button\" onclick=\"codeverify();\">SendCode</button>
-                <button type=\"button\" onclick=\"phoneAuth();\">SendCode</button>
-
-        <script src=\"https://www.gstatic.com/firebasejs/6.0.2/firebase.js\"></script>
-
-<!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#config-web-app -->
-
-<script>
-    // Your web app's Firebase configuration
-    var firebaseConfig = {
-        apiKey: \"AIzaSyCeegLauQXoNxdVWRlppYRa6NeQJ7YXAkQ\",
-    authDomain: \"any-253ae.firebaseapp.com\",
-    projectId: \"any-253ae\",
-    storageBucket: \"any-253ae.appspot.com\",
-    messagingSenderId: \"310748276905\",
-    appId: \"1:310748276905:web:65b9071dafff0f21bea1b8\"
-    };
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-</script>
-
-
-        <script type=\"text/javascript\">
- var conprovider;
-
-
-          function phoneAuth() {
-                  applicationVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-        'size': 'invisible',
-        'callback': function (response) {
-            // reCAPTCHA solved, allow signInWithPhoneNumber.
-            console.log('recaptcha resolved');
-        }
-    });
- var provider = new firebase.auth.PhoneAuthProvider();
-conprovider=provider.verifyPhoneNumber('+963968071098', applicationVerifier)
-
-          }
-          
-          function codeverify() {
-           firebase.auth.PhoneAuthProvider('+963968071098').then(function(verificationId) {
-      var verificationCode = window.prompt('Please enter the verification ' +
-          'code that was sent to your mobile device.');
-      return firebase.auth.PhoneAuthProvider.credential(verificationId,
-          verificationCode);
-    })
-   .then(function(phoneCredential) {
-      return firebase.auth().signInWithCredential(phoneCredential);
-              }).catch(function (error) {
-                  alert(error.message);
-              });
-          } </script>
-
-          </body>
-</html>";
-        return 111;
+        return redirect('/');
 
     }
 

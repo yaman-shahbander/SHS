@@ -47,11 +47,11 @@ class CategoryAPIController extends Controller
             try {
 
 
-        $categories = $this->categoryRepository->all(['id','name','description'])->makeHidden(['custom_fields','has_media','media'])->transform(function($q){
+        $categories = $this->categoryRepository->all(['id','name','image','description'])->makeHidden(['custom_fields','has_media','media'])->transform(function($q){
             $q->subCategory->transform(function($q){
                 try{
 
-                    $q['image']=$q->media[0]->getUrlAttribute();
+                    $q['image']=asset('storage/subcategoriesPic').'/'.($q->image==null?'image_default.png':$q->image);
                 }
                 catch (\Exception $e) {
                     $q['image']=url('images/image_default.png');
@@ -60,7 +60,7 @@ class CategoryAPIController extends Controller
             });
             try{
 
-                $q['image']=$q->media[0]->getUrlAttribute();
+                $q['image']=asset('storage/categoriesPic').'/'.($q->image==null?'image_default.png':$q->image);
             }
             catch (\Exception $e) {
                 $q['image']=url('images/image_default.png');
@@ -128,7 +128,7 @@ class CategoryAPIController extends Controller
 
     }
 
-    
+
 
     /**
      * Update the specified Category in storage.

@@ -607,7 +607,7 @@ class UserAPIController extends Controller
                 $respone[$i]['latitude'] = $attr->coordinates!=null? $attr->coordinates->latitude:null;
                 $respone[$i]['longitude'] = $attr->coordinates!=null? $attr->coordinates->longitude:null;
 
-                $respone[$i]['distance'] = $attr->coordinates!=null && $userLatitude !=null? round(distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude))) : null;
+                $respone[$i]['distance'] = $attr->coordinates!=null && $userLatitude !=null? round(distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)),2) : null;
 
                 //  $respone[$i]['distance'] = $attr->coordinates ? distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)) : 'No coordinates provided for the current vendor';
                 $i++;
@@ -835,7 +835,7 @@ class UserAPIController extends Controller
 //                });
                 if($user->city_id==null){
                     $response = [
-                        'notification'=> $user->notification,
+                        'notification'=>$user->notification==1?true:false,
                         'lang' => $user->language,
                         'city_id' => '',
                         'country_id' =>  ''
@@ -844,7 +844,7 @@ class UserAPIController extends Controller
                 }
                 else
                 $response = [
-                    'notification'=> $user->notification,
+                    'notification'=>$user->notification==1?true:false,
                     'lang' => $user->language,
                     'city_id' => $user->city_id,
                     'country_id' =>  (Country::find($user->cities->country_id))->id

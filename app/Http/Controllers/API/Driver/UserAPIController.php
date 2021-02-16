@@ -636,6 +636,7 @@ class UserAPIController extends Controller
 //                });
                 if($user->city_id==null){
                     $response = [
+                        'notification'=>$user->notification==1?true:false,
                         'lang' => $user->language,
                         'city_id' => '',
                         'country_id' =>  ''
@@ -644,6 +645,7 @@ class UserAPIController extends Controller
                 }
                 else
                     $response = [
+                        'notification'=>$user->notification==1?true:false,
                         'lang' => $user->language,
                         'city_id' => $user->city_id,
                         'country_id' =>  (Country::find($user->cities->country_id))->id
