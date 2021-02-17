@@ -155,8 +155,6 @@
         .space {
             margin-left: 15px;
         }
-
-        
         .stars-0:after { width: 0%; }
         .stars-1:after { width: 1%; }
         .stars-2:after { width: 2%; }
@@ -262,7 +260,7 @@
             padding-top:0px !important;    
             width: 787px !important;
             padding-left: 0px !important; 
-            margin-left: 256px !important;
+            margin-left: -9px !important;
         }
         .box-profile .custom-star-edit {
            
@@ -473,7 +471,6 @@
     .left .img2 {
         width: 88%;
     }
-
     .img-holder {
         display: block;
         vertical-align: middle;
@@ -645,7 +642,7 @@
                         </div>
                     </div>
 
-                </div>
+                    </div>
 <div class="row">
 <div class="col-md-6">
         <!-- users who added this vendor as a favorite-->
@@ -695,7 +692,7 @@
 </div>
 
 <div class="row">
-     <div class="col-md-12 own-padding" style="max-width:775px">
+     <div class="col-md-12">
         <!-- vendor special-offers-->
         <div class="card">
             <div class="card-header" style="background-color: #e4e4e4">
@@ -735,7 +732,7 @@
                                     </div>
                                     <div class="mt-2">
 
-                   @foreach($user->clients as $client)
+                                    @foreach($user->clients as $client)
                     @if($client->pivot->approved==1)
                         <?php
                         $sum = 0;
@@ -804,8 +801,7 @@
                                         <h6>Reviews <span style="font-size: 12px;color: #777;">(Service Providers I reviewd)</span></h6>
                                     </div>
                                     <div class="mt-2">
-
-                   @foreach($user->vendors as $client)
+                                    @foreach($user->vendors as $client)
                     @if($client->pivot->approved==1)
                         <?php
                         $sum = 0;
@@ -890,79 +886,79 @@
             $(document).find($("[id=fixture]")).each(function() {
                // alert($(".wish div").text());
 
-                function addScore(score, $domElement) {
+               function addScore(score, $domElement) {
 
-                    $("<span class='stars-container'>")
-                        .addClass("stars-" + score.toString())
-                        .text("★★★★★")
-                        .appendTo($domElement);
-                }
-                var star = Math.round(parseInt($(this).text()));
-                $(this).text('');
+$("<span class='stars-container'>")
+    .addClass("stars-" + score.toString())
+    .text("★★★★★")
+    .appendTo($domElement);
+}
+var star = Math.round(parseInt($(this).text()));
+$(this).text('');
 
-                addScore(star, $(this))
-            });
-        },100);
+addScore(star, $(this))
+});
+},100);
 
-    });
+});
 
 </script>
 
 
 <script>
 var h=1;
-        /*----------------------------------------
-        Upload btn
-        ------------------------------------------*/
-        var SITE = SITE || {};
+/*----------------------------------------
+Upload btn
+------------------------------------------*/
+var SITE = SITE || {};
 
 SITE.fileInputs = function() {
-    var $this = $(this),
-        $val = $this.val(),
-        valArray = $val.split('\\'),
-        newVal = valArray[valArray.length-1],
-        $button = $this.siblings('.btn2'),
-        $fakeFile = $this.siblings('.file-holder');
-    if(newVal !== '') {
-        $button.text('Photo Chosen');
-        if($fakeFile.length === 0) {
+var $this = $(this),
+$val = $this.val(),
+valArray = $val.split('\\'),
+newVal = valArray[valArray.length-1],
+$button = $this.siblings('.btn2'),
+$fakeFile = $this.siblings('.file-holder');
+if(newVal !== '') {
+$button.text('Photo Chosen');
+if($fakeFile.length === 0) {
 
-            $('.newimg.img-path').val(newVal);
-        } else {
-            $fakeFile.text(newVal);
-        }
-    }
+$('.newimg.img-path').val(newVal);
+} else {
+$fakeFile.text(newVal);
+}
+}
 };
 
 
 $('.file-wrapper input[type=file]').bind('change focus click', SITE.fileInputs);
 
 function readURL(input) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        var tmppath = URL.createObjectURL(event.target.files[0]);
+if (input.files && input.files[0]) {
+var reader = new FileReader();
+var tmppath = URL.createObjectURL(event.target.files[0]);
 
-        reader.onload = function (e) {
-            $('#img-uploaded').attr('src', e.target.result);
+reader.onload = function (e) {
+$('#img-uploaded').attr('src', e.target.result);
 
-        }
+}
 
-        reader.readAsDataURL(input.files[0]);
-    }
+reader.readAsDataURL(input.files[0]);
+}
 }
 
 $(".uploader").change(function(){
-    readURL(this);
+readURL(this);
 });
 
-    </script>
+</script>
 
 
 <script src="{{asset('/js/nice-select2.js')}}"></script>
 
 <script>
-    var options = {searchable: true};
-    NiceSelect.bind(document.getElementById("country"), options);
+var options = {searchable: true};
+NiceSelect.bind(document.getElementById("country"), options);
 </script>
 
-    @endsection
+@endsection
