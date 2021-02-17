@@ -130,6 +130,7 @@ class AdminController extends Controller
 
         $input['user_id']=Auth()->user()->id;
         $input['password'] = Hash::make($input['password']);
+        $input['description'] = $request->description;
 
         while(true) {
             $payment_id = '#' . rand(1000, 9999) . rand(1000, 9999);
@@ -321,9 +322,10 @@ class AdminController extends Controller
             return redirect()->back();
         }
         $input = $request->all();
-
+        return dd($input);
         $input['user_id']=Auth()->user()->id;
         $input['password'] = Hash::make($input['password']);
+        $input['description'] = $request->description;
 
             $input['language'] = $request->input('language') == null ? '' : $request->input('language', '');
             $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');

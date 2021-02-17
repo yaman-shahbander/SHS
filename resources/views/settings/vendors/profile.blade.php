@@ -262,7 +262,7 @@
             padding-top:0px !important;    
             width: 787px !important;
             padding-left: 0px !important; 
-            margin-left: -9px !important;
+            margin-left: 256px !important;
         }
         .box-profile .custom-star-edit {
            
@@ -695,7 +695,7 @@
 </div>
 
 <div class="row">
-     <div class="col-md-12">
+     <div class="col-md-12 own-padding" style="max-width:775px">
         <!-- vendor special-offers-->
         <div class="card">
             <div class="card-header" style="background-color: #e4e4e4">

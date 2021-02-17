@@ -28,7 +28,8 @@ class VendorRepository extends BaseRepository
         'store_id',
         'role_id',
         'user_id',
-        'remember_token'
+        'remember_token',
+        'description'
     ];
 
     /**
