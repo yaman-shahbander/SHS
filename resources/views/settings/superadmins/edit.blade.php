@@ -1,4 +1,5 @@
-@extends('layouts.settings.default')
+@extends('layouts.app')
+@section('settings_title',trans('lang.user_table'))
 @push('css_lib')
 <!-- iCheck -->
 <link rel="stylesheet" href="{{asset('plugins/iCheck/flat/blue.css')}}">
@@ -257,10 +258,31 @@
 
 @endpush
 @section('settings_title',trans('lang.user_table'))
-@section('settings_content')
+@section('content')
+ <!-- Content Header (Page header) -->
+ <div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">Super Admins<small class="ml-3 mr-3">|</small><small> Settings</small></h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{{url('/dashboard')}}"><i class="fa fa-dashboard"></i> {{trans('lang.dashboard')}}</a></li>
+          <li class="breadcrumb-item"><a href="{!! route('superAdminsBoard.index') !!}">Super Admins</a>
+          </li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+  
+  <div class="content">
+  <div class="clearfix"></div>
   @include('flash::message')
   @include('adminlte-templates::common.errors')
-  <div class="clearfix"></div>
   <div class="card">
     <div class="card-header">
       <ul class="nav nav-tabs align-items-end card-header-tabs w-100">
@@ -284,6 +306,7 @@
       <div class="clearfix"></div>
     </div>
   </div>
+</div>
 </div>
 @include('layouts.media_modal',['collection'=>null])
 @endsection

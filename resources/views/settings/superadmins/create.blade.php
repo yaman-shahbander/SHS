@@ -282,10 +282,10 @@
     <div class="card-header">
       <ul class="nav nav-tabs align-items-end card-header-tabs w-100">
         <li class="nav-item">
-          <a class="nav-link" href="{!! route('superAdminsBoard.index') !!}"><i class="fa fa-list mr-2"></i>Admins List</a>
+          <a class="nav-link" href="{!! route('superAdminsBoard.index') !!}"><i class="fa fa-list mr-2"></i>Super Admins List</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-plus mr-2"></i>Create Admin</a>
+          <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-plus mr-2"></i>Create Super Admin</a>
         </li>
       </ul>
     </div>

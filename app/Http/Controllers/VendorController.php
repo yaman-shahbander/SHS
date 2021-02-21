@@ -228,6 +228,20 @@ class VendorController extends Controller
             Flash::warning('please select country and city ');
             return redirect()->back();
         }
+
+        if ($request->input('email') == null && $request->input('phone') == null) {
+            Flash::error('Either email or phone should be filled!');
+            return redirect()->back();
+        }
+
+        if ($request->input('website')) {
+            if(!filter_var($request->input('website'), FILTER_VALIDATE_URL)) {
+                Flash::error('Enter a valid url');
+                return redirect()->back();
+            }
+        }
+        
+
         $input = $request->all();
 
         $input['user_id']=Auth()->user()->id;

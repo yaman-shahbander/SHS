@@ -68,7 +68,7 @@
         <div class="form-group col-md-6 row">
             {!! Form::label('email', trans("lang.user_email"), ['class' => 'col-3 control-label']) !!}
             <div class="col-md-9">
-                {!! Form::text('email', null,  ['class' => 'form-control','placeholder'=>  trans("lang.user_email_placeholder"), 'required']) !!}
+                {!! Form::text('email', null,  ['class' => 'form-control','placeholder'=>  trans("lang.user_email_placeholder")]) !!}
             </div>
         </div>
 
@@ -77,6 +77,30 @@
             {!! Form::label('password', trans("lang.user_password"), ['class' => 'col-md-3 control-label']) !!}
             <div class="col-md-9">
                 {!! Form::password('password', ['class' => 'form-control','placeholder'=>  trans("lang.user_password_placeholder")]) !!}
+            </div>
+        </div>
+
+        <!-- phone Field -->
+        <div class="form-group col-md-6 row">
+            {!! Form::label('phone', "phone", ['class' => 'col-md-3 control-label']) !!}
+            <div class="col-md-9">
+                {!! Form::text('phone',null , ['class' => 'form-control','placeholder'=>  "Insert phone number"]) !!}
+            </div>
+        </div>
+
+        <!-- website Field -->
+        <div class="form-group col-md-6 row">
+            {!! Form::label('website', "Website", ['class' => 'col-md-3 control-label']) !!}
+            <div class="col-md-9">
+                {!! Form::url('website',null ,['class' => 'form-control','placeholder'=>  "Insert website url"]) !!}
+            </div>
+        </div>
+
+        <!-- address Field -->
+        <div class="form-group col-md-6 row">
+            {!! Form::label('address', "Address", ['class' => 'col-md-3 control-label']) !!}
+            <div class="col-md-9">
+                {!! Form::text('address', null ,['class' => 'form-control','placeholder'=>  "Insert physical address"]) !!}
             </div>
         </div>
         <!-- Roles Field -->

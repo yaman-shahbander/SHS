@@ -296,7 +296,7 @@
       </ul>
     </div>
 
-    <div class="select_cities" data-route="{{url('api/user/select')}}">
+    <div class="card-body" data-route="{{url('api/user/select')}}">
       {!! Form::open(['route' => 'vendors.store','enctype'=>"multipart/form-data"]) !!}
 
       <div class="row">
