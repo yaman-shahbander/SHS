@@ -366,3 +366,36 @@ INSERT INTO users (id, name, email, active_status, dark_mode, messenger_color, a
 (93, 'adel', NULL, 0, false, '#2180f3', 'avatar.png', '$2y$10$dMVfSmzxGMN1/MtT7gcDTOhagA9Pk.IJt2sP2INhLEcWWrGOW47Zm', NULL, NULL, '39335b8e86841ad1228abae1a5b43bb41364', 'en', NULL, 0, '7300', '2021-02-08 16:02:43', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-02-08 15:47:43', '2021-02-08 15:47:43', NULL, 'adel-kweifati@outlook.com', '', 1, NULL, NULL, ' ', NULL, 'background.jpg', NULL, NULL, '', NULL, 0, '', '', true),
 (94, 'here my owner name', 'adel-kweifati@outlook.com', 0, false, '#2180f3', 'avatar.png', '$2y$10$DMiwMzXO/iN/PxGT7N68e./JBiCWiq6CDq022/p6.brFbDjXO48cm', NULL, NULL, '39340fe8cc62edcbe64c60a9850ddad54fc5', 'ar', NULL, 1, '6245', '2021-02-08 16:07:31', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-02-08 15:52:31', '2021-02-08 18:39:17', 6, '', '', 1, NULL, NULL, 'here about me', NULL, 'background.jpg', NULL, NULL, '', 'new caption', 0, '', 'here my business name', false),
 (95, 'maher', NULL, 0, false, '#2180f3', 'avatar.png', '$2y$10$seTc4Sxk6JHnpD2YlJLd6eTz5VDMy8MjTymMJx4JN9oqhxWvxn3HS', NULL, NULL, '39350d9874d29762dd8e212826048da73325', 'ar', NULL, 0, '4663', '2021-02-09 23:26:31', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-02-09 23:11:31', '2021-02-09 23:11:31', NULL, '66888', '', 1, NULL, NULL, ' ', NULL, 'background.jpg', NULL, NULL, '', NULL, 0, '', '', true);
+
+
+
+
+
+Hi $user->name!
+
+Thank you for choosing Smart Home Services .
+
+Your verification code is $user->activation_code.
+
+Enter this code in our our app to activate your account.
+
+If you have any questions, send us an email.
+
+if it wasn't you who submitted your email address in the first place ,
+well then that's messed up and  we're sorry ,
+Simply ignore this email and don't copy the code above,You will not receive any emails from us.
+
+We’re glad you’re here!
+The Smart Home Services team
+
+
+Thank you for choosing [customer portal] to deal with [client’s pain point].
+
+The [customer portal] offers all of the information you need to get the most out of our [product/service]] and much more.
+
+To access your account, click on the big [color] button:
+
+[Button]
+
+Once again – thank you for joining our [customer portal] family!
+

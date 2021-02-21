@@ -38,9 +38,9 @@ class ReviewsAPIController extends Controller
 
             if ($validator->fails()) {
 
-                $response = array("status" => 400, "message" => $validator->errors()->first(), "data" => array());
+//                $response = array("status" => 400, "message" => $validator->errors()->first(), "data" => array());
 
-                return $this->sendResponse($response, 'Error');
+                return $this->sendError($validator->errors()->first(),400);
 
             } else {
                 $input['client_id'] = $user->id;

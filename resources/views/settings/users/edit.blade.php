@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="{{asset('/css/nice-select2.css')}}">
 
 <style>
- 
+
 
   .center {
     display:inline;
@@ -62,7 +62,7 @@
   }
   .small{
     color: firebrick;
-  } 
+  }
     [type="file"] {
         height: 0;
         overflow: hidden;
@@ -276,7 +276,7 @@
       </ul>
     </div>
     <div class="card-body" data-route="{{url('api/user/select')}}">
-      {!! Form::model($user, ['route' => ['users.update', $user->id], 'method' => 'patch']) !!}
+      {!! Form::model($user, ['route' => ['users.update', $user->id], 'method' => 'patch','enctype'=>"multipart/form-data"]) !!}
       <div class="row">
         @include('settings.users.fields')
       </div>

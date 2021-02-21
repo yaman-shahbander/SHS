@@ -33,7 +33,7 @@ class Category extends Model implements HasMedia
     }
 
     public $table = 'categories';
-    
+
 
 
     public $fillable = [
@@ -42,6 +42,7 @@ class Category extends Model implements HasMedia
         'name_ar',
         'description',
         'description_en',
+        'description_ar',
         'image'
     ];
 
@@ -75,7 +76,7 @@ class Category extends Model implements HasMedia
     protected $appends = [
         'custom_fields',
         'has_media'
-        
+
     ];
 
     /**

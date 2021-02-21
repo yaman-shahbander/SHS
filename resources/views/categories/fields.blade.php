@@ -37,7 +37,7 @@
     <div class="form-group row col-md-6">
           {!! Form::label('description_ar', 'Description AR', ['class' => 'col-3 control-label ']) !!}
           <div class="col-9">
-          {!! Form::textarea('description_ar', Request::is('*edit') ? $category->name_ar : null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'style' => 'height:100px', 'required']) !!}
+          {!! Form::textarea('description_ar', null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'style' => 'height:100px', 'required']) !!}
             <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
           </div>
         </div>
@@ -73,7 +73,7 @@
                         <img id="img-uploaded" class="img2" src="{{asset('storage/categoriesPic/default.png')}}" alt="your image" />
                       @endif
                     </div>
-                    
+
                      <div class="right">
 
                       <input type="text" class="img-path newimg" placeholder="Image Path">
@@ -132,9 +132,9 @@
       dropzoneFields['image'] = dz_var15866134771240834480ble;
   </script>
   @endprepend
-  </div>  
   </div>
-  
+  </div>
+
 
 
 

@@ -237,6 +237,7 @@ $vendors=$vendors->where('city_id',$user->city_id);
                 $reviews[$i]['name'] = $attr->name;
                 $reviews[$i]['avatar'] = asset('storage/Avatar').'/'.$attr->avatar;
                 $reviews[$i]['last_name'] = $attr->last_name;
+                $reviews[$i]['rating'] = sprintf("%.1f",round((getFullRating(reviews::find($attr->pivot->id))/20)*2)/2);
                 $reviews[$i]['description'] = $attr->pivot->description;
                 $i++;
             }
@@ -250,6 +251,8 @@ $vendors=$vendors->where('city_id',$user->city_id);
                 'phone'          => $vendor->phone,
                 'avatar'         => asset('storage/Avatar').'/'.$vendor->avatar,
                 'background'         => asset('storage/vendors_background').'/'. $vendor->background_profile,
+                'address'        => $vendor->address,
+                'website'        => $vendor->website,
                 'subcategories'  => $vendor->subcategoriesApi->makeHidden('pivot'),
                 'offers'         => $vendor->specialOffers->makeHidden(['user_id', 'created_at', 'updated_at']),
                 'reviews_count'  => count($reviews),

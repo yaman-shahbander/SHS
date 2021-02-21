@@ -129,7 +129,22 @@ class UserAPIController extends Controller
                             $mail->isHTML(true);
 
                             $mail->Subject = 'SHS - Verification Code';
-                            $mail->Body = 'Your verification code is: ' . $user->activation_code;
+                            $mail->Body = "<p style='color:black !important;'>Hi $user->name! <br>
+
+Thank you for choosing Smart Home Services .<br>
+
+Your verification code is $user->activation_code.<br>
+
+Enter this code in our app to activate your account.<br>
+
+If you have any questions, send us an email.<br>
+
+if it wasn't you who submitted your email address in the first place ,<br>
+well then that's messed up and  we're sorry ,<br>
+Simply ignore this email and don't copy the code above,You will not receive any emails from us.<br>
+
+We’re glad you’re here!<br>
+The Smart Home Services team</p>";
 
                             $mail->send();
                             $user->save();
@@ -227,7 +242,7 @@ class UserAPIController extends Controller
             }
             $user = new User;
             $user->name = $request->input('first_name');
-            $user->last_name = $request->input('last_name');
+          //  $user->last_name = $request->input('last_name');
             $user->email = $request->input('email');
            while(true) {
             $payment_id = '#' . rand(1000, 9999) . rand(1000, 9999);
@@ -308,7 +323,22 @@ class UserAPIController extends Controller
                     $mail->isHTML(true);
 
                     $mail->Subject = 'SHS - Verification Code';
-                    $mail->Body    = 'Your verification code is: ' . $user->activation_code;
+                    $mail->Body    = "<p style='color:black !important;'>Hi $user->name! <br>
+
+Thank you for choosing Smart Home Services .<br>
+
+Your verification code is $user->activation_code.<br>
+
+Enter this code in our app to activate your account.<br>
+
+If you have any questions, send us an email.<br>
+
+if it wasn't you who submitted your email address in the first place ,<br>
+well then that's messed up and  we're sorry ,<br>
+Simply ignore this email and don't copy the code above,You will not receive any emails from us.<br>
+
+We’re glad you’re here!<br>
+The Smart Home Services team</p>";
 
                     $mail->send();
 

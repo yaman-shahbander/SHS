@@ -96,6 +96,7 @@ Route::prefix('vendor')->group(function () {
     Route::post('photoProfile', 'API\Manager\UserAPIController@backgroundPic');
     //vendor profile
     Route::get('vendorProfile', 'API\Manager\UserAPIController@vendorprofile');
+    Route::get('viewProfile', 'API\Manager\UserAPIController@viewprofile');
     //vendor profile
     Route::post('saveVednorData', 'API\Manager\UserAPIController@completeRegistration');
     //categories with subcategories API

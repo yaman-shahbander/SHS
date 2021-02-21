@@ -139,7 +139,24 @@ class UserAPIController extends Controller
                         $mail->isHTML(true);
 
                         $mail->Subject = 'SHS - Verification Code';
-                        $mail->Body = 'Your verification code is: ' . $user->activation_code;
+
+
+                        $mail->Body = "<p style='color:black !important;'>Hi $user->name! <br>
+
+Thank you for choosing Smart Home Services .<br>
+
+Your verification code is $user->activation_code.<br>
+
+Enter this code in our app to activate your account.<br>
+
+If you have any questions, send us an email.<br>
+
+if it wasn't you who submitted your email address in the first place ,<br>
+well then that's messed up and  we're sorry ,<br>
+Simply ignore this email and don't copy the code above,You will not receive any emails from us.<br>
+
+We’re glad you’re here!<br>
+The Smart Home Services team</p>";
 
                         $mail->send();
                         $user->save();
@@ -223,7 +240,7 @@ class UserAPIController extends Controller
             }
             $user = new User;
             $user->name = $request->input('first_name');
-            $user->last_name = $request->input('last_name');
+           // $user->last_name = $request->input('last_name');
             $user->email = $request->input('email');
 //            $user->city_id = $request->input('city_id');
             while(true) {
@@ -306,7 +323,22 @@ class UserAPIController extends Controller
                     $mail->isHTML(true);
 
                     $mail->Subject = 'SHS - Verification Code';
-                    $mail->Body = 'Your verification code is: ' . $user->activation_code;
+                    $mail->Body = "<p style='color:black !important;'>Hi $user->name! <br>
+
+Thank you for choosing Smart Home Services .<br>
+
+Your verification code is $user->activation_code.<br>
+
+Enter this code in our app to activate your account.<br>
+
+If you have any questions, send us an email.<br>
+
+if it wasn't you who submitted your email address in the first place ,<br>
+well then that's messed up and  we're sorry ,<br>
+Simply ignore this email and don't copy the code above,You will not receive any emails from us.<br>
+
+We’re glad you’re here!<br>
+The Smart Home Services team</p>";
 
                     $mail->send();
 
@@ -791,6 +823,84 @@ class UserAPIController extends Controller
             return $this->sendError('something was wrong', 401);
 
         }
+
+    }
+    public function viewProfile(Request $request) { // for homeOwners
+        if($request->header('devicetoken')) {
+            $response = [];
+            $hiddenElems = ['custom_fields', 'has_media'];
+            $isFavorite = false;
+            try {
+                $user = User::where('device_token', $request->header('devicetoken'))->first();
+
+                if (empty($user)) {
+                    return $this->sendError('User not found', 401);
+                }
+
+               // $user = User::find($request->vendor_id);
+                $respone = [];
+                $reviewsHiddenColumns = ['custom_fields', 'media', 'has_media'];
+                $attrs = $user->clientsAPI->makeHidden($reviewsHiddenColumns);
+                $reviews = [];
+                $i = 0;
+
+
+
+                $checkIfFavorite = $user->vendorFavorite->transform(function($q) use ($user){
+                    if ($user->id == $q->id)
+                        return $q;
+                });
+
+                count($checkIfFavorite) > 0 ? $isFavorite = true : $isFavorite = false;
+
+                foreach($attrs as $attr) {
+                    $reviews[$i]['id'] = $attr->id;
+                    $reviews[$i]['name'] = $attr->name;
+                    $reviews[$i]['avatar'] = asset('storage/Avatar').'/'.$attr->avatar;
+                    $reviews[$i]['last_name'] = $attr->last_name;
+                    $reviews[$i]['description'] = $attr->pivot->description;
+                    $i++;
+                }
+
+                $respone = [
+                    'id'             => $user->id,
+                    'name'           => $user->name,
+                    'email'          => $user->email,
+                    'rating'         => sprintf("%.1f",round((getRating($user)/20)*2)/2),
+                    'description'    => $user->description,
+                    'phone'          => $user->phone,
+                    'avatar'         => asset('storage/Avatar').'/'.$user->avatar,
+                    'address'        => $user->address,
+                    'website'        => $user->website,
+                    'background'         => asset('storage/vendors_background').'/'. $user->background_profile,
+                    'subcategories'  => $user->subcategoriesApi->makeHidden('pivot'),
+                    'offers'         => $user->specialOffers->makeHidden(['user_id', 'created_at', 'updated_at']),
+                    'reviews_count'  => count($reviews),
+                    'reviews'        => $reviews,
+                    'working_hours'  => $user->daysApi->transform(function($q){
+                        $q['check'] =1;
+
+                        $q['name'] =$q['name_en'];
+                        $q['workHours'] = [
+                            'start' => date("g:i A",strtotime($q->start)),
+                            'end' => date("g:i A",strtotime($q->end))];
+                        return $q->only('id','name', 'check', 'workHours');
+                    }),
+                    'availability'   => $user->vendor_city->makeHidden('pivot'),
+                    'gallery'        => $user->gallery->transform(function($gallery){
+                        $gallery['image'] = asset('storage/gallery') . '/' . $gallery['image'];
+                        return $gallery['image'];
+                    }),
+                    'is_favorite'     =>  $isFavorite
+                ];
+                return $this->sendResponse($respone, 'vendor profile retrieved successfully');
+
+            } catch (\Exception $e) {
+                return $this->sendError($e->getMessage(), 401);
+            }
+        }
+        else
+            return $this->sendError('nothing to process', 401);
 
     }
 

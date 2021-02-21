@@ -9,7 +9,7 @@
 
   <link rel="stylesheet" href="{{asset('/css/nice-select2.css')}}">
   <style>
- 
+
 
  .center {
    display:inline;
@@ -60,7 +60,7 @@
  }
  .small{
    color: firebrick;
- } 
+ }
    [type="file"] {
        height: 0;
        overflow: hidden;
@@ -272,7 +272,7 @@
       </ul>
     </div>
     <div class="card-body" data-route="{{url('api/user/select')}}">
-      {!! Form::open(['route' => 'users.store','files' => true,'method' => 'post']) !!}
+      {!! Form::open(['route' => 'users.store','files' => true,'method' => 'post','enctype'=>"multipart/form-data"]) !!}
       <div class="row">
         @include('settings.users.fields')
       </div>
