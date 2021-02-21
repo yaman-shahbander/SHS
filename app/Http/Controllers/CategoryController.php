@@ -97,8 +97,10 @@ class CategoryController extends Controller
                 $category = $this->categoryRepository->create($input);
                
                 if($request->file('categoryImage')) {
-
+                    
                     $imageName = uniqid() . $request->file('categoryImage')->getClientOriginalName();
+
+                    $imageName = preg_replace('/\s+/', '_', $imageName);
 
                     $request->file('categoryImage')->move(public_path('storage/categoriesPic'), $imageName);
 
@@ -196,6 +198,8 @@ class CategoryController extends Controller
             if(!empty($request->file('categoryImage'))) {
 
                 $imageName = uniqid() . $request->file('categoryImage')->getClientOriginalName();
+
+                $imageName = preg_replace('/\s+/', '_', $imageName);
 
                 $request->file('categoryImage')->move(public_path('storage/categoriesPic'), $imageName);
 

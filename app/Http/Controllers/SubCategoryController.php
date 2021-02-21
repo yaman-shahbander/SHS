@@ -115,6 +115,8 @@ class SubCategoryController extends Controller
 
                 $imageName = uniqid() . $request->file('categoryImage')->getClientOriginalName();
 
+                $imageName = preg_replace('/\s+/', '_', $imageName);
+ 
                 $request->file('categoryImage')->move(public_path('storage/subcategoriesPic'), $imageName);
 
                 $subcategory->update(['image' => $imageName]);   
@@ -205,6 +207,8 @@ class SubCategoryController extends Controller
             if(!empty($request->file('categoryImage'))) {
 
                 $imageName = uniqid() . $request->file('categoryImage')->getClientOriginalName();
+
+                $imageName = preg_replace('/\s+/', '_', $imageName);
 
                 $request->file('categoryImage')->move(public_path('storage/subcategoriesPic'), $imageName);
 

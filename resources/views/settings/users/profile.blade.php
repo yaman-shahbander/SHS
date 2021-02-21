@@ -272,7 +272,7 @@
             padding-top:0px !important;
             width: 787px !important;
             padding-left: 0px !important;
-            margin-left: -9px !important;
+            margin-left: 256px !important;
         }
         .box-profile .custom-star-edit {
 

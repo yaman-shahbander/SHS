@@ -15,9 +15,9 @@
 
         <!-- username Field -->
         <div class="form-group col-md-6 row">
-            {!! Form::label('last name', trans("lang.last_name"), ['class' => 'col-3 control-label']) !!}
+            {!! Form::label('nickname', "Nickname", ['class' => 'col-3 control-label']) !!}
             <div class="col-md-9">
-                {!! Form::text('last_name', null,  ['class' => 'form-control','placeholder'=>  trans('lang.last_name_placeholder'), 'required']) !!}
+                {!! Form::text('nickname', null,  ['class' => 'form-control','placeholder'=>  trans('lang.last_name_placeholder'), 'required']) !!}
             </div>
         </div>
     </div>
@@ -89,7 +89,18 @@
             </div>
         </div>
     </div>
-    <div class="row">
+
+    <div class="form-group row col-md-12">
+                <!-- Description Field -->
+                <div class="form-group row col-md-6">
+                        {!! Form::label('description', trans("lang.category_description"), ['class' => 'col-3 control-label']) !!}
+                        <div class="col-9">
+                            {!! Form::textarea('description', null, ['class' => 'form-control','style' => 'height: 150px;', 'placeholder'=>
+                            trans("lang.category_description_placeholder")  ]) !!}
+                            <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
+                        </div>
+                    </div>
+             
         <!-- $FIELD_NAME_TITLE$ Field -->
         <div class="form-group row col-md-6">
         {!! Form::label('avatar', trans("lang.user_avatar"), ['class' => 'col-md-3 control-label', 'style' => 'font-size:15px']) !!}
@@ -110,66 +121,24 @@
                         @else
                             <img id="img-uploaded" class="img2" src="{{asset('storage/Avatar/avatar.png')}}" alt="your image" />
                         @endif
-                      
+                    
                     </div>
 
-                     <div class="right">
+                    <div class="right">
 
-                      <input type="text" class="img-path newimg" placeholder="Image Path">
-                      <span class="file-wrapper">
-                      <input type="file" name="avatar" id="imgInp" class="uploader newimg"  />
-                      <span class="btn2 btn-large btn-alpha">Upload Image</span>
-                     </span>
+                    <input type="text" class="img-path newimg" placeholder="Image Path">
+                    <span class="file-wrapper">
+                    <input type="file" name="avatar" id="imgInp" class="uploader newimg"  />
+                    <span class="btn2 btn-large btn-alpha">Upload Image</span>
+                    </span>
                 </div>
             </div>
         </div>
     </div>
-    @can('sales_man.index')
-    <div class="row">
-        <div class="content col-md-12">
-            <div class="view"><i class="fa fa-ban" style="font-size:30px;color:red;" aria-hidden="true"></i>{{trans("lang.banned_users")}}</div>
-        </div>
-        <div class="hidden-content col-md-12">
-            <div class="row">
-                <!-- Select Ban forever-->
-                <div class="form-group row col-md-6">
-                    {!! Form::label('banValue', trans('lang.ban_forever'), ['class' => 'col-3 control-label']) !!}
-                    <div class="col-md-9">
-                        <select name="banValue" aria-controls="dataTableBuilder" class="form-control form-control-sm">
-                            <option value="0">0</option>
-                            <option value="1">1</option>
-                        </select>
-                        <div class="form-text text-muted">
-                        Select Value
-                        </div>
-                    </div>
-                </div>
-                <!-- temporary_ban Field -->
-                <div class="form-group row col-md-6">
-                    {!! Form::label('temp_ban', trans('lang.temp_ban'), ['class' => 'col-3 control-label']) !!}
-                    <div class="col-md-9">
-                        {!! Form::date('temp_ban', null ,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder")]) !!}
-
-                        <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group row col-md-6">
-                <!-- Description Field -->
-                    <div class="form-group row col-md-12">
-                        {!! Form::label('description', trans("lang.category_description"), ['class' => 'col-3 control-label']) !!}
-                        <div class="col-9">
-                            {!! Form::textarea('description', null, ['class' => 'form-control','style' => 'height: 150px;', 'placeholder'=>
-                            trans("lang.category_description_placeholder")  ]) !!}
-                            <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    @endcan
+</div>
+</div>
+    
+    
     @prepend('scripts')
 
     <script>

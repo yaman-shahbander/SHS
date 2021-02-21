@@ -85,7 +85,11 @@ class User extends Authenticatable implements HasMedia
         'balance_id',
         'delegate_id',
         'activation_code_exp_date',
-        'payment_id'
+        'payment_id',
+        'nickname',
+        'caption',
+        'showNickname',
+        'description'
     ];
     /**
      * The attributes that should be casted to native types.

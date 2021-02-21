@@ -21,9 +21,9 @@
 
         <!-- username Field -->
         <div class="form-group col-md-6 row">
-            {!! Form::label('last name', trans("lang.last_name"), ['class' => 'col-3 control-label']) !!}
+            {!! Form::label('nickname', "Nickname", ['class' => 'col-3 control-label']) !!}
             <div class="col-md-9">
-                {!! Form::text('last_name', null,  ['class' => 'form-control','placeholder'=>  trans('lang.last_name_placeholder'), 'required']) !!}
+                {!! Form::text('nickname', null,  ['class' => 'form-control','placeholder'=>  trans('lang.last_name_placeholder'), 'required']) !!}
             </div>
         </div>
     </div>
@@ -79,7 +79,6 @@
                 {!! Form::password('password', ['class' => 'form-control','placeholder'=>  trans("lang.user_password_placeholder")]) !!}
             </div>
         </div>
-
         <!-- Roles Field -->
         <div class="form-group col-md-6 row">
             {!! Form::label('roles[]', trans("lang.user_role_id"),['class' => 'col-3 control-label']) !!}
@@ -133,11 +132,18 @@
             </div>
         </div>
     </div>
-
-
-
         </div>
     </div>
+    
+
+    <div class="form-group row col-md-6">
+                        {!! Form::label('description', trans("lang.category_description"), ['class' => 'col-3 control-label']) !!}
+                        <div class="col-9">
+                            {!! Form::textarea('description', null, ['class' => 'form-control','style' => 'height: 150px;', 'placeholder'=>
+                            trans("lang.category_description_placeholder")  ]) !!}
+                            <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
+                        </div>
+                    </div>
 </div>
 
     @prepend('scripts')
@@ -189,5 +195,3 @@
     <button type="submit" class="btn btn-{{setting('theme_color')}}"><i class="fa fa-save"></i> {{trans('lang.save')}} {{trans('lang.user')}}</button>
     <a href="{!! route('vendors.index') !!}" class="btn btn-default"><i class="fa fa-undo"></i> {{trans('lang.cancel')}}</a>
 </div>
-
-
