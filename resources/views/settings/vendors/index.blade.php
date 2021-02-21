@@ -145,7 +145,7 @@
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><a href="{{url('/dashboard')}}"><i class="fa fa-dashboard"></i> {{trans('lang.dashboard')}}</a></li>
-          <li class="breadcrumb-item"><a href="{!! route('favorites.index') !!}">Service Providers</a>
+          <li class="breadcrumb-item"><a href="#">Service Providers</a>
           </li>
         </ol>
       </div><!-- /.col -->

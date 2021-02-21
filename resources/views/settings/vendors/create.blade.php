@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="{{asset('/css/nice-select2.css')}}">
 
   <style>
- 
+
 
   .center {
     display:inline;
@@ -67,7 +67,7 @@
   }
   .small{
     color: firebrick;
-  } 
+  }
     [type="file"] {
         height: 0;
         overflow: hidden;
@@ -258,7 +258,7 @@
 
 
 </style>
-  <link rel="stylesheet" href="{{asset('plugins/dropzone/bootstrap.min.css')}}">
+{{--  <link rel="stylesheet" href="{{asset('plugins/dropzone/bootstrap.min.css')}}">--}}
 @endpush
 @section('content')
 <!-- Content Header (Page header) -->
@@ -375,7 +375,7 @@ $(".uploader").change(function(){
     var options = {searchable: true};
     NiceSelect.bind(document.getElementById("country"), options);
 </script>
-    
+
 @endpush
 
 

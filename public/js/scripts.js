@@ -16,11 +16,7 @@ $(document).ready(function () {
             increaseArea: '20%' // optional
         });
     }
-    if ($('textarea').length > 0) {
-        $('textarea').summernote({
-            height: 200
-        });
-    }
+
     if ($('.datepicker').length > 0) {
         $('.datepicker').datepicker({
             format: "yyyy-mm-dd",

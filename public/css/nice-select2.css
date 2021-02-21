@@ -18,7 +18,6 @@
   padding-left: 18px;
   padding-right: 30px;
   position: relative;
-  text-align: right !important;
   -webkit-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
   -webkit-user-select: none;
@@ -120,7 +119,7 @@
     outline: none;
     padding-left: 18px;
     padding-right: 29px;
-    text-align: right;
+    /*text-align: right;*/
     -webkit-transition: all 0.2s;
     transition: all 0.2s; }
     .nice-select .option:hover, .nice-select .option.focus, .nice-select .option.selected.focus {

@@ -156,7 +156,7 @@ class VendorController extends Controller
         }
 
         $countries=Country::all();
-        
+
         $user = $this->vendorRepository->findWithoutFail($request->id);
         unset($user->password);
         $customFields = false;
@@ -180,7 +180,7 @@ class VendorController extends Controller
         $user->rating=getRating($user);
 
         $userCoordinates =  GmapLocation::where('user_id', $request->id)->first();
-        
+
         if(!empty($userCoordinates)) {
             Mapper::map(
                 $userCoordinates->latitude,
@@ -199,16 +199,16 @@ class VendorController extends Controller
         }
 
         $favoriteVendor = $user->homeOwnerFavorite; // Users who added this vendor as a favorite
-        
-    
-        return $dataTable=$subCategoriesDataTableDataTable->render('settings.vendors.profile',compact(['user', 'role', 'rolesSelected', 'customFields', 'customFieldsValues','countries','cities','style', 'favoriteVendor']));
-        
 
-            
+
+        return $dataTable=$subCategoriesDataTableDataTable->render('settings.vendors.profile',compact(['user', 'role', 'rolesSelected', 'customFields', 'customFieldsValues','countries','cities','style', 'favoriteVendor']));
+
+
+
           //  $subcategories = subCategory::all();
 
           //  return dd($user->clients);
-            
+
 
       //  return $dataTable=$reviewsDataTable->render('settings.vendors.profile',compact(['user', 'role', 'rolesSelected', 'customFields', 'customFieldsValues','countries','cities', 'subcategories']));
 
@@ -222,26 +222,26 @@ class VendorController extends Controller
         if(!auth()->user()->hasPermissionTo('vendors.store')){
             return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
         }
-        
+
         if($request->city=="0")
         {
             Flash::warning('please select country and city ');
             return redirect()->back();
         }
         $input = $request->all();
-    
+
         $input['user_id']=Auth()->user()->id;
         $input['password'] = Hash::make($input['password']);
 
         while(true) {
             $payment_id = '#' . rand(1000, 9999) . rand(1000, 9999);
-            if (!(User::where('payment_id', $payment_id)->exists())) {      
+            if (!(User::where('payment_id', $payment_id)->exists())) {
                 break;
             } else continue;
-        }  
+        }
 
             $input['language'] = $request->input('language') == null ? '' : $request->input('language', '');
-            $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');      
+            $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');
             $input['payment_id'] = $payment_id;
             $balance = new Balance();
             $balance->balance = 0.0;
@@ -256,12 +256,12 @@ class VendorController extends Controller
             $token = bin2hex($user->id . $token);
             $input['device_token'] = $token;
             $user = $this->vendorRepository->update($input,$user->id);
-        
+
             $user->assignRole('vendor');
             $user->assignRole($request->roles);
 
         try {
-   
+
 
             if ($request->file('avatar')) {
 
@@ -291,7 +291,7 @@ class VendorController extends Controller
         }
 
         $count = count(Fee::all()); // if there is an old fee value
-        if ($count > 0) { 
+        if ($count > 0) {
             $value = Fee::all('fee_amount');
             $value = $value[0]['fee_amount'];
             return view('settings.vendors.featuredVendorfee')->with('count', $count)
@@ -323,7 +323,7 @@ class VendorController extends Controller
                 Flash::Error(__('Transfer failed! field must only contain numbers', ['operator' => __('lang.category')]));
                 return redirect(route('vendors.index'));
             }
-            
+
             if ($amount < 0) {
                 Flash::Error(__('Transfer failed! amount should not be negative', ['operator' => __('lang.category')]));
                 return redirect(route('vendors.index'));
@@ -349,7 +349,7 @@ class VendorController extends Controller
                 Flash::Error(__('Transfer failed! field must only contain numbers', ['operator' => __('lang.category')]));
                 return redirect(route('vendors.index'));
             }
-            
+
             if ($amount < 0) {
                 Flash::Error(__('Transfer failed! amount should not be negative', ['operator' => __('lang.category')]));
                 return redirect(route('vendors.index'));
@@ -390,13 +390,13 @@ class VendorController extends Controller
         }
         
         $input = $request->all();
-    
+
         $input['user_id']=Auth()->user()->id;
-        $input['password'] = Hash::make($input['password']); 
+        $input['password'] = Hash::make($input['password']);
 
             $input['language'] = $request->input('language') == null ? '' : $request->input('language', '');
-            $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');      
-            
+            $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');
+
             $input['city_id'] = $request->city;
 
             $user = $this->vendorRepository->update($input,$id);
@@ -406,7 +406,7 @@ class VendorController extends Controller
             $user->assignRole($request->roles);
 
         try {
-   
+
             if ($request->file('avatar')) {
 
                 $imageName = uniqid() . $request->file('avatar')->getClientOriginalName();
