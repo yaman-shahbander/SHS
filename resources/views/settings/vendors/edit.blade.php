@@ -5,10 +5,14 @@
 <!-- select2 -->
 <link rel="stylesheet" href="{{asset('plugins/select2/select2.min.css')}}">
 <!-- bootstrap wysihtml5 - text editor -->
+{{--<link rel="stylesheet" href="{{asset('plugins/dropzone/bootstrap.min.css')}}">--}}
+
+
+{{--<link rel="stylesheet" href="{{asset('plugins/summernote/summernote-bs4.css')}}">--}}
 <link rel="stylesheet" href="{{asset('/css/nice-select2.css')}}">
 
 <style>
- 
+
 
   .center {
     display:inline;
@@ -59,7 +63,7 @@
   }
   .small{
     color: firebrick;
-  } 
+  }
     [type="file"] {
         height: 0;
         overflow: hidden;
@@ -255,7 +259,6 @@
 
 
 {{--dropzone--}}
-<link rel="stylesheet" href="{{asset('plugins/dropzone/bootstrap.min.css')}}">
 @endpush
 @section('settings_title',trans('lang.user_table'))
 @section('settings_content')
@@ -289,6 +292,7 @@
 @include('layouts.media_modal',['collection'=>null])
 @endsection
 @push('scripts_lib')
+
 <!-- iCheck -->
 <script src="{{asset('plugins/iCheck/icheck.min.js')}}"></script>
 <!-- select2 -->
@@ -297,6 +301,7 @@
 
 {{--dropzone--}}
 <script src="{{asset('plugins/dropzone/dropzone.js')}}"></script>
+{{-- <script src="{{asset('plugins/summernote/summernote-bs4.min.js')}}"></script>--}}
 <script type="text/javascript">
     Dropzone.autoDiscover = false;
     var dropzoneFields = [];
@@ -357,6 +362,8 @@ $(".uploader").change(function(){
 <script>
     var options = {searchable: true};
     NiceSelect.bind(document.getElementById("country"), options);
+
+   // $('#quote').summernote('disable');
 </script>
 
 @endpush

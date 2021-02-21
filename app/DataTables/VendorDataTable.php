@@ -99,6 +99,11 @@ class VendorDataTable extends DataTable
                 'title' => trans('lang.user_email'),
 
             ],
+            [
+                'data' => 'phone',
+                'title' => 'Phone',
+
+            ],
 
             [
                 'data' => 'status_type',
@@ -110,11 +115,7 @@ class VendorDataTable extends DataTable
                 'title' => 'Rating',
 
             ],
-            [
-                'data' => 'phone',
-                'title' => 'Phone',
 
-            ],
             [
                 'data' => 'updated_at',
                 'title' => trans('lang.user_updated_at'),
