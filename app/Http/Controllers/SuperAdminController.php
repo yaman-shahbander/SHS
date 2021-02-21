@@ -115,7 +115,7 @@ class SuperAdminController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateUserRequest $request)
     {
         if(!auth()->user()->hasPermissionTo('superadmins.store')){
             return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
@@ -124,6 +124,11 @@ class SuperAdminController extends Controller
         if($request->city=="0")
         {
             Flash::warning('please select country and city ');
+            return redirect()->back();
+        }
+
+        if ($request->input('email') == null && $request->input('phone') == null) {
+            Flash::error('Either email or phone should be filled!');
             return redirect()->back();
         }
 
@@ -301,7 +306,7 @@ class SuperAdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update($id, Request $request)
+    public function update($id, UpdateUserRequest $request)
     {
         if(!auth()->user()->hasPermissionTo('superadmins.update')){
             return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
@@ -321,6 +326,12 @@ class SuperAdminController extends Controller
             Flash::warning('please select country and city ');
             return redirect()->back();
         }
+
+        if ($request->input('email') == null && $request->input('phone') == null) {
+            Flash::error('Either email or phone should be filled!');
+            return redirect()->back();
+        }
+
         $input = $request->all();
 
         $input['user_id']=Auth()->user()->id;

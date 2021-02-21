@@ -26,7 +26,8 @@ class CreateUserRequest extends FormRequest
     public function rules()
     {
         User::$rules['password'] = 'required|string|min:6';
-        User::$rules['email'] = 'required|string|email|max:255|unique:users';
+        User::$rules['email'] = 'email|max:255|nullable|unique:users';
+        User::$rules['phone'] = 'max:255|nullable|unique:users';
         return User::$rules;
     }
 }

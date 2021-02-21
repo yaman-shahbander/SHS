@@ -234,6 +234,12 @@ class UserController extends Controller
             Flash::warning('please select country and city ');
             return redirect()->back();
         }
+
+        if ($request->input('email') == null && $request->input('phone') == null) {
+            Flash::error('Either email or phone should be filled!');
+            return redirect()->back();
+        }
+
         $input = $request->all();
 
         $input['user_id']=Auth()->user()->id;
@@ -247,6 +253,9 @@ class UserController extends Controller
         }
 
             $input['language'] = $request->input('language') == null ? '' : $request->input('language', '');
+
+            
+
             $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');
             $input['payment_id'] = $payment_id;
             $balance = new Balance();
@@ -407,6 +416,12 @@ class UserController extends Controller
             Flash::warning('please select country and city ');
             return redirect()->back();
         }
+        
+        if ($request->input('email') == null && $request->input('phone') == null) {
+            Flash::error('Either email or phone should be filled!');
+            return redirect()->back();
+        }
+
         $input = $request->all();
 
         $input['user_id']=Auth()->user()->id;
@@ -533,11 +548,3 @@ class UserController extends Controller
 }
 
 
-//if(!empty($request->temp_ban)){
-//    $user=$this->BannedUsersRepository()->create([
-//        'user_id'=>$id,
-//        'description'=>$request->description,
-//        'banValue'=>$request->banValue,
-//        'temp_ban'=>$request->temp_ban,
-//    ]);
-//}

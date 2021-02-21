@@ -77,7 +77,15 @@
         <div class="form-group col-md-6 row">
             {!! Form::label('email', trans("lang.user_email"), ['class' => 'col-3 control-label']) !!}
             <div class="col-md-9">
-                {!! Form::text('email', null,  ['class' => 'form-control','placeholder'=>  trans("lang.user_email_placeholder"), 'required']) !!}
+                {!! Form::text('email', null,  ['class' => 'form-control','placeholder'=>  trans("lang.user_email_placeholder")]) !!}
+            </div>
+        </div>
+
+        <!-- phone Field -->
+        <div class="form-group col-md-6 row">
+            {!! Form::label('phone', "Phone", ['class' => 'col-3 control-label']) !!}
+            <div class="col-md-9">
+                {!! Form::text('phone', null,  ['class' => 'form-control','placeholder'=>  'Insert phone number']) !!}
             </div>
         </div>
 
