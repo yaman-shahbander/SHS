@@ -97,6 +97,11 @@ class UserDataTable extends DataTable
 
             ],
             [
+                'data' => 'email',
+                'title' => 'Email',
+
+            ],
+            [
                 'data' => 'phone',
                 'title' => 'Phone',
 
