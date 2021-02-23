@@ -136,7 +136,7 @@
                 @endcan
                 @can('chats.index')
                     <li class="nav-item">
-                        <a class="nav-link {{ Request::is('notifications*') ? 'active' : '' }}" href="{!! route('chatify') !!}"><i class="fa fa-comments"></i></a>
+                        <a class="nav-link {{ Request::is('notifications*') ? 'active' : '' }}" href="#"><i class="fa fa-comments"></i></a>
                     </li>
                 @endcan
                 <li class="nav-item dropdown">

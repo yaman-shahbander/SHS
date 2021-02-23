@@ -100,6 +100,7 @@ class UserController extends Controller
      */
     public function profile()
     {
+        
 
         if(!auth()->user()->hasPermissionTo('users.profile')){
             return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
@@ -134,6 +135,7 @@ class UserController extends Controller
 
     public function userprofile(Request $request,SubCategoriesVendorDataTable $subCategoriesDataTableDataTable)
     {
+
         if(!auth()->user()->hasPermissionTo('users.profile')){
             return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
         }

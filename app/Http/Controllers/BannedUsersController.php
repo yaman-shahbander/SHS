@@ -238,4 +238,95 @@ class BannedUsersController extends Controller
         ]);
 
     }
+
+    public function saveUpdateBlocking(Request $request) {
+        if(!$request->forever && !$request->temporary_ban ){
+            Flash::error('You have to select temporary time or check it forever');
+
+            return redirect()->back();
+        }
+        if($request->forever && $request->temporary_ban ){
+            Flash::error('You have to select temporary time or check it forever');
+
+            return redirect()->back();
+        }
+
+        if($request->Ban_description==null){
+
+            Flash::error('You have to write a description');
+
+            return redirect()->back();
+        }
+     //   return var_dump($request->forever);
+        $baneduser= BannedUsers::where('user_id',$request->id)->first();
+
+        if(empty($baneduser)){
+            $baneduser=new BannedUsers();
+            $baneduser->user_id=$request->id;
+        }
+      
+        $baneduser->description=$request->Ban_description;
+
+        if($request->forever && $request->forever=="on")
+
+        $baneduser->forever_ban="1";
+        else{
+            $baneduser->forever_ban="0";
+
+            $baneduser->temporary_ban=$request->temp_ban;
+
+        }
+
+
+        if($baneduser->save()){
+        Flash::success(__('User Blocked Succesfully', ['operator' => __('lang.category')]));
+
+        return redirect()->back();
+        }
+        else{
+            Flash::error('somthing was wrong');
+
+            return redirect()->back();
+        }
+      
+    }
+    public function unBlockuser(Request $request) {
+
+        if(!auth()->user()->hasPermissionTo('unBlock')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+        }
+        $baneduser= BannedUsers::where('user_id',$request->id)->first();
+  
+
+        if (empty($baneduser)) {
+            Flash::error('User not blocked');
+
+            return redirect()->back();
+        }
+
+            if($baneduser->delete())
+                {
+                     Flash::success(__('User unBlocked Succesfully', ['operator' => __('lang.category')]));
+
+                     return redirect()->back();
+                }
+             else{
+                     Flash::error('somthing was wrong');
+
+                      return redirect()->back();
+                }
+    }
+
+
+    public function showProfile(Request $request) { // determine wether the user is (homeowner, vendor, admin, or superadmin)
+    //     $user = User::find($request->id);
+    //    // return  dd($user->roles->);
+    //     if ($user->hasRole('ve')) {
+    //         return 'ss';
+    //     }
+
+
+    return 55;
+    }
+    
 }

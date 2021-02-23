@@ -14,11 +14,14 @@
 | Here is where you can register API routes for your application. These
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
-|
+| 
 */
 
 Route::prefix('homeOwner')->group(function () {
+
+    
     Route::post('login', 'API\Driver\UserAPIController@login');
+
     Route::post('register', 'API\Driver\UserAPIController@register');
     Route::post('setCityCountry', 'API\Driver\UserAPIController@verify');
     Route::post('send_reset_link_email', 'API\UserAPIController@sendResetLinkEmail');
@@ -156,6 +159,20 @@ Route::prefix('vendor')->group(function () {
     //add, update and delete vendor cities
     Route::post('VendorCitiesavailibility', 'API\Manager\UserAPIController@addVendorCities');
 });
+
+
+
+//for pusher flutter chat
+
+Route::post('saveMessage', 'API\MessageApiController@store');
+
+Route::get('getContacts', 'API\MessageApiController@index'); // for chat(index)
+
+Route::post('getMessage', 'API\MessageApiController@getMessage'); // for chat(get messages)
+
+
+
+
 
 
 Route::post('login', 'API\UserAPIController@login');

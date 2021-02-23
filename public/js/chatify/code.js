@@ -18,7 +18,7 @@ const messagesContainer = $('.messenger-messagingView .m-body'),
     messengerTitleDefault = $('.messenger-headTitle').text(),
     messageInput = $('#message-form .m-send');
 // console.log(auth_id);
-
+    console.log("This is my access token:   " + $('meta[name="csrf-token"]').attr('content'));
 /**
  *-------------------------------------------------------------
  * Global Templates

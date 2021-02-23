@@ -11,6 +11,8 @@
   </a>
   @endcan
 
+  <a data-toggle="tooltip" data-placement="bottom" class='btn btn-link'  class='dropdown-item' href="{{ route('showBannedProfile', ['id' => $user_id]) }}"><i class="fa fa-user mr-1"></i></a>
+
   @can('bannedUsers.destroy')
 {!! Form::open(['route' => ['bannedUsers.destroy', $id], 'method' => 'delete']) !!}
   {!! Form::button('<i class="fa fa-trash"></i>', [
