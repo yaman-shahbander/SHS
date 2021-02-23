@@ -2,15 +2,8 @@
 <script>
   // Enable pusher logging - don't include this in production
   Pusher.logToConsole = true;
-  var pusher = new Pusher("{{ config('chatify.pusher.key') }}", {
-    encrypted: true,
-    cluster: "{{ config('chatify.pusher.options.cluster') }}",
-    authEndpoint: '{{route("pusher.auth")}}',
-    auth: {
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    }
+  var pusher = new Pusher('83ee300b73f42e25c690', {
+      cluster: 'ap2'
   });
 </script>
 <script src="{{ asset('js/chatify/code.js') }}"></script>

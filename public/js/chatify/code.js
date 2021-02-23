@@ -465,7 +465,7 @@ function cancelUpdatingAvatar() {
  */
 
 // subscribe to the channel
-var channel = pusher.subscribe('private-chatify');
+var channel = pusher.subscribe('my-channel');
 
 // Listen to messages, and append if data received
 channel.bind('messaging', function (data) {
@@ -517,7 +517,7 @@ channel.bind('client-contactItem', function (data) {
 
 // -------------------------------------
 // presence channel [User Active Status]
-var activeStatusChannel = pusher.subscribe('presence-activeStatus');
+var activeStatusChannel = pusher.subscribe('my-activeStatus');
 
 // Joined
 activeStatusChannel.bind('pusher:member_added', function (member) {
