@@ -337,6 +337,7 @@ class User extends Authenticatable implements HasMedia
    public function days() {
     return $this->belongsToMany(Day::class,'days_vendors','vendor_id','day_id')->withPivot('start', 'end');
     }
+   
 
    function vendor_city() {
        return $this->belongsToMany(City::class, 'vendors_cities', 'vendor_id', 'city_id')->select(['cities.id', 'cities.city_name'])->withTimeStamps();
