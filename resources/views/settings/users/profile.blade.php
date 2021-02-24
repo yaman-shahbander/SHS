@@ -46,67 +46,93 @@
                         </div>
 
 
+    <!-- Blocking -->
+        <div class="row">
+            <div class="content col-md-12">
 
-                        <div class="row">
-                            <div class="content col-md-12">
-                                <div class="view"><a class="btn btn-danger ban_style_user" >Block User</a></div>
-                                <div class="view"><a class="btn btn-primary unban_style_user" >Unblock User</a></div>
-                            </div>
-                            <div class="hidden-content col-md-12">
-                                <div class="row">
-                                    <!-- Select Ban forever-->
-                                    <div class="col-md-1"></div>
-                                    <div class="form-group row col-md-11">
-                                        {!! Form::label('banValue', trans('lang.ban_forever'), ['class' => 'control-label']) !!}
-                                        <div class=" col-md-11">
-                                            <select name="banValue" aria-controls="dataTableBuilder" class="form-control form-control-sm">
-                                                <option value="0">0</option>
-                                                <option value="1">1</option>
-                                            </select>
-                                            <div class="form-text text-muted">
-                                                Select Value
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- temporary_ban Field -->
-                                    <div class="col-md-1"></div>
-                                    <div class="form-group row col-md-11">
-                                        {!! Form::label('temp_ban', trans('lang.temp_ban'), ['class' => ' control-label']) !!}
-                                        <div class="col-md-11">
-                                            {!! Form::date('temp_ban', null ,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder")]) !!}
 
-                                            <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="form-group row col-md-11">
-                                        <!-- Description Field -->
-                                        <div class="form-group row col-md-12">
-                                            {!! Form::label('description', trans("lang.category_description"), ['class' => 'control-label']) !!}
-                                            <div class="col-12">
-                                                {!! Form::textarea('Ban_description', null, ['class' => 'form-control','style' => 'height: 150px;', 'placeholder'=>
-                                                trans("lang.category_description_placeholder")  ]) !!}
-                                                <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>  <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="form-group row col-md-11">
-                                        <!-- Description Field -->
-                                        <div class="form-group row col-md-12">
-                                            <div class="col-12">
-                                                <button type="submit" class="btn btn-danger"><i class="fa fa-save"></i> {{trans('lang.save')}} {{trans('lang.user')}}</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+
+                <div class="view"><a class="btn btn-danger ban_style_user" > @if($user->bannedusers!=null)Edit Block @else Block User @endif</a></div>
+                @if($user->bannedusers!=null)
+                {!! Form::open(['route' => ['unBlockUser', 'id' => $user->id], 'method' => 'delete']) !!}
+
+            
+                <div class="view"><input type="submit" onclick="confirm('Are you sure?')" class="btn btn-primary unban_style_user" value="Unblock User"></div>
+
+                {!! Form::close() !!}
+                @endif
+            </div>
+            <div class="hidden-content col-md-12">
+                <form action="{{route('saveUpdateBlockedUser',['id' => $user->id])}}" method="POST">
+                   @csrf
+                <div class="row">
+                    <!-- Select Ban forever-->
+                    <div class="col-md-1"></div>
+                    <div class="form-group row col-md-11">
+                   
+                        <div class=" col-md-11">
+                    
+                    <div class="page__section page__custom-settings">
+
+                    <div class="page__toggle">
+                    <label class="toggle">
+                    <input class="toggle__input" onclick="valueChanged()"  name="forever"  type="checkbox" {{$user->bannedusers!=null &&$user->bannedusers->forever_ban==1 ? 'checked' : ''}}>
+                    <span class="toggle__label">
+                    <span class="toggle__text">{{trans('lang.ban_forever')}}</span>
+                    </span>
+                    </label>
+                    </div>
+
+                    </div>
+
+                      
+                       
+                        </div>
+                    </div>
+                    <!-- temporary_ban Field -->
+                    <div class="col-md-1"></div>
+                    <div class="form-group row col-md-11   temp_hide_show">
+                        {!! Form::label('temp_ban', trans('lang.temp_ban'), ['class' => ' control-label']) !!}
+                        <div class="col-md-11">
+                            {!! Form::date('temp_ban', $user->bannedusers!=null && $user->bannedusers->temporary_ban!= '0000-00-00' ? $user->bannedusers->temporary_ban : '' ,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder")]) !!}
+
+                            <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="form-group row col-md-11">
+                        <!-- Description Field -->
+                        <div class="form-group row col-md-12">
+                            {!! Form::label('description', trans("lang.category_description"), ['class' => 'control-label','required']) !!}
+                            <div class="col-12">
+                                {!! Form::textarea('Ban_description', $user->bannedusers!=null && $user->bannedusers->description!= '0000-00-00' ? $user->bannedusers->description : '' , ['class' => 'form-control','style' => 'height: 150px;', 'placeholder'=>
+                                trans("lang.category_description_placeholder")  ]) !!}
+                                <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
                             </div>
                         </div>
+                    </div>
+                </div>  <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="form-group row col-md-11">
+                        <!-- Description Field -->
+                        <div class="form-group row col-md-12">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-danger"><i class="fa fa-save"></i> {{trans('lang.save')}} {{trans('lang.user')}}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+           
+           
+           
+           
+                </form>
+            </div>
+        </div>
 
-                        <!-- /.card-body -->
+        <!-- /.card-body -->
                     </div>
 
                     <!-- available-->
@@ -354,6 +380,31 @@ $(".uploader").change(function(){
 <script>
     var options = {searchable: true};
     NiceSelect.bind(document.getElementById("country"), options);
+
+
+  
+</script>
+<script>
+
+
+$( document ).ready(function(){
+    if($('.toggle__input').is(":checked"))   
+        $(".temp_hide_show").hide();
+
+        else
+        $(".temp_hide_show").show();
+});
+</script>
+<script type="text/javascript">
+
+    function valueChanged()
+    {
+        if($('.toggle__input').is(":checked"))   
+        $(".temp_hide_show").hide();
+
+        else
+        $(".temp_hide_show").show();
+    }
 </script>
 
 @endpush

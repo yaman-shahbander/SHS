@@ -1,37 +1,37 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Welcome Email</title>
-  </head>
-  <body>
-    
-  
+@extends('layoutschat.app')
 
-    <form role="form" method="post" action="{{ route('sendmail') }}" enctype="multipart/form-data">
-            @csrf
-            <div class="row">
-            <div class="col-sm-9 form-group">
-            <label for="email">Email to: </label>
-            <input type="email" class="form-control" name="email" style="border: 1px solid black;">
-            </div>
+@section('content')
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-9 form-group">
-            <label for="subject">Subject: </label>
-            <input type="text" class="form-control" name="subject" style="border: 1px solid black;">
+            <div class="col-md-4">
+                <div class="user-wrapper">
+                    <ul class="users">
+                        @foreach($users as $user)
+                            <li class="user" id="{{ $user->id }}">
+                                {{--will show unread count notification--}}
+                                @if($user->unread)
+                                    <span class="pending">{{ $user->unread }}</span>
+                                @endif
+
+                                <div class="media">
+                                    <div class="media-left">
+                                        <img src="https://via.placeholder.com/150" alt="" class="media-object">
+                                    </div>
+
+                                    <div class="media-body">
+                                        <p class="name">{{ $user->name }}</p>
+                                        <p class="email">{{ $user->email }}</p>
+                                    </div>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-8" id="messages">
+
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-9 form-group">
-            <label for="name">Message: </label>
-            <textarea class="form-control" type="textarea" name="message" style="border: 1px solid black;"></textarea>
-            </div>
-        </div>
-            <div class="row">
-            <div class="col-sm-9 form-group">
-                    <button type="submit" name="sendmail" class="btn btn-primary">Send</button>
-            </div>
-            </div>
-        </form>
-
-  </body>
-</html>
+    </div>
+@endsection

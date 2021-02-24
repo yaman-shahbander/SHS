@@ -7,7 +7,11 @@ use App\Models\User;
 
 class Message extends Model
 {
-    public function user() {
-        return $this->belongsTo(User::class, 'to_id');
-    }
+
+
+    protected $fillable = ['from', 'to', 'message', 'is_read'];
+
+    // public function user() {
+    //     return $this->belongsTo(User::class, 'to_id');
+    // }
 }

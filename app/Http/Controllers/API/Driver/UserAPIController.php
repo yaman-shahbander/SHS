@@ -169,6 +169,8 @@ The Smart Home Services team</p>";
                             'activation_code'=>$user->activation_code
 
                         ];
+
+                        
                     return $this->sendResponse($response_cod, 'user not verified');
 
                 }
@@ -196,7 +198,12 @@ The Smart Home Services team</p>";
                     ]
 
                 ];
-                return $this->sendResponse($response, 'User retrieved successfully');
+                $token = $request->session()->token();
+    
+                $token = csrf_token();
+            
+               ;
+                return $this->sendResponse($token, 'User retrieved successfully');
 
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 401);

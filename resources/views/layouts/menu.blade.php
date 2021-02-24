@@ -208,12 +208,12 @@
 
 @endcan
 
-<!-- @can('chats.index')
+{{-- @can('chats.index')
     <li class="nav-item">
         <a class="nav-link {{ Request::is('chats*') ? 'active' : '' }}" href="{{ route('chatify') }}">@if($icons)
                 <i class="nav-icon fa fa-comment"></i>@endif<p>{{trans('chats')}}</p></a>
     </li>
-@endcan -->
+@endcan--}}
 
 
 <!-- @can('notifications.index')

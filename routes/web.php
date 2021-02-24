@@ -32,9 +32,13 @@ Route::get('/logout',function (){
 });
 ////////
 ///
+
+
 Route::get('/home','HomeController@index')->name('home');
 Route::post('/send-notification', 'NotificationController@store')->name('send.notification');
 
+Route::get('/message/{id}', 'HomeController@getMessage')->name('message');
+Route::post('message', 'HomeController@sendMessage');
 
 /*Route::resource('chats', 'ChatController')->except([
             'show','create','update','destroy','edit','store']);*/
@@ -255,6 +259,20 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
 
     Route::resource('suggested/vendor', 'VendorsSuggestedController');
     Route::post('store_vendors_suggested/{id}','VendorsSuggestedController@store_vendors_suggested')->name('store_vendors_suggested');
+
+    Route::post('saveUpdateBlockedUser','BannedUsersController@saveUpdateBlocking')->name('saveUpdateBlockedUser');
+
+    Route::get('showBannedProfile','BannedUsersController@showProfile')->name('showBannedProfile');
+
+
+
+
+    Route::delete('unBlockUser','BannedUsersController@unBlockuser')->name('unBlockUser');
+
+
+
+
+
     Route::resource('country', 'CountryController')->except([
         'show'
     ]);
@@ -306,103 +324,9 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
     /*
     * This is the main app route [Chatify Messenger]
     */
-    Route::prefix('chatify')->group(function () {
 
 
-        Route::get('/', 'vendor\Chatify\MessagesController@index')->name(config('chatify.path'));
 
-        /**
-         *  Fetch info for specific id [user/group]
-         */
-        Route::post('/idInfo', 'vendor\Chatify\MessagesController@idFetchData');
-
-        /**
-         * Send message route
-         */
-        Route::post('/sendMessage', 'vendor\Chatify\MessagesController@send')->name('send.message');
-
-        /**
-         * Fetch messages
-         */
-        Route::post('/fetchMessages', 'vendor\Chatify\MessagesController@fetch')->name('fetch.messages');
-
-        /**
-         * Download attachments route to create a downloadable links
-         */
-        Route::get('/download/{fileName}', 'vendor\Chatify\MessagesController@download')->name(config('chatify.attachments.route'));
-
-        /**
-         * Authintication for pusher private channels
-         */
-        Route::post('/chat/auth', 'vendor\Chatify\MessagesController@pusherAuth')->name('pusher.auth');
-
-        /**
-         * Make messages as seen
-         */
-        Route::post('/makeSeen', 'vendor\Chatify\MessagesController@seen')->name('messages.seen');
-
-        /**
-         * Get contacts
-         */
-        Route::post('/getContacts', 'vendor\Chatify\MessagesController@getContacts')->name('contacts.get');
-
-        /**
-         * Update contact item data
-         */
-        Route::post('/updateContacts', 'vendor\Chatify\MessagesController@updateContactItem')->name('contacts.update');
-
-
-        /**
-         * Star in favorite list
-         */
-        Route::post('/star', 'vendor\Chatify\MessagesController@favorite')->name('star');
-
-        /**
-         * get favorites list
-         */
-        Route::post('/favorites', 'vendor\Chatify\MessagesController@getFavorites')->name('favorites');
-
-        /**
-         * Search in messenger
-         */
-        Route::post('/search', 'vendor\Chatify\MessagesController@search')->name('search');
-
-        /**
-         * Get shared photos
-         */
-        Route::post('/shared', 'vendor\Chatify\MessagesController@sharedPhotos')->name('shared');
-
-        /**
-         * Delete Conversation
-         */
-        Route::post('/deleteConversation', 'vendor\Chatify\MessagesController@deleteConversation')->name('conversation.delete');
-
-        /**
-         * Delete Conversation
-         */
-        Route::post('/updateSettings', 'vendor\Chatify\MessagesController@updateSettings')->name('avatar.update');
-
-        /**
-         * Set active status
-         */
-        Route::post('/setActiveStatus', 'vendor\Chatify\MessagesController@setActiveStatus')->name('activeStatus.set');
-
-
-        /*
-        * [Group] view by id
-        */
-        Route::get('/group/{id}', 'vendor\Chatify\MessagesController@index')->name('group');
-
-        /*
-        * user view by id.
-        * Note : If you added routes after the [User] which is the below one,
-        * it will considered as user id.
-        *
-        * e.g. - The commented routes below :
-        */
-// Route::get('/route', function(){ return 'Munaf'; }); // works as a route
-        Route::get('/{id}', 'vendor\Chatify\MessagesController@index')->name('user');
-// Route::get('/route', function(){ return 'Munaf'; }); // works as a user id
-    });
+   
 });
 });

@@ -66,7 +66,7 @@ class BannedUsersDataTable extends DataTable
         $columns = [
             [
                 'data' => 'user_id',
-                'title' => 'user_name',
+                'title' => 'Username',
 
             ],
             [
