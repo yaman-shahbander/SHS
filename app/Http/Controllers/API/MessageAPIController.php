@@ -23,19 +23,48 @@ class MessageApiController extends Controller
                 return $this->sendError('User not found', 401);
             }
 
-            $users = DB::select("select users.device_token, users.name, users.avatar, users.email ,count(is_read) as unread 
-             from users LEFT JOIN  messages ON users.device_token = messages.from and is_read = 0 and messages.to = ' . $user->device_token . '
-             where users.device_token != ' . $user->device_token . ' 
-             group by users.device_token, users.name, users.avatar, users.email");
+            //  $users = DB::select("select users.device_token, users.name, users.avatar, users.email ,count(is_read) as unread 
+            //  from users left join messages on  users.device_token = messages.from and is_read = 0 and messages.to = ' . $user->device_token . '
+            //  and users.device_token != ' . $user->device_token . '
+            //  group by users.device_token, users.name, users.avatar, users.email");
 
+            // $response = [];
 
-             foreach($users as $user) {
-                $user->avatar = asset('storage/Avatar') . '/' . $user->avatar;
-             }
+            // $users = DB::select( "SELECT  u1.avatar, u1.device_token, CASE WHEN u2.device_token = '$user->device_token'
+            // THEN u1.name
+            // ELSE u2.name
+            // END as user_name
+            // FROM messages m
+            // JOIN users u1 ON m.from=u1.device_token
+            // JOIN users u2 ON m.to=u2.device_token
+            // WHERE m.id IN (
+            // SELECT MAX(id)
+            // FROM messages
+            // WHERE messages.from = '$user->device_token' OR messages.to = '$user->device_token'
+            // GROUP BY messages.id) ORDER BY m.id DESC
+            // ;");
 
+            // foreach($users as $user) {
+            //     $user->avatar= asset('storage/Avatar') . '/' . $user->avatar;
+            //     $response['chats'][] = $user;
+            // }
+
+            // $device_token = $user->device_token;
+            // $collocutor = User::orWhereHas('messages_to', function ($q) use ($device_token) {
+            //     $q->where('from', $device_token);
+            //      })->orWhereHas('messages_to', function ($q) use ($device_token) {
+            //     $q->where('to', $device_token);
+            //  });
+
+            $users = DB::select("select m.from, m.to, u.avatar, m.is_read, m.created_at from messages m, users u where u.device_token = m.to and m.from = '$user->device_token' or m.to = '$user->device_token' group by m.from, m.to ");
+
+            foreach($users as $user) {
+                $user->avatar= asset('storage/Avatar') . '/' . $user->avatar;
+                $response['chats'][] = $user;
+            }
         }
 
-        return $this->sendResponse($users, 'Contacts retrieved successfully');
+        return $this->sendResponse($response, 'Contacts retrieved successfully');
     }
 
     public function getMessage(Request $request)

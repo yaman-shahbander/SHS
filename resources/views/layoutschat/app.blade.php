@@ -221,7 +221,7 @@
 
 <script>
     var receiver_id = '';
-    var my_id = "{{ Auth::id() }}";
+    var my_id = "{{ Auth::user()->device_token }}";
     $(document).ready(function () {
         // ajax setup form csrf token
         $.ajaxSetup({
@@ -240,11 +240,16 @@
 
         var channel = pusher.subscribe('yaman-channel');
         channel.bind('messaging-event', function (data) {
-            // alert(JSON.stringify(data));
+            //  
             if (my_id == data.from) {
+               
                 $('#' + data.to).click();
+                // alert(JSON.stringify(data.to));
+                console.log(data.from);
+                console.log(my_id);
             } else if (my_id == data.to) {
                 if (receiver_id == data.from) {
+                    
                     // if receiver is selected, reload the selected user ...
                     $('#' + data.from).click();
                 } else {
@@ -273,6 +278,7 @@
                 cache: false,
                 success: function (data) {
                     $('#messages').html(data);
+                    
                     scrollToBottomFunc();
                 }
             });
@@ -286,6 +292,7 @@
                 $(this).val(''); // while pressed enter text box will be empty
 
                 var datastr = "receiver_id=" + receiver_id + "&message=" + message;
+                console.log(datastr);
                 $.ajax({
                     type: "post",
                     url: "message", // need to create this post route

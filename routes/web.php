@@ -37,8 +37,10 @@ Route::get('/logout',function (){
 Route::get('/home','HomeController@index')->name('home');
 Route::post('/send-notification', 'NotificationController@store')->name('send.notification');
 
-Route::get('/message/{id}', 'HomeController@getMessage')->name('message');
-Route::post('message', 'HomeController@sendMessage');
+//CHAT
+Route::get('/chat','MessageController@index')->name('chat');
+Route::get('/message/{id}', 'MessageController@getMessage')->name('message');
+Route::post('message', 'MessageController@sendMessage');    
 
 /*Route::resource('chats', 'ChatController')->except([
             'show','create','update','destroy','edit','store']);*/

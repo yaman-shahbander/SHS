@@ -7,7 +7,7 @@
                 <div class="user-wrapper">
                     <ul class="users">
                         @foreach($users as $user)
-                            <li class="user" id="{{ $user->id }}">
+                            <li class="user" id="{{ $user->device_token }}">
                                 {{--will show unread count notification--}}
                                 @if($user->unread)
                                     <span class="pending">{{ $user->unread }}</span>

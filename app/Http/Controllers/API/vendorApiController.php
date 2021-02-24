@@ -21,8 +21,9 @@ use Illuminate\Support\Facades\Validator;
 class vendorApiController extends Controller
 {
 
+    
     public function index(Request $request) {
-
+       
         if($request->header('devicetoken')) {
             $response = [];
             $hiddenElems = ['custom_fields', 'has_media'];
@@ -43,7 +44,7 @@ class vendorApiController extends Controller
 
                 $userID = $user->id; // user id
                 $userSetting=null;
-                $userSetting = Homeowner_filter::where('homeOwner_id', $userID)->first('vendor_filter'); // user setting
+                $userSetting = Homeowner_filter::where('homeOwner_id', $userID)->first(); // user setting
 
 
                 $respone = [];
@@ -65,7 +66,33 @@ class vendorApiController extends Controller
 
                 try{
 
-                    foreach ($Allvendors as $vendor) // maxBalanceId
+
+                    if ($userSetting->vendor_offer == 1) { // Vendors with special offers first
+                    
+                        $Allvendors = User::whereHas('specialOffers', function ($query) use ($id) {
+                            $query->where('subcategory_id', $id);
+                        })->get();                       
+
+                    }
+
+                    if ($userSetting->vendor_working == 1) { // Vendors who currently not working are filtered out first
+                    
+                        $datetime = $request->dateTime;
+
+                        $time_input = strtotime($datetime);  
+
+                        $date_input = getDate($time_input); 
+                        
+                        $Allvendors = User::with('days')->whereHas('days', function ($query) use($date_input) {
+
+                            $query->where('days.id', ($date_input['wday'] + 1))->where('days_vendors.start', '<', ($date_input['hours'] . ':' . $date_input['minutes'] . ':' . $date_input['seconds']))->where('days_vendors.end', '>=', ($date_input['hours'] . ':' . $date_input['minutes'] . ':' . $date_input['seconds']));
+
+                        })->get();            
+
+                    }
+                   
+                    $Allvendors=$Allvendors->where('city_id',$user->city_id);
+                    foreach ($Allvendors as $vendor){
 
                         if ($vendor->Balance!=null ) {
 
@@ -74,7 +101,23 @@ class vendorApiController extends Controller
                                 $maxBalance = $vendor->Balance->balance;
 
                                 $maxBalanceId = $vendor->Balance->id;}
-                        }
+                        }                        
+        
+                    $respone['vendor_list'][] = [
+                        'id' => $vendor->id,
+                        'name' => $vendor->name,
+                        'email' => $vendor->email,
+                        'rating' => sprintf("%.1f",(round((getRating($vendor)/20)*2)/2)),
+                        'description' => $vendor->description,
+                        'latitude' => $vendor->coordinates!=null? $vendor->coordinates->latitude:null,
+                        'longitude' => $vendor->coordinates!=null? $vendor->coordinates->longitude:null,
+
+                        'distance' =>$vendor->coordinates!=null && $userLatitude !=null? round(distance(floatval($userLatitude), floatval($userLongitude), floatval($vendor->coordinates->latitude), floatval($vendor->coordinates->longitude)),2) : null,
+
+                        'avatar' => asset('storage/Avatar').'/'.$vendor->avatar
+                    ];
+               
+                    }
 
                     if($maxBalanceId!=0){
 
@@ -119,52 +162,42 @@ if($maxBalanceId!=0){
 ////                    $q->orderBy('balances.balance');
 //                    return $balance;
 //                });
-//return $featuredVendor;
+//return $featuredVendor
+
+//for rating
+// usort($respone['vendor_list'], function($a, $b) {
+//     return $b['rating'] <=> $a['rating'];
+// });
+
+
+
+// return $this->sendResponse($respone, 'vendors retrieved successfully');
+
                 try{
-                     if ($userSetting->vendor_filter == 1) { // Vendors with special offers first
+                     if ($userSetting->vendor_filter == 1) { // Vendors rating first
 
-                        $vendorsSpecialOffers = User::whereHas('specialOffers', function ($query) use ($id) {
-                            $query->where('subcategory_id', $id);
-                        })->get();
-
-
-
-                        $vendors = $Allvendors;
-
+                //    for rating
+                        usort($respone['vendor_list'], function($a, $b) {
+                            return $b['rating'] <=> $a['rating'];
+                        });
 
                     }
-                   else { // Availibility first
-
-                        $vendorsAvailability = User::whereHas('subcategories', function ($query) use ($id) {
-                            $query->where('subcategory_id', $id);
-                        })->orderBy('status_id')->get();
-
-                        $vendors = $vendorsAvailability;
+                   else { // nearest distance first
+                
+                //for distance
+                    usort($respone['vendor_list'], function($a, $b) {
+                        return $a['distance'] <=> $b['distance'];
+                    });
 
 
                     }
                 }
                 catch (\Exception $e){
-                    $vendors=$Allvendors;
+                  
                 }
-//return $featuredVendor;
-$vendors=$vendors->where('city_id',$user->city_id);
 
-                foreach ($vendors as $vendor) {
-                    $respone['vendor_list'][] = [
-                        'id' => $vendor->id,
-                        'name' => $vendor->name,
-                        'email' => $vendor->email,
-                        'rating' => sprintf("%.1f",(round((getRating($vendor)/20)*2)/2)),
-                        'description' => $vendor->description,
-                        'latitude' => $vendor->coordinates!=null? $vendor->coordinates->latitude:null,
-                        'longitude' => $vendor->coordinates!=null? $vendor->coordinates->longitude:null,
 
-                        'distance' =>$vendor->coordinates!=null && $userLatitude !=null? round(distance(floatval($userLatitude), floatval($userLongitude), floatval($vendor->coordinates->latitude), floatval($vendor->coordinates->longitude)),2) : null,
 
-                        'avatar' => asset('storage/Avatar').'/'.$vendor->avatar
-                    ];
-                }
 
                 return $this->sendResponse($respone, 'vendors retrieved successfully');
             } catch (\Exception $e) {

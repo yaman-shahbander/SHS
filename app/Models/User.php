@@ -337,6 +337,7 @@ class User extends Authenticatable implements HasMedia
    public function days() {
     return $this->belongsToMany(Day::class,'days_vendors','vendor_id','day_id')->withPivot('start', 'end');
     }
+   
 
    function vendor_city() {
        return $this->belongsToMany(City::class, 'vendors_cities', 'vendor_id', 'city_id')->select(['cities.id', 'cities.city_name'])->withTimeStamps();
@@ -346,9 +347,13 @@ class User extends Authenticatable implements HasMedia
        return $this->hasMany(\App\Models\Gallery::class, 'user_id');
    }
 
-   public function messages()
+   public function messages_from()
    {
-       return $this->hasMany(Message::class, 'to_id');
+       return $this->belongsToMany(Message::class, 'messages', 'from', 'to', 'users.device_token','users.device_token');
+   }
+   public function messages_to()
+   {
+       return $this->belongsToMany(Message::class, 'messages', 'to', 'from', 'users.device_token', 'users.device_token');
    }
 
     //    public function setGalleryAPI()
