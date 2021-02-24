@@ -347,9 +347,13 @@ class User extends Authenticatable implements HasMedia
        return $this->hasMany(\App\Models\Gallery::class, 'user_id');
    }
 
-   public function messages()
+   public function messages_from()
    {
-       return $this->hasMany(Message::class, 'to_id');
+       return $this->belongsToMany(Message::class, 'messages', 'from', 'to', 'users.device_token','users.device_token');
+   }
+   public function messages_to()
+   {
+       return $this->belongsToMany(Message::class, 'messages', 'to', 'from', 'users.device_token', 'users.device_token');
    }
 
     //    public function setGalleryAPI()
