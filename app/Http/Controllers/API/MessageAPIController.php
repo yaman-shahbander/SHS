@@ -56,9 +56,15 @@ class MessageApiController extends Controller
             //     $q->where('to', $device_token);
             //  });
 
+            $users = DB::select("select m.from, m.to, u.avatar, m.is_read, m.created_at from messages m, users u where u.device_token = m.to and m.from = '$user->device_token' or m.to = '$user->device_token' group by m.from, m.to ");
+
+            foreach($users as $user) {
+                $user->avatar= asset('storage/Avatar') . '/' . $user->avatar;
+                $response['chats'][] = $user;
+            }
         }
 
-        return $this->sendResponse($collocutor, 'Contacts retrieved successfully');
+        return $this->sendResponse($response, 'Contacts retrieved successfully');
     }
 
     public function getMessage(Request $request)
