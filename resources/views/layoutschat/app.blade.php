@@ -245,8 +245,6 @@
                
                 $('#' + data.to).click();
                 // alert(JSON.stringify(data.to));
-                console.log(data.from);
-                console.log(my_id);
             } else if (my_id == data.to) {
                 if (receiver_id == data.from) {
                     

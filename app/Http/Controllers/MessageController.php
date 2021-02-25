@@ -93,4 +93,5 @@ class MessageController extends Controller
         $data = ['from' => $from, 'to' => $to, 'message' => $message]; // sending from and to user id when pressed enter
         $pusher->trigger('yaman-channel', 'messaging-event', $data);
     }
+    
 }

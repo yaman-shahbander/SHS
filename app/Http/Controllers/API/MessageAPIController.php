@@ -56,15 +56,55 @@ class MessageApiController extends Controller
             //     $q->where('to', $device_token);
             //  });
 
-            $users = DB::select("select m.from, m.to, u.avatar, m.is_read, m.created_at from messages m, users u where u.device_token = m.to and m.from = '$user->device_token' or m.to = '$user->device_token' group by m.from, m.to ");
+            // $users = DB::select("select m.from, m.to, u.avatar, m.is_read, m.created_at //from messages m, users u where u.device_token = m.to and m.from = '$user->device_token' or m.to = '$user->device_token' group by m.from, m.to ");
 
-            foreach($users as $user) {
-                $user->avatar= asset('storage/Avatar') . '/' . $user->avatar;
-                $response['chats'][] = $user;
-            }
+            // $users = DB::select("SELECT messages.from, messages.to, messages.created_at,  
+            // CASE WHEN messages.from = '$user->device_token' THEN 'yes' END
+            // FROM messages 
+            // GROUP By messages.from");
+            
+            // $users = DB::select("SELECT IF(STRCMP(messages.from, '$user->device_token'), 'YES', 'NO') AS comparison
+            // FROM messages 
+            // GROUP BY messages.from");
+
+            // $users = DB::select("SELECT
+            // u1.name AS sender, 
+            // u2.name AS receiver, 
+            // u1.device_token AS from_deviceToken, 
+            // u2.device_token AS to_deviceToken,
+            // m.message, 
+            // u2.avatar AS receiver_avatar, 
+            // m.created_at 
+            // FROM messages m 
+            // INNER JOIN users u1 ON u1.device_token = m.from 
+            // INNER JOIN users u2 ON u2.device_token = m.to 
+            // LEFT JOIN messages m1 ON m1.from = m.from 
+            // AND m1.to = m.to 
+            // AND m1.created_at < m.created_at 
+            // WHERE m.from = '$user->device_token'
+            // OR m.to = '$user->device_token'
+            // GROUP BY u1.name, u2.name ;");
+ 
+            // foreach($users as $u) {
+
+            //     $u->receiver_avatar = asset('storage/Avatar') . '/' . $u->receiver_avatar;
+
+            //     if ($u->to_deviceToken == $user->device_token) {
+            //         $temp_deviceToken       =  $u->to_deviceToken;
+            //         $temp_name              =  $u->receiver;
+            //         $u->to_deviceToken      =  $u->from_deviceToken;
+            //         $u->receiver            =  $u->sender;
+            //         $u->from_deviceToken    =  $temp_deviceToken;
+            //         $u->sender              =  $temp_name;
+                    
+            //     } // End IF
+            // } // End Foreach
+
+
+            
         }
 
-        return $this->sendResponse($response, 'Contacts retrieved successfully');
+        return $this->sendResponse($users, 'Contacts retrieved successfully');
     }
 
     public function getMessage(Request $request)

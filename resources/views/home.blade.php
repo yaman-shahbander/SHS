@@ -4,6 +4,8 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-4">
+
+            
                 <div class="user-wrapper">
                     <ul class="users">
                         @foreach($users as $user)
@@ -27,6 +29,7 @@
                         @endforeach
                     </ul>
                 </div>
+
             </div>
 
             <div class="col-md-8" id="messages">
@@ -34,4 +37,6 @@
             </div>
         </div>
     </div>
+    
 @endsection
+
