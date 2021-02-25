@@ -25,7 +25,8 @@ class FilterVendorsAPIController extends Controller
                 return $this->sendError('User not found', 401);
             }
 
-            $userSettings = Homeowner_filter::where('homeOwner_id', $user->id)->get(['homeOwner_id', 'vendor_filter']);
+
+            $userSettings = Homeowner_filter::where('homeOwner_id', $user->id)->get(['homeOwner_id', 'vendor_filter','vendor_offer','vendor_working']);
 
             return $this->sendResponse($userSettings->toArray(), 'Settings retrieved successfully');
 
@@ -62,12 +63,14 @@ class FilterVendorsAPIController extends Controller
             $userSettings = Homeowner_filter::where('homeOwner_id', $user->id)->get();
 
             if(count($userSettings) > 0) {
-                return $this->sendResponse($userSettings->toArray(), 'Error setting is exist');
+                return $this->sendError('Error setting is exist',401);
             }
 
             $userSettings = Homeowner_filter::create([
                 'homeOwner_id'  => $user->id,
-                'vendor_filter' => $request->filter_setting
+                'vendor_filter' => $request->vendor_filter,
+                'vendor_offer' => $request->vendor_offer,
+                'vendor_working' => $request->vendor_working
             ]);
             return $this->sendResponse($userSettings->toArray(), 'Setting added successfully');
         }
@@ -113,13 +116,15 @@ class FilterVendorsAPIController extends Controller
                 return $this->sendError('User not found', 401);
             }
 
-            $userSettings = Homeowner_filter::where('homeOwner_id', $user->id)->first(); 
+            $userSettings = Homeowner_filter::where('homeOwner_id', $user->id)->first();
 
             if(empty($userSettings)) {
                 return $this->sendResponse($userSettings->toArray(), 'Error setting is not exist');
-            } 
-            
-            $userSettings->vendor_filter = $request->filter_setting;
+            }
+
+            $userSettings->vendor_filter = $request->vendor_filter;
+            $userSettings->vendor_working = $request->vendor_working;
+            $userSettings->vendor_offer = $request->vendor_offer;
 
             if ($userSettings->save())
             return $this->sendResponse($userSettings->toArray(), 'setting updated successfully');
