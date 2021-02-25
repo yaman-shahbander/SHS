@@ -14,12 +14,12 @@
 | Here is where you can register API routes for your application. These
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
-| 
+|
 */
 
 Route::prefix('homeOwner')->group(function () {
 
-    
+
     Route::post('login', 'API\Driver\UserAPIController@login');
 
     Route::post('register', 'API\Driver\UserAPIController@register');
@@ -212,7 +212,7 @@ Route::post('ViewVendor', 'API\ViewsAPIController@viewVendor');
 Route::post('contactVendor', 'API\ContactAPIController@contactVendor');
 
 //FIlter vendors API
-Route::post('getfilter', 'API\FilterVendorsAPIController@index');
+Route::get('getfilter', 'API\FilterVendorsAPIController@index');
 //FIlter vendors API
 Route::post('storefilter', 'API\FilterVendorsAPIController@store');
 //FIlter vendors API

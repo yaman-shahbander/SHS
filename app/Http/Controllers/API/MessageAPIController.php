@@ -23,7 +23,7 @@ class MessageApiController extends Controller
                 return $this->sendError('User not found', 401);
             }
 
-            //  $users = DB::select("select users.device_token, users.name, users.avatar, users.email ,count(is_read) as unread 
+            //  $users = DB::select("select users.device_token, users.name, users.avatar, users.email ,count(is_read) as unread
             //  from users left join messages on  users.device_token = messages.from and is_read = 0 and messages.to = ' . $user->device_token . '
             //  and users.device_token != ' . $user->device_token . '
             //  group by users.device_token, users.name, users.avatar, users.email");
@@ -55,6 +55,7 @@ class MessageApiController extends Controller
             //      })->orWhereHas('messages_to', function ($q) use ($device_token) {
             //     $q->where('to', $device_token);
             //  });
+
 
             // $users = DB::select("select m.from, m.to, u.avatar, m.is_read, m.created_at //from messages m, users u where u.device_token = m.to and m.from = '$user->device_token' or m.to = '$user->device_token' group by m.from, m.to ");
 
@@ -99,13 +100,30 @@ class MessageApiController extends Controller
                     
             //     } // End IF
             // } // End Foreach
+        
+            $users = Message::join('users',  function ($join) {
+                $join->on('messages.from', '=', 'users.device_token')
+                    ->orOn('messages.to', '=', 'users.device_token');
+            })
+                ->where('messages.from', $user->device_token)
+                ->orWhere('messages.to', $user->device_token)
+                ->orderBy('messages.created_at', 'desc')
+                ->get(['users.id','users.device_token','users.name','users.avatar','messages.message', 'messages.is_read'])
+                ->unique('id');
 
+            foreach ($users as $key=>$usermessag){
+                $usermessag->avatar= asset('storage/Avatar') . '/' . $usermessag->avatar;
+                if($users[$key]['device_token']==$user->device_token)      
+                    unset($users[$key]);
+            }
 
-            
+            return $this->sendResponse($users->toArray(), 'Contacts retrieved successfully');
+
+        } else {
+            return $this->sendError('User not found', 401);
         }
-
-        return $this->sendResponse($users, 'Contacts retrieved successfully');
     }
+    
 
     public function getMessage(Request $request)
     {
@@ -145,7 +163,7 @@ class MessageApiController extends Controller
          if (empty($user)) {
              return $this->sendError('User not found', 401);
          }
-       
+
          $message          = new Message();
 
          $message->from    = $user->device_token;
@@ -154,7 +172,7 @@ class MessageApiController extends Controller
 
          $message->message = $request->message;
 
-         $message->is_read = 0;   
+         $message->is_read = 0;
 
          if($message->save()){
 
@@ -162,14 +180,14 @@ class MessageApiController extends Controller
                 'cluster' => 'ap2',
                 'useTLS' => true
             );
-    
+
             $pusher = new Pusher(
                 env('PUSHER_APP_KEY'),
                 env('PUSHER_APP_SECRET'),
                 env('PUSHER_APP_ID'),
                 $options
             );
-            
+
             $data = response()->json([
                 'from' => $message->from,
                 'to' => $message->to,
@@ -179,40 +197,9 @@ class MessageApiController extends Controller
             $pusher->trigger('yaman-channel', 'messaging-event', $data);
             return $this->sendResponse([], 'Message saved successfully');
          }
-         
+
            return $this->sendError('Message not saved', 401);
-        
+
         }
-        
-        // message - sender_id - chat_id
-        // order_id - restaurant_id - sender_id  - message
-        
-        // try{
-        //     $is_customer = $request->input('is_customer');;
-        //     $restaurant_id = $request->input('restaurant_id');
-        //     $order_id = $request->input('order_id');
-        //     $chat = Chat::where('restaurant_id',$restaurant_id)->where('order_id',$order_id)->first();
-        //     $chat_id = $chat->id;
-        //     $sender_id = $request->input('sender_id');
-        //     $msg = $request->input('message');
-        //     $message = new Message();
-        //     $message->chat_id = $chat_id;
-        //     $message->sender_id = $sender_id;
-        //     $message->msg = $msg;
-        //     if(isset($is_customer))
-        //     {
-        //         $message->is_customer = $is_customer;
-        //     }
-        //     $message->save();
-            
-        //     return $this->sendResponse(true, 'message created successfully');
-        // }
-        // catch (Exception $e) {
-        //     return $this->sendError($e->getMessage());
-        // }
-        
-
-
-
     }
 }

@@ -8,6 +8,7 @@
 
 namespace App\Models;
 use App\City;
+use App\Models\Message;
 use App\Models\Status;
 use App\vendors_suggested;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -25,7 +26,6 @@ use App\Models\specialOffers;
 use App\Balance;
 use App\Delegate;
 use App\Models\Day;
-use App\Models\Message;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 /**
@@ -62,7 +62,7 @@ class User extends Authenticatable implements HasMedia
         'email' => 'nullable|email|max:255|unique:users',
         'phone' => 'nullable|max:255|unique:users'
     ];
-    
+
     public $table = 'users';
     /**
      * The attributes that are mass assignable.
@@ -337,7 +337,7 @@ class User extends Authenticatable implements HasMedia
    public function days() {
     return $this->belongsToMany(Day::class,'days_vendors','vendor_id','day_id')->withPivot('start', 'end');
     }
-   
+
 
    function vendor_city() {
        return $this->belongsToMany(City::class, 'vendors_cities', 'vendor_id', 'city_id')->select(['cities.id', 'cities.city_name'])->withTimeStamps();
@@ -355,7 +355,10 @@ class User extends Authenticatable implements HasMedia
    {
        return $this->belongsToMany(Message::class, 'messages', 'to', 'from', 'users.device_token', 'users.device_token');
    }
-
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'to','device_token');
+    }
     //    public function setGalleryAPI()
     //    {
     //        return $this->gallery->image = asset('storage/gallery') . '/' . $this->gallery->image;

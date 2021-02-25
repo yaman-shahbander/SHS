@@ -21,9 +21,9 @@ use Illuminate\Support\Facades\Validator;
 class vendorApiController extends Controller
 {
 
-    
+
     public function index(Request $request) {
-       
+
         if($request->header('devicetoken')) {
             $response = [];
             $hiddenElems = ['custom_fields', 'has_media'];
@@ -68,29 +68,29 @@ class vendorApiController extends Controller
 
 
                     if ($userSetting->vendor_offer == 1) { // Vendors with special offers first
-                    
+
                         $Allvendors = User::whereHas('specialOffers', function ($query) use ($id) {
                             $query->where('subcategory_id', $id);
-                        })->get();                       
+                        })->get();
 
                     }
 
                     if ($userSetting->vendor_working == 1) { // Vendors who currently not working are filtered out first
-                    
+
                         $datetime = $request->dateTime;
 
-                        $time_input = strtotime($datetime);  
+                        $time_input = strtotime($datetime);
 
-                        $date_input = getDate($time_input); 
-                        
+                        $date_input = getDate($time_input);
+
                         $Allvendors = User::with('days')->whereHas('days', function ($query) use($date_input) {
 
                             $query->where('days.id', ($date_input['wday'] + 1))->where('days_vendors.start', '<', ($date_input['hours'] . ':' . $date_input['minutes'] . ':' . $date_input['seconds']))->where('days_vendors.end', '>=', ($date_input['hours'] . ':' . $date_input['minutes'] . ':' . $date_input['seconds']));
 
-                        })->get();            
+                        })->get();
 
                     }
-                   
+
                     $Allvendors=$Allvendors->where('city_id',$user->city_id);
                     foreach ($Allvendors as $vendor){
 
@@ -101,8 +101,8 @@ class vendorApiController extends Controller
                                 $maxBalance = $vendor->Balance->balance;
 
                                 $maxBalanceId = $vendor->Balance->id;}
-                        }                        
-        
+                        }
+
                     $respone['vendor_list'][] = [
                         'id' => $vendor->id,
                         'name' => $vendor->name,
@@ -116,7 +116,7 @@ class vendorApiController extends Controller
 
                         'avatar' => asset('storage/Avatar').'/'.$vendor->avatar
                     ];
-               
+
                     }
 
                     if($maxBalanceId!=0){
@@ -133,7 +133,7 @@ class vendorApiController extends Controller
 //  return $featuredVendor;
 //                    $respone[$i]['distance'] = $attr->coordinates!=null ? distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)) : 'No coordinates provided for the current vendor';
 
-if($maxBalanceId!=0){
+                    if($maxBalanceId!=0){
                     $respone['featuredVendor']=
 
                             [
@@ -183,7 +183,7 @@ if($maxBalanceId!=0){
 
                     }
                    else { // nearest distance first
-                
+
                 //for distance
                     usort($respone['vendor_list'], function($a, $b) {
                         return $a['distance'] <=> $b['distance'];
@@ -193,7 +193,7 @@ if($maxBalanceId!=0){
                     }
                 }
                 catch (\Exception $e){
-                  
+
                 }
 
 
