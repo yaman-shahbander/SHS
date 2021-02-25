@@ -17,7 +17,7 @@
 
                                 <div class="media">
                                     <div class="media-left">
-                                        <img src="https://via.placeholder.com/150" alt="" class="media-object">
+                                        <img src="{{ asset('storage/Avatar/' . $user->avatar) }}" alt="" class="media-object">
                                     </div>
 
                                     <div class="media-body">

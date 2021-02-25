@@ -32,7 +32,7 @@ class FavoriteDataTable extends DataTable
             ->editColumn('updated_at', function ($user) {
                     return getDateColumn($user, 'updated_at');
                 })
-            ->rawColumns(array_merge($columns, ['action']));
+            ->rawColumns($columns);
     }
 
     /**
@@ -58,7 +58,6 @@ class FavoriteDataTable extends DataTable
         return $this->builder()
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->addAction(['title'=>trans('lang.actions'),'width' => '80px', 'printable' => false, 'responsivePriority' => '100'])
             ->parameters(array_merge(
                 config('datatables-buttons.parameters'), [
                     'language' => json_decode(

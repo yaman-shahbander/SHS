@@ -319,14 +319,17 @@ class BannedUsersController extends Controller
 
 
     public function showProfile(Request $request) { // determine wether the user is (homeowner, vendor, admin, or superadmin)
-    //     $user = User::find($request->id);
-    //    // return  dd($user->roles->);
-    //     if ($user->hasRole('ve')) {
-    //         return 'ss';
-    //     }
 
+        $user = User::find($request->id);
+       // return  dd($user->roles->);
+        if ($user->hasRole('vendor')) {
+            return redirect(route('vendors.profile', ['id' => $user->id]));
+        }
 
-    return 55;
+        if ($user->hasRole('homeowner')) {
+            return redirect(route('user.profile', ['id' => $user->id]));
+        }
+
     }
     
 }
