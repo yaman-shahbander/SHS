@@ -313,7 +313,7 @@
     </div>
 </div>
                 <div class="card-body own-padding">
-                    <div class="container mt-5 mb-5" style="margin-bottom:0px !important">
+                    <div class="container mt-5 mb-5" style="margin-bottom:0px !important; margin-left: -262px !important;">
                         <div class="row height d-flex justify-content-center align-items-center">
                             <div class="col-md-12">
                                 <div class="card">
@@ -383,7 +383,7 @@
 
 
                 <div class="card-body own-padding">
-                    <div class="container mt-5 mb-5"  style="margin-top: 0px !important;">
+                    <div class="container mt-5 mb-5"  style="margin-top: 0px !important; margin-left: -262px !important;">
                         <div class="row height d-flex justify-content-center align-items-center">
                             <div class="col-md-12">
                                 <div class="card">

@@ -381,5 +381,15 @@ $(".uploader").change(function(){
 <script>
     var options = {searchable: true};
     NiceSelect.bind(document.getElementById("country"), options);
+    NiceSelect.bind(document.getElementById("city"), options);
+
+
+function refcity(){
+  var options={searchable:true};
+  $('.city .nice-select').remove();
+  NiceSelect.bind(document.getElementById("city"), options);
+
+
+}
 </script>
 @endpush

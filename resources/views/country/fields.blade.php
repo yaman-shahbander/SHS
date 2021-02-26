@@ -4,6 +4,8 @@
 <div style="flex: 50%;max-width: 100%;padding: 0 4px;" class="column">
   <div class="row">
     <!-- Name Field -->
+    
+    
     <div class="form-group row col-md-6">
       {!! Form::label('name', trans("lang.category_name"), ['class' => 'col-3 control-label text-right']) !!}
       <div class="col-9">
@@ -14,26 +16,28 @@
       </div>
     </div>
       <!-- Name Field -->
+      </div>
+
+    <div class="row">
       <div class="form-group row col-md-6">
       {!! Form::label('name_en', "Name En", ['class' => 'col-3 control-label text-right']) !!}
       <div class="col-9">
-        {!! Form::text('name_en', Request::is('*edit') ? $country->country_name : null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'required']) !!}
+        {!! Form::text('name_en', Request::is('*edit') ? $country->name_en : null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'required']) !!}
         <div class="form-text text-muted">
-          Country Name
+          Country English Name
         </div>
       </div>
     </div>
-  </div>
-
-    <div class="row">
+  
       <!-- Description Field -->
-      <div class="form-group row col-md-6" style="display:none">
-        {!! Form::label('description', trans("lang.category_description"), ['class' => 'col-3 control-label text-right']) !!}
-        <div class="col-9">
-          {!! Form::textarea('description', 'ff', ['class' => 'form-control','placeholder'=>
-          trans("lang.category_description_placeholder")  ]) !!}
-          <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
+      <div class="form-group row col-md-6" >
+      {!! Form::label('name_ar', "Name AR", ['class' => 'col-3 control-label text-right']) !!}
+      <div class="col-9">
+        {!! Form::text('name_ar', Request::is('*edit') ? $country->name_ar : null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'required']) !!}
+        <div class="form-text text-muted">
+          Country Arabic Name
         </div>
+      </div>
       </div>
     </div>
 </div>

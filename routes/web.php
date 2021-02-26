@@ -38,9 +38,7 @@ Route::get('/home','HomeController@index')->name('home');
 Route::post('/send-notification', 'NotificationController@store')->name('send.notification');
 
 //CHAT
-Route::get('/chat','MessageController@index')->name('chat');
-Route::get('/message/{id}', 'MessageController@getMessage')->name('message');
-Route::post('message', 'MessageController@sendMessage');    
+  
 
 /*Route::resource('chats', 'ChatController')->except([
             'show','create','update','destroy','edit','store']);*/
@@ -61,9 +59,16 @@ Auth::routes();
 Route::get('firebase/sw-js', 'AppSettingController@initFirebase');
 Route::group(['prefix' => LaravelLocalization::setLocale()], function()
 {
+   
+
 
     Route::get('storage/app/public/{id}/{conversion}/{filename?}', 'UploadController@storage');
     Route::middleware('auth')->group(function () {
+        Route::get('/chat','MessageController@index')->name('chat');
+        Route::get('/message/{id}', 'MessageController@getMessage')->name('message');
+        Route::post('message', 'MessageController@sendMessage');  
+
+
         Route::middleware('Checklanguage')->group(function () {
             Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
         Route::get('/', 'DashboardController@index')->name('dashboard');

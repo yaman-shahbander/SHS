@@ -11,8 +11,8 @@ class city extends Model
     public $fillable = [
         'city_name',
         'name_en',
+        'name_ar',
         'country_id'
-
     ];
 
     public static $rules = [

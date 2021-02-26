@@ -195,7 +195,7 @@
                             </ul>
                         </div>
 
-                        <div class="card-body">
+                        <div class="card-body" data-route="{{url('api/user/select')}}">
                             {!! Form::model($user, ['route' => ['users.update', $user->id], 'method' => 'patch']) !!}
                             <div class="row">
                                 @include('settings.users.fields')
@@ -381,7 +381,16 @@ $(".uploader").change(function(){
     var options = {searchable: true};
     NiceSelect.bind(document.getElementById("country"), options);
 
+    NiceSelect.bind(document.getElementById("city"), options);
 
+
+function refcity(){
+  var options={searchable:true};
+  $('.city .nice-select').remove();
+  NiceSelect.bind(document.getElementById("city"), options);
+
+
+}
   
 </script>
 <script>

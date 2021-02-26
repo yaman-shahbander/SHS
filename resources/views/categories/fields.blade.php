@@ -3,10 +3,12 @@
 @endif
 <div style="flex: 50%;max-width: 100%;padding: 0 4px;" class="column">
     <div class="row">
+    <div class=" col-md-2">
+    </div>
       <!-- Name Field -->
-      <div class="form-group row col-md-6">
-        {!! Form::label('name', trans("lang.category_name"), ['class' => 'col-3 control-label']) !!}
-        <div class="col-9">
+      <div class="form-group row col-md-8">
+        {!! Form::label('name', trans("lang.category_name"), ['class' => 'col-2 control-label']) !!}
+        <div class=" col-9">
           {!! Form::text('name', null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'required']) !!}
           <div class="form-text text-muted">
             {{ trans("lang.category_name_help") }}
@@ -14,7 +16,8 @@
         </div>
       </div>
       <!-- NameEn Field -->
-      <div class="form-group row col-md-6">
+    <div class="form-group col-md-12 row">
+      <div class="form-group  col-md-6 row">
         {!! Form::label('name_en', 'NameEn', ['class' => 'col-3 control-label ']) !!}
         <div class="col-9">
           {!! Form::text('name_en', null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'required']) !!}
@@ -22,8 +25,23 @@
             {{ trans("lang.category_name_help") }}
           </div>
         </div>
+        </div>
+
+
+          <!-- Name ar Field -->
+        <div class="form-group col-md-6 row ">
+        {!! Form::label('name_ar', "NameAR", ['class' => 'col-3 control-label']) !!}
+        <div class="col-9">
+          {!! Form::text('name_ar', null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'required']) !!}
+          <div class="form-text text-muted">
+            {{ trans("lang.category_name_help") }}
+          </div>
+        </div>
       </div>
-    </div>
+      </div>
+
+
+
   <div class="row">
     <!-- Description Field -->
     <div class="form-group row col-md-6">
