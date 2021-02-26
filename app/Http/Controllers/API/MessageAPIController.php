@@ -112,15 +112,16 @@ class MessageApiController extends Controller
                 $options
             );
 
-            $data = response()->json([
-                'from' => $message->from,
-                'to' => $message->to,
-                'message' => $message->message,
-                'created_at' => $message->created_at
+//            $data = response()->json([
+//                'from' => $message->from,
+//                'to' => $message->to,
+//                'message' => $message->message,
+//                'created_at' => $message->created_at
+//
+//            ]);
 
-            ]);
-
-            $pusher->trigger('yaman-channel', 'messaging-event', $data);
+             $data = ['from' => $message->from, 'to' => $message->to, 'message' => $message->message]; // sending from and to user id when pressed enter
+             $pusher->trigger('yaman-channel', 'messaging-event', $data);
             return $this->sendResponse([], 'Message saved successfully');
          }
 
