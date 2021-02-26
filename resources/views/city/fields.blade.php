@@ -11,19 +11,9 @@
             </div>
           </div>
         </div>
-          <!-- Name Field -->
-          <div class="form-group row col-md-6">
-          {!! Form::label('name_en', 'Name En', ['class' => 'col-3 control-label text-right']) !!}
-          <div class="col-9">
-            {!! Form::text('name_en', Request::is('*edit') ? $city->city_name : null  ,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'required']) !!}
-            <div class="form-text text-muted">
-              {{ trans("lang.category_name_help") }}
-            </div>
-          </div>
-        </div>
-  </div>
-  <div class="row">
-        <!-- Select country-->
+          
+    
+ <!-- Select country-->
         <div class="form-group row col-md-6">
             {!! Form::label('name', "Country", ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
@@ -39,16 +29,29 @@
                 </div>
             </div>
         </div>
-          <!-- Description Field -->
-          <div class="form-group row " style="display:none">
-            {!! Form::label('description', trans("lang.category_description"), ['class' => 'col-3 control-label text-right']) !!}
-            <div class="col-9">
-              {!! Form::textarea('description', 'ff', ['class' => 'form-control','placeholder'=>
-               trans("lang.category_description_placeholder")  ]) !!}
-              <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
+  </div>
+  <div class="row">
+       <!-- Name Field -->
+        <div class="form-group row col-md-6">
+          {!! Form::label('name_en', 'Name En', ['class' => 'col-3 control-label text-right']) !!}
+          <div class="col-9">
+            {!! Form::text('name_en', Request::is('*edit') ? $city->name_en : null  ,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'required']) !!}
+            <div class="form-text text-muted">
+              {{ trans("lang.category_name_help") }}
             </div>
           </div>
-</div>     
+        </div>
+          <!-- Description Field -->
+          <div class="form-group  col-md-6 row " style="">
+          {!! Form::label('name_ar', 'Name AR', ['class' => 'col-3 control-label text-right']) !!}
+          <div class="col-9">
+            {!! Form::text('name_ar', Request::is('*edit') ? $city->name_ar : null  ,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'required']) !!}
+            <div class="form-text text-muted">
+              {{ trans("lang.category_name_help") }}
+            </div>
+          </div>
+          </div>
+          </div>     
         
 
       <!-- Submit Field -->

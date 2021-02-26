@@ -9,10 +9,13 @@ class Country extends Model
     public $table = 'countries';
     public $fillable = [
         'country_name',
-        'name_en'
+        'name_en',
+        'name_ar'
     ];
     public static $rules = [
-        'country_name' => 'required'
+        'country_name' => 'required',
+        'name_en' => 'required',
+        'name_en' => 'required'
     ];
     public function customFieldsValues()
     {

@@ -40,7 +40,7 @@
         <!-- City Field -->
         <div class="form-group col-md-6 row">
             {!! Form::label('City', trans('lang.city'), ['class' => 'col-3 control-label']) !!}
-            <div class="col-md-9">
+            <div class="col-md-9 city">
                 <select name="city" id="city" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
                     <option value="0" >select</option>
 
@@ -182,6 +182,7 @@ $(document).ready(function(){
 
                     $('#city').empty();
                     $('#city').append($city);
+                    refcity();
 
 
                 });

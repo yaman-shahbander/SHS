@@ -306,8 +306,14 @@
                         scrollToBottomFunc();
                     }
                 })
+               
+              //  $('#inputmessage').attr('autofocus');
+                
             }
+            //$("#Box1").
+          
         });
+     
     });
 
     // make a function to scroll down auto
@@ -315,6 +321,9 @@
         $('.message-wrapper').animate({
             scrollTop: $('.message-wrapper').get(0).scrollHeight
         }, 50);
+
+      
+            $('#inputmessage').focus();
     }
 </script>
 </body>
