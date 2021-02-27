@@ -171,7 +171,8 @@ Route::get('getContacts', 'API\MessageApiController@index'); // for chat(index)
 Route::post('getMessage', 'API\MessageApiController@getMessage'); // for chat(get messages)
 
 
-
+//Global Search
+Route::post('search', 'API\SearchAPIController@index');
 
 
 

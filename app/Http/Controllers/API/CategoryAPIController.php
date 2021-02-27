@@ -41,41 +41,50 @@ class CategoryAPIController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-        public function index(Request $request)
+    public function index(Request $request)
+    
     {
 
-            try {
+    try {
+       
+      
+        $lang = $request->lang;
 
+        $categories = $this->categoryRepository->all(['id','name','name_en', 'name_ar','image','description'])->transform(function($q) use ($lang){
 
-        $categories = $this->categoryRepository->all(['id','name','image','description'])->makeHidden(['custom_fields','has_media','media'])->transform(function($q){
-            $q->subCategory->transform(function($q){
-                try{
+            $q->subCategory->transform(function($q) use ($lang){
+                if ($lang) { $q['name'] = $q['name_' . $lang]; }
+      try{
 
-                    $q['image']=asset('storage/subcategoriesPic').'/'.($q->image==null?'image_default.png':$q->image);
-                }
-                catch (\Exception $e) {
-                    $q['image']=url('images/image_default.png');
-                }
-                return $q->only('id','name','description','image');
-            });
-            try{
+          $q['image']=asset('storage/subcategoriesPic').'/'.($q->image==null?'image_default.png':$q->image); 
 
-                $q['image']=asset('storage/categoriesPic').'/'.($q->image==null?'image_default.png':$q->image);
-            }
-            catch (\Exception $e) {
-                $q['image']=url('images/image_default.png');
-            }
-            return $q;
+        } catch (\Exception $e) {
+            
+            $q['image']=url('images/image_default.png'); 
+        }
+
+        return $q->only('id','name','description','image');
         });
+
+        if ($lang) { $q['name'] = $q['name_' . $lang]; }
+      
+        try{
+
+            $q['image']=asset('storage/categoriesPic').'/'.($q->image==null?'image_default.png':$q->image); 
+
+        }  catch (\Exception $e) {
+            $q['image']=url('images/image_default.png'); }
+            return $q; 
+        })->makeHidden(['custom_fields','has_media','media', 'name_en', 'name_ar']);
+    
         $response=$categories->toArray();
 
-         return $this->sendResponse($response, 'Categories retrieved successfully');
-            }
-            catch (\Exception $e) {
-                return $this->sendError('error save', 401);
-            }
+        return $this->sendResponse($response, 'Categories retrieved successfully');
 
-    }
+    } catch (\Exception $e) {
+        return $this->sendError('error', 401); }   
+
+ }
 
     /**
      * Display the specified Category.
@@ -140,30 +149,30 @@ class CategoryAPIController extends Controller
      */
     public function update($id, Request $request)
     {
-        $category = $this->categoryRepository->findWithoutFail($id);
+        // $category = $this->categoryRepository->findWithoutFail($id);
 
-        if (empty($category)) {
-            return $this->sendError('Category not found');
-        }
-        $input = $request->all();
-        $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->categoryRepository->model());
-        try {
-            $category = $this->categoryRepository->update($input, $id);
+        // if (empty($category)) {
+        //     return $this->sendError('Category not found');
+        // }
+        // $input = $request->all();
+        // $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->categoryRepository->model());
+        // try {
+        //     $category = $this->categoryRepository->update($input, $id);
 
-            if (isset($input['image']) && $input['image']) {
-                $cacheUpload = $this->uploadRepository->getByUuid($input['image']);
-                $mediaItem = $cacheUpload->getMedia('image')->first();
-                $mediaItem->copy($category, 'image');
-            }
-            foreach (getCustomFieldsValues($customFields, $request) as $value) {
-                $category->customFieldsValues()
-                    ->updateOrCreate(['custom_field_id' => $value['custom_field_id']], $value);
-            }
-        } catch (ValidatorException $e) {
-            return $this->sendError($e->getMessage());
-        }
+        //     if (isset($input['image']) && $input['image']) {
+        //         $cacheUpload = $this->uploadRepository->getByUuid($input['image']);
+        //         $mediaItem = $cacheUpload->getMedia('image')->first();
+        //         $mediaItem->copy($category, 'image');
+        //     }
+        //     foreach (getCustomFieldsValues($customFields, $request) as $value) {
+        //         $category->customFieldsValues()
+        //             ->updateOrCreate(['custom_field_id' => $value['custom_field_id']], $value);
+        //     }
+        // } catch (ValidatorException $e) {
+        //     return $this->sendError($e->getMessage());
+        // }
 
-        return $this->sendResponse($category->toArray(), __('lang.updated_successfully', ['operator' => __('lang.category')]));
+        // return $this->sendResponse($category->toArray(), __('lang.updated_successfully', ['operator' => __('lang.category')]));
 
     }
 
@@ -176,14 +185,14 @@ class CategoryAPIController extends Controller
      */
     public function destroy($id)
     {
-        $category = $this->categoryRepository->findWithoutFail($id);
+        // $category = $this->categoryRepository->findWithoutFail($id);
 
-        if (empty($category)) {
-            return $this->sendError('Category not found');
-        }
+        // if (empty($category)) {
+        //     return $this->sendError('Category not found');
+        // }
 
-        $category = $this->categoryRepository->delete($id);
+        // $category = $this->categoryRepository->delete($id);
 
-        return $this->sendResponse($category, __('lang.deleted_successfully', ['operator' => __('lang.category')]));
+        // return $this->sendResponse($category, __('lang.deleted_successfully', ['operator' => __('lang.category')]));
     }
 }

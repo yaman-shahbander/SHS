@@ -210,30 +210,25 @@ class vendorApiController extends Controller
 
     public function vendorFeefunc(Request $request) {
         if($request->header('devicetoken')) {
+            $user = User::where('device_token', $request->header('devicetoken'))->first();
 
-            $featuredVendor = User::where('device_token', $request->header('devicetoken'))->first();
+            if (empty($user)) {
+                return $this->sendError('User not found', 401);
+            }
+
+            $featuredVendor = User::find( $request->vendor_id);
 
             $featuredVendorBalance = $featuredVendor->Balance->balance;
 
-            $count = count(Fee::all()); // if there is a fee value
+            $fee = Fee::first(); // if there is a fee value
 
-            if ($count > 0) {
-
-                $value = Fee::all('fee_amount');
-
-                $value = $value[0]['fee_amount'];
-
-                $featuredVendorBalance -= $value;
-
-            } else {
-
-                $featuredVendorBalance = $featuredVendorBalance;
-            }
-
-            Balance::where('id', $featuredVendor->Balance->id)->update([
-                'balance' => $featuredVendorBalance]);
-
-            return $this->sendResponse($featuredVendorBalance, 'Fee subtracted successfully');
+            if (!empty($fee)) {
+                $featuredVendorBalance -= $fee->fee_amount;
+            } 
+            $featuredVendor->Balance->balance=$featuredVendorBalance;
+            $featuredVendor->Balance->save();
+            
+            return $this->sendResponse([], 'Fee subtracted successfully');
         }
     }
 
@@ -369,8 +364,6 @@ class vendorApiController extends Controller
         if(!empty($request->header('devicetoken'))) {
             $vendor = User::where('device_token', $request->header('devicetoken'))->first();
            if(!empty($vendor)) {
-
-
             try {
                 $Days  = Day::all(['id', 'name_'.$vendor->language]);
             }
@@ -389,6 +382,7 @@ class vendorApiController extends Controller
        }
 
     }
+    
     public function vendorReviews(Request $request) {
         if($request->header('devicetoken')) {
             $response = [];

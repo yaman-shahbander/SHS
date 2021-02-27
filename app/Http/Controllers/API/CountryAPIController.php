@@ -26,22 +26,54 @@ class CountryAPIController extends Controller
     {
         $this->countryRepository = $countryRepo;
     }
+
+    
     public function index(Request $request)
     {
-
+  
             try {
 
-        $countries = Country::with('City')->get(["id", "country_name"])->transform(function($q){
-            $q->City->makeHidden(['created_at','updated_at','name_en','country_id']);
-            return $q;
-        });
+                $countries = Country::with('City')->get(["id", "country_name", 'name_en', 'name_ar']);
 
-        return $this->sendResponse($countries->toArray(), 'Countries retrieved successfully');
+                if ($request->lang) {
+
+                $lang = $request->lang;
+
+                $countries = $countries->transform(function($q) use ($lang){
+
+                    $q->City->transform(function($q) use ($lang){
+
+                        $q['city_name'] = $q['name_' . $lang];
+
+                        return $q->only('id', 'city_name');
+
+                    });
+
+
+                    $q['country_name'] = $q['name_' . $lang];
+                    return $q;
+
+                })->makeHidden(['name_en' , 'name_ar']);
+                
+            } else {
+
+                $countries  =   $countries->makeHidden(['name_en' , 'name_ar'])->transform(function($q){
+
+                    $q->city->makeHidden(['name_en' , 'name_ar', 'country_id', 'created_at', 'updated_at']);
+
+                    return $q;
+
+                });
+
+            }
+             
+                return $this->sendResponse($countries->toArray(), 'Countries retrieved successfully');
             }
             catch (\Exception $e) {
-                return $this->sendError('error', 401);
-            }
 
+                return $this->sendError($e->getMessage(), 401);
+
+            }
     }
 
     /**
