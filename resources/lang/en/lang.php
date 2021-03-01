@@ -847,7 +847,7 @@ return [
     'normal_admins'=>'Admins',
     'super_admins'=>'Super Admins',
     'export'=>'Export',
-    'suggested'=>'Suggested Service Providers',
+    'suggested'=>'Suggested Service Provider',
     'special_offers'=>'Special Offers',
     'special_offers_desc'=>'Special Offers Managment',
     'special_offers_table'=>'Special Offers List',

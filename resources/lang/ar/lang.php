@@ -819,7 +819,7 @@ return [
     'normal_admins'=>'المشرفين',
     'super_admins'=>'المشرفين المميزين',
     'export'=>'تصدير',
-    'suggested'=>'Suggested Vendor',
+    'suggested'=>'مزود خدمة مقترح',
     'special_offers'=>'Special Offers',
     'special_offers_desc'=>'Special Offers Managment',
     'special_offers_table'=>'Special Offers List',
