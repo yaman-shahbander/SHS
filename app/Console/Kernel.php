@@ -4,6 +4,9 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Models\BannedUsers;
+use Carbon\Carbon;
+use App\Console\Commands\Unblock;
 
 class Kernel extends ConsoleKernel
 {
@@ -14,6 +17,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\DemoCron::class,
+        Unblock::class,
     ];
 
     /**
@@ -26,8 +30,14 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
-         $schedule->command('demo:cron')
-                 ->everyMinute();
+        // $schedule->command('demo:cron')
+        //         ->everyMinute();
+
+          $schedule->command('user:unblock')->everyMinute();
+
+        // $schedule->call(function () {
+        //     BannedUsers::where('forever_ban', '!=', '1')->where('temporary_ban', '<=', Carbon::now())->delete();
+        // })->everyMinute()->runInBackground();
     }
 
     /**
