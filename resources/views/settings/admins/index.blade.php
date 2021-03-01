@@ -7,12 +7,12 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0 text-dark">Admins<small class="ml-3 mr-3">|</small><small>Admins settings</small></h1>
+        <h1 class="m-0 text-dark">{{trans('lang.normal_admins')}}<small class="ml-3 mr-3">|</small><small>{{trans('lang.normal_admins')}} settings</small></h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><a href="{{url('/dashboard')}}"><i class="fa fa-dashboard"></i> {{trans('lang.dashboard')}}</a></li>
-          <li class="breadcrumb-item"><a href="{!! route('adminsBoard.index') !!}">Admins</a>
+          <li class="breadcrumb-item"><a href="{!! route('adminsBoard.index') !!}">{{trans('lang.normal_admins')}}</a>
           </li>
         </ol>
       </div><!-- /.col -->

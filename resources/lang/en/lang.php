@@ -777,6 +777,7 @@ return [
     'user_updated_at_help' => 'Insert Updated At',
     'user_updated_at_placeholder' => 'Insert Updated At',
     'vendors' => 'Service Providers',
+    'vendors_settings' => 'Service Providers Settings',
     'vendor' => 'Service Provider',
     'vendor_about_me' => 'About Me',
     'vendor_address' => 'Address',
@@ -947,5 +948,8 @@ return [
     'expire'=>'Expire',
     'temp_ban'=>'Temp Ban',
     'ban_forever'=>'Ban Forever',
-
+    'Home_Owner'  => 'Home Owner',
+    'Home_Owner_settings'  => 'Home Owner Settings',
+    'favorites'   => 'Favorites',
+    'reviews'     => 'Reviews',
 ];

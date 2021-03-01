@@ -747,6 +747,7 @@ return [
     'user_updated_at_placeholder' => 'أدخل تاريخ التحديث',
     
     'vendors'=>'مزودين الخدمة',
+    'vendors_settings' => 'أعدادات مزودين الخدمة',
     'vendor' => 'مزود خدمة',
     'vendor_about_me' => 'عنًي',
     'vendor_address' => 'العنوان',
@@ -918,5 +919,8 @@ return [
     'expire'=>'انتهاء الصلاحية',
     'temp_ban'=>'حظر مؤقت',
     'ban_forever'=>'حظر للابد',
-
+    'Home_Owner'  => 'صاحب المنزل',
+    'Home_Owner_settings'  => 'أعدادات صاحب المنزل',
+    'favorites'   => 'المفضلة',
+    'reviews'     => 'المراجعات',
 ];

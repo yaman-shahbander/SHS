@@ -265,12 +265,12 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0 text-dark"> Home Owner<small class="ml-3 mr-3">|</small><small>Home Owners Settings</small></h1>
+        <h1 class="m-0 text-dark">{{trans('lang.Home_Owner')}}<small class="ml-3 mr-3">|</small><small>{{trans('lang.Home_Owner_settings')}}</small></h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><a href="{{url('/dashboard')}}"><i class="fa fa-dashboard"></i> {{trans('lang.dashboard')}}</a></li>
-          <li class="breadcrumb-item"><a href="{!! route('users.index') !!}">Home Owners</a>
+          <li class="breadcrumb-item"><a href="{!! route('users.index') !!}">{{trans('lang.Home_Owner')}}</a>
           </li>
         </ol>
       </div><!-- /.col -->

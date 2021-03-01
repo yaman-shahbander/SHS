@@ -77,7 +77,7 @@
     @can('users.index')
     <li class="nav-item">
         <a class="nav-link {{ Request::is('users*') ? 'active' : '' }}" href="{!! route('users.index') !!}">@if($icons)
-                <i class="nav-icon fa fa-users"></i>@endif<p>{{trans('lang.home_owner')}}</p></a>
+                <i class="nav-icon fa fa-users"></i>@endif<p>{{trans('lang.Home_Owner')}}</p></a>
     </li>
     @endcan
 
