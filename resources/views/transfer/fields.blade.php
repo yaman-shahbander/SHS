@@ -7,7 +7,7 @@
 
 <!-- Select from user-->
 <div class="form-group row">
-    {!! Form::label('fromUser', "From Name", ['class' => 'col-3 control-label text-right']) !!}
+    {!! Form::label('fromUser', trans('lang.from_user'), ['class' => 'col-3 control-label text-right']) !!}
     <div class="col-9">
     @if(Request::is('*edit'))
         <select name="fromUser" id="brand" aria-controls="dataTableBuilder" class="form-control form-control-sm" disabled>
@@ -32,7 +32,7 @@
 
 <!-- Select to user-->
 <div class="form-group row">
-    {!! Form::label('toUser', "To Name", ['class' => 'col-3 control-label text-right']) !!}
+    {!! Form::label('toUser', trans('lang.to_user'), ['class' => 'col-3 control-label text-right']) !!}
     <div class="col-9">
     @if(Request::is('*edit'))
         <select name="toUser" id="brand1" aria-controls="dataTableBuilder" class="form-control form-control-sm" disabled>
@@ -58,7 +58,7 @@
 
 <!-- amount Field -->
 <div class="form-group row ">
-  {!! Form::label('amount', "amount", ['class' => 'col-3 control-label text-right']) !!}
+  {!! Form::label('amount', trans('lang.amount'), ['class' => 'col-3 control-label text-right']) !!}
   <div class="col-9">
     {!! Form::number('amount', Request::is('*edit') ? null : null,  ['class' => 'form-control','placeholder'=>  'Insert amount', 'step' => "0.01", 'required']) !!}
   </div>
@@ -138,6 +138,6 @@
 
 <!-- Submit Field -->
 <div class="form-group col-12 text-right">
-  <button type="submit" class="btn btn-{{setting('theme_color')}}" ><i class="fa fa-save"></i> Save Transfer</button>
+  <button type="submit" class="btn btn-{{setting('theme_color')}}" ><i class="fa fa-save"></i> {{trans('lang.save')}} </button>
   <a href="{!! route('transfer.index') !!}" class="btn btn-default"><i class="fa fa-undo"></i> {{trans('lang.cancel')}}</a>
 </div>

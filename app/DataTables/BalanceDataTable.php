@@ -57,11 +57,11 @@ class BalanceDataTable extends DataTable
         $columns = [
             [
                'data' => 'name',
-               'title' => 'Name',
+               'title' => trans('lang.name'),
             ],
             [
                 'data' => 'balance_id',
-                'title' => 'Balance',
+                'title' => trans('lang.balance'),
             ],
             [
                 'data' => 'updated_at',

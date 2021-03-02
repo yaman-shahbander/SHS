@@ -15,14 +15,14 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0 text-dark">Country<small class="ml-3 mr-3">|</small><small>Country Management</small></h1>
+        <h1 class="m-0 text-dark">{{trans('lang.country')}}<small class="ml-3 mr-3">|</small><small>{{trans('lang.country_management')}}</small></h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><a href="{{url('/dashboard')}}"><i class="fa fa-dashboard"></i> {{trans('lang.dashboard')}}</a></li>
-          <li class="breadcrumb-item"><a href="{!! route('country.index') !!}">Country</a>
+          <li class="breadcrumb-item"><a href="{!! route('country.index') !!}">{{trans('lang.country')}}</a>
           </li>
-          <li class="breadcrumb-item active">Edit Country</li>
+          <li class="breadcrumb-item active">{{trans('lang.edit_country')}}</li>
         </ol>
       </div><!-- /.col -->
     </div><!-- /.row -->
@@ -39,16 +39,16 @@
       <ul class="nav nav-tabs align-items-end card-header-tabs w-100">
         @can('country.index')
         <li class="nav-item">
-          <a class="nav-link" href="{!! route('country.index') !!}"><i class="fa fa-list mr-2"></i>Country list</a>
+          <a class="nav-link" href="{!! route('country.index') !!}"><i class="fa fa-list mr-2"></i>{{trans('lang.country_list')}}</a>
         </li>
         @endcan
         @can('country.create')
         <li class="nav-item">
-          <a class="nav-link" href="{!! route('country.create') !!}"><i class="fa fa-plus mr-2"></i>Create Country</a>
+          <a class="nav-link" href="{!! route('country.create') !!}"><i class="fa fa-plus mr-2"></i>{{trans('lang.create_country')}}</a>
         </li>
         @endcan
         <li class="nav-item">
-          <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-pencil mr-2"></i>Edit Country</a>
+          <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-pencil mr-2"></i>{{trans('lang.edit_country')}}</a>
         </li>
       </ul>
     </div>

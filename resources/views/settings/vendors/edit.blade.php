@@ -298,7 +298,7 @@
           <a class="nav-link" href="{!! route('vendors.create') !!}"><i class="fa fa-plus mr-2"></i>{{trans('lang.vendor_create')}}</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-pencil mr-2"></i>Edit Service Provider</a>
+          <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-pencil mr-2"></i>{{trans('lang.edit_service_provider')}}</a>
         </li>
       </ul>
     </div>

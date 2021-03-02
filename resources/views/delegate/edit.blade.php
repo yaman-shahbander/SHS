@@ -9,7 +9,7 @@
 {{--dropzone--}}
 <link rel="stylesheet" href="{{asset('plugins/dropzone/bootstrap.min.css')}}">
 @endpush
-@section('settings_title',trans('lang.delegate'))
+@section('settings_title',trans('lang.delegates'))
 @section('settings_content')
   @include('flash::message')
   @include('adminlte-templates::common.errors')

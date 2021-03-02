@@ -21,7 +21,7 @@
 
         <!-- username Field -->
         <div class="form-group col-md-6 row">
-            {!! Form::label('nickname', "Nickname", ['class' => 'col-3 control-label']) !!}
+            {!! Form::label('nickname', trans("lang.nickname"), ['class' => 'col-3 control-label']) !!}
             <div class="col-md-9">
                 {!! Form::text('nickname', null,  ['class' => 'form-control','placeholder'=>  trans('lang.last_name_placeholder'), 'required']) !!}
             </div>
@@ -82,7 +82,7 @@
 
         <!-- phone Field -->
         <div class="form-group col-md-6 row">
-            {!! Form::label('phone', "phone", ['class' => 'col-md-3 control-label']) !!}
+            {!! Form::label('phone', trans("lang.phone"), ['class' => 'col-md-3 control-label']) !!}
             <div class="col-md-9">
                 {!! Form::text('phone',null , ['class' => 'form-control','placeholder'=>  "Insert phone number"]) !!}
             </div>
@@ -90,7 +90,7 @@
 
         <!-- website Field -->
         <div class="form-group col-md-6 row">
-            {!! Form::label('website', "Website", ['class' => 'col-md-3 control-label']) !!}
+            {!! Form::label('website', trans('lang.website'), ['class' => 'col-md-3 control-label']) !!}
             <div class="col-md-9">
                 {!! Form::url('website',null ,['class' => 'form-control','placeholder'=>  "Insert website url"]) !!}
             </div>
@@ -98,7 +98,7 @@
 
         <!-- address Field -->
         <div class="form-group col-md-6 row">
-            {!! Form::label('address', "Address", ['class' => 'col-md-3 control-label']) !!}
+            {!! Form::label('address', trans('lang.address'), ['class' => 'col-md-3 control-label']) !!}
             <div class="col-md-9">
                 {!! Form::text('address', null ,['class' => 'form-control','placeholder'=>  "Insert physical address"]) !!}
             </div>
@@ -108,7 +108,7 @@
         <!-- Roles Field -->
             <div class="form-group col-md-6 row">
                     <div class="form-group col-md-12 row">
-                        {!! Form::label('Language', 'Lang', ['class' => 'col-3 control-label']) !!}
+                        {!! Form::label('Language', trans('lang.lang'), ['class' => 'col-3 control-label']) !!}
                         <div class="col-9" >
                             {!! Form::text('language', null,  ['class' => 'form-control','placeholder'=> trans("lang.language_placeholder") ,'required']) !!}
                             <div class="form-text text-muted">
@@ -141,7 +141,7 @@
         <!-- $FIELD_NAME_TITLE$ Field -->
 
         <div class="form-group row col-md-6">
-        {!! Form::label('avatar', trans("lang.user_avatar"), ['class' => 'col-md-3 control-label', 'style' => 'font-size:15px']) !!}
+        {!! Form::label('avatar', trans("lang.avatar"), ['class' => 'col-md-3 control-label', 'style' => 'font-size:15px']) !!}
             <div class="col-md-9">
                 <!-- $FIELD_NAME_TITLE$ Field -->
                 <div class="row">
@@ -238,6 +238,6 @@
 
 <!-- Submit Field -->
 <div class="form-group col-12 text-right">
-    <button type="submit" class="btn btn-{{setting('theme_color')}}"><i class="fa fa-save"></i> {{trans('lang.save')}} {{trans('lang.user')}}</button>
+    <button type="submit" class="btn btn-{{setting('theme_color')}}"><i class="fa fa-save"></i> {{trans('lang.save')}} </button>
     <a href="{!! route('vendors.index') !!}" class="btn btn-default"><i class="fa fa-undo"></i> {{trans('lang.cancel')}}</a>
 </div>

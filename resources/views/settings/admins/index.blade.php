@@ -7,7 +7,7 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0 text-dark">{{trans('lang.normal_admins')}}<small class="ml-3 mr-3">|</small><small>{{trans('lang.normal_admins')}} settings</small></h1>
+        <h1 class="m-0 text-dark">{{trans('lang.normal_admins')}}<small class="ml-3 mr-3">|</small><small>{{trans('lang.normal_admins_settings')}}</small></h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
@@ -30,10 +30,10 @@
     <div class="card-header">
       <ul class="nav nav-tabs align-items-end card-header-tabs w-100">
         <li class="nav-item">
-          <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-list mr-2"></i>Admins List</a>
+          <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-list mr-2"></i>{{ trans('lang.admins_list') }}</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link " href="{!! route('adminsBoard.create') !!}"><i class="fa fa-plus mr-2"></i>Create Admin</a>
+          <a class="nav-link " href="{!! route('adminsBoard.create') !!}"><i class="fa fa-plus mr-2"></i>{{ trans('lang.admins_create') }}</a>
         </li>
         @include('layouts.right_toolbar', compact('dataTable'))
       </ul>

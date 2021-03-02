@@ -15,7 +15,7 @@
 
         <!-- username Field -->
         <div class="form-group col-md-6 row">
-            {!! Form::label('nickname', "Nickname", ['class' => 'col-3 control-label']) !!}
+            {!! Form::label('nickname', trans('lang.nickname'), ['class' => 'col-3 control-label']) !!}
             <div class="col-md-9">
                 {!! Form::text('nickname', null,  ['class' => 'form-control','placeholder'=>  trans('lang.last_name_placeholder'), 'required']) !!}
             </div>
@@ -91,7 +91,7 @@
 
         <!-- phone Field -->
         <div class="form-group col-md-6 row">
-            {!! Form::label('phone', "Phone", ['class' => 'col-3 control-label']) !!}
+            {!! Form::label('phone', trans('lang.phone'), ['class' => 'col-3 control-label']) !!}
             <div class="col-md-9">
                 {!! Form::text('phone', null,  ['class' => 'form-control','placeholder'=>  'Insert phone number']) !!}
             </div>
@@ -118,7 +118,7 @@
              
         <!-- $FIELD_NAME_TITLE$ Field -->
         <div class="form-group row col-md-6">
-        {!! Form::label('avatar', trans("lang.user_avatar"), ['class' => 'col-md-3 control-label', 'style' => 'font-size:15px']) !!}
+        {!! Form::label('avatar', trans("lang.avatar"), ['class' => 'col-md-3 control-label', 'style' => 'font-size:15px']) !!}
             <div class="col-md-9">
 
                 <!-- $FIELD_NAME_TITLE$ Field -->
@@ -221,6 +221,6 @@ $(document).ready(function(){
 
 <!-- Submit Field -->
 <div class="form-group col-12 text-right">
-    <button type="submit" class="btn btn-{{setting('theme_color')}}"><i class="fa fa-save"></i> {{trans('lang.save')}} {{trans('lang.user')}}</button>
+    <button type="submit" class="btn btn-{{setting('theme_color')}}"><i class="fa fa-save"></i> {{trans('lang.save')}} </button>
     <a href="{!! route('users.index') !!}" class="btn btn-default"><i class="fa fa-undo"></i> {{trans('lang.cancel')}}</a>
 </div>

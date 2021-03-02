@@ -57,20 +57,22 @@ Auth::routes();
 //Route::get('payments/paypal', 'PayPalController@index')->name('paypal.index');
 
 Route::get('firebase/sw-js', 'AppSettingController@initFirebase');
+
+
 Route::group(['prefix' => LaravelLocalization::setLocale()], function()
 {
    
 
 
-    Route::get('storage/app/public/{id}/{conversion}/{filename?}', 'UploadController@storage');
-    Route::middleware('auth')->group(function () {
+        Route::get('storage/app/public/{id}/{conversion}/{filename?}', 'UploadController@storage');
+        Route::middleware('auth')->group(function () {
         Route::get('/chat','MessageController@index')->name('chat');
         Route::get('/message/{id}', 'MessageController@getMessage')->name('message');
         Route::post('message', 'MessageController@sendMessage');  
 
 
         Route::middleware('Checklanguage')->group(function () {
-            Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+        Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
         Route::get('/', 'DashboardController@index')->name('dashboard');
 
         Route::post('uploads/store', 'UploadController@store')->name('medias.create');
@@ -81,9 +83,61 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
         Route::get('showAdmin','UserController@showAdmin')->name('showAdmin');
         Route::get('superAdmin','UserController@superAdmin')->name('superAdmin');
         Route::resource('sales_man','DelegateController');
+        Route::resource('special/offers', 'SpecialOffersController')->except([
+            'show'
+        ]);
+        Route::resource('/vendorRegistration', 'DurationController');
+        Route::resource("/durationOffer", "durationOffersController");
+        Route::resource('/balance', 'BalanceController');
+        Route::get('{id}/addBalance', 'BalanceController@addBalance')->name('balance.add');
+        Route::put('{id}/balanceaddUpdate', 'BalanceController@balanceaddUpdate')->name('balance.addupdate');
+        Route::resource('/transfer', 'TransferTransactionController');
+        Route::get('/transferHistory/{id}', 'TransferTransactionController@transactionHistory');
+        Route::get('user/profile', 'UserController@userprofile')->name('user.profile');
+        Route::resource('/notification', 'NotificationController');
+        Route::get('/fee', 'VendorController@featuredfeeFunction')->name('vendor.fee');
+        Route::post('/feeSave', 'VendorController@savefeeFunction')->name('fee.save');
+        Route::resource('bannedUsers', 'BannedUsersController')->except([
+            'show'
+        ]);
+        Route::get('banned/{id}','BannedUsersController@banned');
+        Route::resource('pending/reviews','PendingReviewsController');
+        Route::resource('reviews/approved','ReviewsController');
+        Route::get('reviews/approve','PendingReviewsController@approve')->name('reviews.approve');
+        Route::resource('rating','RatingController');
+        Route::get('/subcategoryVendor/{id}', 'SubCategoryController@getSubcategoryVendors');
+        Route::resource("/homeOwnerFavorites", "FavoriteController");
+        Route::resource('/adminsBoard', 'AdminController');
+        Route::post('adminsBoard/profile', 'AdminController@adminprofile')->name('admin.profile');
+        Route::resource('/superAdminsBoard', 'SuperAdminController');
+        Route::post('superAdminsBoard/profile', 'SuperAdminController@superadminAdminProfile')->name('superadmin.profile');
+        Route::resource('suggested/vendor', 'VendorsSuggestedController');
+        Route::post('store_vendors_suggested/{id}','VendorsSuggestedController@store_vendors_suggested')->name('store_vendors_suggested');
+        Route::post('saveUpdateBlockedUser','BannedUsersController@saveUpdateBlocking')->name('saveUpdateBlockedUser');
+        Route::get('showBannedProfile','BannedUsersController@showProfile')->name('showBannedProfile');
+        Route::delete('unBlockUser','BannedUsersController@unBlockuser')->name('unBlockUser');
+        Route::resource('country', 'CountryController')->except([
+        'show']);
+        Route::resource('city', 'CityController')->except([
+        'show']);
+
+        Route::resource('subcategory', 'SubCategoryController')->except([
+            'show'
+        ]);
+        Route::post('categories/remove-media', 'CategoryController@removeMedia');
+        Route::post('msubcategory/remove-media', 'SubCategoryController@removeMedia');
+        Route::resource('categories', 'CategoryController')->except([
+            'show'
+        ]);
+        Route::resource('faqCategories', 'FaqCategoryController')->except([
+            'show'
+        ]);
         Route::resource('subscription','SubscriptionController');
         Route::resource('language','languageController');
         Route::get('dashboard', 'DashboardController@index')->name('dashboard');
+        Route::resource('faqs', 'FaqController')->except([
+            'show'
+        ]);
 
         Route::group(['middleware' => ['permission:medias']], function () {
             Route::get('uploads/all/{collection?}', 'UploadController@all');
@@ -158,17 +212,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
     //        'show'
     //    ]);
 
-    Route::post('categories/remove-media', 'CategoryController@removeMedia');
-    Route::post('msubcategory/remove-media', 'SubCategoryController@removeMedia');
-    Route::resource('categories', 'CategoryController')->except([
-        'show'
-    ]);
-
-
-
-    Route::resource('faqCategories', 'FaqCategoryController')->except([
-        'show'
-    ]);
+    
 
 //    Route::resource('orderStatuses', 'OrderStatusController')->except([
 //        'create', 'store', 'destroy'
@@ -200,9 +244,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
 //        'create', 'store', 'edit', 'destroy'
 //    ]);;
 
-    Route::resource('faqs', 'FaqController')->except([
-        'show'
-    ]);
+    
     ///
 //    Route::resource('restaurantReviews', 'RestaurantReviewController')->except([
 //        'show'
@@ -260,80 +302,9 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
 
     });
 
-    Route::resource('subcategory', 'SubCategoryController')->except([
-        'show'
-    ]);
-
-    Route::resource('suggested/vendor', 'VendorsSuggestedController');
-    Route::post('store_vendors_suggested/{id}','VendorsSuggestedController@store_vendors_suggested')->name('store_vendors_suggested');
-
-    Route::post('saveUpdateBlockedUser','BannedUsersController@saveUpdateBlocking')->name('saveUpdateBlockedUser');
-
-    Route::get('showBannedProfile','BannedUsersController@showProfile')->name('showBannedProfile');
-
-
-
-
-    Route::delete('unBlockUser','BannedUsersController@unBlockuser')->name('unBlockUser');
-
-
-
-
-
-    Route::resource('country', 'CountryController')->except([
-        'show'
-    ]);
-
-    Route::resource('city', 'CityController')->except([
-        'show'
-    ]);
-    //to get cities
-
-
-    ///for special offers
-
-    Route::resource('special/offers', 'SpecialOffersController')->except([
-        'show'
-    ]);
-
-    Route::resource('bannedUsers', 'BannedUsersController')->except([
-        'show'
-    ]);
-    Route::get('banned/{id}','BannedUsersController@banned');
-    Route::resource('pending/reviews','PendingReviewsController');
-    Route::resource('reviews/approved','ReviewsController');
-    Route::get('reviews/approve','PendingReviewsController@approve')->name('reviews.approve');
-    Route::resource('rating','RatingController');
-    Route::get('/subcategoryVendor/{id}', 'SubCategoryController@getSubcategoryVendors');
-    Route::resource("/homeOwnerFavorites", "FavoriteController");
-    //Route::get('/homeOwnerFavorites/{id}', 'favoriteController@getSubcategoryVendors');
-    Route::resource('/vendorRegistration', 'DurationController');
-    Route::resource("/durationOffer", "durationOffersController");
-    Route::resource('/balance', 'BalanceController');
-    Route::get('{id}/addBalance', 'BalanceController@addBalance')->name('balance.add');
-    Route::put('{id}/balanceaddUpdate', 'BalanceController@balanceaddUpdate')->name('balance.addupdate');
-    Route::resource('/transfer', 'TransferTransactionController');
-    Route::get('/transferHistory/{id}', 'TransferTransactionController@transactionHistory');
-    Route::get('user/profile', 'UserController@userprofile')->name('user.profile');
-    Route::resource('/notification', 'NotificationController');
-    Route::get('/fee', 'VendorController@featuredfeeFunction')->name('vendor.fee');
-    Route::post('/feeSave', 'VendorController@savefeeFunction')->name('fee.save');
-    Route::resource('/adminsBoard', 'AdminController');
-    Route::post('adminsBoard/profile', 'AdminController@adminprofile')->name('admin.profile');
-    Route::resource('/superAdminsBoard', 'SuperAdminController');
-    Route::post('superAdminsBoard/profile', 'SuperAdminController@superadminAdminProfile')->name('superadmin.profile');
-
     Route::post('/sendmail',[
         'as' => 'sendmail',
         'uses' => 'phpmailercontroller@sendEmail'
     ]);
-
-    /*
-    * This is the main app route [Chatify Messenger]
-    */
-
-
-
-   
 });
 });

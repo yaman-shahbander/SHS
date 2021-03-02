@@ -64,27 +64,27 @@ class PendingReviewDataTable extends DataTable
         $columns = [
             [
                 'data' => 'vendor_id',
-                'title' => 'Vendor Name',
+                'title' => trans('lang.SP_name'),
 
             ],
             [
                 'data' => 'client_id',
-                'title' => 'Client Name',
+                'title' => trans('lang.reviewer'),
 
             ],
             [
                 'data' => 'vendors.phone',
-                'title' => 'Phone',
+                'title' => trans('lang.phone'),
 
             ],
             [
                 'data' => 'description',
-                'title' => 'Description',
+                'title' => trans('lang.description'),
 
             ],
             [
                 'data' => 'full_rating',
-                'title' => 'Full Rating',
+                'title' => trans('lang.rating'),
 
             ]
 

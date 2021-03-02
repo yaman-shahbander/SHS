@@ -96,7 +96,7 @@ class VendorSuggestedDataTable extends DataTable
             // ],
             [
                 'data' => 'phone',
-                'title' =>'Phone',
+                'title' => trans('lang.phone'),
                 'searchable' => false, 'orderable' => false, 'exportable' => false, 'printable' => false,
             ],
             [

@@ -54,15 +54,15 @@ class DurationOfeersDataTable extends DataTable
         $columns = [
             [
                     'data'  => 'duration',
-                    'title' => 'Duration'
+                    'title' => trans('lang.durations')
             ],
             [
                     'data'  => 'duration_in_num',
-                    'title' => 'Duration in number'
+                    'title' => trans('lang.durations_number')
             ],
             [
                     'data'  => 'discount',
-                    'title' => 'Discount'
+                    'title' => trans('lang.discount')
             ],
             [
                 'data' => 'updated_at',

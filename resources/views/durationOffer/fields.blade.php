@@ -5,14 +5,14 @@
   <div class="row">
     <!-- duration_name Field -->
     <div class="form-group row col-md-6">
-      {!! Form::label('duration_name', "Duration Name", ['class' => 'col-4 control-label ']) !!}
+      {!! Form::label('duration_name', trans('lang.durations'), ['class' => 'col-4 control-label ']) !!}
       <div class="col-8">
         {!! Form::text('duration_name', Request::is('*edit') ? $duration->duration : null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'required']) !!}
       </div>
     </div>
     <!-- duration in number Field -->
     <div class="form-group row col-md-6">
-      {!! Form::label('duration_in_number', "Duration In Number", ['class' => 'col-4 control-label']) !!}
+      {!! Form::label('duration_in_number', trans('lang.durations_number'), ['class' => 'col-4 control-label']) !!}
       <div class="col-8">
         {!! Form::text('duration_in_number', Request::is('*edit') ? $duration->duration_in_num : null,  ['class' => 'form-control','placeholder'=>  "Insert Number", 'required']) !!}
       </div>
@@ -22,7 +22,7 @@
   <div class="row">
     <!-- discount Field -->
     <div class="form-group row col-md-6">
-      {!! Form::label('discount', "Discount", ['class' => 'col-4 control-label ']) !!}
+      {!! Form::label('discount', trans('lang.discount'), ['class' => 'col-4 control-label ']) !!}
       <div class="col-8">
         {!! Form::text('discount', Request::is('*edit') ? $duration->discount : null,  ['class' => 'form-control','placeholder'=>  "Insert discount in percentage", 'required']) !!}
         <div class="form-text text-muted">
@@ -101,6 +101,6 @@
 
 <!-- Submit Field -->
 <div class="form-group col-12 text-right">
-  <button type="submit" class="btn btn-{{setting('theme_color')}}" ><i class="fa fa-save"></i> Save Duration</button>
+  <button type="submit" class="btn btn-{{setting('theme_color')}}" ><i class="fa fa-save"></i> {{trans('lang.save')}} </button>
   <a href="{!! route('durationOffer.index') !!}" class="btn btn-default"><i class="fa fa-undo"></i> {{trans('lang.cancel')}}</a>
 </div>

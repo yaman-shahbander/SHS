@@ -15,14 +15,14 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0 text-dark">Reviews<small class="ml-3 mr-3">|</small><small>Pending Reviews</small></h1>
+        <h1 class="m-0 text-dark">{{trans('lang.reviews')}}<small class="ml-3 mr-3">|</small><small>{{ trans('lang.pending_reviews') }}</small></h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><a href="{{url('/dashboard')}}"><i class="fa fa-dashboard"></i> {{trans('lang.dashboard')}}</a></li>
           <li class="breadcrumb-item"><a href="{!! route('reviews.index') !!}">Reviews</a>
           </li>
-          <li class="breadcrumb-item active">Edit Pending Reviews</li>
+          <li class="breadcrumb-item active">{{trans('lang.approve_edit')}}</li>
         </ol>
       </div><!-- /.col -->
     </div><!-- /.row -->
@@ -57,7 +57,7 @@
 
           <!-- Vendor Name Field -->
           <div class="form-group row ">
-            {!! Form::label('vendor_name', 'Vendor Name', ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important']) !!}
+            {!! Form::label('vendor_name', trans('lang.SP_name'), ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important']) !!}
             <div class="col-8">
               {!! Form::text('vendor_name', $review->vendors->name,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'readonly']) !!}
             </div>
@@ -65,7 +65,7 @@
 
           <!-- HomeOwner Name Field -->
           <div class="form-group row ">
-            {!! Form::label('homeowner_name', 'HomeOwner Name', ['class' => 'col-4 control-label text-right']) !!}
+            {!! Form::label('homeowner_name', trans('lang.reviewer'), ['class' => 'col-4 control-label text-right']) !!}
             <div class="col-8">
               {!! Form::text('homeowner_name', $review->clients->name,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'readonly']) !!}
             </div>
@@ -86,40 +86,40 @@
         <!-- Rating Field -->
 
         <div class="form-group row">
-        <div style="width:100%"><h3 style="text-align:center !important">Ratings<h3></div>
+        <div style="width:100%"><h3 style="text-align:center !important">{{trans('lang.rating')}}<h3></div>
 
         </div><!--end div>-->
 
         <div class="form-group row">
-            {!! Form::label('price_rating', 'Rating Price', ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important']) !!}
+            {!! Form::label('price_rating', trans('lang.Rating_Price'), ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important']) !!}
             <div class="col-8">
               {!! Form::text('price_rating', $review->price_rating,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder")]) !!}
             </div>
         </div><!--end div>-->
 
         <div class="form-group row">
-            {!! Form::label('service_rating', 'Rating Service', ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important']) !!}
+            {!! Form::label('service_rating',trans('lang.Rating_Service'), ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important']) !!}
             <div class="col-8">
               {!! Form::text('service_rating', $review->service_rating,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder")]) !!}
             </div>
         </div><!--end div>-->
 
         <div class="form-group row">
-            {!! Form::label('speed_rating', 'Rating Speed', ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important']) !!}
+            {!! Form::label('speed_rating', trans('lang.Rating_Speed'), ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important']) !!}
             <div class="col-8">
               {!! Form::text('speed_rating', $review->speed_rating,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder")]) !!}
             </div>
         </div><!--end div>-->
 
         <div class="form-group row">
-            {!! Form::label('trust_rating', 'Rating Trust', ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important']) !!}
+            {!! Form::label('trust_rating', trans('lang.Rating_Trust'), ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important']) !!}
             <div class="col-8">
               {!! Form::text('trust_rating', $review->trust_rating,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder")]) !!}
             </div>
         </div><!--end div>-->
 
         <div class="form-group row">
-            {!! Form::label('knowledge_rating', 'Rating Knowledge', ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important']) !!}
+            {!! Form::label('knowledge_rating', trans('lang.Rating_Knowledge'), ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important']) !!}
             <div class="col-8">
               {!! Form::text('knowledge_rating', $review->knowledge_rating,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder")]) !!}
             </div>
@@ -131,10 +131,10 @@
         <div class="form-group col-12 text-right">
           {{--  @can('review.approve')--}}
                     <a data-toggle="tooltip"  title="'review approve'" href="{{ route('reviews.approve',['id'=> $review->id]) }}" class="btn btn-success" style="margin-right:3px">
-                    Approve
+                    {{trans('lang.approve')}}
                     </a>
           {{--  @endcan--}}
-          <button type="submit" class="btn btn-{{setting('theme_color')}}" ><i class="fa fa-save"></i> Save Reviews</button>
+          <button type="submit" class="btn btn-{{setting('theme_color')}}" ><i class="fa fa-save"></i> {{trans('lang.save')}} </button>
           
           <a href="{!! route('reviews.index') !!}" class="btn btn-default"><i class="fa fa-undo"></i> {{trans('lang.cancel')}}</a>
         </div>

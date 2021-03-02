@@ -3,7 +3,7 @@
     <div class="row">
         <!-- Name Field -->
         <div class="form-group row col-md-6">
-          {!! Form::label('name', trans("lang.category_name"), ['class' => 'col-3 control-label text-right']) !!}
+          {!! Form::label('name', trans("lang.city_name"), ['class' => 'col-3 control-label text-right']) !!}
           <div class="col-9">
             {!! Form::text('name', Request::is('*edit') ? $city->city_name : null  ,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'required']) !!}
             <div class="form-text text-muted">
@@ -15,7 +15,7 @@
     
  <!-- Select country-->
         <div class="form-group row col-md-6">
-            {!! Form::label('name', "Country", ['class' => 'col-3 control-label text-right']) !!}
+            {!! Form::label('name', trans("lang.country_name"), ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
             <select name="country" id="brand" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
                 @foreach($countries as $country)
@@ -33,7 +33,7 @@
   <div class="row">
        <!-- Name Field -->
         <div class="form-group row col-md-6">
-          {!! Form::label('name_en', 'Name En', ['class' => 'col-3 control-label text-right']) !!}
+          {!! Form::label('name_en',  trans("lang.category_english_name"), ['class' => 'col-3 control-label text-right']) !!}
           <div class="col-9">
             {!! Form::text('name_en', Request::is('*edit') ? $city->name_en : null  ,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'required']) !!}
             <div class="form-text text-muted">
@@ -43,7 +43,7 @@
         </div>
           <!-- Description Field -->
           <div class="form-group  col-md-6 row " style="">
-          {!! Form::label('name_ar', 'Name AR', ['class' => 'col-3 control-label text-right']) !!}
+          {!! Form::label('name_ar', trans("lang.category_arabic_name"), ['class' => 'col-3 control-label text-right']) !!}
           <div class="col-9">
             {!! Form::text('name_ar', Request::is('*edit') ? $city->name_ar : null  ,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'required']) !!}
             <div class="form-text text-muted">
@@ -56,6 +56,7 @@
 
       <!-- Submit Field -->
         <div class="form-group col-12 text-right">
-          <button type="submit" class="btn btn-{{setting('theme_color')}}" ><i class="fa fa-save"></i> Save City</button>
+          <button type="submit" class="btn btn-{{setting('theme_color')}}" ><i class="fa fa-save"></i>
+          {{ trans('lang.save') }}</button>
           <a href="{!! route('city.index') !!}" class="btn btn-default"><i class="fa fa-undo"></i> {{trans('lang.cancel')}}</a>
         </div>

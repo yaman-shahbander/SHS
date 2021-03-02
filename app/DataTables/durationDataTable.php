@@ -59,24 +59,21 @@ class durationDataTable extends DataTable
         $columns = [
             [
                 'data'  => 'name',
-                'title' => 'Vendor Name'
+                'title' => trans('lang.name')
             ],
             [
                     'data'  => 'duration_id',
-                    'title' => 'Duration'
+                    'title' =>  trans('lang.duration')
             ],
-            [
-                    'data'  => 'discount',
-                    'title' => 'Discount'
-            ],
+            
             [
                 'data' => 'start_date',
-                'title' => 'Start Date',
+                'title' => trans('lang.start_date'),
                 'searchable' => false,
             ],
             [
                 'data' => 'expire',
-                'title' => 'Expire',
+                'title' =>  trans('lang.Expire'),
                 'searchable' => false,
             ],
             [

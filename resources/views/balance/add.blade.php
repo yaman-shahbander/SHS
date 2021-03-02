@@ -44,7 +44,7 @@
         @endcan
         @can('country.create')
         <li class="nav-item">
-          <a class="nav-link" href="{!! route('balance.create') !!}"><i class="fa fa-plus mr-2"></i>C{{trans('lang.balance_create')}}</a>
+          <a class="nav-link" href="{!! route('balance.create') !!}"><i class="fa fa-plus mr-2"></i>{{trans('lang.balance_create')}}</a>
         </li>
         @endcan
         <li class="nav-item">

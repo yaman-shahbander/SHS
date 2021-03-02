@@ -66,12 +66,11 @@ class BannedUsersDataTable extends DataTable
         $columns = [
             [
                 'data' => 'user_id',
-                'title' => 'Username',
-
+                'title' => trans('lang.user_name'),
             ],
             [
                 'data' => 'description',
-                'title' => 'description',
+                'title' => trans('lang.description'),
             ],
             [
                 'data' => 'updated_at',
@@ -80,12 +79,12 @@ class BannedUsersDataTable extends DataTable
             ],
             [
                'data' => 'temporary_ban',
-               'title' => 'temporary ban',
+               'title' => trans('lang.temporary_ban'),
                'searchable' => false,
             ],
             [
                'data' => 'forever_ban',
-               'title' => 'forever ban',
+               'title' => trans('lang.forever_ban'),
                'searchable' => false,
            ]
         ];

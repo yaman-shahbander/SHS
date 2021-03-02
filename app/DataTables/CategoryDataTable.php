@@ -66,8 +66,8 @@ class CategoryDataTable extends DataTable
             ],
             [
                 'data' => 'name_en',
-                'title' => 'Name En',
-
+                'title' => trans('lang.category_english_name'),
+                
             ],
             [
                 'data' => 'image',

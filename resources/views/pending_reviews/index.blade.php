@@ -136,12 +136,12 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0 text-dark">Reviews<small class="ml-3 mr-3">|</small><small>Pending Reviews</small></h1>
+        <h1 class="m-0 text-dark">{{trans('lang.reviews')}}<small class="ml-3 mr-3">|</small><small>{{trans('lang.pending_reviews')}}</small></h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><a href="{{url('/dashboard')}}"><i class="fa fa-dashboard"></i> {{trans('lang.dashboard')}}</a></li>
-          <li class="breadcrumb-item"><a href="{!! route('reviews.index') !!}">reviews</a>
+          <li class="breadcrumb-item"><a href="{!! route('reviews.index') !!}">{{trans('lang.reviews')}}</a>
           </li>
           <li class="breadcrumb-item active"></li>
         </ol>
@@ -158,7 +158,7 @@
     <div class="card-header">
       <ul class="nav nav-tabs align-items-end card-header-tabs w-100">
         <li class="nav-item">
-          <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-list mr-2"></i>Pending Reviews List</a>
+          <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-list mr-2"></i>{{trans('lang.pending_reviews_list')}}</a>
         </li>
 
         @include('layouts.right_toolbar', compact('dataTable'))

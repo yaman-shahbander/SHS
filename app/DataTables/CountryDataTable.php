@@ -53,12 +53,12 @@ class CountryDataTable extends DataTable
         $columns = [
             [
                 'data' => 'country_name',
-                'title' => 'Country Name',
+                'title' => trans('lang.country_name'),
 
             ],
             [
                 'data' => 'name_en',
-                'title' => 'Name En',
+                'title' => trans('lang.category_english_name'),
 
             ],
             [

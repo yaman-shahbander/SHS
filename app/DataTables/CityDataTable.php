@@ -56,15 +56,15 @@ class CityDataTable extends DataTable
         $columns = [
             [
                 'data' => 'city_name',
-                'title' => 'City Name',
+                'title' => trans('lang.city_name'),
             ],
             [
                 'data' => 'name_en',
-                'title' => 'Name En',
+                'title' =>  trans('lang.category_english_name'),
             ],
             [
                 'data' => 'country_id',
-                'title' => 'Parent country',
+                'title' => trans('lang.parent_country'),
                 'searchable' => false, 'orderable' => false, 'exportable' => false, 'printable' => false,
             ],
             [

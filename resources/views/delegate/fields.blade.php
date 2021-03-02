@@ -16,7 +16,7 @@
         </div>
         <!-- username Field -->
         <div class="form-group row col-md-6">
-            {!! Form::label('phone', 'Phone', ['class' => 'col-4 control-label text-right']) !!}
+            {!! Form::label('phone', trans('lang.phone'), ['class' => 'col-4 control-label text-right']) !!}
             <div class="col-8">
                 {!! Form::text('phone', null,  ['class' => 'form-control','placeholder'=>  'phone','required']) !!}
                 <div class="form-text text-muted">
@@ -28,7 +28,7 @@
     <div class="row">
         <!-- balance Field -->
         <div class="form-group row col-md-6">
-            {!! Form::label('balance', 'Balance', ['class' => 'col-4 control-label text-right']) !!}
+            {!! Form::label('balance', trans('lang.balance'), ['class' => 'col-4 control-label text-right']) !!}
             <div class="col-8">
                 {!! Form::number('balance', Request::is('*edit') ? $saleMan->Balance->balance : null,  ['class' => 'form-control','placeholder'=>  'Balance']) !!}
                 <div class="form-text text-muted">
@@ -49,6 +49,6 @@
 @endif
 <!-- Submit Field -->
 <div class="form-group col-12 text-right">
-    <button type="submit" class="btn btn-{{setting('theme_color')}}"><i class="fa fa-save"></i> {{trans('lang.save')}} {{trans('lang.user')}}</button>
+    <button type="submit" class="btn btn-{{setting('theme_color')}}"><i class="fa fa-save"></i> {{trans('lang.save')}} </button>
     <a href="{!! route('users.index') !!}" class="btn btn-default"><i class="fa fa-undo"></i> {{trans('lang.cancel')}}</a>
 </div>

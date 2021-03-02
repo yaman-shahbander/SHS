@@ -20,7 +20,7 @@
 
     <div class="row">
       <div class="form-group row col-md-6">
-      {!! Form::label('name_en', "Name En", ['class' => 'col-3 control-label text-right']) !!}
+      {!! Form::label('name_en', trans('lang.category_english_name'), ['class' => 'col-3 control-label text-right']) !!}
       <div class="col-9">
         {!! Form::text('name_en', Request::is('*edit') ? $country->name_en : null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'required']) !!}
         <div class="form-text text-muted">
@@ -31,7 +31,7 @@
   
       <!-- Description Field -->
       <div class="form-group row col-md-6" >
-      {!! Form::label('name_ar', "Name AR", ['class' => 'col-3 control-label text-right']) !!}
+      {!! Form::label('name_ar',  trans('lang.category_arabic_name'), ['class' => 'col-3 control-label text-right']) !!}
       <div class="col-9">
         {!! Form::text('name_ar', Request::is('*edit') ? $country->name_ar : null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'required']) !!}
         <div class="form-text text-muted">
@@ -92,6 +92,6 @@
 
 <!-- Submit Field -->
 <div class="form-group col-12 text-right">
-  <button type="submit" class="btn btn-{{setting('theme_color')}}" ><i class="fa fa-save"></i> Save Country</button>
+  <button type="submit" class="btn btn-{{setting('theme_color')}}" ><i class="fa fa-save"></i> {{ trans('lang.save') }} </button>
   <a href="{!! route('country.index') !!}" class="btn btn-default"><i class="fa fa-undo"></i> {{trans('lang.cancel')}}</a>
 </div>

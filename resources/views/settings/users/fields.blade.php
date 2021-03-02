@@ -83,7 +83,7 @@
 
         <!-- Email Field -->
         <div class="form-group col-md-6 row">
-            {!! Form::label('phone', "Phone", ['class' => 'col-3 control-label']) !!}
+            {!! Form::label('phone', trans('lang.phone'), ['class' => 'col-3 control-label']) !!}
             <div class="col-md-9">
                 {!! Form::text('phone', null,  ['class' => 'form-control','placeholder'=>  'Insert phone number']) !!}
             </div>
@@ -100,7 +100,7 @@
     <div class="row">
         <!-- $FIELD_NAME_TITLE$ Field -->
         <div class="form-group row col-md-6">
-        {!! Form::label('avatar', trans("lang.user_avatar"), ['class' => 'col-md-3 control-label', 'style' => 'font-size:15px']) !!}
+        {!! Form::label('avatar', trans("lang.avatar"), ['class' => 'col-md-3 control-label', 'style' => 'font-size:15px']) !!}
             <div class="col-md-9">
 
                 <!-- $FIELD_NAME_TITLE$ Field -->
