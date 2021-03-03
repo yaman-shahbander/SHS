@@ -106,23 +106,25 @@
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
             <!-- lang -->
-            <!-- <li>
+            <li>
                 <div class="dropdown">
                     <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                         <i class="fa fa-globe"></i>
                         <span class="caret"></span>
                     </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
-                            <li>
-                                <a rel="alternate" hreflang="{{ $localeCode }}" href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">
-                                    {{ $properties['native'] }}
-                                </a>
-                            </li>
-                        @endforeach
+                    <ul id="language" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <!-- @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+                                <li>
+                                    <a rel="alternate" hreflang="{{ $localeCode }}" href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">
+                                        {{ $properties['native'] }}
+                                    </a>
+                                </li>
+                            @endforeach -->
+                        <li><a rel="alternate" href="{{ route('lang', ['lang' => 'en']) }}" style="margin-left:10px">English</a></li>
+                        <li><a rel="alternate" href="{{ route('lang', ['lang' => 'ar']) }}"  style="margin-left:10px">العربية</a></li>
                     </ul>
                 </div>
-            </li> -->
+            </li>
                 @if(env('APP_CONSTRUCTION',false))
                     <li class="nav-item">
                         <a class="nav-link text-danger" href="#"><i class="fa fa-info-circle"></i>

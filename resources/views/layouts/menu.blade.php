@@ -316,7 +316,7 @@
     <a href="{!! url('languages') !!}" class="nav-link {{  Request::is('languages*') ? 'active' : '' }}">
         @if($icons)<i class="nav-icon fa fa-language"></i> @endif <p>{{trans('lang.app_setting_localisation')}}</p></a>
 </li>
-@endcan -->
+@endcan 
 
 
 {{--@can('medias')--}}

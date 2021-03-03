@@ -10,6 +10,10 @@ use App\Models\Message;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Pusher\Pusher;
+use Session;
+use Illuminate\Foundation\Application;
+use App;
+use Flash;
 
 class HomeController extends Controller
 {
@@ -75,8 +79,6 @@ class HomeController extends Controller
 
       return  dd(curl_exec($ch));
     }
-
-
 
 
     

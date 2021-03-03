@@ -6,6 +6,12 @@ namespace App\Http\Controllers;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Session;
+use Illuminate\Foundation\Application;
+use App;
+use Flash;
+use App\Models\User;
+use App\Models\Message;
 
 class DashboardController extends Controller
 {
@@ -55,5 +61,14 @@ class DashboardController extends Controller
         */       
         return view('dashboard.index');
         
+    }
+
+    public function lang(Request $request) {
+        $language = $request->lang;
+        $user = User::find(auth()->id());
+        $user->language = $language;
+        $user->save();
+        $user->language == 'en' ? Flash::success('Language Updated Successfully') : Flash::success('تم تعديل اللغة بنجاح');
+        return redirect()->back();
     }
 }

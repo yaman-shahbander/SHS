@@ -88,6 +88,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
         ]);
         Route::resource('/vendorRegistration', 'DurationController');
         Route::resource("/durationOffer", "durationOffersController");
+        Route::get('changeLanguage/{lang}', 'DashboardController@lang')->name('lang');
         Route::resource('/balance', 'BalanceController');
         Route::get('{id}/addBalance', 'BalanceController@addBalance')->name('balance.add');
         Route::put('{id}/balanceaddUpdate', 'BalanceController@balanceaddUpdate')->name('balance.addupdate');
