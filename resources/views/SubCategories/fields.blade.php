@@ -13,7 +13,7 @@
           </div>
           <!-- Name Field -->
           <div class="form-group row col-md-6">
-            {!! Form::label('name_en', "NameEn", ['class' => 'col-3 control-label ']) !!}
+            {!! Form::label('name_en', trans("lang.category_english_name"), ['class' => 'col-3 control-label ']) !!}
             <div class="col-9">
               {!! Form::text('name_en', null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'required']) !!}
               <div class="form-text text-muted">
@@ -25,7 +25,7 @@
       <div class="row">
         <!-- Select Category-->
         <div class="form-group row col-md-6">
-            {!! Form::label('name', "Category", ['class' => 'col-3 control-label ']) !!}
+            {!! Form::label('name', trans('lang.category'), ['class' => 'col-3 control-label ']) !!}
             <div class="col-9">
               <select name="category" id="brand" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
                   @foreach($categories as $category)
@@ -51,7 +51,7 @@
       <div class="row">
         <!-- Description AR Field -->
         <div class="form-group row col-md-6">
-          {!! Form::label('description_ar', 'Description AR', ['class' => 'col-3 control-label ']) !!}
+          {!! Form::label('description_ar',  trans('lang.category_arabic_desc'), ['class' => 'col-3 control-label ']) !!}
           <div class="col-9">
           {!! Form::textarea('description_ar', Request::is('*edit') ? $subcategory->description_ar : null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'style' => 'height:100px', 'required']) !!}
             <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
@@ -59,7 +59,7 @@
         </div>
         <!-- Description En Field -->
         <div class="form-group row col-md-6">
-          {!! Form::label('description_en', 'Description En', ['class' => 'col-3 control-label ']) !!}
+          {!! Form::label('description_en', trans('lang.category_english_desc'), ['class' => 'col-3 control-label ']) !!}
           <div class="col-9">
             {!! Form::textarea('description_en', null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'style' => 'height:100px', 'required']) !!}
             <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
@@ -72,7 +72,7 @@
 
         <!-- $FIELD_NAME_TITLE$ Field -->
   <div class="form-group row col-md-6">
-        {!! Form::label('categoryImage',"Image", ['class' => 'col-md-3 control-label', 'style' => 'font-size:15px']) !!}
+        {!! Form::label('categoryImage',trans('lang.image'), ['class' => 'col-md-3 control-label', 'style' => 'font-size:15px']) !!}
 
             <div class="col-md-9">
                 <!-- $FIELD_NAME_TITLE$ Field -->
@@ -151,6 +151,6 @@
 </div>
       <!-- Submit Field -->
         <div class="form-group col-12 text-right">
-          <button type="submit" class="btn btn-{{setting('theme_color')}}" ><i class="fa fa-save"></i> Save Sub Category</button>
+          <button type="submit" class="btn btn-{{setting('theme_color')}}" ><i class="fa fa-save"></i> {{trans('lang.save')}}</button>
           <a href="{!! route('subcategory.index') !!}" class="btn btn-default"><i class="fa fa-undo"></i> {{trans('lang.cancel')}}</a>
         </div>

@@ -101,19 +101,17 @@ class VendorDataTable extends DataTable
             ],
             [
                 'data' => 'phone',
-                'title' => 'Phone',
+                'title' => trans('lang.phone'),
 
             ],
 
             [
                 'data' => 'status_type',
-                'title' => 'Status',
-
+                'title' => trans('lang.status'),
             ],
             [
                 'data' => 'full_rating',
-                'title' => 'Rating',
-
+                'title' =>  trans('lang.rating'),
             ],
 
             [

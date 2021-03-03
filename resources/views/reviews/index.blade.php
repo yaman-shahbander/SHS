@@ -136,14 +136,14 @@
   <div class="container-fluid">
   <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0 text-dark">{{__('lang.reviews')}}<small class="ml-3 mr-3">|</small><small>{{__('lang.pending_reviews')}}</small></h1>
+        <h1 class="m-0 text-dark">{{__('lang.reviews')}}<small class="ml-3 mr-3">|</small><small>{{__('lang.approved_reviews')}}</small></h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><a href="{{url('/dashboard')}}"><i class="fa fa-dashboard"></i> {{trans('lang.dashboard')}}</a></li>
           <li class="breadcrumb-item"><a href="{!! route('reviews.index') !!}">{{__('lang.reviews')}}</a>
           </li>
-          <li class="breadcrumb-item active">{{__('lang.approve_edit')}}</li>
+          <li class="breadcrumb-item active">{{__('lang.reviews')}}</li>
         </ol>
       </div><!-- /.col -->
       </div><!-- /.row -->

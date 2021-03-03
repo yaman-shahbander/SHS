@@ -74,34 +74,34 @@ class SpecialOffersDataTable extends DataTable
         $columns = [
             [
                 'data' => 'description',
-                'title' => 'Description',
+                'title' => trans('lang.description'),
 
             ],
             [
                 'data' => 'user_id',
-                'title' => 'Owner Vendor',
+                'title' => trans('lang.offer_owner'),
                 'searchable' => false, 'orderable' => false, 'exportable' => false, 'printable' => false,
             ],
             [
                 'data' => 'subcategory_id',
-                'title' => 'subcategory',
+                'title' => trans('lang.subcategory'),
             ],
             [
                 'data' => 'category',
-                'title' => 'category',
+                'title' => trans('lang.category'),
             ],
             [
                 'data' => 'image',
-                'title' => 'image',
+                'title' => trans('lang.image'),
             ],
             [
                 'data' => 'updated_at',
-                'title' => 'Updated',
+                'title' => trans('lang.user_updated_at'),
                 'searchable' => false,
             ],
             [
                 'data' => 'created_at',
-                'title' => 'Created',
+                'title' => trans('lang.created_at'),
                 'searchable' => false,
             ]
 

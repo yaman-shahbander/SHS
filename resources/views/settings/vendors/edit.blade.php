@@ -270,12 +270,12 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0 text-dark">Service Providers<small class="ml-3 mr-3">|</small><small>Service Providers Settings</small></h1>
+        <h1 class="m-0 text-dark">{{trans('lang.vendors')}}<small class="ml-3 mr-3">|</small><small>{{trans('lang.vendors_settings')}}</small></h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><a href="{{url('/dashboard')}}"><i class="fa fa-dashboard"></i> {{trans('lang.dashboard')}}</a></li>
-          <li class="breadcrumb-item"><a href="{!! route('vendors.index') !!}">Service Providers</a>
+          <li class="breadcrumb-item"><a href="{!! route('vendors.index') !!}">{{trans('lang.vendors')}}</a>
           </li>
         </ol>
       </div><!-- /.col -->
@@ -298,7 +298,7 @@
           <a class="nav-link" href="{!! route('vendors.create') !!}"><i class="fa fa-plus mr-2"></i>{{trans('lang.vendor_create')}}</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-pencil mr-2"></i>Edit Service Provider</a>
+          <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-pencil mr-2"></i>{{trans('lang.edit_service_provider')}}</a>
         </li>
       </ul>
     </div>

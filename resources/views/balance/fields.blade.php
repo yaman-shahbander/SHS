@@ -4,7 +4,7 @@
     <!-- Select Name-->
     <div class="form-group row col-md-12">
         @if(Request::is('*create'))
-              {!! Form::label('nameselect',trans('lang.balance_name'), ['class' => 'col-4 control-label ']) !!}
+              {!! Form::label('nameselect',trans('lang.name'), ['class' => 'col-4 control-label ']) !!}
               <div class="col-8">
                 <select name="nameselect" id="brand" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
                     @foreach($users as $user)
@@ -51,7 +51,7 @@
     @if(Request::is('*addBalance'))
   <!--add more balance Field -->
   <div class="form-group row col-md-12">
-    {!! Form::label('Add', "Add Amount", ['class' => 'col-4 control-label  ']) !!}
+    {!! Form::label('Add', trans('lang.add_amount'), ['class' => 'col-4 control-label  ']) !!}
     <div class="col-8">
       {!! Form::text('Add', null,  ['class' => 'form-control','placeholder'=>  "Insert amount", 'required']) !!}
     </div>

@@ -59,16 +59,16 @@ class TransferTransactionDataTable extends DataTable
         $columns = [
             [
                 'data' => 'from_id',
-                'title' => 'From User',
+                'title' => trans('lang.from_user'),
 
             ],
             [
                 'data' => 'to_id',
-                'title' => 'To User',
+                'title' => trans('lang.to_user'),
             ],
             [
                 'data' => 'amount',
-                'title' => 'Amount',
+                'title' => trans('lang.amount'),
             ],
             [
                 'data' => 'updated_at',

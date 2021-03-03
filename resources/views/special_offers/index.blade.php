@@ -13,7 +13,7 @@
           <li class="breadcrumb-item"><a href="{{url('/dashboard')}}"><i class="fa fa-dashboard"></i> {{trans('lang.dashboard')}}</a></li>
           <li class="breadcrumb-item"><a href="{!! route('offers.index') !!}">{{__('lang.special_offers')}}</a>
           </li>
-          <li class="breadcrumb-item active">{{__('lang.special_offers_table')}}</li>
+          <li class="breadcrumb-item active">{{__('lang.special_offers_list')}}</li>
         </ol>
       </div><!-- /.col -->
     </div><!-- /.row -->
@@ -28,11 +28,11 @@
     <div class="card-header">
       <ul class="nav nav-tabs align-items-end card-header-tabs w-100">
         <li class="nav-item">
-          <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-list mr-2"></i>{{__('lang.special_offers_table')}}</a>
+          <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-list mr-2"></i>{{__('lang.special_offers')}}</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="{!! route('offers.create') !!}"><i class="fa fa-plus mr-2"></i>Create special Offer</a>
+          <a class="nav-link" href="{!! route('offers.create') !!}"><i class="fa fa-plus mr-2"></i>{{ trans('lang.create_special_offers') }}</a>
         </li>
 
         @include('layouts.right_toolbar', compact('dataTable'))

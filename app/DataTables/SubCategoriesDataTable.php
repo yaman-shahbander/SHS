@@ -71,16 +71,16 @@ class SubCategoriesDataTable extends DataTable
             ],
             [
                 'data' => 'name_en',
-                'title' => 'Name En',
+                'title' =>  trans('lang.category_english_name'),
             ],
             [
                 'data' => 'Parent Category',
-                'title' => 'Parent Category',
+                'title' =>  trans('lang.parent_category'),
                 'searchable' => false, 'orderable' => false, 'exportable' => false, 'printable' => false,
             ],
             [
                 'data' => 'image',
-                'title' => trans('lang.category_image'),
+                'title' => trans('lang.image'),
                 'searchable' => false, 'orderable' => false, 'exportable' => false, 'printable' => false,
             ],
             [

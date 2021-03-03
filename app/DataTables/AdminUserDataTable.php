@@ -85,7 +85,7 @@ class AdminUserDataTable extends DataTable
         $columns = [
             [
                 'data' => 'avatar',
-                'title' => trans('lang.user_avatar'),
+                'title' => trans('lang.avatar'),
                 'orderable' => false, 'searchable' => false,
 
             ],
@@ -101,7 +101,7 @@ class AdminUserDataTable extends DataTable
             ],
             [
                 'data' => 'phone',
-                'title' => 'Phone',
+                'title' => trans('lang.phone'),
 
             ],
             [

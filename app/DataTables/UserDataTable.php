@@ -87,7 +87,7 @@ class UserDataTable extends DataTable
         $columns = [
             [
                 'data' => 'avatar',
-                'title' => trans('lang.user_avatar'),
+                'title' => trans('lang.avatar'),
                 'orderable' => false, 'searchable' => false,
 
             ],
@@ -98,12 +98,12 @@ class UserDataTable extends DataTable
             ],
             [
                 'data' => 'email',
-                'title' => 'Email',
+                'title' => trans('lang.user_email'),
 
             ],
             [
                 'data' => 'phone',
-                'title' => 'Phone',
+                'title' => trans('lang.phone'),
 
             ],
             [

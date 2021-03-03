@@ -1,6 +1,6 @@
 {!! Form::open(['route' => ['vendor.destroy', $id], 'method' => 'delete']) !!}
 <div class='btn-group btn-group-sm'>
-    <a data-toggle="tooltip" data-placement="bottom" title="User approve" href="{{ route('vendor.show', $id) }}" class='btn btn-link'>
+    <a data-toggle="tooltip" data-placement="bottom" title="{{trans('lang.user_approve')}}" href="{{ route('vendor.show', $id) }}" class='btn btn-link'>
         <i class="fa fa-check"></i> </a>
 
     {!! Form::button('<i class="fa fa-trash"></i>', [

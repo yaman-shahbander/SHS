@@ -9,7 +9,7 @@
 <div style="flex: 50%;max-width: 50%;padding: 0 4px;" class="column">
 <!-- Vendor Name Field -->
 <div class="form-group row ">
-  {!! Form::label('vendor_name', 'Vendor Name', ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important']) !!}
+  {!! Form::label('vendor_name', trans('lang.SP_name'), ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important']) !!}
   <div class="col-8">
     @if(Request::is('*create'))
     <select name="vendornameselect" id ="brand" aria-controls="dataTableBuilder" class="form-control form-control-sm" required  >
@@ -25,7 +25,7 @@
 
 <!-- Select duration-->
 <div class="form-group row ">
-    {!! Form::label('Duration', "Duration", ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important;']) !!}
+    {!! Form::label('Duration', trans('lang.durations'), ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important;']) !!}
     <div class="col-8">
     <select name="duration" id ="brand1" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
     @if(Request::is('*create'))
@@ -50,7 +50,7 @@
 <!-- Start date-->
 @if(Request::is('*edit'))
 <div class="form-group row ">
-    {!! Form::label('start_date', "Start Date", ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important;']) !!}
+    {!! Form::label('start_date', trans('lang.start_date'), ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important;']) !!}
     <div class="col-8">   
         <div class="input-group date">
             
@@ -65,7 +65,7 @@
 
 <!-- Start date-->
 <div class="form-group row ">
-    {!! Form::label('expire', "Expire", ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important;']) !!}
+    {!! Form::label('expire', trans('lang.Expire'), ['class' => 'col-4 control-label text-right', 'style' => 'text-align: left !important;']) !!}
     <div class="col-8">   
         <div class="input-group date" >
             <input name="expire" type="text" class="form-control datepicker" value = {{ $duration->expire }} >
@@ -140,7 +140,7 @@
 
 <!-- Submit Field -->
 <div class="form-group col-12 text-right">
-  <button type="submit" class="btn btn-{{setting('theme_color')}}" ><i class="fa fa-save"></i> Save Duration</button>
+  <button type="submit" class="btn btn-{{setting('theme_color')}}" ><i class="fa fa-save"></i> {{trans('lang.save')}} </button>
   <a href="{!! route('country.index') !!}" class="btn btn-default"><i class="fa fa-undo"></i> {{trans('lang.cancel')}}</a>
 </div>
 

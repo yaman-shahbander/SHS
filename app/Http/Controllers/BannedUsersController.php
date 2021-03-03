@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Prettus\Validator\Exceptions\ValidatorException;
 use App\Models\User;
+use DateTime;
 
 class BannedUsersController extends Controller
 {
@@ -240,14 +241,14 @@ class BannedUsersController extends Controller
     }
 
     public function saveUpdateBlocking(Request $request) {
-        if(!$request->forever && !$request->temporary_ban ){
-            Flash::error('You have to select temporary time or check it forever');
 
+        if(!$request->forever && DateTime::createFromFormat('Y-m-d', $request->temporary_ban) !== FALSE ){
+            Flash::error('You have to select temporary time or check it forever');
             return redirect()->back();
         }
-        if($request->forever && $request->temporary_ban ){
+        
+        if($request->forever == "on" && $request->temporary_ban ){
             Flash::error('You have to select temporary time or check it forever');
-
             return redirect()->back();
         }
 

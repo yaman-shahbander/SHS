@@ -61,17 +61,17 @@ class TransactionHistoryDataTable extends DataTable
         $columns = [
             [
                 'data' => 'from_id',
-                'title' => 'From User',
+                'title' => trans('lang.from_user'),
                 'searchable' => false,
             ],
             [   
                 'data' => 'to_id',
-                'title' => 'To User',
+                'title' => trans('lang.to_user'),
                 'searchable' => false,
             ],
             [
                 'data' => 'amount',
-                'title' => 'Amount',
+                'title' => trans('lang.amount'),
                 'searchable' => false,
             ],
             [

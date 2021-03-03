@@ -1,7 +1,8 @@
 <div style="flex: 50%;max-width: 50%;padding: 0 4px;" class="column">
         <!-- Vendors Field -->
+        @if(!Request::is('*edit'))
         <div class="form-group row ">
-            {!! Form::label('vendors', "Vendors", ['class' => 'col-3 control-label text-right']) !!}
+            {!! Form::label('vendors', trans('lang.vendors'), ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
             <select name="vendors" id="brand" aria-controls="dataTableBuilder" class="form-control form-control-sm" required @if(Request::is('*edit')) disabled @endif>
               <option value="0">select</option>
@@ -14,10 +15,11 @@
               </div>
             </div>
           </div>
+        @endif
 
           <!-- Name Field -->
           <div class="form-group row ">
-            {!! Form::label('offername', "Offer Name", ['class' => 'col-3 control-label text-right']) !!}
+            {!! Form::label('offername', trans('lang.offer_name'), ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
               {!! Form::text('offername', Request::is('*edit') ? $offer->title : null ,  ['class' => 'form-control', 'required' => true, 'placeholder'=>  trans("lang.category_name_placeholder"), 'required']) !!}
               <div class="form-text text-muted">
@@ -29,7 +31,7 @@
           <!-- Description Field -->
 
           <div class="form-group row ">
-            {!! Form::label('description', "Description", ['class' => 'col-3 control-label text-right']) !!}
+            {!! Form::label('description', trans('lang.description'), ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
               {!! Form::text('description', Request::is('*edit') ? $offer->description : null ,  ['class' => 'form-control', 'required' => true, 'placeholder'=>  "Insert Description", 'required']) !!}
               <div class="form-text text-muted">
@@ -40,7 +42,7 @@
 
           <!-- Select category-->
         <div class="form-group row">
-              {!! Form::label('category', "Category", ['class' => 'col-3 control-label text-right']) !!}
+              {!! Form::label('category', trans('lang.category'), ['class' => 'col-3 control-label text-right']) !!}
               <div class="col-9">  
               <select name="category" id="category" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
               <option value="0">select</option>
@@ -56,7 +58,7 @@
 
         <!-- Select subcategory-->
         <div class="form-group row " @if(Request::is('*edit')) style="visibility:visible" @else style="visibility:hidden" @endif id="sub">
-            {!! Form::label('subcategory', "Subcategory", ['class' => 'col-3 control-label text-right']) !!}
+            {!! Form::label('subcategory', trans('lang.subcategory'), ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
               <select name="subcategory" id="subcategory" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
               <option value="" >select</option>
@@ -79,7 +81,7 @@
         <!-- image Field -->
 
         <div class="form-group row">
-        {!! Form::label('image', "Image", ['class' => 'col-md-3 control-label', 'style' => 'font-size:15px']) !!}
+        {!! Form::label('image', trans('lang.image'), ['class' => 'col-md-3 control-label', 'style' => 'font-size:15px']) !!}
             <div class="col-md-9">
 
                 <!-- $FIELD_NAME_TITLE$ Field -->

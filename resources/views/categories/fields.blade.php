@@ -18,7 +18,7 @@
       <!-- NameEn Field -->
     <div class="form-group col-md-12 row">
       <div class="form-group  col-md-6 row">
-        {!! Form::label('name_en', 'NameEn', ['class' => 'col-3 control-label ']) !!}
+        {!! Form::label('name_en', trans('lang.category_english_name'), ['class' => 'col-3 control-label ']) !!}
         <div class="col-9">
           {!! Form::text('name_en', null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'required']) !!}
           <div class="form-text text-muted">
@@ -30,7 +30,7 @@
 
           <!-- Name ar Field -->
         <div class="form-group col-md-6 row ">
-        {!! Form::label('name_ar', "NameAR", ['class' => 'col-3 control-label']) !!}
+        {!! Form::label('name_ar', trans('lang.category_arabic_name'), ['class' => 'col-3 control-label']) !!}
         <div class="col-9">
           {!! Form::text('name_ar', null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'required']) !!}
           <div class="form-text text-muted">
@@ -53,7 +53,7 @@
     </div>
     <!-- Description AR Field -->
     <div class="form-group row col-md-6">
-          {!! Form::label('description_ar', 'Description AR', ['class' => 'col-3 control-label ']) !!}
+          {!! Form::label('description_ar', trans('lang.category_arabic_desc'), ['class' => 'col-3 control-label ']) !!}
           <div class="col-9">
           {!! Form::textarea('description_ar', null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'style' => 'height:100px', 'required']) !!}
             <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
@@ -63,7 +63,7 @@
   <div class="row">
         <!-- Description En Field -->
         <div class="form-group row col-md-6">
-          {!! Form::label('description_en', 'Description En', ['class' => 'col-3 control-label ']) !!}
+          {!! Form::label('description_en', trans('lang.category_english_desc'), ['class' => 'col-3 control-label ']) !!}
           <div class="col-9">
             {!! Form::textarea('description_en', null,  ['class' => 'form-control','placeholder'=>  trans("lang.category_name_placeholder"), 'style' => 'height:100px', 'required']) !!}
             <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
@@ -74,7 +74,7 @@
 
   <!-- $FIELD_NAME_TITLE$ Field -->
   <div class="form-group row col-md-6">
-        {!! Form::label('categoryImage',"Image", ['class' => 'col-md-3 control-label', 'style' => 'font-size:15px']) !!}
+        {!! Form::label('categoryImage', trans('lang.image'), ['class' => 'col-md-3 control-label', 'style' => 'font-size:15px']) !!}
 
             <div class="col-md-9">
                 <!-- $FIELD_NAME_TITLE$ Field -->

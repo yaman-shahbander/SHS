@@ -6,7 +6,7 @@
   @endcan
 
   @can('city.edit')
-  <a data-toggle="tooltip" data-placement="bottom" title="{{trans('lang.category_edit')}}" 
+  <a data-toggle="tooltip" data-placement="bottom" title="{{trans('lang.edit_city')}}" 
   href="{{ route('city.edit', $id) }}" class='btn btn-link'>
     <i class="fa fa-edit"></i>
   </a>

@@ -63,16 +63,16 @@ class DelegateDataTable extends DataTable
         $columns = [
             [
                 'data' => 'name',
-                'title' => 'Delegate Name',
+                'title' => trans('lang.delegate_name'),
 
             ],
             [
                 'data' => 'phone',
-                'title' => 'Phone',
+                'title' => trans('lang.phone'),
             ],
             [
                 'data' => 'balance_id',
-                'title' => 'Balance',
+                'title' => trans('lang.balance'),
             ],
             [
                 'data' => 'updated_at',
