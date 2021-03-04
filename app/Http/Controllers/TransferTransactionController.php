@@ -52,7 +52,7 @@ class TransferTransactionController extends Controller
     public function index(TransferTransactionDataTable $transferTransactionDataTable)
     {
         if(!auth()->user()->hasPermissionTo('transfer.index')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         return $transferTransactionDataTable->render('transfer.index');
@@ -66,7 +66,7 @@ class TransferTransactionController extends Controller
     public function create()
     {
         if(!auth()->user()->hasPermissionTo('transfer.create')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $hasCustomField = in_array($this->TransferTransactionRepository->model(), setting('custom_field_models', []));
@@ -91,7 +91,7 @@ class TransferTransactionController extends Controller
     public function store(Request $request)
     {
         if(!auth()->user()->hasPermissionTo('transfer.store')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
          $input = $request->all();
@@ -101,41 +101,41 @@ class TransferTransactionController extends Controller
          $input['amount']  = strip_tags($input['amount']);
 
          if(preg_match('/[a-zA-Z]/', $input['amount'])) {
-            Flash::Error(__('Transfer failed! field must only contain numbers', ['operator' => __('lang.category')]));
+            Flash::Error(trans('lang.only_numbers'));
             return redirect(route('transfer.index'));
          }
 
          if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $input['amount'])) {
-            Flash::Error(__('Transfer failed! field must only contain numbers', ['operator' => __('lang.category')]));
+            Flash::Error(trans('lang.only_numbers'));
             return redirect(route('transfer.index'));
         }
 
          $fromUserBalanceID = $fromUser->balance_id;
 
          if ($fromUser->id == $toUser->id) {
-            Flash::Error(__('Transfer failed! User can\'t be the same', ['operator' => __('lang.category')]));
+            Flash::Error(trans('lang.transfer_same_user'));
             return redirect(route('transfer.index'));
          }
 
          if ($fromUserBalanceID == null) {
-            Flash::Error(__('Transfer failed! User ('. $fromUser->name .') doesn\'t have balance account', ['operator' => __('lang.category')]));
+            Flash::Error(trans('lang.failed_balance') . '(' . $fromUser->name . ')' );
             return redirect(route('transfer.index'));
          }
 
          $toUserBalanceID   = $toUser->balance_id;
 
          if ($toUserBalanceID == null) {
-            Flash::Error(__('Transfer failed! User ('. $toUser->name .') doesn\'t have balance account', ['operator' => __('lang.category')]));
+            Flash::Error(trans('lang.failed_balance')  . '(' . $toUser->name . ')');
             return redirect(route('transfer.index'));
          }
-
+  
          if (empty($input['amount'])) {
-            Flash::Error(__('Transfer failed! amount should have a value', ['operator' => __('lang.category')]));
+            Flash::Error(trans('lang.amount_value'));
             return redirect(route('transfer.index'));
          }
 
          if ($input['amount'] < 0) {
-            Flash::Error(__('Transfer failed! amount should not be negative', ['operator' => __('lang.category')]));
+            Flash::Error(trans('lang.negative_amount'));
             return redirect(route('transfer.index'));
          }     
 
@@ -162,10 +162,10 @@ class TransferTransactionController extends Controller
                 Flash::error($e->getMessage());
             }
     
-            Flash::success(__('Transfer Saved successfully', ['operator' => __('lang.category')]));
+            Flash::success(trans('lang.success_transfer'));
             return redirect(route('transfer.index'));
          } else {
-            Flash::success(__('Transfer failed! Not enough balance', ['operator' => __('lang.category')]));
+            Flash::success(trans('lang.failure_transfer'));
             return redirect(route('transfer.index'));
          }
     }
@@ -190,7 +190,7 @@ class TransferTransactionController extends Controller
     public function edit($id)
     {
         if(!auth()->user()->hasPermissionTo('transfer.edit')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $transfer = $this->TransferTransactionRepository->findWithoutFail($id);
@@ -221,13 +221,13 @@ class TransferTransactionController extends Controller
     public function update($id ,Request $request)
     {
         if(!auth()->user()->hasPermissionTo('transfer.update')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $transfer = $this->TransferTransactionRepository->findWithoutFail($id);
 
         if (empty($transfer)) {
-            Flash::error('transfer not found');
+            Flash::error(trans('lang.transfer_not_found'));
             return redirect(route('transfer.index'));
         }
 
@@ -241,39 +241,39 @@ class TransferTransactionController extends Controller
          $input['amount']  = strip_tags($input['amount']);
 
          if(preg_match('/[a-zA-Z]/', $input['amount'])) {
-            Flash::Error(__('Transfer failed! field must only contain numbers', ['operator' => __('lang.category')]));
+            Flash::Error(trans('lang.only_numbers'));
             return redirect(route('transfer.index'));
          }
 
          if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $input['amount'])) {
-            Flash::Error(__('Transfer failed! field must only contain numbers', ['operator' => __('lang.category')]));
+            Flash::Error(trans('lang.only_numbers'));
             return redirect(route('transfer.index'));
         }
 
          if ($fromUser->id == $toUser->id) {
-            Flash::Error(__('Transfer failed! User can\'t be the same', ['operator' => __('lang.category')]));
+            Flash::Error(trans('lang.transfer_same_user'));
             return redirect(route('transfer.index'));
          }
 
          if ($fromUserBalanceID == null) {
-            Flash::Error(__('Transfer failed! User ('. $fromUser->name .') doesn\'t have balance account', ['operator' => __('lang.category')]));
+            Flash::Error(trans('lang.failed_balance') . '(' . $fromUser->name . ')' );
             return redirect(route('transfer.index'));
          }
 
          $toUserBalanceID   = $toUser->balance_id;
 
          if ($toUserBalanceID == null) {
-            Flash::Error(__('Transfer failed! User ('. $toUser->name .') doesn\'t have balance account', ['operator' => __('lang.category')]));
+            Flash::Error(trans('lang.failed_balance')  . '(' . $toUser->name . ')');
             return redirect(route('transfer.index'));
          }
 
          if (empty($input['amount'])) {
-            Flash::Error(__('Transfer failed! amount should have a value', ['operator' => __('lang.category')]));
+            Flash::Error(trans('lang.amount_value'));
             return redirect(route('transfer.index'));
          }
 
          if ($input['amount'] < 0) {
-            Flash::Error(__('Transfer failed! amount should not be negative', ['operator' => __('lang.category')]));
+            Flash::Error(trans('lang.negative_amount'));
             return redirect(route('transfer.index'));
          }
 
@@ -296,7 +296,7 @@ class TransferTransactionController extends Controller
 
             // end if Fromuser balance can be substracted 
             } else { 
-            Flash::success(__('Transfer can\'t be updated', ['operator' => __('lang.category')]));
+            Flash::success(trans('lang.transfer_update_fail'));
 
             return redirect(route('transfer.index'));
             } // end else
@@ -312,7 +312,7 @@ class TransferTransactionController extends Controller
 
             // end if Touser balance can be substracted 
             } else { 
-            Flash::success(__('Transfer can\'t be updated', ['operator' => __('lang.category')]));
+            Flash::success(trans('lang.transfer_update_fail'));
 
             return redirect(route('transfer.index'));
             } // end else
@@ -326,7 +326,7 @@ class TransferTransactionController extends Controller
             Flash::error($e->getMessage());
         }
 
-        Flash::success(__('Transfer updated Successfully', ['operator' => __('lang.category')]));
+        Flash::success(trans('lang.store_operation'));
 
         return redirect(route('transfer.index'));
     }
@@ -340,7 +340,7 @@ class TransferTransactionController extends Controller
     public function destroy($id)
     {
         if(!auth()->user()->hasPermissionTo('transfer.destroy')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $transfer = $this->TransferTransactionRepository->findWithoutFail($id);
@@ -352,7 +352,7 @@ class TransferTransactionController extends Controller
 
         $this->TransferTransactionRepository->delete($id);
 
-        Flash::success(__('transfer deleted successfully', ['operator' => __('lang.category')]));
+        Flash::success(trans('lang.delete_operation'));
 
         return redirect(route('transfer.index'));
     }

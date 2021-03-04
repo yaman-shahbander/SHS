@@ -38,7 +38,7 @@ class DelegateController extends Controller
     public function index(DelegateDataTable $delegateDataTable)
     {
         if(!auth()->user()->hasPermissionTo('delegate.index')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         return $delegateDataTable->render('delegate.index');
@@ -53,7 +53,7 @@ class DelegateController extends Controller
     {
 
         if(!auth()->user()->hasPermissionTo('delegate.create')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $hasCustomField = in_array($this->delegateRepository->model(), setting('custom_field_models', []));
@@ -74,7 +74,7 @@ class DelegateController extends Controller
     {
 
         if(!auth()->user()->hasPermissionTo('delegate.store')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $input = $request->all();
@@ -85,7 +85,7 @@ class DelegateController extends Controller
         $checkDelegateName = Delegate::where('phone', $request->phone)->first();
 
         if (!empty($checkDelegateName)) { 
-            Flash::error('this Delegate is exist');
+            Flash::error(trans('lang.salesman_exist'));
             return redirect()->route('sales_man.index');
         }
 
@@ -100,7 +100,8 @@ class DelegateController extends Controller
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }
-        Flash::success(__('lang.saved_successfully', ['operator' => __('lang.dalegate')]));
+
+        Flash::success(trans('lang.store_operation'));
 
         return redirect(route('sales_man.index'));
     }
@@ -116,7 +117,7 @@ class DelegateController extends Controller
         $delegate = $this->delegateRepository->findWithoutFail($id);
 
         if (empty($delegate)) {
-            Flash::error('delegate not found');
+            Flash::error(trans('lang.delegate_not_found'));
 
             return redirect(route('delegate.index'));
         }
@@ -133,14 +134,14 @@ class DelegateController extends Controller
     public function edit($id)
     {
         if(!auth()->user()->hasPermissionTo('delegate.edit')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $saleMan = $this->delegateRepository->findWithoutFail($id);
 
 
         if (empty($saleMan)) {
-            Flash::error('Salesman not found');
+            Flash::error(trans('lang.delegate_not_found'));
 
             return redirect(route('sales_man.index'));
         }
@@ -158,7 +159,7 @@ class DelegateController extends Controller
     public function update($id, Request $request)
     {
         if(!auth()->user()->hasPermissionTo('delegate.update')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $input = $request->all();
@@ -171,7 +172,7 @@ class DelegateController extends Controller
         
         if (!empty($checkDelegateName)) { 
             if ($id != $checkDelegateName->id) {
-            Flash::error('this Delegate is exist');
+            Flash::error(trans('lang.salesman_exist'));
             return redirect()->route('sales_man.index');
             }
         }
@@ -185,7 +186,8 @@ class DelegateController extends Controller
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }
-        Flash::success(__('Salesman updated successfully', ['operator' => __('lang.dalegate')]));
+
+        Flash::success(trans('lang.update_operation'));
 
         return redirect(route('sales_man.index'));
     }
@@ -199,13 +201,13 @@ class DelegateController extends Controller
     public function destroy($id)
     {
         if(!auth()->user()->hasPermissionTo('delegate.destroy')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $salesman = $this->delegateRepository->findWithoutFail($id);
 
         if (empty($salesman)) {
-            Flash::error('Salesman not found');
+            Flash::error(trans('lang.delegate_not_found'));
 
             return redirect(route('sales_man.index'));
         }
@@ -216,7 +218,7 @@ class DelegateController extends Controller
 
         $this->delegateRepository->delete($id);
 
-        Flash::success(__("Deleted Successfully", ['operator' => __('lang.category')]));
+        Flash::success(trans('lang.delete_operation'));
 
         return redirect(route('sales_man.index'));
     }

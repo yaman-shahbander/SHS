@@ -43,7 +43,7 @@ class SpecialOffersController extends Controller
     public function index(SpecialOffersDataTable $SpecialDataTable)
     {
         if(!auth()->user()->hasPermissionTo('offers.index')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         return $SpecialDataTable->render('special_offers.index');
@@ -57,7 +57,7 @@ class SpecialOffersController extends Controller
     public function create()
     {
         if(!auth()->user()->hasPermissionTo('offers.create')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $hasCustomField = in_array($this->SpecialRepository->model(), setting('custom_field_models', []));
@@ -90,12 +90,12 @@ class SpecialOffersController extends Controller
     {
 
         if(!auth()->user()->hasPermissionTo('offers.store')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         if($request->vendors=="0")
         {
-            Flash::error('please select service providor');
+            Flash::error(trans('lang.SP_not_found'));
             return redirect(route('offers.create'));
 
 
@@ -133,7 +133,7 @@ class SpecialOffersController extends Controller
 
             }
 
-        Flash::success(__('lang.saved_successfully', ['operator' => __('lang.category')]));
+        Flash::success(trans('lang.store_operation'));
 
         return redirect(route('offers.create'));
     }
@@ -149,7 +149,7 @@ class SpecialOffersController extends Controller
         $special = $this->SpecialRepository->findWithoutFail($id);
 
         if (empty($special)) {
-            Flash::error('Offers not found');
+            Flash::error(trans('lang.offer_not_found'));
 
             return redirect(route('offers.index'));
         }
@@ -167,7 +167,7 @@ class SpecialOffersController extends Controller
     {
 
         if(!auth()->user()->hasPermissionTo('offers.edit')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $offer = $this->SpecialRepository->findWithoutFail($id);
@@ -181,7 +181,7 @@ class SpecialOffersController extends Controller
         })->get();
 
         if (empty($offer)) {
-            Flash::error(__('lang.not_found', ['operator' => __('lang.category')]));
+            Flash::error(trans('lang.offer_not_found'));
 
             return redirect(route('offers.index'));
         }
@@ -202,13 +202,13 @@ class SpecialOffersController extends Controller
     public function update($id, Request $request)
     {
         if(!auth()->user()->hasPermissionTo('offers.update')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $offer = $this->SpecialRepository->findWithoutFail($id);
 
         if (empty($offer)) {
-            Flash::error(__('lang.not_found', ['operator' => __('lang.category')]));
+            Flash::error(trans('lang.offer_not_found'));
 
             return redirect(route('offers.index'));
         }
@@ -245,7 +245,7 @@ class SpecialOffersController extends Controller
             Flash::error($e->getMessage());
         }
 
-        Flash::success(__('Offer updated successfully', ['operator' => __('lang.category')]));
+        Flash::success(trans('lang.update_operation'));
 
         return redirect(route('offers.index'));
     }
@@ -259,13 +259,13 @@ class SpecialOffersController extends Controller
     public function destroy($id)
     {
         if(!auth()->user()->hasPermissionTo('offers.destroy')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $special = $this->SpecialRepository->findWithoutFail($id);
 
         if (empty($special)) {
-            Flash::error('offers not found');
+            Flash::error(trans('lang.offer_not_found'));
 
             return redirect(route('offers.index'));
         }
@@ -275,7 +275,7 @@ class SpecialOffersController extends Controller
 
         $this->SpecialRepository->delete($id);
 
-        Flash::success(__('Offer Deleted Successfully', ['operator' => __('lang.category')]));
+        Flash::success(trans('lang.delete_operation'));
 
         return redirect(route('offers.index'));
     }

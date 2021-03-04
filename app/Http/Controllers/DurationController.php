@@ -54,7 +54,7 @@ class DurationController extends Controller
     public function index(durationDataTable $durationRepository)
     {
         if(!auth()->user()->hasPermissionTo('duration.index')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         return $durationRepository->render('duration.index');
@@ -68,7 +68,7 @@ class DurationController extends Controller
     public function create()
     {
         if(!auth()->user()->hasPermissionTo('duration.create')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $hasCustomField = in_array($this->durationRepository->model(), setting('custom_field_models', []));
@@ -94,7 +94,7 @@ class DurationController extends Controller
     {
 
         if(!auth()->user()->hasPermissionTo('duration.store')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $input = [];
@@ -119,7 +119,8 @@ class DurationController extends Controller
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }
-        Flash::success(__('Duration added successfully'));
+
+        Flash::success(trans('lang.store_operation'));
 
         return redirect(route('vendorRegistration.index'));
     }
@@ -143,14 +144,14 @@ class DurationController extends Controller
     public function edit($id)
     {
         if(!auth()->user()->hasPermissionTo('duration.edit')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $duration = $this->userRepository->findWithoutFail($id);
 
 
         if (empty($duration)) {
-            Flash::error(__('Vendor not found', ['operator' => __('lang.category')]));
+            Flash::error(trans('lang.SP_not_found'));
 
             return redirect(route('duration.index'));
         }
@@ -171,14 +172,14 @@ class DurationController extends Controller
     {
 
         if(!auth()->user()->hasPermissionTo('duration.update')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
 
         $duration = $this->userRepository->findWithoutFail($id);
 
         if (empty($duration)) {
-            Flash::error('Vendor not found');
+            Flash::error(trans('lang.SP_not_found'));
             return redirect(route('vendorRegistration.index'));
         }
 
@@ -214,7 +215,7 @@ class DurationController extends Controller
             Flash::error($e->getMessage());
         }
 
-        Flash::success(__('Duration successfully Edited', ['operator' => __('lang.category')]));
+        Flash::success(trans('lang.update_operation'));
 
         return redirect(route('vendorRegistration.index'));
     }

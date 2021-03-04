@@ -42,7 +42,7 @@ class CityController extends Controller
     public function index(CItyDataTable $CityDataTable)
     {   
         if(!auth()->user()->hasPermissionTo('city.index')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         return $CityDataTable->render('city.index');
@@ -56,7 +56,7 @@ class CityController extends Controller
     public function create()
     {
         if(!auth()->user()->hasPermissionTo('city.create')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $hasCustomField = in_array($this->CityRepository->model(), setting('custom_field_models', []));
@@ -81,7 +81,7 @@ class CityController extends Controller
     public function store(Request $request)
     {
         if(!auth()->user()->hasPermissionTo('city.store')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         if ($request->country == "0") {
@@ -114,7 +114,7 @@ class CityController extends Controller
             Flash::error($e->getMessage());
         }
 
-        Flash::success(__('lang.saved_successfully', ['operator' => __('lang.category')]));
+        Flash::success(trans('lang.store_operation'));
 
         return redirect(route('city.index'));
     }
@@ -130,7 +130,7 @@ class CityController extends Controller
         $city = $this->CityRepository->findWithoutFail($id);
 
         if (empty($city)) {
-            Flash::error('Category not found');
+            Flash::error(trans('lang.city_not_found'));
 
             return redirect(route('city.index'));
         }
@@ -147,7 +147,7 @@ class CityController extends Controller
     public function edit($id)
     {
         if(!auth()->user()->hasPermissionTo('city.edit')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $countries=Country::all();
@@ -155,7 +155,7 @@ class CityController extends Controller
         $city = $this->CityRepository->findWithoutFail($id);
 
         if (empty($city)) {
-            Flash::error(__('lang.not_found', ['operator' => __('lang.category')]));
+            Flash::error(trans('lang.city_not_found'));
 
             return redirect(route('city.index'));
         }
@@ -174,12 +174,12 @@ class CityController extends Controller
     public function update($id, Request $request)
     {
         if(!auth()->user()->hasPermissionTo('city.update')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $city = $this->CityRepository->findWithoutFail($id);
         if (empty($city)) {
-            Flash::error('City not found');
+            Flash::error(trans('lang.city_not_found'));
             return redirect(route('city.index'));
         }
         $input = $request->all();
@@ -195,7 +195,7 @@ class CityController extends Controller
             Flash::error($e->getMessage());
         }
 
-        Flash::success(__('lang.updated_successfully', ['operator' => __('lang.category')]));
+        Flash::success(trans('lang.update_operation'));
 
         return redirect(route('city.index'));
     }
@@ -209,20 +209,20 @@ class CityController extends Controller
     public function destroy($id)
     {
         if(!auth()->user()->hasPermissionTo('city.destroy')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $city = $this->CityRepository->findWithoutFail($id);
 
         if (empty($city)) {
-            Flash::error('City not found');
+            Flash::error(trans('lang.city_not_found'));
 
             return redirect(route('city.index'));
         }
 
         $this->CityRepository->delete($id);
 
-        Flash::success(__('lang.deleted_successfully', ['operator' => __('lang.category')]));
+        Flash::success(trans('lang.delete_operation'));
 
         return redirect(route('city.index'));
     }

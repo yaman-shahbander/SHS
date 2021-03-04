@@ -54,7 +54,7 @@ class BannedUsersController extends Controller
     public function index(BannedUsersDataTable $BannedUsersDataTable)
     {
         if(!auth()->user()->hasPermissionTo('bannedUsers.index')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
         return $BannedUsersDataTable->render('bannedUsers.index');
     }
@@ -67,7 +67,7 @@ class BannedUsersController extends Controller
     public function create()
     {
         if(!auth()->user()->hasPermissionTo('bannedUsers.create')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
         $hasCustomField = in_array($this->BannedUsersRepository->model(), setting('custom_field_models', []));
         if ($hasCustomField) {
@@ -91,10 +91,10 @@ class BannedUsersController extends Controller
     public function store(Request $request)
     {
         if(!auth()->user()->hasPermissionTo('bannedUsers.store')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
         if ($request->username == "0") {
-            Flash::error('Please select username');
+            Flash::error(trans('lang.select_option'));
             return redirect()->back();
         }
         $userid = BannedUsers::where('user_id', $request->username)->get();
@@ -117,7 +117,7 @@ class BannedUsersController extends Controller
             Flash::error($e->getMessage());
         }
 
-        Flash::success(__('lang.saved_successfully', ['operator' => __('lang.category')]));
+        Flash::success(trans('lang.store_operation'));
 
         return redirect(route('bannedUsers.index'));
     }
@@ -134,7 +134,7 @@ class BannedUsersController extends Controller
         $bannedUser = $this->BannedUsersRepository->findWithoutFail($id);
 
         if (empty($bannedUser)) {
-            Flash::error('user not found');
+            Flash::error(trans('lang.user_not_found'));
 
             return redirect(route('bannedUsers.index'));
         }
@@ -151,13 +151,13 @@ class BannedUsersController extends Controller
     public function edit($id)
     {
         if(!auth()->user()->hasPermissionTo('bannedUsers.edit')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
         $bannedUsers = $this->BannedUsersRepository->findWithoutFail($id);
 
 
         if (empty($bannedUsers)) {
-            Flash::error(__('lang.not_found', ['operator' => __('lang.category')]));
+            Flash::error(trans('lang.user_not_found'));
 
             return redirect(route('bannedUsers.index'));
         }
@@ -180,13 +180,13 @@ class BannedUsersController extends Controller
     public function update($id ,Request $request)
     {
         if(!auth()->user()->hasPermissionTo('bannedUsers.update')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $bannedUser = $this->BannedUsersRepository->findWithoutFail($id);
 
         if (empty($bannedUser)) {
-            Flash::error('user not found');
+            Flash::error(trans('lang.user_not_found'));
             return redirect(route('bannedUsers.index'));
         }
         $input = $request->all();
@@ -201,7 +201,7 @@ class BannedUsersController extends Controller
             Flash::error($e->getMessage());
         }
 
-        Flash::success(__('lang.updated_successfully', ['operator' => __('lang.category')]));
+        Flash::success(trans('lang.update_operation'));
 
         return redirect(route('bannedUsers.index'));
     }
@@ -215,19 +215,19 @@ class BannedUsersController extends Controller
     public function destroy($id)
     {
         if(!auth()->user()->hasPermissionTo('bannedUsers.destroy')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $bannedUser = $this->BannedUsersRepository->findWithoutFail($id);
         if (empty($bannedUser)) {
-            Flash::error('user not found');
+            Flash::error(trans('lang.user_not_found'));
 
             return redirect(route('bannedUsers.index'));
         }
 
         $this->BannedUsersRepository->delete($id);
 
-        Flash::success(__('lang.deleted_successfully', ['operator' => __('lang.category')]));
+        Flash::success(trans('lang.delete_operation'));
 
         return redirect(route('bannedUsers.index'));
     }
@@ -243,18 +243,17 @@ class BannedUsersController extends Controller
     public function saveUpdateBlocking(Request $request) {
 
         if(!$request->forever && DateTime::createFromFormat('Y-m-d', $request->temporary_ban) !== FALSE ){
-            Flash::error('You have to select temporary time or check it forever');
+            Flash::error(trans('lang.always_temp'));
             return redirect()->back();
         }
         
         if($request->forever == "on" && $request->temporary_ban ){
-            Flash::error('You have to select temporary time or check it forever');
+            Flash::error(trans('lang.always_temp'));
             return redirect()->back();
         }
 
         if($request->Ban_description==null){
-
-            Flash::error('You have to write a description');
+            Flash::error(trans('lang.required_description'));
 
             return redirect()->back();
         }
@@ -280,12 +279,12 @@ class BannedUsersController extends Controller
 
 
         if($baneduser->save()){
-        Flash::success(__('User Blocked Succesfully', ['operator' => __('lang.category')]));
+            Flash::success(trans('lang.unblock_user'));
 
-        return redirect()->back();
+            return redirect()->back();
         }
         else{
-            Flash::error('somthing was wrong');
+            Flash::error(trans('lang.something_wrong'));
 
             return redirect()->back();
         }
@@ -294,7 +293,7 @@ class BannedUsersController extends Controller
     public function unBlockuser(Request $request) {
 
         if(!auth()->user()->hasPermissionTo('unBlock')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
         $baneduser= BannedUsers::where('user_id',$request->id)->first();
   
@@ -307,12 +306,12 @@ class BannedUsersController extends Controller
 
             if($baneduser->delete())
                 {
-                     Flash::success(__('User unBlocked Succesfully', ['operator' => __('lang.category')]));
+                     Flash::success(trans('lang.unblock_user'));
 
                      return redirect()->back();
                 }
              else{
-                     Flash::error('somthing was wrong');
+                     Flash::error(trans('lang.something_wrong'));
 
                       return redirect()->back();
                 }

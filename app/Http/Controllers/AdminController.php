@@ -72,7 +72,7 @@ class AdminController extends Controller
     public function index(AdminUserDataTable $userDataTable)
     {
         if(!auth()->user()->hasPermissionTo('admins.index')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
         
         return $userDataTable->render('settings.admins.index');
@@ -86,7 +86,7 @@ class AdminController extends Controller
     public function create()
     {
         if(!auth()->user()->hasPermissionTo('admins.create')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $countries=Country::all();
@@ -117,7 +117,7 @@ class AdminController extends Controller
     public function store(CreateUserRequest $request)
     {
         if(!auth()->user()->hasPermissionTo('admins.store')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         if($request->city=="0")
@@ -183,7 +183,7 @@ class AdminController extends Controller
             Flash::error($e->getMessage());
         }
 
-        Flash::success('saved successfully.');
+        Flash::success(trans('lang.store_operation'));
 
         return redirect(route('adminsBoard.index'));
     }
@@ -197,7 +197,7 @@ class AdminController extends Controller
     public function show($id, Request $request,AdminUserDataTable $adminUserDataTable)
     {
         if(!auth()->user()->hasPermissionTo('admin.profile')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $countries=Country::all();
@@ -255,7 +255,7 @@ class AdminController extends Controller
     public function edit($id)
     {
         if(!auth()->user()->hasPermissionTo('admins.edit')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         if ($id==1) {
@@ -278,7 +278,7 @@ class AdminController extends Controller
         }
 
         if (empty($user)) {
-            Flash::error('Admin not found');
+            Flash::error(trans('lang.user_not_found'));
 
             return redirect(route('adminsBoard.index'));
         }
@@ -309,7 +309,7 @@ class AdminController extends Controller
     public function update($id, UpdateUserRequest $request)
     {
         if(!auth()->user()->hasPermissionTo('admins.update')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         // dd($request->input());
@@ -372,7 +372,7 @@ class AdminController extends Controller
             Flash::error($e->getMessage());
         }
 
-        Flash::success('Admin Updated Successfully!');
+        Flash::success(trans('lang.update_operation'));
 
         return redirect(route('adminsBoard.index'));
     }
@@ -386,7 +386,7 @@ class AdminController extends Controller
     public function destroy($id)
     {
         if(!auth()->user()->hasPermissionTo('admins.destroy')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         if (env('APP_DEMO', false)) {
@@ -396,7 +396,7 @@ class AdminController extends Controller
         $user = $this->userRepository->findWithoutFail($id);
 
         if (empty($user)) {
-            Flash::error('Admin not found');
+            Flash::error(trans('lang.user_not_found'));
 
             return redirect(route('adminsBoard.index'));
         }
@@ -410,7 +410,7 @@ class AdminController extends Controller
 
         $this->userRepository->delete($id);
 
-        Flash::success('Admin deleted successfully.');
+        Flash::success(trans('lang.delete_operation'));
 
         return redirect(route('adminsBoard.index'));
     }

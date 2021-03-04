@@ -48,7 +48,7 @@ class CountryController extends Controller
     public function index(countryDataTable $countryDataTable)
     {
         if(!auth()->user()->hasPermissionTo('country.index')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         return $countryDataTable->render('country.index');
@@ -62,7 +62,7 @@ class CountryController extends Controller
     public function create()
     {
         if(!auth()->user()->hasPermissionTo('country.create')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $hasCustomField = in_array($this->countryRepository->model(), setting('custom_field_models', []));
@@ -82,7 +82,7 @@ class CountryController extends Controller
     public function store(Request $request)
     {
         if(!auth()->user()->hasPermissionTo('country.store')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $input = $request->all();
@@ -91,7 +91,7 @@ class CountryController extends Controller
         $checkCountryName = Country::where('country_name', $request->name)->get();
 
         if (count($checkCountryName) > 0) { 
-            Flash::error('this country is exist');
+            Flash::error(trans('lang.country_exist'));
             return redirect()->route('country.index');
         }
 
@@ -103,7 +103,7 @@ class CountryController extends Controller
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }
-        Flash::success(__('lang.saved_successfully', ['operator' => __('lang.category')]));
+        Flash::success(trans('lang.store_operation'));
 
         return redirect(route('country.index'));
     }
@@ -119,7 +119,7 @@ class CountryController extends Controller
         $country = $this->countryRepository->findWithoutFail($id);
 
         if (empty($country)) {
-            Flash::error('Category not found');
+            Flash::error(trans('lang.country_not_found'));
 
             return redirect(route('country.index'));
         }
@@ -136,20 +136,14 @@ class CountryController extends Controller
     public function edit($id)
     {
         if(!auth()->user()->hasPermissionTo('country.edit')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $country = $this->countryRepository->findWithoutFail($id);
 
 
         if (empty($country)) {
-            Flash::error(__('lang.not_found', ['operator' => __('lang.category')]));
-
-            return redirect(route('country.index'));
-        }
-
-        if (empty($country)) {
-            Flash::error(__('lang.not_found', ['operator' => __('lang.category')]));
+            Flash::error(trans('lang.country_not_found'));
 
             return redirect(route('country.index'));
         }
@@ -169,13 +163,13 @@ class CountryController extends Controller
     public function update($id, request $request)
     {
         if(!auth()->user()->hasPermissionTo('country.update')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $country = $this->countryRepository->findWithoutFail($id);
 
         if (empty($country)) {
-            Flash::error('Country not found');
+            Flash::error(trans('lang.country_not_found'));
             return redirect(route('country.index'));
         }
         $input = $request->all();
@@ -193,7 +187,7 @@ class CountryController extends Controller
             Flash::error($e->getMessage());
         }
 
-        Flash::success(__('lang.updated_successfully', ['operator' => __('lang.category')]));
+        Flash::success(trans('lang.update_operation'));
 
         return redirect(route('country.index'));
     }
@@ -208,20 +202,20 @@ class CountryController extends Controller
     {
 
         if(!auth()->user()->hasPermissionTo('country.destroy')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $country = $this->countryRepository->findWithoutFail($id);
 
         if (empty($country)) {
-            Flash::error('country not found');
+            Flash::error(trans('lang.country_not_found'));
 
             return redirect(route('country.index'));
         }
 
         $this->countryRepository->delete($id);
 
-        Flash::success(__('Country deleted successfully', ['operator' => __('lang.category')]));
+        Flash::success(trans('lang.delete_operation'));
 
         return redirect(route('country.index'));
     }

@@ -49,7 +49,7 @@ class BalanceController extends Controller
     public function index(BalanceDataTable $balanceDataTable)
     {
         if(!auth()->user()->hasPermissionTo('balance.index')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         return $balanceDataTable->render('balance.index');
@@ -64,7 +64,7 @@ class BalanceController extends Controller
     {
 
         if(!auth()->user()->hasPermissionTo('balance.create')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $hasCustomField = in_array($this->balanceRepository->model(), setting('custom_field_models', []));
@@ -90,7 +90,7 @@ class BalanceController extends Controller
     {
 
         if(!auth()->user()->hasPermissionTo('balance.store')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $latestBalanceId = DB::table('balances')->latest('id')->first("id");
@@ -113,7 +113,7 @@ class BalanceController extends Controller
         ->where('id', $request->nameselect)
         ->update(array('balance_id' => $latestBalanceIdPlusOne));
 
-        Flash::success(__('Balance saved successfully', ['operator' => __('lang.category')]));
+        Flash::success(trans('lang.store_operation'));
 
         return redirect(route('balance.index'));
     }
@@ -138,7 +138,7 @@ class BalanceController extends Controller
     public function edit($id)
     {
         if(!auth()->user()->hasPermissionTo('balance.edit')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $balance_id = User::find($id)->balance_id;
@@ -149,7 +149,7 @@ class BalanceController extends Controller
 
 
         if (empty($balance)) {
-            Flash::error(__('Balance Not found', ['operator' => __('lang.category')]));
+            Flash::error(trans('lang.balance_not_found'));
 
             return redirect(route('balance.index'));
         }
@@ -173,13 +173,13 @@ class BalanceController extends Controller
     {
 
         if(!auth()->user()->hasPermissionTo('balance.update')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
         
         $balance = $this->balanceRepository->findWithoutFail($id);
 
         if (empty($balance)) {
-            Flash::error('balance not found');
+            Flash::error(trans('lang.balance_not_found'));
             return redirect(route('balance.index'));
         }
 
@@ -195,7 +195,7 @@ class BalanceController extends Controller
             Flash::error($e->getMessage());
         }
 
-        Flash::success(__('Balance successfully updated', ['operator' => __('lang.category')]));
+        Flash::success(trans('lang.update_operation'));
 
         return redirect(route('balance.index'));
     }
@@ -210,14 +210,14 @@ class BalanceController extends Controller
     {
 
         if(!auth()->user()->hasPermissionTo('balance.destroy')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $balance_id = User::find($id)->balance_id;
 
         $this->balanceRepository->delete($balance_id);
 
-        Flash::success(__('Balance Deleted Successfully', ['operator' => __('lang.category')]));
+        Flash::success(trans('lang.delete_operation'));
 
         return redirect(route('balance.index'));
     }
@@ -225,7 +225,8 @@ class BalanceController extends Controller
     public function addBalance($id) {
 
         if(!auth()->user()->hasPermissionTo('balance.add')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')
+            ]);
         }
 
         $balance_id = User::find($id)->balance_id;
@@ -236,7 +237,7 @@ class BalanceController extends Controller
 
         if (empty($balance)) {
             
-            Flash::error(__('Balance Not found', ['operator' => __('lang.category')]));
+            Flash::error(trans('lang.balance_not_found'));
 
             return redirect(route('balance.index'));
         }
@@ -253,14 +254,14 @@ class BalanceController extends Controller
     public function balanceaddUpdate($id ,Request $request) {
 
         if(!auth()->user()->hasPermissionTo('balance.addupdate')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
 
         $balance = $this->balanceRepository->findWithoutFail($id); 
 
         if (empty($balance)) {
-            Flash::error('balance not found');
+            Flash::error(trans('lang.balance_not_found'));
             return redirect(route('balance.index'));
         }
 
@@ -276,7 +277,7 @@ class BalanceController extends Controller
             Flash::error($e->getMessage());
         }
 
-        Flash::success(__('Balance successfully updated', ['operator' => __('lang.category')]));
+        Flash::success(trans('lang.update_operation'));
 
         return redirect(route('balance.index'));
     }

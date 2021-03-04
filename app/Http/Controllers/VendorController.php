@@ -80,7 +80,7 @@ class VendorController extends Controller
     public function index(VendorDataTable $vendorDataTable)
     {
         if(!auth()->user()->hasPermissionTo('vendors.index')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         return $vendorDataTable->render('settings.vendors.index');
@@ -118,7 +118,7 @@ class VendorController extends Controller
     public function create()
     {
         if(!auth()->user()->hasPermissionTo('vendors.create')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $countries=Country::all();
@@ -152,7 +152,7 @@ class VendorController extends Controller
     public function profile(Request $request,SubCategoriesVendorDataTable $subCategoriesDataTableDataTable)
     {
         if(!auth()->user()->hasPermissionTo('vendors.profile')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $countries=Country::all();
@@ -220,12 +220,12 @@ class VendorController extends Controller
     {
 
         if(!auth()->user()->hasPermissionTo('vendors.store')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         if($request->city=="0")
         {
-            Flash::warning('please select country and city ');
+            Flash::warning(trans('lang.select_country_city'));
             return redirect()->back();
         }
 
@@ -293,7 +293,7 @@ class VendorController extends Controller
             Flash::error($e->getMessage());
         }
 
-        Flash::success('saved successfully.');
+        Flash::success(trans('lang.store_operation'));
 
         return redirect(route('vendors.index'));
     }
@@ -301,7 +301,7 @@ class VendorController extends Controller
     public function featuredfeeFunction() {
 
         if(!auth()->user()->hasPermissionTo('vendors.fee')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $count = count(Fee::all()); // if there is an old fee value
@@ -318,7 +318,7 @@ class VendorController extends Controller
     public function savefeeFunction(Request $request) {
 
         if(!auth()->user()->hasPermissionTo('vendors.feeSave')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $check = Fee::all();
@@ -328,18 +328,18 @@ class VendorController extends Controller
             $amount  = strip_tags($request->fee_amount);
 
             if(preg_match('/[a-zA-Z]/', $amount)) {
-                Flash::Error(__('Transfer failed! field must only contain numbers', ['operator' => __('lang.category')]));
+                Flash::Error(trans('lang.only_numbers'));
                 return redirect(route('vendors.index'));
              }
 
 
              if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $amount)) {
-                Flash::Error(__('Transfer failed! field must only contain numbers', ['operator' => __('lang.category')]));
+                Flash::Error(trans('lang.only_numbers'));
                 return redirect(route('vendors.index'));
             }
 
             if ($amount < 0) {
-                Flash::Error(__('Transfer failed! amount should not be negative', ['operator' => __('lang.category')]));
+                Flash::Error(trans('lang.negative_amount'));
                 return redirect(route('vendors.index'));
              }
 
@@ -347,25 +347,25 @@ class VendorController extends Controller
 
             $newfee->save();
 
-            Flash::success('Fee saved successfully.');
+            Flash::success(trans('lang.store_operation'));
             return redirect(route('vendors.index'));
         } else {
 
             $amount  = strip_tags($request->fee_amount);
 
             if(preg_match('/[a-zA-Z]/', $amount)) {
-                Flash::Error(__('Transfer failed! field must only contain numbers', ['operator' => __('lang.category')]));
+                Flash::Error(trans('lang.only_numbers'));
                 return redirect(route('vendors.index'));
              }
 
 
              if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $amount)) {
-                Flash::Error(__('Transfer failed! field must only contain numbers', ['operator' => __('lang.category')]));
+                Flash::Error(trans('lang.only_numbers'));
                 return redirect(route('vendors.index'));
             }
 
             if ($amount < 0) {
-                Flash::Error(__('Transfer failed! amount should not be negative', ['operator' => __('lang.category')]));
+                Flash::Error(trans('lang.negative_amount'));
                 return redirect(route('vendors.index'));
              }
 
@@ -373,7 +373,7 @@ class VendorController extends Controller
                 'fee_amount' => $amount
             ]);
 
-            Flash::success('Fee updated successfully.');
+            Flash::success(trans('lang.fee_update'));
             return redirect(route('vendors.index'));
         }
     }
@@ -381,7 +381,7 @@ class VendorController extends Controller
     public function update($id, UpdateUserRequest $request)
     {
         if(!auth()->user()->hasPermissionTo('vendors.update')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         if (env('APP_DEMO', false)) {
@@ -394,12 +394,12 @@ class VendorController extends Controller
         }
         if($request->city=="0")
         {
-            Flash::warning('please select country and city ');
+            Flash::warning(trans('lang.select_country_city'));
             return redirect()->back();
         }
 
         if ($request->input('email') == null && $request->input('phone') == null) {
-            Flash::error('Either email or phone should be filled!');
+            Flash::success(trans('lang.require_email_phone'));
             return redirect()->back();
         }
         
@@ -440,7 +440,7 @@ class VendorController extends Controller
             Flash::error($e->getMessage());
         }
 
-        Flash::success('Vendor Updated Successfully!');
+        Flash::success(trans('lang.update_operation'));
 
         return redirect(route('vendors.index'));
 
@@ -449,11 +449,11 @@ class VendorController extends Controller
     public function edit($id)
     {
         if(!auth()->user()->hasPermissionTo('vendors.edit')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         if ($id==1) {
-            Flash::error('Permission denied');
+            Flash::success(trans('lang.Permission_denied'));
             return redirect(route('users.index'));
         }
 
@@ -472,7 +472,7 @@ class VendorController extends Controller
         }
 
         if (empty($user)) {
-            Flash::error('User not found');
+            Flash::success(trans('lang.user_not_found'));
 
             return redirect(route('users.index'));
         }
@@ -496,7 +496,7 @@ class VendorController extends Controller
         public function destroy($id)
         {
             if(!auth()->user()->hasPermissionTo('vendors.destroy')){
-                return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+                return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
             }
 
         if (env('APP_DEMO', false)) {
@@ -506,7 +506,7 @@ class VendorController extends Controller
         $user = $this->vendorRepository->findWithoutFail($id);
 
         if (empty($user)) {
-            Flash::error('User not found');
+            Flash::success(trans('lang.user_not_found'));
 
             return redirect(route('users.index'));
         }
@@ -520,7 +520,7 @@ class VendorController extends Controller
 
         $this->vendorRepository->delete($id);
 
-        Flash::success('User deleted successfully.');
+        Flash::success(trans('lang.delete_operation'));
 
         return redirect(route('vendors.index'));
     }

@@ -43,7 +43,7 @@ class ReviewsController extends Controller
     public function index(ReviewsDataTable $reviewDataTable)
     {
         if(!auth()->user()->hasPermissionTo('approved.index')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         return $reviewDataTable->render('reviews.index');
@@ -92,7 +92,7 @@ class ReviewsController extends Controller
     {
 
         if(!auth()->user()->hasPermissionTo('approved.edit')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $pendingReview = $this->reviewRepository->findWithoutFail($id);
@@ -100,7 +100,7 @@ class ReviewsController extends Controller
 
 
         if (empty($pendingReview)) {
-            Flash::error(__('lang.not_found', ['operator' => __('lang.category')]));
+            Flash::error(trans('lang.review_not_found'));
 
             return redirect(route('approved.index'));
         }
@@ -119,14 +119,14 @@ class ReviewsController extends Controller
     public function update($id,Request $request){
 
         if(!auth()->user()->hasPermissionTo('approved.update')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $review = $this->reviewRepository->findWithoutFail($id);
 //$review = reviews::find($id);
 
     if (empty($review)) {
-        Flash::error('Review not found');
+        Flash::error(trans('lang.review_not_found'));
         return redirect(route('approved.index'));        }
 
     try {
@@ -145,7 +145,7 @@ class ReviewsController extends Controller
     }
 
 
-    Flash::success('Reviews Updated');
+    Flash::success(trans('lang.update_operation'));
 
     return redirect(route('approved.index'));  
     }
@@ -159,21 +159,20 @@ class ReviewsController extends Controller
     public function destroy($id)
     {
         if(!auth()->user()->hasPermissionTo('approved.destroy')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
 
         $review = $this->reviewRepository->findWithoutFail($id);
 
         if (empty($review)) {
-            Flash::error('Review not found');
-
+            Flash::error(trans('lang.review_not_found'));
             return redirect(route('approved.index'));
         }
 
         $this->reviewRepository->delete($id);
 
-        Flash::success(__('lang.deleted_successfully', ['operator' => __('lang.category')]));
+        Flash::success(trans('lang.delete_operation'));
 
         return redirect(route('approved.index'));
     }

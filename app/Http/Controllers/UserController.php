@@ -84,7 +84,7 @@ class UserController extends Controller
     public function index(UserDataTable $userDataTable)
     {
         if(!auth()->user()->hasPermissionTo('users.index')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
         
         return $userDataTable->render('settings.users.index');
@@ -103,7 +103,7 @@ class UserController extends Controller
         
 
         if(!auth()->user()->hasPermissionTo('users.profile')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $countries=Country::all();
@@ -137,7 +137,7 @@ class UserController extends Controller
     {
 
         if(!auth()->user()->hasPermissionTo('users.profile')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $countries=Country::all();
@@ -195,7 +195,7 @@ class UserController extends Controller
     public function create()
     {
         if(!auth()->user()->hasPermissionTo('users.create')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $countries=Country::all();
@@ -228,17 +228,17 @@ class UserController extends Controller
     public function store(CreateUserRequest $request)
     {
         if(!auth()->user()->hasPermissionTo('users.store')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         if($request->city=="0")
         {
-            Flash::warning('please select country and city ');
+            Flash::warning(trans('lang.select_country_city'));
             return redirect()->back();
         }
 
         if ($request->input('email') == null && $request->input('phone') == null) {
-            Flash::error('Either email or phone should be filled!');
+            Flash::success(trans('lang.require_email_phone'));
             return redirect()->back();
         }
 
@@ -297,7 +297,7 @@ class UserController extends Controller
             Flash::error($e->getMessage());
         }
 
-        Flash::success('saved successfully.');
+        Flash::success(trans('lang.store_operation'));
 
         return redirect(route('users.index'));
     }
@@ -314,7 +314,7 @@ class UserController extends Controller
         $user = $this->userRepository->findWithoutFail($id);
 
         if (empty($user)) {
-            Flash::error('User not found');
+            Flash::success(trans('lang.user_not_found'));
 
             return redirect(route('users.index'));
         }
@@ -326,12 +326,12 @@ class UserController extends Controller
     {
         $user = $this->userRepository->findWithoutFail($id);
         if (empty($user)) {
-            Flash::error('User not found');
+            Flash::success(trans('lang.user_not_found'));
             return redirect(route('users.index'));
         }
         auth()->login($user, true);
         if (auth()->id() !== $user->id) {
-            Flash::error('User not found');
+            Flash::success(trans('lang.user_not_found'));
         }
         return redirect(route('users.profile'));
     }
@@ -346,11 +346,11 @@ class UserController extends Controller
     public function edit($id)
     {
         if(!auth()->user()->hasPermissionTo('users.edit')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         if ($id==1) {
-            Flash::error('Permission denied');
+            Flash::success(trans('lang.Permission_denied'));
             return redirect(route('users.index'));
         }
 
@@ -369,7 +369,7 @@ class UserController extends Controller
         }
 
         if (empty($user)) {
-            Flash::error('User not found');
+            Flash::success(trans('lang.user_not_found'));
 
             return redirect(route('users.index'));
         }
@@ -401,7 +401,7 @@ class UserController extends Controller
     public function update($id, UpdateUserRequest $request)
     {
         if(!auth()->user()->hasPermissionTo('users.update')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         // dd($request->input());
@@ -410,17 +410,17 @@ class UserController extends Controller
             return redirect(route('users.profile'));
         }
         if ($id==1 ) {
-            Flash::error('Permission denied');
+            Flash::success(trans('lang.Permission_denied'));
             return redirect(route('users.profile'));
         }
         if($request->city=="0")
         {
-            Flash::warning('please select country and city ');
+            Flash::warning(trans('lang.select_country_city'));
             return redirect()->back();
         }
         
         if ($request->input('email') == null && $request->input('phone') == null) {
-            Flash::error('Either email or phone should be filled!');
+            Flash::success(trans('lang.require_email_phone'));
             return redirect()->back();
         }
 
@@ -463,7 +463,7 @@ class UserController extends Controller
             Flash::error($e->getMessage());
         }
 
-        Flash::success('User Updated Successfully!');
+        Flash::success(trans('lang.update_operation'));
 
         return redirect(route('users.index'));
 
@@ -479,7 +479,7 @@ class UserController extends Controller
     public function destroy($id)
     {
         if(!auth()->user()->hasPermissionTo('users.destroy')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         if (env('APP_DEMO', false)) {
@@ -494,7 +494,7 @@ class UserController extends Controller
 
 
         if (empty($user)) {
-            Flash::error('User not found');
+            Flash::success(trans('lang.user_not_found'));
 
             return redirect(route('users.index'));
         }
@@ -504,7 +504,7 @@ class UserController extends Controller
 
         $this->userRepository->delete($id);
 
-        Flash::success('User deleted successfully.');
+        Flash::success(trans('lang.delete_operation'));
 
         return redirect(route('users.index'));
     }
