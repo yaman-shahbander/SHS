@@ -101,11 +101,15 @@ class MessageController extends Controller
                      ->Orwhere("email", "LIKE", "%".$search."%")
                      ->get(['name', 'email', 'avatar', 'device_token']);
 
+        if ($search == "emptyValue") {
+            $Users = User::all('name', 'email', 'avatar', 'device_token');
+        }
+        
         $Users->transform(function($q) {
             $q['avatar'] = asset('/storage/Avatar') . '/' . $q['avatar'];
             return $q;
         });
-        
+
         return $Users;
     }
     

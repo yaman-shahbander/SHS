@@ -115,6 +115,7 @@
 
     function searchFunction() {
         var elemVal = document.getElementById("search").value;
+        if(elemVal.trim() == "")  { elemVal = "emptyValue" }
          $.ajax({
             url : "{{ url('api/search') }}",
             type: "POST",
