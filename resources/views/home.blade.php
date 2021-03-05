@@ -175,37 +175,37 @@
     }
 
 
-    
+    document.addEventListener("click", function(event){
+        var targetElement = event.target || event.srcElement;
 
+        if(targetElement.className == "name" || targetElement.className == "email") {
+            var parentID = targetElement.parentElement.parentElement.parentElement.id;
 
-    // document.getElementsByClassName("user").addEventListener("click", function(){
-    //     alert(event.target);
-    // });
+        } else if (targetElement.className == "media-object") {
+            var parentID = targetElement.parentElement.parentElement.parentElement.id;
 
+        } else if (targetElement.className == "media-body") {
+            var parentID = targetElement.parentElement.parentElement.id;
+        } else if (targetElement.className == "user") {
+            var parentID = targetElement.id; //Not parent but the same element
+        } 
 
-    //
-    /**
-    
-    .addEventListener("click", function(){
-        alert(event.target);
+        if (parentID != null) {
+            receiver_id = parentID;
+            $.ajax({
+                type: "get",
+                url: "message/" + receiver_id, // need to create this route
+                data: "",
+                cache: false,
+                success: function (data) {
+                    $('#messages').html(data);
+                    
+                    scrollToBottomFunc();
+                }
+            });
+        }
+        
     });
-    
-     */
-
-    // document.addEventListener("click", function(){
-
-    //      s = document.querySelector("#user-wrapper ul li");
-
-    //      console.log(s);
-    // });
-
-    // function func() {
-
-    //     $div = $("#user-wrapper");
-    //     $ul = $("#user-wrapper").find('ul');
-
-    //      alert('here be dragons');return false;
-    // };
    
 </script>
 
