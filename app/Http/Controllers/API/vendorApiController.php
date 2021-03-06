@@ -224,10 +224,10 @@ class vendorApiController extends Controller
 
             if (!empty($fee)) {
                 $featuredVendorBalance -= $fee->fee_amount;
-            } 
+            }
             $featuredVendor->Balance->balance=$featuredVendorBalance;
             $featuredVendor->Balance->save();
-            
+
             return $this->sendResponse([], 'Fee subtracted successfully');
         }
     }
@@ -254,11 +254,12 @@ class vendorApiController extends Controller
 
 
                 $checkIfFavorite = $user->vendorFavorite->transform(function($q) use ($vendor){
-                    if ($vendor->id == $q->id)
-                        return $q;
+                   // if ($vendor->id == $q->id)
+                        return $q->id;
                     });
 
-                count($checkIfFavorite) > 0 ? $isFavorite = true : $isFavorite = false;
+//return $checkIfFavorite ;
+                in_array($vendor->id,$checkIfFavorite->toArray()) ? $isFavorite = true : $isFavorite = false;
 
             foreach($attrs as $attr) {
                 $reviews[$i]['id'] = $attr->id;
@@ -382,7 +383,7 @@ class vendorApiController extends Controller
        }
 
     }
-    
+
     public function vendorReviews(Request $request) {
         if($request->header('devicetoken')) {
             $response = [];
