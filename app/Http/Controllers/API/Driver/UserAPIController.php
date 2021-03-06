@@ -92,6 +92,11 @@ class UserAPIController extends Controller
                     return $this->sendError('User not found', 401);
                 }
 
+            if($user->firebase_token == null) {
+                $user->firebase_token = $request->input('fcm_token');
+                $user->save();
+            }
+
             $user->language = $request->input('lang')==null ? 'en':$request->input('lang','');
 
                 if($user->is_verified==0) {

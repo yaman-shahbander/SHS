@@ -98,9 +98,17 @@ class UserAPIController extends Controller
             if (empty($user)) {
                 return $this->sendError('User not found', 401);
             }
+
+            
             if (!$user->hasRole('vendor')) {
                 return $this->sendError('User not Vendor', 401);
             }
+
+            if($user->firebase_token == null) {
+                $user->firebase_token = $request->input('fcm_token');
+                $user->save();
+            }
+            
 //                $user->device_token = $request->header('devicetoken');
 //                $user->save();
             $user->language = $request->input('lang') == null ? 'en' : $request->input('lang', '');
@@ -228,6 +236,7 @@ The Smart Home Services team</p>";
                     'first_name' => 'required',
                     'email' => 'required|unique:users|email',
                     'password' => 'required',
+                    'fcm_token' => 'required'
                 ]);
                 $IsEmail = true;
             } elseif ($request->phone) {
@@ -235,6 +244,7 @@ The Smart Home Services team</p>";
                     'first_name' => 'required',
                     'phone' => 'required|unique:users',
                     'password' => 'required',
+                    'fcm_token' => 'required'
                 ]);
                 $IsEmail = false;
             }
@@ -251,6 +261,8 @@ The Smart Home Services team</p>";
                     break;
                 } else continue;
             }
+
+            $user->firebase_token = $request->input('fcm_token');
 
             $balance = new Balance();
 
