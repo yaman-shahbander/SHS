@@ -105,10 +105,13 @@ class UserAPIController extends Controller
             }
 
             if($user->firebase_token == null) {
+                $this->validate($request, [
+                    'fcm_token' => 'required'
+                ]);
                 $user->firebase_token = $request->input('fcm_token');
                 $user->save();
             }
-            
+
 //                $user->device_token = $request->header('devicetoken');
 //                $user->save();
             $user->language = $request->input('lang') == null ? 'en' : $request->input('lang', '');

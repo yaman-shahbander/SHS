@@ -93,6 +93,9 @@ class UserAPIController extends Controller
                 }
 
             if($user->firebase_token == null) {
+                $this->validate($request, [
+                    'fcm_token' => 'required'
+                ]);
                 $user->firebase_token = $request->input('fcm_token');
                 $user->save();
             }
