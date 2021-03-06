@@ -85,7 +85,7 @@ class NotificationController extends Controller
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
-         $SERVER_API_KEY = 'AAAA4D63pNE:APA91bHZnOMtZp1E5zvs5hmd0mniLA2JRWQwECU5Rc-aI4cvHfENc4PuMTwNnHtFwFex11IFsdEns2ErZ05GXfn-sJVDMit8lfc5RSMTF9GHfHadBQ0OMfGA8MJ0H4DQ5t3LAl-Nx6y2';
+         $SERVER_API_KEY = 'AAAA71-LrSk:APA91bHCjcToUH4PnZBAhqcxic2lhyPS2L_Eezgvr3N-O3ouu2XC7-5b2TjtCCLGpKo1jhXJqxEEFHCdg2yoBbttN99EJ_FHI5J_Nd_MPAhCre2rTKvTeFAgS8uszd_P6qmp7NkSXmuq';
 
         $headers = [
             'Authorization: key=' . $SERVER_API_KEY,
@@ -97,7 +97,7 @@ class NotificationController extends Controller
         $categories = Category::all();
 
 
-        $users = User::whereNotNull('device_token');
+        $users = User::whereNotNull('firebase_token');
 
 
         if ($request->type == 1)
@@ -139,7 +139,7 @@ class NotificationController extends Controller
        // $users = $users->get('device_token');
 
         $data = [
-            "registration_ids" => $users->pluck('device_token'),
+            "registration_ids" => $users->pluck('firebase_token'),
             "notification" => [
                 "title"    => $request->title,
                 "body"     => $request->description,
@@ -238,14 +238,20 @@ class NotificationController extends Controller
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
-        $SERVER_API_KEY = 'AAAA4D63pNE:APA91bHZnOMtZp1E5zvs5hmd0mniLA2JRWQwECU5Rc-aI4cvHfENc4PuMTwNnHtFwFex11IFsdEns2ErZ05GXfn-sJVDMit8lfc5RSMTF9GHfHadBQ0OMfGA8MJ0H4DQ5t3LAl-Nx6y2';
+        $SERVER_API_KEY = 'AAAA71-LrSk:APA91bHCjcToUH4PnZBAhqcxic2lhyPS2L_Eezgvr3N-O3ouu2XC7-5b2TjtCCLGpKo1jhXJqxEEFHCdg2yoBbttN99EJ_FHI5J_Nd_MPAhCre2rTKvTeFAgS8uszd_P6qmp7NkSXmuq	
+        ';
+//and
+// AAAA71-LrSk:APA91bHCjcToUH4PnZBAhqcxic2lhyPS2L_Eezgvr3N-O3ouu2XC7-5b2TjtCCLGpKo1jhXJqxEEFHCdg2yoBbttN99EJ_FHI5J_Nd_MPAhCre2rTKvTeFAgS8uszd_P6qmp7NkSXmuq
+
+
+        //AAAA4D63pNE:APA91bHZnOMtZp1E5zvs5hmd0mniLA2JRWQwECU5Rc-aI4cvHfENc4PuMTwNnHtFwFex11IFsdEns2ErZ05GXfn-sJVDMit8lfc5RSMTF9GHfHadBQ0OMfGA8MJ0H4DQ5t3LAl-Nx6y2
 
         $headers = [
             'Authorization: key=' . $SERVER_API_KEY,
             'Content-Type: application/json',
         ]; 
 
-        $users = User::whereNotNull('device_token');
+        $users = User::whereNotNull('firebase_token');
 
 
         if ($request->type == 1)
@@ -287,7 +293,7 @@ class NotificationController extends Controller
        // $users = $users->get('device_token');
 
         $data = [
-            "registration_ids" => $users->pluck('device_token'),
+            "registration_ids" => $users->pluck('firebase_token'),
             "notification" => [
                 "title"    => $request->title,
                 "body"     => $request->description,

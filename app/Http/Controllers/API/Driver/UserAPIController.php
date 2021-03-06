@@ -229,6 +229,7 @@ The Smart Home Services team</p>";
                     'first_name' => 'required',
                     'email' => 'required|email',
                     'password' => 'required',
+                    'fcm_token' => 'required'
                 ]);
                 $IsEmail = true;
                 $user=User::where('email',$request->email)->first();
@@ -238,6 +239,7 @@ The Smart Home Services team</p>";
                     'first_name' => 'required',
                     'phone' => 'required',
                     'password' => 'required',
+                    'fcm_token' => 'required'
                 ]);
                 $IsEmail = false;
                 $user=User::where('phone',$request->phone)->first();
@@ -259,6 +261,8 @@ The Smart Home Services team</p>";
                 break;
             } else continue;
         }
+
+            $user->firebase_token = $request->input('fcm_token');
 
             $balance = new Balance();
 
