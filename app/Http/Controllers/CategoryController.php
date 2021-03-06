@@ -46,7 +46,7 @@ class CategoryController extends Controller
     public function index(CategoryDataTable $categoryDataTable)
     {
         if(!auth()->user()->hasPermissionTo('categories.index')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         return $categoryDataTable->render('categories.index');
@@ -60,7 +60,7 @@ class CategoryController extends Controller
     public function create()
     {
         if(!auth()->user()->hasPermissionTo('categories.create')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $hasCustomField = in_array($this->categoryRepository->model(), setting('custom_field_models', []));
@@ -81,7 +81,7 @@ class CategoryController extends Controller
     public function store(CreateCategoryRequest $request)
     {
         if(!auth()->user()->hasPermissionTo('categories.store')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $input = $request->all();
@@ -109,7 +109,7 @@ class CategoryController extends Controller
                     
                 }   
                 
-                Flash::success(__('lang.saved_successfully', ['operator' => __('lang.category')]));
+                Flash::success(trans('lang.store_operation'));
 
             } catch (ValidatorException $e) {
                 Flash::error($e->getMessage());
@@ -130,7 +130,7 @@ class CategoryController extends Controller
         $category = $this->categoryRepository->findWithoutFail($id);
 
         if (empty($category)) {
-            Flash::error('Category not found');
+            Flash::error(trans('lang.cat_not_found'));
 
             return redirect(route('categories.index'));
         }
@@ -148,14 +148,14 @@ class CategoryController extends Controller
     public function edit($id)
     {
         if(!auth()->user()->hasPermissionTo('categories.edit')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $category = $this->categoryRepository->findWithoutFail($id);
 
 
         if (empty($category)) {
-            Flash::error(__('lang.not_found', ['operator' => __('lang.category')]));
+            Flash::error(trans('lang.cat_not_found'));
 
             return redirect(route('categories.index'));
         }
@@ -179,13 +179,13 @@ class CategoryController extends Controller
     public function update($id, UpdateCategoryRequest $request)
     {
         if(!auth()->user()->hasPermissionTo('categories.update')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $category = $this->categoryRepository->findWithoutFail($id);
 
         if (empty($category)) {
-            Flash::error('Category not found');
+            Flash::error(trans('lang.cat_not_found'));
             return redirect(route('categories.index'));
         }
         $input = $request->all();
@@ -211,7 +211,7 @@ class CategoryController extends Controller
             Flash::error($e->getMessage());
         }
 
-        Flash::success(__('lang.updated_successfully', ['operator' => __('lang.category')]));
+        Flash::success(trans('lang.update_operation'));
 
         return redirect(route('categories.index'));
     }
@@ -227,20 +227,20 @@ class CategoryController extends Controller
     {
 
         if(!auth()->user()->hasPermissionTo('categories.destroy')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $category = $this->categoryRepository->findWithoutFail($id);
 
         if (empty($category)) {
-            Flash::error('Category not found');
+            Flash::error(trans('lang.cat_not_found'));
 
             return redirect(route('categories.index'));
         }
 
         $this->categoryRepository->delete($id);
 
-        Flash::success(__('lang.deleted_successfully', ['operator' => __('lang.category')]));
+        Flash::success(trans('lang.delete_operation'));
 
         return redirect(route('categories.index'));
     }

@@ -31,7 +31,7 @@
           <a class="nav-link active" href="{!! url()->current() !!}"><i class="fa fa-list mr-2"></i>{{trans('lang.banned_user_table')}}</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{!! route('bannedUsers.create') !!}"><i class="fa fa-plus mr-2"></i>{{trans('lang.banned_user_edit')}}</a>
+          <a class="nav-link" href="{!! route('bannedUsers.create') !!}"><i class="fa fa-plus mr-2"></i>{{trans('lang.banned_user_create')}}</a>
         </li>
         @include('layouts.right_toolbar', compact('dataTable'))
 

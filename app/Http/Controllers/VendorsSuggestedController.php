@@ -55,7 +55,7 @@ class VendorsSuggestedController extends Controller
     public function index(VendorSuggestedDataTable $vendorsugDataTable)
     {
         if(!auth()->user()->hasPermissionTo('suggestedvendor.index')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         return $vendorsugDataTable->render('settings.vendors_suggested.index');
@@ -69,7 +69,7 @@ class VendorsSuggestedController extends Controller
     {
 
         if(!auth()->user()->hasPermissionTo('suggestedvendor.create')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $hasCustomField = in_array($this->vendorSugRepository->model(), setting('custom_field_models', []));
@@ -86,7 +86,7 @@ class VendorsSuggestedController extends Controller
     {
 
         if(!auth()->user()->hasPermissionTo('suggestedvendor.store')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $input = $request->all();
@@ -98,7 +98,7 @@ class VendorsSuggestedController extends Controller
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }
-        Flash::success('saved successfully.');
+        Flash::success(trans('lang.store_operation'));
         return redirect(route('vendor.index'));
     }
 
@@ -114,7 +114,7 @@ class VendorsSuggestedController extends Controller
         $vendor = $this->vendorSugRepository->findWithoutFail($id);
         
         if (empty($vendor)) {
-            Flash::error('Vendor not found');
+            Flash::error(trans('lang.SP_not_found'));
 
             return redirect(route('vendor.index'));
         }
@@ -144,14 +144,14 @@ class VendorsSuggestedController extends Controller
     public function edit($id)
     {
         if(!auth()->user()->hasPermissionTo('suggestedvendor.edit')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $vendor = $this->vendorSugRepository->findWithoutFail($id);
 
 
         if (empty($vendor)) {
-            Flash::error(__('lang.not_found', ['operator' => __('lang.category')]));
+            Flash::error(trans('lang.SP_not_found'));
 
             return redirect(route('vendor.index'));
         }
@@ -176,13 +176,13 @@ class VendorsSuggestedController extends Controller
     public function update($id, UpdateCategoryRequest $request)
     {
         if(!auth()->user()->hasPermissionTo('suggestedvendor.update')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $vendor = $this->vendorSugRepository->findWithoutFail($id);
 
         if (empty($vendor)) {
-            Flash::error('vendor not found');
+            Flash::error(trans('lang.SP_not_found'));
             return redirect(route('vendor.index'));
         }
         $input = $request->all();
@@ -199,7 +199,7 @@ class VendorsSuggestedController extends Controller
             Flash::error($e->getMessage());
         }
 
-        Flash::success(__('lang.updated_successfully', ['operator' => __('lang.vendor')]));
+        Flash::success(trans('lang.update_operation'));
 
         return redirect(route('vendor.index'));
     }
@@ -214,20 +214,20 @@ class VendorsSuggestedController extends Controller
     public function destroy($id)
     {
         if(!auth()->user()->hasPermissionTo('suggestedvendor.destroy')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $vendor = $this->vendorSugRepository->findWithoutFail($id);
 
         if (empty($vendor)) {
-            Flash::error('vendor not found');
+            Flash::error(trans('lang.SP_not_found'));
 
             return redirect(route('vendor.index'));
         }
 
         $this->vendorSugRepository->delete($id);
 
-        Flash::success(__('lang.deleted_successfully', ['operator' => __('lang.vendor')]));
+        Flash::success(trans('lang.delete_operation'));
 
         return redirect(route('vendor.index'));
     }
@@ -236,14 +236,14 @@ class VendorsSuggestedController extends Controller
     {
 
         if(!auth()->user()->hasPermissionTo('suggestedvendor.save')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         try {
       
             if($request->city=="0")
             {
-                Flash::warning('please select country and city ');
+                Flash::warning(trans('lang.select_country_city'));
                 return redirect()->back();
             }
             $input = $request->all();    
@@ -289,7 +289,7 @@ class VendorsSuggestedController extends Controller
             } catch (ValidatorException $e) {
                 Flash::error($e->getMessage());
             }
-            Flash::success('saved successfully.');
+            Flash::success(trans('lang.store_operation'));
 
             return redirect(route('vendors.index'));
         } catch (ValidatorException $e) {

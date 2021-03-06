@@ -93,5 +93,24 @@ class MessageController extends Controller
         $data = ['from' => $from, 'to' => $to, 'message' => $message]; // sending from and to user id when pressed enter
         $pusher->trigger('yaman-channel', 'messaging-event', $data);
     }
+
+    public function getChats(Request $request) {
+        $search = $request->searchValue;
+
+        $Users = User::where('name', 'LIKE', "%".$search."%")
+                     ->Orwhere("email", "LIKE", "%".$search."%")
+                     ->get(['name', 'email', 'avatar', 'device_token']);
+
+        if ($search == "emptyValue") {
+            $Users = User::all('name', 'email', 'avatar', 'device_token');
+        }
+        
+        $Users->transform(function($q) {
+            $q['avatar'] = asset('/storage/Avatar') . '/' . $q['avatar'];
+            return $q;
+        });
+
+        return $Users;
+    }
     
 }

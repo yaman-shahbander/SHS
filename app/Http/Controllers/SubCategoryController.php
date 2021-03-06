@@ -49,7 +49,7 @@ class SubCategoryController extends Controller
     public function index(SubCategoriesDataTable $subcategoryDataTable)
     {           
         if(!auth()->user()->hasPermissionTo('subcategory.index')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $categories = subCategory::all();
@@ -64,7 +64,7 @@ class SubCategoryController extends Controller
     public function create()
     {
         if(!auth()->user()->hasPermissionTo('subcategory.create')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $hasCustomField = in_array($this->subcategoryRepository->model(), setting('custom_field_models', []));
@@ -90,17 +90,17 @@ class SubCategoryController extends Controller
     public function store(Request $request)
     {
         if(!auth()->user()->hasPermissionTo('subcategory.store')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         if ($request->category == "0") {
-            Flash::error('Please select category');
+            Flash::error(trans('lang.select_cat'));
             return redirect()->back();
         }
         $subcategories = subCategory::where('name', $request->name)->get();
          foreach ($subcategories as $category) {
             if ($category->category_id == $request->category) {
-                Flash::error('this category is exist');
+                Flash::error(trans('lang.subcate_exist'));
                 return redirect()->back();
             }
         }
@@ -125,7 +125,7 @@ class SubCategoryController extends Controller
             Flash::error($e->getMessage());
         }
 
-        Flash::success(__('Subcategory saved successfully', ['operator' => __('lang.category')]));
+        Flash::success(trans('lang.store_operation'));
 
         return redirect(route('subcategory.create'));
 
@@ -144,7 +144,7 @@ class SubCategoryController extends Controller
         $subcategory = $this->subcategoryRepository->findWithoutFail($id);
 
         if (empty($subcategory)) {
-            Flash::error('Category not found');
+            Flash::error(trans('lang.subcat_not_found'));
 
             return redirect(route('subcategory.index'));
         }
@@ -160,7 +160,7 @@ class SubCategoryController extends Controller
     public function edit($id)
     {
         if(!auth()->user()->hasPermissionTo('subcategory.edit')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $categories=Category::all();
@@ -170,7 +170,7 @@ class SubCategoryController extends Controller
 
 
         if (empty($subcategory)) {
-            Flash::error(__('lang.not_found', ['operator' => __('lang.category')]));
+            Flash::error(trans('lang.subcat_not_found'));
 
             return redirect(route('subcategory.index'));
         }
@@ -188,13 +188,13 @@ class SubCategoryController extends Controller
     public function update($id, UpdateSubCategoryRequest $request)
     {
         if(!auth()->user()->hasPermissionTo('subcategory.update')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $subcategory = $this->subcategoryRepository->findWithoutFail($id);
 
         if (empty($subcategory)) {
-            Flash::error('Category not found');
+            Flash::error(trans('lang.subcat_not_found'));
             return redirect(route('subcategory.index'));
         }
         $input = $request->all();
@@ -219,7 +219,7 @@ class SubCategoryController extends Controller
             Flash::error($e->getMessage());
         }
 
-        Flash::success(__('lang.updated_successfully', ['operator' => __('lang.category')]));
+        Flash::success(trans('lang.update_operation'));
 
         return redirect(route('subcategory.index'));
     }
@@ -233,20 +233,20 @@ class SubCategoryController extends Controller
     public function destroy($id)
     {
         if(!auth()->user()->hasPermissionTo('subcategory.destroy')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $subcategory = $this->subcategoryRepository->findWithoutFail($id);
 
         if (empty($subcategory)) {
-            Flash::error('Category not found');
+            Flash::error(trans('lang.subcat_not_found'));
 
             return redirect(route('subcategory.index'));
         }
 
         $this->subcategoryRepository->delete($id);
 
-        Flash::success(__('lang.deleted_successfully', ['operator' => __('lang.category')]));
+        Flash::success(trans('lang.delete_operation'));
 
         return redirect(route('subcategory.index'));
     }

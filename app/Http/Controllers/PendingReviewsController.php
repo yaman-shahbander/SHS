@@ -45,7 +45,7 @@ class PendingReviewsController extends Controller
     public function index(PendingReviewDataTable $reviewDataTable)
     {
         if(!auth()->user()->hasPermissionTo('pending.index')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         return $reviewDataTable->render('pending_reviews.index');
@@ -102,7 +102,7 @@ class PendingReviewsController extends Controller
     {
 
         if(!auth()->user()->hasPermissionTo('pending.edit')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $pendingReview = $this->reviewRepository->findWithoutFail($id);
@@ -110,7 +110,7 @@ class PendingReviewsController extends Controller
 
 
         if (empty($pendingReview)) {
-            Flash::error(__('lang.not_found', ['operator' => __('lang.category')]));
+            Flash::error(trans('lang.review_not_found'));
 
             return redirect(route('reviews.index'));
         }
@@ -130,7 +130,7 @@ class PendingReviewsController extends Controller
     public function approve(Request $request)
     {
         if(!auth()->user()->hasPermissionTo('pending.approve')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
        // return dd($request->id);
@@ -138,7 +138,7 @@ class PendingReviewsController extends Controller
 
 
         if (empty($review)) {
-            Flash::error('Review not found');
+            Flash::error(trans('lang.review_not_found'));
             return redirect(route('reviews.index'));        }
 
         try {
@@ -152,7 +152,7 @@ class PendingReviewsController extends Controller
         }
 
 
-        Flash::success('Reviews Approved');
+        Flash::success(trans('lang.review_approved'));
 
         return redirect(route('reviews.index'));    }
 
@@ -160,14 +160,14 @@ class PendingReviewsController extends Controller
         public function update($id,Request $request){
 
             if(!auth()->user()->hasPermissionTo('pending.update')){
-                return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+                return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
             }
 
             $review = $this->reviewRepository->findWithoutFail($id);
 //$review = reviews::find($id);
 
         if (empty($review)) {
-            Flash::error('Review not found');
+            Flash::error(trans('lang.review_not_found'));
             return redirect(route('reviews.index'));        }
 
         try {
@@ -186,7 +186,7 @@ class PendingReviewsController extends Controller
         }
 
 
-        Flash::success('Reviews Updated');
+        Flash::success(trans('lang.update_operation'));
 
         return redirect(route('reviews.index'));  
         }
@@ -201,21 +201,21 @@ class PendingReviewsController extends Controller
     public function destroy($id)
     {
         if(!auth()->user()->hasPermissionTo('pending.destroy')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
 
         $review = $this->reviewRepository->findWithoutFail($id);
 
         if (empty($review)) {
-            Flash::error('Review not found');
+            Flash::error(trans('lang.review_not_found'));
 
             return redirect(route('reviews.index'));
         }
 
         $this->reviewRepository->delete($id);
 
-        Flash::success(__('lang.deleted_successfully', ['operator' => __('lang.category')]));
+        Flash::success(trans('lang.delete_operation'));
 
         return redirect(route('reviews.index'));
     }

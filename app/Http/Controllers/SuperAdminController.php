@@ -73,7 +73,7 @@ class SuperAdminController extends Controller
     public function index(SuperAdminDataTable $userDataTable)
     {
         if(!auth()->user()->hasPermissionTo('superadmins.index')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
         
         return $userDataTable->render('settings.superadmins.index');
@@ -87,7 +87,7 @@ class SuperAdminController extends Controller
     public function create()
     {
         if(!auth()->user()->hasPermissionTo('superadmins.create')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $countries=Country::all();
@@ -118,7 +118,7 @@ class SuperAdminController extends Controller
     public function store(CreateUserRequest $request)
     {
         if(!auth()->user()->hasPermissionTo('superadmins.store')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         if($request->city=="0")
@@ -128,7 +128,7 @@ class SuperAdminController extends Controller
         }
 
         if ($request->input('email') == null && $request->input('phone') == null) {
-            Flash::error('Either email or phone should be filled!');
+            Flash::error(trans('lang.require_email_phone'));
             return redirect()->back();
         }
 
@@ -183,7 +183,7 @@ class SuperAdminController extends Controller
             Flash::error($e->getMessage());
         }
 
-        Flash::success('saved successfully.');
+        Flash::success(trans('lang.store_operation'));
 
         return redirect(route('superAdminsBoard.index'));
     }
@@ -197,7 +197,7 @@ class SuperAdminController extends Controller
     public function show($id, Request $request,SuperAdminDataTable $superAdminUserDataTable)
     {
         if(!auth()->user()->hasPermissionTo('superadmins.profile')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $countries=Country::all();
@@ -255,11 +255,11 @@ class SuperAdminController extends Controller
     public function edit($id)
     {
         if(!auth()->user()->hasPermissionTo('superadmins.edit')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         if ($id==1) {
-            Flash::error('Permission denied');
+            Flash::error(trans('lang.Permission_denied'));
             return redirect(route('adminsBoard.index'));
         }
 
@@ -278,7 +278,7 @@ class SuperAdminController extends Controller
         }
 
         if (empty($user)) {
-            Flash::error('Admin not found');
+            Flash::error(trans('lang.superadmin_not_found'));
 
             return redirect(route('superAdminsBoard.index'));
         }
@@ -309,7 +309,7 @@ class SuperAdminController extends Controller
     public function update($id, UpdateUserRequest $request)
     {
         if(!auth()->user()->hasPermissionTo('superadmins.update')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         // dd($request->input());
@@ -318,7 +318,7 @@ class SuperAdminController extends Controller
             return redirect(route('superAdminsBoard.profile'));
         }
         if ($id==1 ) {
-            Flash::error('Permission denied');
+            Flash::error(trans('lang.Permission_denied'));
             return redirect(route('superAdminsBoard.profile'));
         }
         if($request->city=="0")
@@ -328,7 +328,7 @@ class SuperAdminController extends Controller
         }
 
         if ($request->input('email') == null && $request->input('phone') == null) {
-            Flash::error('Either email or phone should be filled!');
+            Flash::error(trans('lang.require_email_phone'));
             return redirect()->back();
         }
 
@@ -371,7 +371,7 @@ class SuperAdminController extends Controller
             Flash::error($e->getMessage());
         }
 
-        Flash::success('Admin Updated Successfully!');
+        Flash::success(trans('lang.update_operation'));
 
         return redirect(route('superAdminsBoard.index'));
     }
@@ -385,7 +385,7 @@ class SuperAdminController extends Controller
     public function destroy($id)
     {
         if(!auth()->user()->hasPermissionTo('superadmins.destroy')){
-            return view('vendor.errors.page', ['code' => 403, 'message' => '<strong>You don\'t have The right permission</strong>']);
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         if (env('APP_DEMO', false)) {
@@ -395,7 +395,7 @@ class SuperAdminController extends Controller
         $user = $this->userRepository->findWithoutFail($id);
 
         if (empty($user)) {
-            Flash::error('Admin not found');
+            Flash::error(trans('lang.superadmin_not_found'));
 
             return redirect(route('superAdminsBoard.index'));
         }
@@ -409,7 +409,7 @@ class SuperAdminController extends Controller
 
         $this->userRepository->delete($id);
 
-        Flash::success('SuperAdmin deleted successfully.');
+        Flash::success(trans('lang.delete_operation'));
 
         return redirect(route('superAdminsBoard.index'));
     }
