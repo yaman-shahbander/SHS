@@ -196,6 +196,15 @@
                 <script>
 
 
+                    // var firebaseConfig = {
+                    //     apiKey: "AIzaSyDNBLqF0AtzyJyUi0aMxBfQfBrGnANwp7A",
+                    //     authDomain: "chat-app-79620.firebaseapp.com",
+                    //     projectId: "chat-app-79620",
+                    //     storageBucket: "chat-app-79620.appspot.com",
+                    //     messagingSenderId: "1028100173097",
+                    //     appId: "1:1028100173097:android:a19b6cc6f693cda1905b38"
+                    // };
+
                     var firebaseConfig = {
                         apiKey: "AIzaSyC1GWjZ1Irhj7_OB4Ob--_a_rcP0xnk1Js",
                         authDomain: "shs-chat-c425e.firebaseapp.com",
@@ -209,9 +218,6 @@
 
                     firebase.initializeApp(firebaseConfig);
                     const messaging = firebase.messaging();
-
-
-
 
                     messaging.onMessage(function(payload) {
                         const noteTitle = payload.notification.title;

@@ -12,6 +12,7 @@ use App;
 use Flash;
 use App\Models\User;
 use App\Models\Message;
+use Twilio\Rest\Client;
 
 class DashboardController extends Controller
 {
@@ -71,4 +72,19 @@ class DashboardController extends Controller
         $user->language == 'en' ? Flash::success('Language Updated Successfully') : Flash::success('تم تعديل اللغة بنجاح');
         return redirect()->back();
     }
+
+    // public function snedWhats() {
+    //     $sid = getenv("TWILIO_ACCOUNT_SID");
+    //     $token = getenv("TWILIO_AUTH_TOKEN");
+    //     $twilio = new Client($sid, $token);
+
+    //     $message = $twilio->messages
+    //         ->create("whatsapp:+971557302126", // to
+    //                 [
+    //                     "from" => "whatsapp:+14155238886",
+    //                     "body" => "It's test time!"
+    //                 ]);
+
+    //     print($message->sid);
+    // }
 }

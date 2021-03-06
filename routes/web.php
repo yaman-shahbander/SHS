@@ -38,6 +38,9 @@ Route::get('/msg','HomeController@whatsAppMessage')->name('msg');
 Route::get('/home','HomeController@index')->name('home');
 Route::post('/send-notification', 'NotificationController@store')->name('send.notification');
 
+//whatsapp message
+// Route::get('/sendWhatsMessage', 'DashboardController@snedWhats');
+
 //CHAT
 
 
@@ -62,7 +65,6 @@ Route::get('firebase/sw-js', 'AppSettingController@initFirebase');
 
 Route::group(['prefix' => LaravelLocalization::setLocale()], function()
 {
-
 
 
         Route::get('storage/app/public/{id}/{conversion}/{filename?}', 'UploadController@storage');
