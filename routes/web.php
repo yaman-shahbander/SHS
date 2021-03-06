@@ -34,11 +34,12 @@ Route::get('/logout',function (){
 ///
 
 
+Route::get('/msg','HomeController@whatsAppMessage')->name('msg');
 Route::get('/home','HomeController@index')->name('home');
 Route::post('/send-notification', 'NotificationController@store')->name('send.notification');
 
 //CHAT
-  
+
 
 /*Route::resource('chats', 'ChatController')->except([
             'show','create','update','destroy','edit','store']);*/
@@ -61,14 +62,14 @@ Route::get('firebase/sw-js', 'AppSettingController@initFirebase');
 
 Route::group(['prefix' => LaravelLocalization::setLocale()], function()
 {
-   
+
 
 
         Route::get('storage/app/public/{id}/{conversion}/{filename?}', 'UploadController@storage');
         Route::middleware('auth')->group(function () {
         Route::get('/chat','MessageController@index')->name('chat');
         Route::get('/message/{id}', 'MessageController@getMessage')->name('message');
-        Route::post('message', 'MessageController@sendMessage');  
+        Route::post('message', 'MessageController@sendMessage');
 
 
         Route::middleware('Checklanguage')->group(function () {
@@ -213,7 +214,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
     //        'show'
     //    ]);
 
-    
+
 
 //    Route::resource('orderStatuses', 'OrderStatusController')->except([
 //        'create', 'store', 'destroy'
@@ -245,7 +246,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
 //        'create', 'store', 'edit', 'destroy'
 //    ]);;
 
-    
+
     ///
 //    Route::resource('restaurantReviews', 'RestaurantReviewController')->except([
 //        'show'
