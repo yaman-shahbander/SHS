@@ -12,9 +12,9 @@ return [
     |
     */
 
-    'password' => 'Passwörter müssen mindestens 6 Zeichen lang sein und korrekt bestätigt werden.',
-    'reset'    => 'Das Passwort wurde zurückgesetzt!',
-    'sent'     => 'Passworterinnerung wurde gesendet!',
-    'token'    => 'Der Passwort-Wiederherstellungs-Schlüssel ist ungültig oder abgelaufen.',
-    'user'     => 'Es konnte leider kein Nutzer mit dieser E-Mail-Adresse gefunden werden.',
+    'password' => 'يجب أن تتكون كلمات المرور من ستة أحرف على الأقل وأن تتطابق مع التأكيد.',
+    'reset'    => 'تم إعادة تعيين كلمة المرور الخاصة بك!',
+    'sent'     => 'لقد أرسلنا رابط إعادة تعيين كلمة المرور بالبريد الإلكتروني!',
+    'token'    => 'رمز إعادة تعيين كلمة المرور هذا غير صالح.',
+    'user'     => 'لا يمكننا العثور على مستخدم بعنوان البريد الإلكتروني هذا.',
 ];
