@@ -6,7 +6,7 @@
   @endcan
 
   @can('notification.edit')
-  <a data-toggle="tooltip" data-placement="bottom" title="Edit Notification" 
+  <a data-toggle="tooltip" data-placement="bottom" title="{{trans('lang.edit_notification')}}" 
   href="{{ route('notification.edit', $id) }}" class='btn btn-link'>
     <i class="fa fa-edit"></i>
   </a>

@@ -3,7 +3,7 @@
         <!-- Select type-->
         <div class="form-group row ">
         <div class="col-6 row">
-            {!! Form::label('type', "Type", ['class' => 'col-3 control-label text-right']) !!}
+            {!! Form::label('type', trans('lang.type'), ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
             <select name="type" aria-controls="dataTableBuilder" class="form-control form-control-sm">
                <option value="1" @if(Request::is("*edit")) @if($notification->type == 1) selected @endif @endif>Service Providers</option>
@@ -16,7 +16,7 @@
         <!-- Select country-->
         <div class="form-group row ">
         <div class="col-6 row">
-            {!! Form::label('country', "Country", ['class' => 'col-3 control-label text-right']) !!}
+            {!! Form::label('country', trans('lang.country'), ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
             <select name="country" id="country" aria-controls="dataTableBuilder" class="form-control form-control-sm">
             <option value="0">select</option>
@@ -27,7 +27,7 @@
             </div>
             </div>
             <div class="col-6 row cityShow" @if(Request::is('*edit')) @if($notification->country!=Null) @else style="display:none" @endif @endif >
-            {!! Form::label('city', "City", ['class' => 'col-3 control-label text-right']) !!}
+            {!! Form::label('city', trans('lang.city'), ['class' => 'col-3 control-label text-right']) !!}
               <div class="col-9">
                 <select name="city" id="city" aria-controls="dataTableBuilder" class="form-control form-control-sm">
                 @if(Request::is('*edit'))
@@ -46,7 +46,7 @@
       <!-- Select category-->
       <div class="form-group row ">
         <div class="col-6 row">
-            {!! Form::label('category', "Category", ['class' => 'col-3 control-label text-right']) !!}
+            {!! Form::label('category', trans('lang.category'), ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
             <select name="category" id="category" aria-controls="dataTableBuilder" class="form-control form-control-sm">
             <option value="0">select</option>
@@ -62,7 +62,7 @@
         <!-- Select subcategory-->
         <div class="form-group row ">
         <div class="col-6 row">
-            {!! Form::label('subcategory', "Subcategory", ['class' => 'col-3 control-label text-right']) !!}
+            {!! Form::label('subcategory', trans('lang.subcategory'), ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
             <select name="subcategory" id="subcategory" aria-controls="dataTableBuilder" class="form-control form-control-sm">
             <option value="" >select</option>
@@ -80,7 +80,7 @@
           <!-- title Field -->
           <div class="form-group row ">
           <div class="col-6 row">
-            {!! Form::label('title', 'Title', ['class' => 'col-3 control-label text-right']) !!}
+            {!! Form::label('title', trans('lang.notification_title'), ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
               {!! Form::text('title', Request::is('*edit') ? $notification->title : null   ,  ['class' => 'form-control','placeholder'=>  'Insert title']) !!}
             </div>
@@ -90,7 +90,7 @@
           <!-- body Field -->
           <div class="form-group row ">
           <div class="col-6 row">
-            {!! Form::label('description', 'Body', ['class' => 'col-3 control-label text-right']) !!}
+            {!! Form::label('description', trans('lang.body'), ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
               {!! Form::text('description', Request::is('*edit') ? $notification->body : null  ,  ['class' => 'form-control','placeholder'=>  'Insert Description']) !!}
             </div>
@@ -235,6 +235,6 @@
 
       <!-- Submit Field -->
         <div class="form-group col-12 text-right">
-          <button type="submit" class="btn btn-{{setting('theme_color')}}" ><i class="fa fa-save"></i> Save Notification</button>
+          <button type="submit" class="btn btn-{{setting('theme_color')}}" ><i class="fa fa-save"></i> {{trans('lang.save')}}</button>
           <a href="{!! route('notification.index') !!}" class="btn btn-default"><i class="fa fa-undo"></i> {{trans('lang.cancel')}}</a>
         </div>

@@ -58,7 +58,7 @@
 
 
 
-                <div class="view"><a class="btn btn-danger ban_style_user" > @if($user->bannedusers!=null)Edit Block @else Block User @endif</a></div>
+                <div class="view"><a class="btn btn-danger ban_style_user" > @if($user->bannedusers!=null){{trans('lang.edit_block')}} @else {{trans('lang.block_user')}} @endif</a></div>
                 @if($user->bannedusers!=null)
                 {!! Form::open(['route' => ['unBlockUser', 'id' => $user->id], 'method' => 'delete']) !!}
 
@@ -146,7 +146,7 @@
                     <!-- About Me Box -->
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title"><i class="fa fa-list mr-2"></i>Working Hours</h3>
+                                <h3 class="card-title"><i class="fa fa-list mr-2"></i>{{trans('lang.working_hours')}}</h3>
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body ">
@@ -172,7 +172,7 @@
                     <!-- available-->
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title"><i class="fa fa-list mr-2"></i>Available Cities</h3>
+                            <h3 class="card-title"><i class="fa fa-list mr-2"></i>{{trans('lang.available_cities')}}</h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body ">
@@ -238,8 +238,8 @@
         <!-- users who added this vendor as a favorite-->
         <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title"><i class="fa fa-list mr-2"></i> service provider</h3>
-                    <h6 style="font-size:11px"><i>Users who added this as a favorite </i></h6>
+                    <h3 class="card-title"><i class="fa fa-list mr-2"></i> {{trans('lang.vendors')}}</h3>
+                    <h6 style="font-size:11px"><i>{{trans('lang.users_who_added_SP_as_favorite')}} </i></h6>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
@@ -262,7 +262,7 @@
 <!-- favorites-->
 <div class="card">
         <div class="card-header">
-            <h3 class="card-title"><i class="fa fa-list mr-2"></i>Favorite service providers</h3>
+            <h3 class="card-title"><i class="fa fa-list mr-2"></i>{{trans('lang.favorite_service_providers')}}</h3>
         </div>
         <!-- /.card-header -->
         <div class="card-body">
@@ -286,7 +286,7 @@
         <!-- vendor special-offers-->
         <div class="card">
             <div class="card-header" style="background-color: #e4e4e4">
-                <h3 class="card-title"><i class="fa fa-list mr-2"></i>Special Offers</h3>
+                <h3 class="card-title"><i class="fa fa-list mr-2"></i>{{trans('lang.special_offers')}}</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body" style="background-color: #ececec">
@@ -318,7 +318,7 @@
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="p-3">
-                                        <h6>Reviews <span style="font-size: 12px;color: #777;">(Users who reviewd me)</span></h6>
+                                        <h6>{{trans('lang.reviews')}} <span style="font-size: 12px;color: #777;">({{trans('lang.users_who_reviewd_me')}})</span></h6>
                                     </div>
                                     <div class="mt-2">
 
@@ -388,7 +388,7 @@
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="p-3">
-                                        <h6>Reviews <span style="font-size: 12px;color: #777;">(Service Providers I reviewd)</span></h6>
+                                        <h6>{{trans('lang.reviews')}} <span style="font-size: 12px;color: #777;">({{trans('lang.service_providers_I_reviewd')}})</span></h6>
                                     </div>
                                     <div class="mt-2">
                                     @foreach($user->vendors as $client)
