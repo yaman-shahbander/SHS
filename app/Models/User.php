@@ -93,7 +93,7 @@ class User extends Authenticatable implements HasMedia
         'description',
         'website',
         'address',
-        'firebase_token',
+        'fcm_token',
         'owner_name'
     ];
     /**

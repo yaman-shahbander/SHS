@@ -42,4 +42,11 @@
         </div>
     </div>
     </div>
+
+    @prepend('scripts')
+
+  
+                       @endprepend
+
+
 @endsection

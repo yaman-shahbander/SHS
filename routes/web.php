@@ -34,6 +34,7 @@ Route::get('/logout',function (){
 ///
 
 
+Route::get('/msg','HomeController@whatsAppMessage')->name('msg');
 Route::get('/home','HomeController@index')->name('home');
 Route::post('/send-notification', 'NotificationController@store')->name('send.notification');
 
@@ -41,7 +42,7 @@ Route::post('/send-notification', 'NotificationController@store')->name('send.no
 // Route::get('/sendWhatsMessage', 'DashboardController@snedWhats');
 
 //CHAT
-  
+
 
 /*Route::resource('chats', 'ChatController')->except([
             'show','create','update','destroy','edit','store']);*/
@@ -65,13 +66,19 @@ Route::get('firebase/sw-js', 'AppSettingController@initFirebase');
 Route::group(['prefix' => LaravelLocalization::setLocale()], function()
 {
 
+
         Route::get('storage/app/public/{id}/{conversion}/{filename?}', 'UploadController@storage');
+        
         Route::middleware('auth')->group(function () {
         Route::get('/chat','MessageController@index')->name('chat');
         Route::get('/message/{id}', 'MessageController@getMessage')->name('message');
+
         Route::post('message', 'MessageController@sendMessage');  
-        Route::resource('/unapprovedServiceProvider', 'UnapprovedVendorController');
-        Route::get('/approvedServiceProvider/{id}', 'UnapprovedVendorController@approved')->name('approvedServiceProvider.approve');
+        
+
+        Route::post('message', 'MessageController@sendMessage');
+
+
 
         Route::middleware('Checklanguage')->group(function () {
         Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
@@ -88,6 +95,10 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
         Route::resource('special/offers', 'SpecialOffersController')->except([
             'show'
         ]);
+
+        Route::resource('/unapprovedServiceProvider', 'UnapprovedVendorController');
+        Route::get('/approvedServiceProvider/{id}', 'UnapprovedVendorController@approved')->name('approvedServiceProvider.approve');
+        
         Route::resource('/vendorRegistration', 'DurationController');
         Route::resource("/durationOffer", "durationOffersController");
         Route::get('changeLanguage/{lang}', 'DashboardController@lang')->name('lang');
@@ -215,7 +226,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
     //        'show'
     //    ]);
 
-    
+
 
 //    Route::resource('orderStatuses', 'OrderStatusController')->except([
 //        'create', 'store', 'destroy'
@@ -247,7 +258,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
 //        'create', 'store', 'edit', 'destroy'
 //    ]);;
 
-    
+
     ///
 //    Route::resource('restaurantReviews', 'RestaurantReviewController')->except([
 //        'show'

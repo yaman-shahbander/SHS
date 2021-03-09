@@ -115,6 +115,56 @@ class MoneyAPIController extends Controller
 
                     $user->ToUserName()->attach($transfer);
 
+                    
+        //for send notification 
+        $SERVER_API_KEY = 'AAAA71-LrSk:APA91bHCjcToUH4PnZBAhqcxic2lhyPS2L_Eezgvr3N-O3ouu2XC7-5b2TjtCCLGpKo1jhXJqxEEFHCdg2yoBbttN99EJ_FHI5J_Nd_MPAhCre2rTKvTeFAgS8uszd_P6qmp7NkSXmuq';
+
+        $headers = [
+            'Authorization: key=' . $SERVER_API_KEY,
+            'Content-Type: application/json',
+        ];
+
+        $data = [
+            "registration_ids" => array($vendor->fcm_token),
+            "notification" => [
+                "title"    => config('notification_lang.Notification_SP_transfer_title_' . $vendor->language),
+                "body"     =>  $user->name . ' '.config('notification_lang.Notification_SP_transfer_body_' . $vendor->language)
+            ]
+        ];
+
+        $datayou = [
+            "registration_ids" => array($user->fcm_token),
+            "notification" => [
+                "title"    => config('notification_lang.Notification_SP_transfer_title_' . $user->language),
+                "body"     =>  config('notification_lang.Notification_SP_transfer_body_you_' . $user->language ) . ' ' . $vendor->name
+            ]
+        ];
+
+        $dataString = json_encode($data);
+
+        $datayouString = json_encode($datayou);
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+
+        curl_setopt($ch, CURLOPT_POST, true);
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+         //return dd(curl_exec($ch));
+
+        $response = curl_exec($ch);
+
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $datayouString);
+
+        $response = curl_exec($ch);
+
 
                     return $this->sendResponse([], 'Money transfered successfully');
                 } else {
@@ -122,7 +172,7 @@ class MoneyAPIController extends Controller
                 }
             }
       } catch (\Exception $e) {
-          return $this->sendError('Something is wrong', 401);
+          return $this->sendError($e->getMessage(), 401);
       }
     }
 

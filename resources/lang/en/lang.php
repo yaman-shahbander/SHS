@@ -1104,7 +1104,6 @@ return [
     'body'                           =>   'Body',
     'unapproved_SP'                  =>   'Unapproved service providers',
     'unapproved_SP_settings'         =>   'Unapproved service providers settings',
-    'unapproved_SP_list'             =>   'Unapproved service providers list',
-
-
+    'unapproved_SP_list'             =>   'Unapproved service providers list',   
+    'reviewer'                       =>   'reviewer',     
 ];

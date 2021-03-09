@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DataTables\PendingReviewDataTable;
 use App\Models\reviews;
+use App\Models\User;
 use App\Repositories\CustomFieldRepository;
 use App\Repositories\ReviewsRepositry;
 use App\Repositories\UploadRepository;
@@ -144,13 +145,53 @@ class PendingReviewsController extends Controller
         try {
            // return dd($review);
            // $review->save();
-           $review=$this->reviewRepository->update(['approved'=>1],$request->id);
+         $review=$this->reviewRepository->update(['approved'=>1],$request->id);
 
 
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }
 
+        $vendor = User::find($review->vendor_id);
+
+        $reviewer = User::find($review->client_id);
+
+        //for send notification 
+        $SERVER_API_KEY = 'AAAA71-LrSk:APA91bHCjcToUH4PnZBAhqcxic2lhyPS2L_Eezgvr3N-O3ouu2XC7-5b2TjtCCLGpKo1jhXJqxEEFHCdg2yoBbttN99EJ_FHI5J_Nd_MPAhCre2rTKvTeFAgS8uszd_P6qmp7NkSXmuq';
+
+        $headers = [
+            'Authorization: key=' . $SERVER_API_KEY,
+            'Content-Type: application/json',
+        ];
+
+        $data = [
+            "registration_ids" => array($vendor->fcm_token),
+            "notification" => [
+                "title"    => config('notification_lang.Notification_SP_reviews_title_' . $vendor->language),
+                "body"     =>  $reviewer->name . ' '.config('notification_lang.Notification_SP_reviews_body_' . $vendor->language)
+            ]
+        ];
+
+       // return $data;
+
+        $dataString = json_encode($data);
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+
+        curl_setopt($ch, CURLOPT_POST, true);
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+         //return dd(curl_exec($ch));
+
+        $response = curl_exec($ch);
 
         Flash::success(trans('lang.review_approved'));
 

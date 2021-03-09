@@ -7,5 +7,8 @@ use App\Http\Controllers\Controller;
 
 class TrackAPIController extends Controller
 {
-    //
+    // public function viewProfile(Request $request)
+    // {
+
+    // }
 }

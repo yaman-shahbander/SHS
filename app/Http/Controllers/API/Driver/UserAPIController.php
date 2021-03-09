@@ -48,6 +48,7 @@ class UserAPIController extends Controller
 
     function login(Request $request)
     {
+
         $IsEmail = false;
 
         try {
@@ -58,6 +59,7 @@ class UserAPIController extends Controller
 
                     'email' => 'required|email',
                     'password' => 'required',
+                    'fcm_token' => 'required'
                 ]);
                 if (auth()->attempt(['email' => $request->input('email'), 'password' => $request->input('password')])) {
                     $user = auth()->user();
@@ -74,6 +76,7 @@ class UserAPIController extends Controller
 
                     'phone' => 'required',
                     'password' => 'required',
+                    'fcm_token' => 'required'
                 ]);
                 if (auth()->attempt(['phone' => $request->input('phone'), 'password' => $request->input('password')])) {
                     $user = auth()->user();
@@ -92,14 +95,9 @@ class UserAPIController extends Controller
                     return $this->sendError('User not found', 401);
                 }
 
-            if($user->firebase_token == null) {
-                $this->validate($request, [
-                    'fcm_token' => 'required'
-                ]);
-                $user->firebase_token = $request->input('fcm_token');
-                $user->save();
-            }
 
+
+            $user->fcm_token = $request->input('fcm_token');
             $user->language = $request->input('lang')==null ? 'en':$request->input('lang','');
 
                 if($user->is_verified==0) {
@@ -178,7 +176,7 @@ The Smart Home Services team</p>";
 
                         ];
 
-                        
+
                     return $this->sendResponse($response_cod, 'user not verified');
 
                 }
@@ -207,9 +205,9 @@ The Smart Home Services team</p>";
 
                 ];
                 $token = $request->session()->token();
-    
+
                 $token = csrf_token();
-            
+
                ;
                 return $this->sendResponse($token, 'User retrieved successfully');
 
@@ -261,7 +259,9 @@ The Smart Home Services team</p>";
             $user->name = $request->input('first_name');
           //  $user->last_name = $request->input('last_name');
             $user->email = $request->input('email');
-           while(true) {
+            $user->fcm_token = $request->input('fcm_token');
+
+            while(true) {
             $payment_id = '#' . rand(1000, 9999) . rand(1000, 9999);
             if (!(User::where('payment_id', $payment_id)->exists())) {
                 $user->payment_id = $payment_id;
@@ -270,7 +270,6 @@ The Smart Home Services team</p>";
             } else continue;
         }
 
-            $user->firebase_token = $request->input('fcm_token');
 
             $balance = new Balance();
 

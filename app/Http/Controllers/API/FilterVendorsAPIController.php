@@ -49,7 +49,7 @@ class FilterVendorsAPIController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function save(Request $request)
     {
 
         if($request->header('devicetoken')) {
@@ -60,19 +60,29 @@ class FilterVendorsAPIController extends Controller
                 return $this->sendError('User not found', 401);
             }
 
-            $userSettings = Homeowner_filter::where('homeOwner_id', $user->id)->get();
+            $userSettings = Homeowner_filter::where('homeOwner_id', $user->id)->first();
 
-            if(count($userSettings) > 0) {
-                return $this->sendError('Error setting is exist',401);
+            if(empty($userSettings)) {
+                $userSettings =new Homeowner_filter();
+                // return $this->sendError('Error setting is exist',401);
+                //  'homeOwner_id'  => $user->id,
+                $userSettings->homeOwner_id = $user->id;
             }
 
-            $userSettings = Homeowner_filter::create([
-                'homeOwner_id'  => $user->id,
-                'vendor_filter' => $request->vendor_filter,
-                'vendor_offer' => $request->vendor_offer,
-                'vendor_working' => $request->vendor_working
-            ]);
-            return $this->sendResponse($userSettings->toArray(), 'Setting added successfully');
+            // $userSettings = Homeowner_filter::create([
+            //     'homeOwner_id'  => $user->id,
+            //     'vendor_filter' => $request->vendor_filter,
+            //     'vendor_offer' => $request->vendor_offer,
+            //     'vendor_working' => $request->vendor_working
+            // ]);
+
+            $userSettings->vendor_filter = $request->vendor_filter;
+            $userSettings->vendor_working = $request->vendor_working;
+            $userSettings->vendor_offer = $request->vendor_offer;
+            // return $userSettings;
+
+            if ($userSettings->save())
+                return $this->sendResponse($userSettings->toArray(), 'Setting saved successfully');
         }
     }
 

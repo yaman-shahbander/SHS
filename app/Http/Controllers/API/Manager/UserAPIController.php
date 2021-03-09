@@ -68,6 +68,7 @@ class UserAPIController extends Controller
 
                     'email' => 'required|email',
                     'password' => 'required',
+                    'fcm_token' => 'required'
                 ]);
                 if (auth()->attempt(['email' => $request->input('email'), 'password' => $request->input('password')])) {
                     $user = auth()->user();
@@ -80,6 +81,7 @@ class UserAPIController extends Controller
 
                     'phone' => 'required',
                     'password' => 'required',
+                    'fcm_token' => 'required'
                 ]);
                 if (auth()->attempt(['phone' => $request->input('phone'), 'password' => $request->input('password')])) {
                     $user = auth()->user();
@@ -99,18 +101,13 @@ class UserAPIController extends Controller
                 return $this->sendError('User not found', 401);
             }
 
-            
+
             if (!$user->hasRole('vendor')) {
                 return $this->sendError('User not Vendor', 401);
             }
 
-            if($user->firebase_token == null) {
-                $this->validate($request, [
-                    'fcm_token' => 'required'
-                ]);
-                $user->firebase_token = $request->input('fcm_token');
-                $user->save();
-            }
+            $user->fcm_token = $request->input('fcm_token');
+
 
 //                $user->device_token = $request->header('devicetoken');
 //                $user->save();
@@ -255,6 +252,9 @@ The Smart Home Services team</p>";
             $user->name = $request->input('first_name');
            // $user->last_name = $request->input('last_name');
             $user->email = $request->input('email');
+
+            $user->fcm_token = $request->input('fcm_token');
+
 //            $user->city_id = $request->input('city_id');
             while(true) {
                 $payment_id = '#' . rand(1000, 9999) . rand(1000, 9999);
@@ -265,7 +265,7 @@ The Smart Home Services team</p>";
                 } else continue;
             }
 
-            $user->firebase_token = $request->input('fcm_token');
+
 
             $balance = new Balance();
 

@@ -67,7 +67,7 @@ class NotificationController extends Controller
         if(!auth()->user()->hasPermissionTo('notification.create')){
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
-    
+
         $countries = Country::all();
         $categories = Category::all();
         return view('notifications.create',['countries' => $countries, 'categories' => $categories]);
@@ -97,7 +97,7 @@ class NotificationController extends Controller
         $categories = Category::all();
 
 
-        $users = User::whereNotNull('firebase_token');
+        $users = User::whereNotNull('fcm_token');
 
 
         if ($request->type == 1)
@@ -139,7 +139,7 @@ class NotificationController extends Controller
        // $users = $users->get('device_token');
 
         $data = [
-            "registration_ids" => $users->pluck('firebase_token'),
+            "registration_ids" => $users->pluck('fcm_token'),
             "notification" => [
                 "title"    => $request->title,
                 "body"     => $request->description,
@@ -162,9 +162,9 @@ class NotificationController extends Controller
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
         curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
-        // return dd(curl_exec($ch));   
+        // return dd(curl_exec($ch));
         $response = curl_exec($ch);
-        
+
         $input['type']         = $request->type;
         $input['country']      = $request->country !=0 ? $request->country : null;
         $input['city']         = $request->city !=0 ? $request->city : null;
@@ -180,7 +180,7 @@ class NotificationController extends Controller
             Flash::error(trans('lang.notification_failed'));
             return view('notifications.create',['countries' => $countries, 'categories' => $categories]);
         }
-        
+
     }
 
     /**
@@ -209,7 +209,7 @@ class NotificationController extends Controller
         $countries = Country::all();
         $categories = Category::all();
 
-    
+
         $notification = $this->NotificationRepository->findWithoutFail($id);
         $subcategories=subCategory::where('category_id',$notification->category)->get();
         $cities=City::where('country_id',$notification->country)->get();
@@ -238,7 +238,7 @@ class NotificationController extends Controller
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
-        $SERVER_API_KEY = 'AAAA71-LrSk:APA91bHCjcToUH4PnZBAhqcxic2lhyPS2L_Eezgvr3N-O3ouu2XC7-5b2TjtCCLGpKo1jhXJqxEEFHCdg2yoBbttN99EJ_FHI5J_Nd_MPAhCre2rTKvTeFAgS8uszd_P6qmp7NkSXmuq	
+        $SERVER_API_KEY = 'AAAA71-LrSk:APA91bHCjcToUH4PnZBAhqcxic2lhyPS2L_Eezgvr3N-O3ouu2XC7-5b2TjtCCLGpKo1jhXJqxEEFHCdg2yoBbttN99EJ_FHI5J_Nd_MPAhCre2rTKvTeFAgS8uszd_P6qmp7NkSXmuq
         ';
 //and
 // AAAA71-LrSk:APA91bHCjcToUH4PnZBAhqcxic2lhyPS2L_Eezgvr3N-O3ouu2XC7-5b2TjtCCLGpKo1jhXJqxEEFHCdg2yoBbttN99EJ_FHI5J_Nd_MPAhCre2rTKvTeFAgS8uszd_P6qmp7NkSXmuq
@@ -249,9 +249,9 @@ class NotificationController extends Controller
         $headers = [
             'Authorization: key=' . $SERVER_API_KEY,
             'Content-Type: application/json',
-        ]; 
+        ];
 
-        $users = User::whereNotNull('firebase_token');
+        $users = User::whereNotNull('fcm_token');
 
 
         if ($request->type == 1)
@@ -293,7 +293,7 @@ class NotificationController extends Controller
        // $users = $users->get('device_token');
 
         $data = [
-            "registration_ids" => $users->pluck('firebase_token'),
+            "registration_ids" => $users->pluck('fcm_token'),
             "notification" => [
                 "title"    => $request->title,
                 "body"     => $request->description,
@@ -316,9 +316,9 @@ class NotificationController extends Controller
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
         curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
-        // 
+        //
         $response = curl_exec($ch);
-        //return dd(curl_exec($ch));   
+        //return dd(curl_exec($ch));
         $input['type']         = $request->type;
         $input['country']      = $request->country !=0 ? $request->country : null;
         $input['city']         = $request->city !=0 ? $request->city : null;

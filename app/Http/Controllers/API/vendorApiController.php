@@ -22,9 +22,10 @@ class vendorApiController extends Controller
 {
 
 
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
 
-        if($request->header('devicetoken')) {
+        if ($request->header('devicetoken')) {
             $response = [];
             $hiddenElems = ['custom_fields', 'has_media'];
             try {
@@ -32,39 +33,35 @@ class vendorApiController extends Controller
                 if (empty($user)) {
                     return $this->sendError('User not found', 401);
                 }
-                try{
+                try {
                     $userLatitude = $user->coordinates->latitude;
                     $userLongitude = $user->coordinates->longitude;
-                }
-                catch (\Exception $e){
+                } catch (\Exception $e) {
                     $userLatitude = null;
                     $userLongitude = null;
                 }
                 $id = $request->id; //subcategory id
 
                 $userID = $user->id; // user id
-                $userSetting=null;
+                $userSetting = null;
                 $userSetting = Homeowner_filter::where('homeOwner_id', $userID)->first(); // user setting
 
 
                 $respone = [];
-//
+                //
                 $maxBalance = 0;
 
                 $maxBalanceId = 0;
 
 
-                try{
+                try {
                     $Allvendors = subCategory::find($id)->vendors;
-
-                }
-                catch (\Exception $e){
+                } catch (\Exception $e) {
                     return $this->sendError('there is no vendor for this subcategory', 401);
-
                 }
 
 
-                try{
+                try {
 
 
                     if ($userSetting->vendor_offer == 1) { // Vendors with special offers first
@@ -72,7 +69,6 @@ class vendorApiController extends Controller
                         $Allvendors = User::whereHas('specialOffers', function ($query) use ($id) {
                             $query->where('subcategory_id', $id);
                         })->get();
-
                     }
 
                     if ($userSetting->vendor_working == 1) { // Vendors who currently not working are filtered out first
@@ -83,117 +79,106 @@ class vendorApiController extends Controller
 
                         $date_input = getDate($time_input);
 
-                        $Allvendors = User::with('days')->whereHas('days', function ($query) use($date_input) {
+                        $Allvendors = User::with('days')->whereHas('days', function ($query) use ($date_input) {
 
                             $query->where('days.id', ($date_input['wday'] + 1))->where('days_vendors.start', '<', ($date_input['hours'] . ':' . $date_input['minutes'] . ':' . $date_input['seconds']))->where('days_vendors.end', '>=', ($date_input['hours'] . ':' . $date_input['minutes'] . ':' . $date_input['seconds']));
-
                         })->get();
-
                     }
 
-                    $Allvendors=$Allvendors->where('city_id',$user->city_id);
-                    foreach ($Allvendors as $vendor){
+                    $Allvendors = $Allvendors->where('city_id', $user->city_id);
+                    foreach ($Allvendors as $vendor) {
 
-                        if ($vendor->Balance!=null ) {
+                        if ($vendor->Balance != null) {
 
 
-                            if($vendor->Balance->balance > $maxBalance){
+                            if ($vendor->Balance->balance > $maxBalance) {
                                 $maxBalance = $vendor->Balance->balance;
 
-                                $maxBalanceId = $vendor->Balance->id;}
+                                $maxBalanceId = $vendor->Balance->id;
+                            }
                         }
 
-                    $respone['vendor_list'][] = [
-                        'id' => $vendor->id,
-                        'name' => $vendor->name,
-                        'email' => $vendor->email,
-                        'rating' => sprintf("%.1f",(round((getRating($vendor)/20)*2)/2)),
-                        'description' => $vendor->description,
-                        'latitude' => $vendor->coordinates!=null? $vendor->coordinates->latitude:null,
-                        'longitude' => $vendor->coordinates!=null? $vendor->coordinates->longitude:null,
+                        $respone['vendor_list'][] = [
+                            'id' => $vendor->id,
+                            'name' => $vendor->name,
+                            'email' => $vendor->email,
+                            'rating' => sprintf("%.1f", (round((getRating($vendor) / 20) * 2) / 2)),
+                            'description' => $vendor->description,
+                            'latitude' => $vendor->coordinates != null ? $vendor->coordinates->latitude : null,
+                            'longitude' => $vendor->coordinates != null ? $vendor->coordinates->longitude : null,
 
-                        'distance' =>$vendor->coordinates!=null && $userLatitude !=null? round(distance(floatval($userLatitude), floatval($userLongitude), floatval($vendor->coordinates->latitude), floatval($vendor->coordinates->longitude)),2) : null,
+                            'distance' => $vendor->coordinates != null && $userLatitude != null ? round(distance(floatval($userLatitude), floatval($userLongitude), floatval($vendor->coordinates->latitude), floatval($vendor->coordinates->longitude)), 2) : null,
 
-                        'avatar' => asset('storage/Avatar').'/'.$vendor->avatar
-                    ];
-
+                            'avatar' => asset('storage/Avatar') . '/' . $vendor->avatar
+                        ];
                     }
 
-                    if($maxBalanceId!=0){
+                    if ($maxBalanceId != 0) {
 
-                        $featuredVendor=User::where('balance_id',$maxBalanceId)->get();
+                        $featuredVendor = User::where('balance_id', $maxBalanceId)->get();
+                    } else {
 
+
+                        $featuredVendor = null;
                     }
-                    else{
+                    //  return $featuredVendor;
+                    //                    $respone[$i]['distance'] = $attr->coordinates!=null ? distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)) : 'No coordinates provided for the current vendor';
 
-
-                        $featuredVendor=null;
-
-                    }
-//  return $featuredVendor;
-//                    $respone[$i]['distance'] = $attr->coordinates!=null ? distance(floatval($userLatitude), floatval($userLongitude), floatval($attr->coordinates->latitude), floatval($attr->coordinates->longitude)) : 'No coordinates provided for the current vendor';
-
-                    if($maxBalanceId!=0){
-                    $respone['featuredVendor']=
+                    if ($maxBalanceId != 0) {
+                        $respone['featuredVendor'] =
 
                             [
                                 'id' => $featuredVendor[0]->id,
                                 'name' => $featuredVendor[0]->name,
                                 'email' => $featuredVendor[0]->email,
-                                'latitude' =>$featuredVendor[0]->coordinates!=null? $featuredVendor[0]->coordinates->latitude:null,
-                                'longitude' => $featuredVendor[0]->coordinates!=null? $featuredVendor[0]->coordinates->longitude:null,
-                                'rating' => sprintf("%.1f",round((getRating($featuredVendor[0])/20)*2,2)/2),
+                                'latitude' => $featuredVendor[0]->coordinates != null ? $featuredVendor[0]->coordinates->latitude : null,
+                                'longitude' => $featuredVendor[0]->coordinates != null ? $featuredVendor[0]->coordinates->longitude : null,
+                                'rating' => sprintf("%.1f", round((getRating($featuredVendor[0]) / 20) * 2, 2) / 2),
                                 'description' => $featuredVendor[0]->description,
-                                'distance' =>$featuredVendor[0]->coordinates!=null && $userLatitude !=null? round(distance(floatval($userLatitude), floatval($userLongitude), floatval($featuredVendor[0]->coordinates->latitude), floatval($featuredVendor[0]->coordinates->longitude))) : null,
-                                'avatar' => asset('storage/Avatar').'/'.$featuredVendor[0]->avatar
+                                'distance' => $featuredVendor[0]->coordinates != null && $userLatitude != null ? round(distance(floatval($userLatitude), floatval($userLongitude), floatval($featuredVendor[0]->coordinates->latitude), floatval($featuredVendor[0]->coordinates->longitude))) : null,
+                                'avatar' => asset('storage/Avatar') . '/' . $featuredVendor[0]->avatar
                             ];
-}
-
+                    }
                 }
-//                asset('storage/Avatar').'/'.$attr->avatar;
-                catch (\Exception $e){
-                    return $e->getMessage();}
+                //                asset('storage/Avatar').'/'.$attr->avatar;
+                catch (\Exception $e) {
+                    return $e->getMessage();
+                }
 
-//                $featuredVendor = User::;
-//                $featuredVendor = $Allvendors->transform(function($q){
-//                    $balance=0;
-//                    if($q->Balance->balance > $balance)
-//                        $balance=$q->Balance->balance;
-////                    $q->orderBy('balances.balance');
-//                    return $balance;
-//                });
-//return $featuredVendor
+                //                $featuredVendor = User::;
+                //                $featuredVendor = $Allvendors->transform(function($q){
+                //                    $balance=0;
+                //                    if($q->Balance->balance > $balance)
+                //                        $balance=$q->Balance->balance;
+                ////                    $q->orderBy('balances.balance');
+                //                    return $balance;
+                //                });
+                //return $featuredVendor
 
-//for rating
-// usort($respone['vendor_list'], function($a, $b) {
-//     return $b['rating'] <=> $a['rating'];
-// });
+                //for rating
+                // usort($respone['vendor_list'], function($a, $b) {
+                //     return $b['rating'] <=> $a['rating'];
+                // });
 
 
 
-// return $this->sendResponse($respone, 'vendors retrieved successfully');
+                // return $this->sendResponse($respone, 'vendors retrieved successfully');
 
-                try{
-                     if ($userSetting->vendor_filter == 1) { // Vendors rating first
+                try {
+                    if ($userSetting->vendor_filter == 1) { // Vendors rating first
 
-                //    for rating
-                        usort($respone['vendor_list'], function($a, $b) {
+                        //    for rating
+                        usort($respone['vendor_list'], function ($a, $b) {
                             return $b['rating'] <=> $a['rating'];
                         });
+                    } else { // nearest distance first
 
+                        //for distance
+                        usort($respone['vendor_list'], function ($a, $b) {
+                            return $a['distance'] <=> $b['distance'];
+                        });
                     }
-                   else { // nearest distance first
-
-                //for distance
-                    usort($respone['vendor_list'], function($a, $b) {
-                        return $a['distance'] <=> $b['distance'];
-                    });
-
-
-                    }
-                }
-                catch (\Exception $e){
-
+                } catch (\Exception $e) {
                 }
 
 
@@ -203,20 +188,20 @@ class vendorApiController extends Controller
             } catch (\Exception $e) {
                 return $this->sendError($e->getMessage(), 401);
             }
-        }
-        else
+        } else
             return $this->sendError('nothing to process', 401);
     }
 
-    public function vendorFeefunc(Request $request) {
-        if($request->header('devicetoken')) {
+    public function vendorFeefunc(Request $request)
+    {
+        if ($request->header('devicetoken')) {
             $user = User::where('device_token', $request->header('devicetoken'))->first();
 
             if (empty($user)) {
                 return $this->sendError('User not found', 401);
             }
 
-            $featuredVendor = User::find( $request->vendor_id);
+            $featuredVendor = User::find($request->vendor_id);
 
             $featuredVendorBalance = $featuredVendor->Balance->balance;
 
@@ -224,16 +209,17 @@ class vendorApiController extends Controller
 
             if (!empty($fee)) {
                 $featuredVendorBalance -= $fee->fee_amount;
-            } 
-            $featuredVendor->Balance->balance=$featuredVendorBalance;
+            }
+            $featuredVendor->Balance->balance = $featuredVendorBalance;
             $featuredVendor->Balance->save();
-            
+
             return $this->sendResponse([], 'Fee subtracted successfully');
         }
     }
 
-    public function profile(Request $request) { // for homeOwners
-        if($request->header('devicetoken')) {
+    public function profile(Request $request)
+    { // for homeOwners
+        if ($request->header('devicetoken')) {
             $response = [];
             $hiddenElems = ['custom_fields', 'has_media'];
             $isFavorite = false;
@@ -245,6 +231,45 @@ class vendorApiController extends Controller
                 }
 
                 $vendor = User::find($request->vendor_id);
+
+                if (!$user->vendorViews->contains($request->vendor_id)) {
+                    $user->vendorViews()->attach($request->vendor_id);
+
+                    $SERVER_API_KEY = 'AAAA71-LrSk:APA91bHCjcToUH4PnZBAhqcxic2lhyPS2L_Eezgvr3N-O3ouu2XC7-5b2TjtCCLGpKo1jhXJqxEEFHCdg2yoBbttN99EJ_FHI5J_Nd_MPAhCre2rTKvTeFAgS8uszd_P6qmp7NkSXmuq';
+
+                    $headers = [
+                        'Authorization: key=' . $SERVER_API_KEY,
+                        'Content-Type: application/json',
+                    ];
+
+                    $data = [
+                        "registration_ids" => array($vendor->fcm_token),
+                        "notification" => [
+                            "title"    => config('notification_lang.Notification_SP_open_profile_title_' . $vendor->language),
+                            "body"     =>  $user->name . ' ' . config('notification_lang.Notification_SP_open_profile_body_' . $vendor->language)
+                        ]
+                    ];
+
+                    $dataString = json_encode($data);
+
+                    $ch = curl_init();
+
+                    curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+                    curl_setopt($ch, CURLOPT_POST, true);
+
+
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+                    //return dd(curl_exec($ch));
+                    $response = curl_exec($ch);
+                }
+
+
                 $respone = [];
                 $reviewsHiddenColumns = ['custom_fields', 'media', 'has_media'];
                 $attrs = $vendor->clientsAPI->makeHidden($reviewsHiddenColumns);
@@ -253,138 +278,136 @@ class vendorApiController extends Controller
 
 
 
-                $checkIfFavorite = $user->vendorFavorite->transform(function($q) use ($vendor){
-                    if ($vendor->id == $q->id)
-                        return $q;
-                    });
+                $checkIfFavorite = $user->vendorFavorite->transform(function ($q) use ($vendor) {
+                    // if ($vendor->id == $q->id)
+                    return $q->id;
+                });
 
-                count($checkIfFavorite) > 0 ? $isFavorite = true : $isFavorite = false;
+                //return $checkIfFavorite ;
+                in_array($vendor->id, $checkIfFavorite->toArray()) ? $isFavorite = true : $isFavorite = false;
 
-            foreach($attrs as $attr) {
-                $reviews[$i]['id'] = $attr->id;
-                $reviews[$i]['name'] = $attr->name;
-                $reviews[$i]['avatar'] = asset('storage/Avatar').'/'.$attr->avatar;
-                $reviews[$i]['last_name'] = $attr->last_name;
-                $reviews[$i]['rating'] = sprintf("%.1f",round((getFullRating(reviews::find($attr->pivot->id))/20)*2)/2);
-                $reviews[$i]['description'] = $attr->pivot->description;
-                $i++;
-            }
+                foreach ($attrs as $attr) {
+                    $reviews[$i]['id'] = $attr->id;
+                    $reviews[$i]['name'] = $attr->name;
+                    $reviews[$i]['avatar'] = asset('storage/Avatar') . '/' . $attr->avatar;
+                    $reviews[$i]['last_name'] = $attr->last_name;
+                    $reviews[$i]['rating'] = sprintf("%.1f", round((getFullRating(reviews::find($attr->pivot->id)) / 20) * 2) / 2);
+                    $reviews[$i]['description'] = $attr->pivot->description;
+                    $i++;
+                }
 
-            $respone = [
-                'id'             => $vendor->id,
-                'name'           => $vendor->name,
-                'email'          => $vendor->email,
-                'rating'         => sprintf("%.1f",round((getRating($vendor)/20)*2)/2),
-                'description'    => $vendor->description,
-                'phone'          => $vendor->phone,
-                'avatar'         => asset('storage/Avatar').'/'.$vendor->avatar,
-                'background'         => asset('storage/vendors_background').'/'. $vendor->background_profile,
-                'address'        => $vendor->address,
-                'website'        => $vendor->website,
-                'subcategories'  => $vendor->subcategoriesApi->makeHidden('pivot'),
-                'offers'         => $vendor->specialOffers->makeHidden(['user_id', 'created_at', 'updated_at']),
-                'reviews_count'  => count($reviews),
-                'reviews'        => $reviews,
-                'working_hours'  => $vendor->daysApi->transform(function($q){
-                    $q['check'] =1;
+                $respone = [
+                    'id'             => $vendor->id,
+                    'name'           => $vendor->name,
+                    'email'          => $vendor->email,
+                    'rating'         => sprintf("%.1f", round((getRating($vendor) / 20) * 2) / 2),
+                    'description'    => $vendor->description,
+                    'phone'          => $vendor->phone,
+                    'avatar'         => asset('storage/Avatar') . '/' . $vendor->avatar,
+                    'background'         => asset('storage/vendors_background') . '/' . $vendor->background_profile,
+                    'address'        => $vendor->address,
+                    'website'        => $vendor->website,
+                    'subcategories'  => $vendor->subcategoriesApi->makeHidden('pivot'),
+                    'offers'         => $vendor->specialOffers->makeHidden(['user_id', 'created_at', 'updated_at']),
+                    'reviews_count'  => count($reviews),
+                    'reviews'        => $reviews,
+                    'working_hours'  => $vendor->daysApi->transform(function ($q) {
+                        $q['check'] = 1;
 
-                    $q['name'] =$q['name_en'];
-                    $q['workHours'] = [
-                    'start' => date("g:i A",strtotime($q->start)),
-                    'end' => date("g:i A",strtotime($q->end))];
-                    return $q->only('id','name', 'check', 'workHours');
-                }),
-                'availability'   => $vendor->vendor_city->makeHidden('pivot'),
-                'gallery'        => $vendor->gallery->transform(function($gallery){
-                                    $gallery['image'] = asset('storage/gallery') . '/' . $gallery['image'];
-                                    return $gallery['image'];
-                                }),
-                'is_favorite'     =>  $isFavorite
-            ];
+                        $q['name'] = $q['name_en'];
+                        $q['workHours'] = [
+                            'start' => date("g:i A", strtotime($q->start)),
+                            'end' => date("g:i A", strtotime($q->end))
+                        ];
+                        return $q->only('id', 'name', 'check', 'workHours');
+                    }),
+                    'availability'   => $vendor->vendor_city->makeHidden('pivot'),
+                    'gallery'        => $vendor->gallery->transform(function ($gallery) {
+                        $gallery['image'] = asset('storage/gallery') . '/' . $gallery['image'];
+                        return $gallery['image'];
+                    }),
+                    'is_favorite'     =>  $isFavorite
+                ];
                 return $this->sendResponse($respone, 'vendor profile retrieved successfully');
-
             } catch (\Exception $e) {
                 return $this->sendError($e->getMessage(), 401);
             }
-        }
-        else
+        } else
             return $this->sendError('nothing to process', 401);
-
     }
 
 
 
-    public function categorySubCatFunc(Request $request) {
+    public function categorySubCatFunc(Request $request)
+    {
 
         $lang = false;
-        if(!empty($request->header('devicetoken'))) {
+        if (!empty($request->header('devicetoken'))) {
             $vendor = User::where('device_token', $request->header('devicetoken'))->first();
-            $l=$vendor->language;
-            $arr=[
-                'lang'=>$vendor->language,
-                'bool'=>$lang
+            $l = $vendor->language;
+            $arr = [
+                'lang' => $vendor->language,
+                'bool' => $lang
             ];
-            if(!empty($vendor)) {
-                $hiddenElems = ['created_at', 'updated_at','custom_fields','has_media'];
+            if (!empty($vendor)) {
+                $hiddenElems = ['created_at', 'updated_at', 'custom_fields', 'has_media'];
                 try {
-                    $categories  = Category::with('subCategory')->get(['id', 'name_'.$vendor->language, 'description'])->makeHidden($hiddenElems);
+                    $categories  = Category::with('subCategory')->get(['id', 'name_' . $vendor->language, 'description'])->makeHidden($hiddenElems);
                     $lang = true;
                 } catch (\Exception  $e) {
                     $categories  = Category::with('subCategory')->get()->makeHidden($hiddenElems);
                     $lang = false;
                 }
 
-                $respone=[];
-                    foreach($categories as $category){
-                            $respone[]=[
-                                 'id'    => $category->id,
-                                 'name'  => $lang ?
-                                 $category['name_'. $vendor->language] : $category['name'],
-                                 'description'    => $category->description,
-                                 'sub_categories' => $category->subCategoryAPI->transform(function($q) use($arr){
+                $respone = [];
+                foreach ($categories as $category) {
+                    $respone[] = [
+                        'id'    => $category->id,
+                        'name'  => $lang ?
+                            $category['name_' . $vendor->language] : $category['name'],
+                        'description'    => $category->description,
+                        'sub_categories' => $category->subCategoryAPI->transform(function ($q) use ($arr) {
 
-                                    return $arr['bool']? $q->only(['id','name_'.$arr['lang']]):$q->only(['id','name']);
-                                 })
+                            return $arr['bool'] ? $q->only(['id', 'name_' . $arr['lang']]) : $q->only(['id', 'name']);
+                        })
                     ];
-
                 }
 
                 return $this->sendResponse($respone, 'Categories with subcategories retrieved successfully!');
-                 } else {
-                    return $this->sendResponse([], 'User not found!');
-                 }
-            }  else {
-                return $this->sendResponse([], 'Error!');
+            } else {
+                return $this->sendResponse([], 'User not found!');
             }
+        } else {
+            return $this->sendResponse([], 'Error!');
+        }
     }
 
 
 
-    public function workHours(Request $request) {
-        if(!empty($request->header('devicetoken'))) {
+    public function workHours(Request $request)
+    {
+        if (!empty($request->header('devicetoken'))) {
             $vendor = User::where('device_token', $request->header('devicetoken'))->first();
-           if(!empty($vendor)) {
-            try {
-                $Days  = Day::all(['id', 'name_'.$vendor->language]);
-            }
-            catch (\Exception  $e) {
-                $Days  = Day::all(['id', 'name_en']);
-            }
+            if (!empty($vendor)) {
+                try {
+                    $Days  = Day::all(['id', 'name_' . $vendor->language]);
+                } catch (\Exception  $e) {
+                    $Days  = Day::all(['id', 'name_en']);
+                }
 
-            $respone[]=$Days;
+                $respone[] = $Days;
                 return $this->sendResponse($respone, 'days retrieved successfully!');
             } else {
-               return $this->sendResponse([], 'User not found!');
+                return $this->sendResponse([], 'User not found!');
             }
-       }
-        else {
-           return $this->sendResponse([], 'Error!');
-       }
-
+        } else {
+            return $this->sendResponse([], 'Error!');
+        }
     }
-    
-    public function vendorReviews(Request $request) {
-        if($request->header('devicetoken')) {
+
+    public function vendorReviews(Request $request)
+    {
+        if ($request->header('devicetoken')) {
             $response = [];
             $hiddenElems = ['custom_fields', 'has_media'];
             try {
@@ -392,27 +415,28 @@ class vendorApiController extends Controller
                 if (empty($user)) {
                     return $this->sendError('User not found', 401);
                 }
-                $response = $user->clientsAPI->transform(function($q){
+                $response = $user->clientsAPI->transform(function ($q) {
 
-                   $r=reviews::find($q->pivot->id);
-                    return $q =[
+                    $r = reviews::find($q->pivot->id);
+                    return $q = [
                         'user_id' => $q->id,
                         'name' => $q->name,
-                        'description'=> $q->pivot->description,
-                        'avatar' => asset('storage/Avatar').'/'. $q->avatar,
+                        'description' => $q->pivot->description,
+                        'avatar' => asset('storage/Avatar') . '/' . $q->avatar,
                         'reviews' => getFullRating($r)
                     ];
                 });
 
                 return $this->sendResponse($response, 'Reviews retrieved successfully!');
             } catch (\Exception $e) {
-        return $this->sendError($e->getMessage(), 401);
-      }
+                return $this->sendError($e->getMessage(), 401);
+            }
+        }
     }
-  }
 
-  public function backgroundAvatar(Request $request) {
-        if($request->header('devicetoken')) {
+    public function backgroundAvatar(Request $request)
+    {
+        if ($request->header('devicetoken')) {
             $response = [];
             try {
                 $user = User::where('device_token', $request->header('devicetoken'))->first();
@@ -421,117 +445,19 @@ class vendorApiController extends Controller
                 }
 
                 $response = [
-                    'avatar'    => asset('storage/Avatar').'/'. $user->avatar,
-                    'background' => asset('storage/vendors_background').'/'. $user->background_profile
+                    'avatar'    => asset('storage/Avatar') . '/' . $user->avatar,
+                    'background' => asset('storage/vendors_background') . '/' . $user->background_profile
                 ];
 
                 return $this->sendResponse($response, 'Data retrieved successfully!');
             } catch (\Exception $e) {
-                   return $this->sendError($e->getMessage(), 401);
+                return $this->sendError($e->getMessage(), 401);
             }
         }
-     }
-
-     public function vendorInfo(Request $request)
-     {
-         try {
-             if ($request->header('devicetoken')) {
-                 $response = [];
-                 try {
-                     $user = User::where('device_token', $request->header('devicetoken'))->first();
-                     if (empty($user)) {
-                         return $this->sendError('User not found', 401);
-                     }
-                     $response = [
-                         'caption' => $user->caption,
-                         'Business_name' => $user->nickname,
-                         'Owner_name' => $user->name,
-                         'About_you' => $user->description
-                     ];
-
-                     return $this->sendResponse($response, 'Data retrieved successfully!');
-                 } catch (\Exception $e) {
-                     return $this->sendError($e->getMessage(), 401);
-                 }
-             }
-         }
-         catch (\Exception $e) {
-             return $this->sendError('something was wrong', 401);
-         }
-     }
-
-     public function vendorInfoUpdate(Request $request) {
-      try {
-          if ($request->header('devicetoken')) {
-              $response = [];
-              try {
-                  $user = User::where('device_token', $request->header('devicetoken'))->first();
-                  if (empty($user)) {
-                      return $this->sendError('User not found', 401);
-                  }
-
-                  $user->name = $request->ownerName;
-                  $user->caption = $request->input('caption') == null ? '' : $request->input('caption', '');
-                  $user->description = $request->input('aboutyou') == null ? '' : $request->input('aboutyou', '');
-                  $user->nickname = $request->input('businessName') == null ? '' : $request->input('businessName', '');
-                  if ($user->save()) {
-
-                      $response = [
-                          'caption' => $user->caption,
-                          'Business_name' => $user->nickname,
-                          'Owner_name' => $user->name,
-                          'About_you' => $user->description
-                      ];
-
-                      return $this->sendResponse($response, 'Data retrieved successfully!');
-                  } else
-                      return $this->sendError('error save User information', 401);
-
-
-              } catch (\Exception $e) {
-                  return $this->sendError('something was wrong!', 401);
-              }
-          }
-          else
-              return $this->sendError('Error!', 401);
-
-
-      }
-      catch (\Exception $e) {
-          return $this->sendError('something was wrong!', 401);
-      }
-     }
-
-
-    public function contactLocation(Request $request) {
-        if($request->header('devicetoken')) {
-            $response = [];
-            try {
-                $user = User::where('device_token', $request->header('devicetoken'))->first();
-                if (empty($user)) {
-                    return $this->sendError('User not found', 401);
-                }
-                $response = [
-                    'coordinates'        => [
-                        'latitude'  => $user->coordinates==null?null:$user->coordinates->latitude,
-                        'longitude' => $user->coordinates==null?null:$user->coordinates->longitude
-                     ],
-                    'address'        => $user->address,
-                    'website'        => $user->website,
-                    'phone_number'   => $user->phone
-                ];
-
-                return $this->sendResponse($response, 'Data retrieved successfully!');
-                } catch (\Exception $e) {
-                    return $this->sendError('something was wrong', 401);
-            }
-        }
-        else
-            return $this->sendError('Error!', 401);
-
     }
 
-    public function contactLocationUpdate(Request $request) {
+    public function vendorInfo(Request $request)
+    {
         try {
             if ($request->header('devicetoken')) {
                 $response = [];
@@ -540,7 +466,99 @@ class vendorApiController extends Controller
                     if (empty($user)) {
                         return $this->sendError('User not found', 401);
                     }
-                    if($user->coordinates==null) {
+                    $response = [
+                        'caption' => $user->caption,
+                        'Business_name' => $user->nickname,
+                        'Owner_name' => $user->name,
+                        'About_you' => $user->description
+                    ];
+
+                    return $this->sendResponse($response, 'Data retrieved successfully!');
+                } catch (\Exception $e) {
+                    return $this->sendError($e->getMessage(), 401);
+                }
+            }
+        } catch (\Exception $e) {
+            return $this->sendError('something was wrong', 401);
+        }
+    }
+
+    public function vendorInfoUpdate(Request $request)
+    {
+        try {
+            if ($request->header('devicetoken')) {
+                $response = [];
+                try {
+                    $user = User::where('device_token', $request->header('devicetoken'))->first();
+                    if (empty($user)) {
+                        return $this->sendError('User not found', 401);
+                    }
+
+                    $user->name = $request->ownerName;
+                    $user->caption = $request->input('caption') == null ? '' : $request->input('caption', '');
+                    $user->description = $request->input('aboutyou') == null ? '' : $request->input('aboutyou', '');
+                    $user->nickname = $request->input('businessName') == null ? '' : $request->input('businessName', '');
+                    if ($user->save()) {
+
+                        $response = [
+                            'caption' => $user->caption,
+                            'Business_name' => $user->nickname,
+                            'Owner_name' => $user->name,
+                            'About_you' => $user->description
+                        ];
+
+                        return $this->sendResponse($response, 'Data retrieved successfully!');
+                    } else
+                        return $this->sendError('error save User information', 401);
+                } catch (\Exception $e) {
+                    return $this->sendError('something was wrong!', 401);
+                }
+            } else
+                return $this->sendError('Error!', 401);
+        } catch (\Exception $e) {
+            return $this->sendError('something was wrong!', 401);
+        }
+    }
+
+
+    public function contactLocation(Request $request)
+    {
+        if ($request->header('devicetoken')) {
+            $response = [];
+            try {
+                $user = User::where('device_token', $request->header('devicetoken'))->first();
+                if (empty($user)) {
+                    return $this->sendError('User not found', 401);
+                }
+                $response = [
+                    'coordinates'        => [
+                        'latitude'  => $user->coordinates == null ? null : $user->coordinates->latitude,
+                        'longitude' => $user->coordinates == null ? null : $user->coordinates->longitude
+                    ],
+                    'address'        => $user->address,
+                    'website'        => $user->website,
+                    'phone_number'   => $user->phone
+                ];
+
+                return $this->sendResponse($response, 'Data retrieved successfully!');
+            } catch (\Exception $e) {
+                return $this->sendError('something was wrong', 401);
+            }
+        } else
+            return $this->sendError('Error!', 401);
+    }
+
+    public function contactLocationUpdate(Request $request)
+    {
+        try {
+            if ($request->header('devicetoken')) {
+                $response = [];
+                try {
+                    $user = User::where('device_token', $request->header('devicetoken'))->first();
+                    if (empty($user)) {
+                        return $this->sendError('User not found', 401);
+                    }
+                    if ($user->coordinates == null) {
                         $coordinates = new GmapLocation();
                         $coordinates->user_id = $user->id;
                         $coordinates->save();
@@ -561,12 +579,12 @@ class vendorApiController extends Controller
 
                     $response = [
                         'coordinates' =>
-                            [
+                        [
 
-                                'latitude' => $user->coordinates == null ? null : $user->coordinates->latitude,
-                                'longitude' => $user->coordinates == null ? null : $user->coordinates->longitude
+                            'latitude' => $user->coordinates == null ? null : $user->coordinates->latitude,
+                            'longitude' => $user->coordinates == null ? null : $user->coordinates->longitude
 
-                            ],
+                        ],
                         'address' => $user->address,
                         'website' => $user->website,
                         'phone' => $user->phone
@@ -578,77 +596,75 @@ class vendorApiController extends Controller
                 }
             } else
                 return $this->sendError('Error!', 401);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 401);
         }
-     }
+    }
 
-     public function supportedSubcategpries(Request $request) {
-       try {
-           $lang = false;
-           if ($request->header('devicetoken')) {
-               $vendor = User::where('device_token', $request->header('devicetoken'))->first();
+    public function supportedSubcategpries(Request $request)
+    {
+        try {
+            $lang = false;
+            if ($request->header('devicetoken')) {
+                $vendor = User::where('device_token', $request->header('devicetoken'))->first();
 
-               //return $sub;
+                //return $sub;
 
-               if (!empty($vendor)) {
+                if (!empty($vendor)) {
 
-                   $sub = $vendor->subcategories->transform(function ($q) {
+                    $sub = $vendor->subcategories->transform(function ($q) {
 
-                       return $q->id;
-                   });
-                   $l = $vendor->language;
-                   $arr = [
-                       'lang' => $vendor->language,
-                       'bool' => $lang
-                   ];
-                   $ids = [3, 4, 7];
-                   $hiddenElems = ['created_at', 'updated_at', 'custom_fields', 'has_media'];
-//                   try {
-//                       $categories = Category::with('subCategory')->get(['id', 'name_' . $vendor->language, 'description'])->transform(function ($q) use ($sub) {
-//
-//                           $q->subCategory->transform(function ($q) use ($sub) {
-//                               if (in_array($q->id, $sub->toArray()))
-//                                   $q['check'] = 1;
-//                               else
-//                                   $q['check'] = 0;
-//                               return $q;
-//                           });
-//                           return $q;
-//                       });
-//                       $lang = true;
-//                   } catch (\Exception  $e) {
-//                       return $this->sendError('something was wrong ');
-//                   }
+                        return $q->id;
+                    });
+                    $l = $vendor->language;
+                    $arr = [
+                        'lang' => $vendor->language,
+                        'bool' => $lang
+                    ];
+                    $ids = [3, 4, 7];
+                    $hiddenElems = ['created_at', 'updated_at', 'custom_fields', 'has_media'];
+                    //                   try {
+                    //                       $categories = Category::with('subCategory')->get(['id', 'name_' . $vendor->language, 'description'])->transform(function ($q) use ($sub) {
+                    //
+                    //                           $q->subCategory->transform(function ($q) use ($sub) {
+                    //                               if (in_array($q->id, $sub->toArray()))
+                    //                                   $q['check'] = 1;
+                    //                               else
+                    //                                   $q['check'] = 0;
+                    //                               return $q;
+                    //                           });
+                    //                           return $q;
+                    //                       });
+                    //                       $lang = true;
+                    //                   } catch (\Exception  $e) {
+                    //                       return $this->sendError('something was wrong ');
+                    //                   }
 
-                   $respone = [];
-//                   foreach ($categories as $category) {
-//                       $respone[] = [
-//                           'id' => $category->id,
-//                           'name' => $lang ?
-//                               $category['name_' . $vendor->language] : $category['name'],
-//                           'description' => $category->description,
-//                           'sub_categories' => $category->subCategory->transform(function ($q) use ($arr) {
-//
-//                               return $q->only(['id', 'name', 'check']);
-//                           })
-//                       ];
-//
-//                   }
+                    $respone = [];
+                    //                   foreach ($categories as $category) {
+                    //                       $respone[] = [
+                    //                           'id' => $category->id,
+                    //                           'name' => $lang ?
+                    //                               $category['name_' . $vendor->language] : $category['name'],
+                    //                           'description' => $category->description,
+                    //                           'sub_categories' => $category->subCategory->transform(function ($q) use ($arr) {
+                    //
+                    //                               return $q->only(['id', 'name', 'check']);
+                    //                           })
+                    //                       ];
+                    //
+                    //                   }
 
-                   return $this->sendResponse($sub, 'Categories with subcategories retrieved successfully!');
-               } else {
-                   return $this->sendResponse([], 'User not found!');
-               }
-           } else {
-               return $this->sendResponse([], 'Error!');
-           }
-       }
-       catch (\Exception  $e) {
-           return $this->sendError('something was wrong ');
-       }
-
+                    return $this->sendResponse($sub, 'Categories with subcategories retrieved successfully!');
+                } else {
+                    return $this->sendResponse([], 'User not found!');
+                }
+            } else {
+                return $this->sendResponse([], 'Error!');
+            }
+        } catch (\Exception  $e) {
+            return $this->sendError('something was wrong ');
+        }
     }
     public function saveSupportedSubcategpries(Request $request)
     {
@@ -667,8 +683,9 @@ class vendorApiController extends Controller
     }
 
 
-    public function vendorRefer(Request $request) {
-        if($request->header('devicetoken')) {
+    public function vendorRefer(Request $request)
+    {
+        if ($request->header('devicetoken')) {
             $hiddenElems = ['custom_fields', 'has_media', 'media'];
 
             $response = [];
@@ -695,7 +712,6 @@ class vendorApiController extends Controller
             if ($validator->fails()) {
 
                 return $arr = array("status" => 400, "message" => $validator->errors()->first(), "data" => array());
-
             } else {
 
                 vendors_suggested::create([
@@ -704,16 +720,9 @@ class vendorApiController extends Controller
                     'phone'   =>  $request->phone,
                     'user_id' =>  $referer->id
                 ]);
-
             }
             return $this->sendResponse($response, "Referring added successfully!");
-        }
-        else
+        } else
             return $this->sendError('Error', 401);
-
     }
-
-
 }
-
-

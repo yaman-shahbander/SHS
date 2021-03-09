@@ -158,10 +158,14 @@ Route::prefix('vendor')->group(function () {
 
     //add, update and delete vendor cities
     Route::post('VendorCitiesavailibility', 'API\Manager\UserAPIController@addVendorCities');
+
+    
 });
 
 
+///for openinng vendor profile
 
+//Route::post('ViewVendorProfileFromHomeOwner', '');
 //for pusher flutter chat
 
 Route::post('saveMessage', 'API\MessageApiController@store');

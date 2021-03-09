@@ -14,7 +14,7 @@ class AddColumnFirebaseTokenToUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('firebase_token')->nullable()->unique();
+            $table->string('fcm_token')->nullable();
         });
     }
 

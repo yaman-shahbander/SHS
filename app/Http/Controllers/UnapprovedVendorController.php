@@ -114,6 +114,8 @@ class UnapprovedVendorController extends Controller
             return redirect(route('unapprovedServiceProvider.index'));
         }
 
+     
+
         if ($user->balance_id != null) {
             Balance::find($user->balance_id)->delete();
         }
@@ -122,6 +124,39 @@ class UnapprovedVendorController extends Controller
         catch (\Exception $e) {}
 
         $this->vendorRepository->delete($id);
+
+        //for send notification 
+        $SERVER_API_KEY = 'AAAA71-LrSk:APA91bHCjcToUH4PnZBAhqcxic2lhyPS2L_Eezgvr3N-O3ouu2XC7-5b2TjtCCLGpKo1jhXJqxEEFHCdg2yoBbttN99EJ_FHI5J_Nd_MPAhCre2rTKvTeFAgS8uszd_P6qmp7NkSXmuq';
+
+        $headers = [
+            'Authorization: key=' . $SERVER_API_KEY,
+            'Content-Type: application/json',
+        ];
+        $data = [
+            "registration_ids" => $user->pluck('fcm_token'),
+            "notification" => [
+                "title"    => config('notification_lang.Notification_title_unapproved_' . $user->language),
+                "body"     => config('notification_lang.Notification_body_unapproved_' . $user->language)
+            ]
+        ];
+
+        $dataString = json_encode($data);
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+        curl_setopt($ch, CURLOPT_POST, true);
+
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+         //return dd(curl_exec($ch));
+        $response = curl_exec($ch);
 
         Flash::success(trans('lang.delete_operation'));
 
@@ -138,12 +173,53 @@ class UnapprovedVendorController extends Controller
         try {
       
             $user = User::find($id);
-            $user->approved_vendor = 1;
-            $user->save();
-  
-            Flash::success(trans('lang.store_operation'));
+           $user->approved_vendor = 1;
+            if($user->save()){
 
-            return redirect(route('unapprovedServiceProvider.index'));
+
+
+             //for send notification 
+        $SERVER_API_KEY = 'AAAA71-LrSk:APA91bHCjcToUH4PnZBAhqcxic2lhyPS2L_Eezgvr3N-O3ouu2XC7-5b2TjtCCLGpKo1jhXJqxEEFHCdg2yoBbttN99EJ_FHI5J_Nd_MPAhCre2rTKvTeFAgS8uszd_P6qmp7NkSXmuq';
+
+        $headers = [
+            'Authorization: key=' . $SERVER_API_KEY,
+            'Content-Type: application/json',
+        ];
+        $data = [
+            "registration_ids" => $user->pluck('fcm_token'),
+            "notification" => [
+                "title"    => config('notification_lang.Notification_title_approved_' . $user->language),
+                "body"     => config('notification_lang.Notification_body_approved_' . $user->language)
+            ]
+        ];
+
+        $dataString = json_encode($data);
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+        curl_setopt($ch, CURLOPT_POST, true);
+
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+         //return dd(curl_exec($ch));
+        $response = curl_exec($ch);
+        Flash::success(trans('lang.store_operation'));
+
+        return redirect(route('unapprovedServiceProvider.index'));
+    }
+    else{
+        Flash::error($e->getMessage());
+        return redirect(route('unapprovedServiceProvider.index'));
+    }
+
+           
         } catch (ValidatorException $e) {
         Flash::error($e->getMessage());
         return redirect(route('unapprovedServiceProvider.index'));
