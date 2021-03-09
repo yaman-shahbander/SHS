@@ -26,8 +26,8 @@ use Illuminate\Support\Facades\Response;
 use Prettus\Validator\Exceptions\ValidatorException;
 use App\subCategory;
 use DB;
- use Cornford\Googlmapper\Facades\MapperFacade as Mapper;
- use Illuminate\Support\Facades\Route;
+use Cornford\Googlmapper\Facades\MapperFacade as Mapper;
+use Illuminate\Support\Facades\Route;
 use App\Models\GmapLocation;
 use App\Models\Fee;
 use App\Models\User;
@@ -65,9 +65,13 @@ class VendorController extends Controller
 
 
 
-    public function __construct(ReviewsRepositry $reviewRepo,VendorRepository $vendorRepo, RoleRepository $roleRepo, UploadRepository $uploadRepo,
-                                CustomFieldRepository $customFieldRepo)
-    {
+    public function __construct(
+        ReviewsRepositry $reviewRepo,
+        VendorRepository $vendorRepo,
+        RoleRepository $roleRepo,
+        UploadRepository $uploadRepo,
+        CustomFieldRepository $customFieldRepo
+    ) {
         parent::__construct();
         $this->reviewRepository = $reviewRepo;
 
@@ -79,7 +83,7 @@ class VendorController extends Controller
 
     public function index(VendorDataTable $vendorDataTable)
     {
-        if(!auth()->user()->hasPermissionTo('vendors.index')){
+        if (!auth()->user()->hasPermissionTo('vendors.index')) {
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
@@ -91,38 +95,38 @@ class VendorController extends Controller
      * @return Response
      */
 
-//    public function create()
-//    {
-//        $role = $this->roleRepository->pluck('name', 'name');
-//        //$role = $role->where('name','vendor');
-//        $role = array(
-//          "vendor" => "vendor"
-//        );
-//
-//        //dd($role);
-//        $rolesSelected = [];
-//        $hasCustomField = in_array($this->vendorRepository->model(), setting('custom_field_models', []));
-//        if ($hasCustomField) {
-//            $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->vendorRepository->model());
-//            $html = generateCustomField($customFields);
-//        }
-//
-//        return view('settings.vendors.create')
-//            ->with("role", $role)
-//            ->with("customFields", isset($html) ? $html : false)
-//            ->with("rolesSelected", $rolesSelected);
-//    }
+    //    public function create()
+    //    {
+    //        $role = $this->roleRepository->pluck('name', 'name');
+    //        //$role = $role->where('name','vendor');
+    //        $role = array(
+    //          "vendor" => "vendor"
+    //        );
+    //
+    //        //dd($role);
+    //        $rolesSelected = [];
+    //        $hasCustomField = in_array($this->vendorRepository->model(), setting('custom_field_models', []));
+    //        if ($hasCustomField) {
+    //            $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->vendorRepository->model());
+    //            $html = generateCustomField($customFields);
+    //        }
+    //
+    //        return view('settings.vendors.create')
+    //            ->with("role", $role)
+    //            ->with("customFields", isset($html) ? $html : false)
+    //            ->with("rolesSelected", $rolesSelected);
+    //    }
 
 
 
     public function create()
     {
-        if(!auth()->user()->hasPermissionTo('vendors.create')){
+        if (!auth()->user()->hasPermissionTo('vendors.create')) {
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
-        $countries=Country::all();
-//        $cities=City::all();
+        $countries = Country::all();
+        //        $cities=City::all();
         $role = $this->roleRepository->pluck('name', 'name');
 
         $rolesSelected = [];
@@ -131,14 +135,13 @@ class VendorController extends Controller
             $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->vendorRepository->model());
             $html = generateCustomField($customFields);
         }
-        $style="";
+        $style = "";
         return view('settings.vendors.create')
             ->with("role", $role)
             ->with("customFields", isset($html) ? $html : false)
             ->with("rolesSelected", $rolesSelected)
             ->with("style", $style)
             ->with("countries", $countries);
-
     }
 
 
@@ -149,13 +152,13 @@ class VendorController extends Controller
      * @param ReviewsDataTable $reviewDataTable
      * @return Response
      */
-    public function profile(Request $request,SubCategoriesVendorDataTable $subCategoriesDataTableDataTable)
+    public function profile(Request $request, SubCategoriesVendorDataTable $subCategoriesDataTableDataTable)
     {
-        if(!auth()->user()->hasPermissionTo('vendors.profile')){
+        if (!auth()->user()->hasPermissionTo('vendors.profile')) {
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
-        $countries=Country::all();
+        $countries = Country::all();
 
         $user = $this->vendorRepository->findWithoutFail($request->id);
         unset($user->password);
@@ -169,19 +172,16 @@ class VendorController extends Controller
             $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->vendorRepository->model());
             $customFields = generateCustomField($customFields, $customFieldsValues);
         }
-        if(!empty($user->cities->id))
-        {
-            $cities=City::where('country_id',$user->cities->country_id)->get();
-
-        }
-        else
-            $cities=[];
-          //  return dd($user->subcategories);
-        $user->rating=getRating($user);
+        if (!empty($user->cities->id)) {
+            $cities = City::where('country_id', $user->cities->country_id)->get();
+        } else
+            $cities = [];
+        //  return dd($user->subcategories);
+        $user->rating = getRating($user);
 
         $userCoordinates =  GmapLocation::where('user_id', $request->id)->first();
 
-        if(!empty($userCoordinates)) {
+        if (!empty($userCoordinates)) {
             Mapper::map(
                 $userCoordinates->latitude,
                 $userCoordinates->longitude,
@@ -190,41 +190,41 @@ class VendorController extends Controller
                     'draggable' => false,
                     'marker'    => true,
                     'markers' => ['title' => 'My Location', 'animation' => 'BOUNCE']
-                ]);
+                ]
+            );
 
-                // document.getElementById("gmap").style.
-                $style='style="width: 100%; height: 300px"';
+            // document.getElementById("gmap").style.
+            $style = 'style="width: 100%; height: 300px"';
         } else {
-                $style="";
+            $style = "";
         }
 
         $favoriteVendor = $user->homeOwnerFavorite; // Users who added this vendor as a favorite
 
 
-        return $dataTable=$subCategoriesDataTableDataTable->render('settings.vendors.profile',compact(['user', 'role', 'rolesSelected', 'customFields', 'customFieldsValues','countries','cities','style', 'favoriteVendor']));
+        return $dataTable = $subCategoriesDataTableDataTable->render('settings.vendors.profile', compact(['user', 'role', 'rolesSelected', 'customFields', 'customFieldsValues', 'countries', 'cities', 'style', 'favoriteVendor']));
 
 
 
-          //  $subcategories = subCategory::all();
+        //  $subcategories = subCategory::all();
 
-          //  return dd($user->clients);
-
-
-      //  return $dataTable=$reviewsDataTable->render('settings.vendors.profile',compact(['user', 'role', 'rolesSelected', 'customFields', 'customFieldsValues','countries','cities', 'subcategories']));
+        //  return dd($user->clients);
 
 
-      //  return view('settings.vendors.profile', compact(['user', 'role', 'rolesSelected', 'customFields', 'customFieldsValues','countries','cities','dataTable']));
+        //  return $dataTable=$reviewsDataTable->render('settings.vendors.profile',compact(['user', 'role', 'rolesSelected', 'customFields', 'customFieldsValues','countries','cities', 'subcategories']));
+
+
+        //  return view('settings.vendors.profile', compact(['user', 'role', 'rolesSelected', 'customFields', 'customFieldsValues','countries','cities','dataTable']));
     }
 
     public function store(CreateUserRequest $request)
     {
 
-        if(!auth()->user()->hasPermissionTo('vendors.store')){
+        if (!auth()->user()->hasPermissionTo('vendors.store')) {
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
-        if($request->city=="0")
-        {
+        if ($request->city == "0") {
             Flash::warning(trans('lang.select_country_city'));
             return redirect()->back();
         }
@@ -235,44 +235,44 @@ class VendorController extends Controller
         }
 
         if ($request->input('website')) {
-            if(!filter_var($request->input('website'), FILTER_VALIDATE_URL)) {
+            if (!filter_var($request->input('website'), FILTER_VALIDATE_URL)) {
                 Flash::error('Enter a valid url');
                 return redirect()->back();
             }
         }
-        
+
 
         $input = $request->all();
 
-        $input['user_id']=Auth()->user()->id;
+        $input['user_id'] = Auth()->user()->id;
         $input['password'] = Hash::make($input['password']);
 
-        while(true) {
+        while (true) {
             $payment_id = '#' . rand(1000, 9999) . rand(1000, 9999);
             if (!(User::where('payment_id', $payment_id)->exists())) {
                 break;
             } else continue;
         }
 
-            $input['language'] = $request->input('language') == null ? '' : $request->input('language', '');
-            $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');
-            $input['payment_id'] = $payment_id;
-            $balance = new Balance();
-            $balance->balance = 0.0;
-            $balance->save();
-            $input['balance_id'] = $balance->id;
-            $input['is_verified'] = 0;
-            $input['city_id'] = $request->city;
-            $token = openssl_random_pseudo_bytes(16);
-            $user = $this->vendorRepository->create($input);
+        $input['language'] = $request->input('language') == null ? '' : $request->input('language', '');
+        $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');
+        $input['payment_id'] = $payment_id;
+        $balance = new Balance();
+        $balance->balance = 0.0;
+        $balance->save();
+        $input['balance_id'] = $balance->id;
+        $input['is_verified'] = 0;
+        $input['city_id'] = $request->city;
+        $token = openssl_random_pseudo_bytes(16);
+        $user = $this->vendorRepository->create($input);
 
-            //Convert the binary data into hexadecimal representation.
-            $token = bin2hex($user->id . $token);
-            $input['device_token'] = $token;
-            $user = $this->vendorRepository->update($input,$user->id);
+        //Convert the binary data into hexadecimal representation.
+        $token = bin2hex($user->id . $token);
+        $input['device_token'] = $token;
+        $user = $this->vendorRepository->update($input, $user->id);
 
-            $user->assignRole('vendor');
-            $user->assignRole($request->roles);
+        $user->assignRole('vendor');
+        $user->assignRole($request->roles);
 
         try {
 
@@ -288,7 +288,6 @@ class VendorController extends Controller
                 $user->avatar = $imageName;
                 $user->save();
             }
-
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }
@@ -298,9 +297,10 @@ class VendorController extends Controller
         return redirect(route('vendors.index'));
     }
 
-    public function featuredfeeFunction() {
+    public function featuredfeeFunction()
+    {
 
-        if(!auth()->user()->hasPermissionTo('vendors.fee')){
+        if (!auth()->user()->hasPermissionTo('vendors.fee')) {
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
@@ -309,31 +309,32 @@ class VendorController extends Controller
             $value = Fee::all('fee_amount');
             $value = $value[0]['fee_amount'];
             return view('settings.vendors.featuredVendorfee')->with('count', $count)
-            ->with('value', $value);
-         } else {
+                ->with('value', $value);
+        } else {
             return view('settings.vendors.featuredVendorfee')->with('count', $count);
-         }
+        }
     }
 
-    public function savefeeFunction(Request $request) {
+    public function savefeeFunction(Request $request)
+    {
 
-        if(!auth()->user()->hasPermissionTo('vendors.feeSave')){
+        if (!auth()->user()->hasPermissionTo('vendors.feeSave')) {
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $check = Fee::all();
-        if(count($check) == 0) {
+        if (count($check) == 0) {
             $newfee = new Fee;
 
             $amount  = strip_tags($request->fee_amount);
 
-            if(preg_match('/[a-zA-Z]/', $amount)) {
+            if (preg_match('/[a-zA-Z]/', $amount)) {
                 Flash::Error(trans('lang.only_numbers'));
                 return redirect(route('vendors.index'));
-             }
+            }
 
 
-             if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $amount)) {
+            if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $amount)) {
                 Flash::Error(trans('lang.only_numbers'));
                 return redirect(route('vendors.index'));
             }
@@ -341,7 +342,7 @@ class VendorController extends Controller
             if ($amount < 0) {
                 Flash::Error(trans('lang.negative_amount'));
                 return redirect(route('vendors.index'));
-             }
+            }
 
             $newfee->fee_amount = $amount;
 
@@ -353,13 +354,13 @@ class VendorController extends Controller
 
             $amount  = strip_tags($request->fee_amount);
 
-            if(preg_match('/[a-zA-Z]/', $amount)) {
+            if (preg_match('/[a-zA-Z]/', $amount)) {
                 Flash::Error(trans('lang.only_numbers'));
                 return redirect(route('vendors.index'));
-             }
+            }
 
 
-             if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $amount)) {
+            if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $amount)) {
                 Flash::Error(trans('lang.only_numbers'));
                 return redirect(route('vendors.index'));
             }
@@ -367,7 +368,7 @@ class VendorController extends Controller
             if ($amount < 0) {
                 Flash::Error(trans('lang.negative_amount'));
                 return redirect(route('vendors.index'));
-             }
+            }
 
             Fee::first()->update([
                 'fee_amount' => $amount
@@ -380,7 +381,7 @@ class VendorController extends Controller
 
     public function update($id, UpdateUserRequest $request)
     {
-        if(!auth()->user()->hasPermissionTo('vendors.update')){
+        if (!auth()->user()->hasPermissionTo('vendors.update')) {
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
@@ -388,12 +389,11 @@ class VendorController extends Controller
             Flash::warning('This is only demo app you can\'t change this section ');
             return redirect(route('users.profile'));
         }
-        if ($id==1 ) {
+        if ($id == 1) {
             Flash::error('Permission denied');
             return redirect(route('users.profile'));
         }
-        if($request->city=="0")
-        {
+        if ($request->city == "0") {
             Flash::warning(trans('lang.select_country_city'));
             return redirect()->back();
         }
@@ -402,22 +402,32 @@ class VendorController extends Controller
             Flash::success(trans('lang.require_email_phone'));
             return redirect()->back();
         }
-        
+
         $input = $request->all();
 
-        $input['user_id']=Auth()->user()->id;
+        $input['user_id'] = Auth()->user()->id;
         $input['password'] = Hash::make($input['password']);
 
-            $input['language'] = $request->input('language') == null ? '' : $request->input('language', '');
-            $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');
+        $input['language'] = $request->input('language') == null ? '' : $request->input('language', '');
+        $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');
 
-            $input['city_id'] = $request->city;
+        $input['city_id'] = $request->city;
+        unset($input['email']);
+        unset($input['phone']);
+        $user = $this->vendorRepository->update($input, $id);
+        if($user->email !=$request->email) {
+            $user->email=$request->email;
 
-            $user = $this->vendorRepository->update($input,$id);
+        }
+        if($user->phone !=$request->phone) {
+            $user->phone=$request->phone;
 
-            DB::table('model_has_roles')->where('model_id', $user->id)->delete();
+        }
+        $user->save();
 
-            $user->assignRole($request->roles);
+        DB::table('model_has_roles')->where('model_id', $user->id)->delete();
+
+        $user->assignRole($request->roles);
 
         try {
 
@@ -429,13 +439,14 @@ class VendorController extends Controller
 
                 $request->file('avatar')->move(public_path('storage/Avatar'), $imageName);
 
-                try{ unlink(public_path('storage/Avatar').'/'.$user->avatar);}
-                catch (\Exception $e) {}
+                try {
+                    unlink(public_path('storage/Avatar') . '/' . $user->avatar);
+                } catch (\Exception $e) {
+                }
 
                 $user->avatar = $imageName;
                 $user->save();
             }
-
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }
@@ -443,21 +454,20 @@ class VendorController extends Controller
         Flash::success(trans('lang.update_operation'));
 
         return redirect(route('vendors.index'));
-
     }
 
     public function edit($id)
     {
-        if(!auth()->user()->hasPermissionTo('vendors.edit')){
+        if (!auth()->user()->hasPermissionTo('vendors.edit')) {
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
-        if ($id==1) {
+        if ($id == 1) {
             Flash::success(trans('lang.Permission_denied'));
             return redirect(route('users.index'));
         }
 
-        $countries=Country::all();
+        $countries = Country::all();
 
         $user = $this->vendorRepository->findWithoutFail($id);
         unset($user->password);
@@ -476,28 +486,25 @@ class VendorController extends Controller
 
             return redirect(route('users.index'));
         }
-        if(!empty($user->cities->id))
-        {
-            $cities=City::where('country_id',$user->cities->country_id)->get();
+        if (!empty($user->cities->id)) {
+            $cities = City::where('country_id', $user->cities->country_id)->get();
+        } else
+            $cities = [];
+        $style = "";
+        return view('settings.vendors.edit')
+            ->with('user', $user)->with("role", $role)
+            ->with("rolesSelected", $rolesSelected)
+            ->with("customFields", $html)
+            ->with("style", $style)
+            ->with("countries", $countries)
+            ->with("cities", $cities);
+    }
 
+    public function destroy($id)
+    {
+        if (!auth()->user()->hasPermissionTo('vendors.destroy')) {
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
-        else
-        $cities=[];
-        $style="";
-            return view('settings.vendors.edit')
-                ->with('user', $user)->with("role", $role)
-                ->with("rolesSelected", $rolesSelected)
-                ->with("customFields", $html)
-                ->with("style", $style)
-                ->with("countries", $countries)
-                ->with("cities", $cities);
-        }
-
-        public function destroy($id)
-        {
-            if(!auth()->user()->hasPermissionTo('vendors.destroy')){
-                return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
-            }
 
         if (env('APP_DEMO', false)) {
             Flash::warning('This is only demo app you can\'t change this section ');
@@ -515,8 +522,10 @@ class VendorController extends Controller
             Balance::find($user->balance_id)->delete();
         }
 
-        try{ unlink(public_path('storage/Avatar').'/'.$user->avatar);}
-        catch (\Exception $e) {}
+        try {
+            unlink(public_path('storage/Avatar') . '/' . $user->avatar);
+        } catch (\Exception $e) {
+        }
 
         $this->vendorRepository->delete($id);
 
@@ -524,5 +533,4 @@ class VendorController extends Controller
 
         return redirect(route('vendors.index'));
     }
-
 }
