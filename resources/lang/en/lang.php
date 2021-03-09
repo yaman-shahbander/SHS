@@ -1102,4 +1102,9 @@ return [
     'edit_notification'              =>   'Edit Notification',
     'type'                           =>   'Type',
     'body'                           =>   'Body',
+    'unapproved_SP'                  =>   'Unapproved service providers',
+    'unapproved_SP_settings'         =>   'Unapproved service providers settings',
+    'unapproved_SP_list'             =>   'Unapproved service providers list',
+
+
 ];

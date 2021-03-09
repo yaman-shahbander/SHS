@@ -8,7 +8,7 @@ use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
 use Barryvdh\DomPDF\Facade as PDF;
 
-class VendorDataTable extends DataTable
+class UnapprovedVendorDataTable extends DataTable
 {
 
     /**
@@ -24,7 +24,6 @@ class VendorDataTable extends DataTable
     //
     public function dataTable($query)
     {
-
         $dataTable = new EloquentDataTable($query);
 
         $columns = array_column($this->getColumns(), 'data');
@@ -35,13 +34,7 @@ class VendorDataTable extends DataTable
             ->editColumn('email', function ($user) {
                 return getEmailColumn($user, 'email');
             })
-            ->editColumn('status_type', function ($user) {
-                return getUserStatus($user);
-            })
-            ->editColumn('full_rating',function($user){
-                return getRating($user);
-            })
-            ->addColumn('action', 'settings.vendors.datatables_actions')
+            ->addColumn('action', 'unapprovedVendor.datatables_actions')
             ->rawColumns(array_merge($columns, ['action']));
     }
 
@@ -56,7 +49,7 @@ class VendorDataTable extends DataTable
         // getting vendors from database
         return $model->newQuery()->with('roles')
             ->leftJoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-            ->where('role_id',3)->where('approved_vendor', 1);
+            ->where('role_id',3)->where('approved_vendor', 0);
     }
 
     /**
@@ -105,14 +98,6 @@ class VendorDataTable extends DataTable
 
             ],
 
-            [
-                'data' => 'status_type',
-                'title' => trans('lang.status'),
-            ],
-            [
-                'data' => 'full_rating',
-                'title' =>  trans('lang.rating'),
-            ],
 
             [
                 'data' => 'updated_at',

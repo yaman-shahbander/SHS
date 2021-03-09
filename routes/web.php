@@ -70,7 +70,8 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
         Route::get('/chat','MessageController@index')->name('chat');
         Route::get('/message/{id}', 'MessageController@getMessage')->name('message');
         Route::post('message', 'MessageController@sendMessage');  
-
+        Route::resource('/unapprovedServiceProvider', 'UnapprovedVendorController');
+        Route::get('/approvedServiceProvider/{id}', 'UnapprovedVendorController@approved')->name('approvedServiceProvider.approve');
 
         Route::middleware('Checklanguage')->group(function () {
         Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');

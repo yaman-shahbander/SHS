@@ -47,7 +47,7 @@
 
     <!-- vendors -->
     @can('vendors.index')
-    <li class="nav-item has-treeview {{ Request::is('vendors*') || Request::is('suggested/vendor*') ? 'menu-open' : '' }}">
+    <li class="nav-item has-treeview {{ Request::is('vendors*') || Request::is('suggested/vendor*') || Request::is('unapprovedServiceProvider*')  ? 'menu-open' : '' }}">
         <a href="#" class="nav-link {{ Request::is('vendors*') || Request::is('suggested/vendor*') ? 'active' : '' }}"> @if($icons)<i class="nav-icon fa fa-users"></i>@endif
         @if(LaravelLocalization::getCurrentLocaleDirection() == "rtl")
             <p>{{trans('lang.vendors')}} <i class="fa fa-angle-left"></i></p>
@@ -66,6 +66,13 @@
             <li class="nav-item">
                 <a class="nav-link {{ Request::is('suggested/vendor*') ? 'active' : '' }}" href="{!! route('vendor.index') !!}">@if($icons)
                 <i class="nav-icon fa fa-user"></i>@endif<p>{{trans('lang.suggested')}}</p></a>
+            </li>
+            @endcan
+
+            @can('unapprovedServiceProvider.index')
+            <li class="nav-item">
+                <a class="nav-link {{ Request::is('unapprovedServiceProvider*') ? 'active' : '' }}" href="{!! route('unapprovedServiceProvider.index') !!}">@if($icons)
+                <i class="nav-icon fa fa-user"></i>@endif<p>{{trans('lang.unapproved_SP')}}</p></a>
             </li>
             @endcan
 
