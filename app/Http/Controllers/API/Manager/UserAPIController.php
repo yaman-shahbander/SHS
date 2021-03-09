@@ -68,6 +68,7 @@ class UserAPIController extends Controller
 
                     'email' => 'required|email',
                     'password' => 'required',
+                    'fcm_token' => 'required'
                 ]);
                 if (auth()->attempt(['email' => $request->input('email'), 'password' => $request->input('password')])) {
                     $user = auth()->user();
@@ -80,6 +81,7 @@ class UserAPIController extends Controller
 
                     'phone' => 'required',
                     'password' => 'required',
+                    'fcm_token' => 'required'
                 ]);
                 if (auth()->attempt(['phone' => $request->input('phone'), 'password' => $request->input('password')])) {
                     $user = auth()->user();
