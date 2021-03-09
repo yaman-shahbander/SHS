@@ -563,7 +563,7 @@
                     <!-- available-->
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title"><i class="fa fa-list mr-2"></i>Residence City</h3>
+                            <h3 class="card-title"><i class="fa fa-list mr-2"></i>{{ trans('lang.residence_city') }}</h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body ">
@@ -580,7 +580,7 @@
                     <!-- favorites-->
                     <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title"><i class="fa fa-list mr-2"></i>Favorite service providers</h3>
+                                <h3 class="card-title"><i class="fa fa-list mr-2"></i>{{trans('lang.favorite_service_providers')}}</h3>
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
@@ -639,7 +639,7 @@
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="p-3">
-                                        <h6>My Reviews <span style="font-size: 12px;color: #777;">(All reviews that the user did for vendors)</span></h6>
+                                        <h6>{{ trans('lang.my_reviews') }}  <span style="font-size: 12px;color: #777;">({{trans('lang.all_reviews_user_for_vendors')}})</span></h6>
                                     </div>
                                     <div class="mt-2">
 
@@ -666,23 +666,23 @@
                             <p class="text-justify comment-text mb-0">{{$client->pivot->description}}</p>
                             <div class="d-flex flex-row user-feed" >
                                  <div class="space">
-                                    <span class="wish">Quality Rating</span>
+                                    <span class="wish">{{trans('lang.Rating_Service')}}</span>
                                     <div id="fixture">{{$client->pivot->service_rating}}</div>
                                  </div>
                                  <div class="space">
-                                    <span class="wish">&nbsp;&nbsp;Price Rating</span>
+                                    <span class="wish">&nbsp;&nbsp;{{trans('lang.Rating_Price')}}</span>
                                     <div id="fixture">{{$client->pivot->price_rating}}</div>
                                  </div>
                                  <div class="space">
-                                    <span class="wish">&nbsp;&nbsp;Speed Rating</span>
+                                    <span class="wish">&nbsp;&nbsp;{{trans('lang.Rating_Speed')}}</span>
                                     <div id="fixture">{{$client->pivot->speed_rating}}</div>
                                  </div>
                                  <div class="space">
-                                    <span class="wish">&nbsp;&nbsp;Trust Rating</span>
+                                    <span class="wish">&nbsp;&nbsp;{{trans('lang.Rating_Trust')}}</span>
                                     <div id="fixture">{{$client->pivot->trust_rating}}</div>
                                  </div>
                                  <div class="space">
-                                    <span class="wish">&nbsp;&nbsp;Knowledge Rating</span>
+                                    <span class="wish">&nbsp;&nbsp;{{trans('lang.Rating_Knowledge')}}</span>
                                     <div id="fixture">{{$client->pivot->knowledge_rating}}</div>
                                  </div>
 

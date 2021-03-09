@@ -49,22 +49,22 @@ class NotificationDataTable extends DataTable
         $columns = [
             [
                 'data' => 'title',
-                'title' => 'Title',
+                'title' => trans('lang.notification_title'),
 
             ],
             [
                 'data' => 'body',
-                'title' => 'Body',
+                'title' =>  trans('lang.body'),
 
             ],
             [
                 'data' => 'updated_at',
-                'title' => 'updated_at',
+                'title' => trans('lang.user_updated_at'),
                 'searchable' => false,
             ],
             [
                 'data' => 'created_at',
-                'title' => 'created_at',
+                'title' => trans('lang.duration_created_at'),
                 'searchable' => false,
             ]
         ];
