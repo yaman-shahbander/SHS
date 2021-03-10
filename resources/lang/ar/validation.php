@@ -11,7 +11,7 @@ return [
     | as the size rules. Feel free to tweak each of these messages.
     |
     */
-
+    'phone'                => 'الهاتف موجود مسبقا',
     'accepted'             => 'يجب قبول :attribute .',
     'active_url'           => ':attribute ليس عنوان صحيح.',
     'after'                => ':attribute يجب أن يكون تاريخ بعد :date',
@@ -38,8 +38,7 @@ return [
     'digits_between'       => ':attribute على الأقل :min و :max على الأكثر.',
     'dimensions'           => ':attribute الصورة بابعاد غير صحيحة.',
     'distinct'             => ':attribute قيمة مكررة.',
-    'email'                => ':attribute يجب أن يكون عنوان بريد إلكتروني صالح.
-    ',
+    'email'                => 'البريد الالكتروني موجود مسبقا',
     'exists'               => ' :attribute ليست صحيحة.',
     'file'                 => ':attribute يجب لأن يكون ملف',
     'filled'               => ':attribute يجب أن تملك قيمة',

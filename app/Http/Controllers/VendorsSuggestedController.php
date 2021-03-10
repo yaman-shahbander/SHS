@@ -36,15 +36,19 @@ class VendorsSuggestedController extends Controller
      */
     private $customFieldRepository;
 
-    public function __construct(VendorSuggRepository $vendorSugRepo,RoleRepository $roleRepo,UserRepository $userRepo,
-                                CustomFieldRepository $customFieldRepo,UploadRepository $uploadRepo)
-    {
+    public function __construct(
+        VendorSuggRepository $vendorSugRepo,
+        RoleRepository $roleRepo,
+        UserRepository $userRepo,
+        CustomFieldRepository $customFieldRepo,
+        UploadRepository $uploadRepo
+    ) {
         parent::__construct();
         $this->vendorSugRepository = $vendorSugRepo;
         $this->roleRepository = $roleRepo;
         $this->userRepository = $userRepo;
         $this->customFieldRepository = $customFieldRepo;
-        $this->uploadRepository=$uploadRepo;
+        $this->uploadRepository = $uploadRepo;
     }
     /**
      * Display a listing of the Vendors.
@@ -54,7 +58,7 @@ class VendorsSuggestedController extends Controller
      */
     public function index(VendorSuggestedDataTable $vendorsugDataTable)
     {
-        if(!auth()->user()->hasPermissionTo('suggestedvendor.index')){
+        if (!auth()->user()->hasPermissionTo('suggestedvendor.index')) {
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
@@ -68,7 +72,7 @@ class VendorsSuggestedController extends Controller
     public function create()
     {
 
-        if(!auth()->user()->hasPermissionTo('suggestedvendor.create')){
+        if (!auth()->user()->hasPermissionTo('suggestedvendor.create')) {
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
@@ -85,15 +89,33 @@ class VendorsSuggestedController extends Controller
     public function store(Request $request)
     {
 
-        if(!auth()->user()->hasPermissionTo('suggestedvendor.store')){
+        if (!auth()->user()->hasPermissionTo('suggestedvendor.store')) {
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         $input = $request->all();
         $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->vendorSugRepository->model());
-        $input['user_id']=auth()->user()->id;
+        $input['user_id'] = auth()->user()->id;
         try {
+
+            $checkEmail = vendors_suggested::where('email', '=', $input['email'])->first();
+
+            if ($checkEmail != null) {
+                Flash::error(trans('validation.email'));
+
+                return redirect(route('vendor.create'));
+            }
+
+            $checkPhone = vendors_suggested::where('phone', '=', $input['phone'])->first();
+
+            if ($checkPhone != null) {
+                Flash::error(trans('validation.phone'));
+
+                return redirect(route('vendor.create'));
+            }
+
             $vendor = $this->vendorSugRepository->create($input);
+
             $vendor->customFieldsValues()->createMany(getCustomFieldsValues($customFields, $request));
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
@@ -112,27 +134,27 @@ class VendorsSuggestedController extends Controller
     public function show($id)
     {
         $vendor = $this->vendorSugRepository->findWithoutFail($id);
-        
+
         if (empty($vendor)) {
             Flash::error(trans('lang.SP_not_found'));
 
             return redirect(route('vendor.index'));
         }
-        $countries=Country::all();
-        $users=User::all();
-        $sugg_user=User::find($vendor->user_id);
-//        $cities=City::all();
+        $countries = Country::all();
+        $users = User::all();
+        $sugg_user = User::find($vendor->user_id);
+        //        $cities=City::all();
         $role = $this->roleRepository->pluck('name', 'name');
         // $rolesSelected = $user->getRoleNames()->toArray();
 
         $rolesSelected = [];
         return view('settings.vendors_suggested.show')
             ->with('vendor', $vendor)
-            ->with('countries',$countries)
-            ->with('role',$role)
-            ->with('users',$users)
-            ->with('sugg_user',$sugg_user)
-            ->with('rolesSelected',$rolesSelected);
+            ->with('countries', $countries)
+            ->with('role', $role)
+            ->with('users', $users)
+            ->with('sugg_user', $sugg_user)
+            ->with('rolesSelected', $rolesSelected);
     }
     /**
      * Show the form for editing the specified Category.
@@ -143,7 +165,7 @@ class VendorsSuggestedController extends Controller
      */
     public function edit($id)
     {
-        if(!auth()->user()->hasPermissionTo('suggestedvendor.edit')){
+        if (!auth()->user()->hasPermissionTo('suggestedvendor.edit')) {
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
@@ -175,7 +197,7 @@ class VendorsSuggestedController extends Controller
      */
     public function update($id, UpdateCategoryRequest $request)
     {
-        if(!auth()->user()->hasPermissionTo('suggestedvendor.update')){
+        if (!auth()->user()->hasPermissionTo('suggestedvendor.update')) {
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
@@ -213,7 +235,7 @@ class VendorsSuggestedController extends Controller
      */
     public function destroy($id)
     {
-        if(!auth()->user()->hasPermissionTo('suggestedvendor.destroy')){
+        if (!auth()->user()->hasPermissionTo('suggestedvendor.destroy')) {
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
@@ -232,31 +254,30 @@ class VendorsSuggestedController extends Controller
         return redirect(route('vendor.index'));
     }
 
-    public function store_vendors_suggested( $id,Request $request)
+    public function store_vendors_suggested($id, Request $request)
     {
 
-        if(!auth()->user()->hasPermissionTo('suggestedvendor.save')){
+        if (!auth()->user()->hasPermissionTo('suggestedvendor.save')) {
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
         try {
-      
-            if($request->city=="0")
-            {
+
+            if ($request->city == "0") {
                 Flash::warning(trans('lang.select_country_city'));
                 return redirect()->back();
             }
-            $input = $request->all();    
-  
-            $input['password'] = Hash::make($input['password']);       
-            while(true) {
+            $input = $request->all();
+
+            $input['password'] = Hash::make($input['password']);
+            while (true) {
                 $payment_id = '#' . rand(1000, 9999) . rand(1000, 9999);
-                if (!(User::where('payment_id', $payment_id)->exists())) {      
+                if (!(User::where('payment_id', $payment_id)->exists())) {
                     break;
                 } else continue;
-            }       
+            }
             $input['language'] = $request->input('language') == null ? '' : $request->input('language', '');
-            $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');      
+            $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');
             $input['payment_id'] = $payment_id;
             $balance = new Balance();
             $balance->balance = 0.0;
@@ -270,8 +291,8 @@ class VendorsSuggestedController extends Controller
             //Convert the binary data into hexadecimal representation.
             $token = bin2hex($user->id . $token);
             $input['device_token'] = $token;
-            $user = $this->userRepository->update($input,$user->id);
-        
+            $user = $this->userRepository->update($input, $user->id);
+
             $user->assignRole('vendor');
 
             try {
@@ -283,9 +304,8 @@ class VendorsSuggestedController extends Controller
                     $user->avatar = $imageName;
                     $user->save();
                 }
-            
-                vendors_suggested::find($id)->delete();   
-                
+
+                vendors_suggested::find($id)->delete();
             } catch (ValidatorException $e) {
                 Flash::error($e->getMessage());
             }
@@ -293,9 +313,8 @@ class VendorsSuggestedController extends Controller
 
             return redirect(route('vendors.index'));
         } catch (ValidatorException $e) {
-        Flash::error($e->getMessage());
-    return redirect(route('vendors.index'));
-   }
- }
- 
+            Flash::error($e->getMessage());
+            return redirect(route('vendors.index'));
+        }
+    }
 }
