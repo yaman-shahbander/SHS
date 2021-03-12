@@ -1,4 +1,5 @@
 <?php
+
 /**
  * File name: UserController.php
  * Last modified: 2020.06.11 at 16:10:52
@@ -64,9 +65,13 @@ class UserController extends Controller
      */
     private $customFieldRepository;
 
-    public function __construct(VendorRepository $vendorRepo, UserRepository $userRepo, RoleRepository $roleRepo, UploadRepository $uploadRepo,
-                                CustomFieldRepository $customFieldRepo)
-    {
+    public function __construct(
+        VendorRepository $vendorRepo,
+        UserRepository $userRepo,
+        RoleRepository $roleRepo,
+        UploadRepository $uploadRepo,
+        CustomFieldRepository $customFieldRepo
+    ) {
         parent::__construct();
         $this->userRepository = $userRepo;
         $this->vendorRepository = $vendorRepo;
@@ -83,10 +88,10 @@ class UserController extends Controller
      */
     public function index(UserDataTable $userDataTable)
     {
-        if(!auth()->user()->hasPermissionTo('users.index')){
+        if (!auth()->user()->hasPermissionTo('users.index')) {
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
-        
+
         return $userDataTable->render('settings.users.index');
     }
 
@@ -100,13 +105,13 @@ class UserController extends Controller
      */
     public function profile()
     {
-        
 
-        if(!auth()->user()->hasPermissionTo('users.profile')){
+
+        if (!auth()->user()->hasPermissionTo('users.profile')) {
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
-        $countries=Country::all();
+        $countries = Country::all();
         $subcategories = subCategory::all();
         $user = $this->userRepository->findWithoutFail(auth()->id());
         unset($user->password);
@@ -120,27 +125,24 @@ class UserController extends Controller
             $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->userRepository->model());
             $customFields = generateCustomField($customFields, $customFieldsValues);
         }
-        if(!empty($user->cities->id))
-        {
-            $cities=City::where('country_id',$user->cities->country_id)->get();
-
-        }
-        else
-            $cities=[];
-            $style="";
-            //$subcategories = subCategory::where('vendor_id', $user->vendors->subcategory_id)->get();
-        return view('settings.users.profile', compact(['user', 'role', 'style','rolesSelected', 'customFields', 'customFieldsValues','countries','cities', 'subcategories']));
+        if (!empty($user->cities->id)) {
+            $cities = City::where('country_id', $user->cities->country_id)->get();
+        } else
+            $cities = [];
+        $style = "";
+        //$subcategories = subCategory::where('vendor_id', $user->vendors->subcategory_id)->get();
+        return view('settings.users.profile', compact(['user', 'role', 'style', 'rolesSelected', 'customFields', 'customFieldsValues', 'countries', 'cities', 'subcategories']));
     }
 
 
-    public function userprofile(Request $request,SubCategoriesVendorDataTable $subCategoriesDataTableDataTable)
+    public function userprofile(Request $request, SubCategoriesVendorDataTable $subCategoriesDataTableDataTable)
     {
 
-        if(!auth()->user()->hasPermissionTo('users.profile')){
+        if (!auth()->user()->hasPermissionTo('users.profile')) {
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
-        $countries=Country::all();
+        $countries = Country::all();
 
         $user = $this->userRepository->findWithoutFail($request->id);
         unset($user->password);
@@ -154,19 +156,16 @@ class UserController extends Controller
             $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->userRepository->model());
             $customFields = generateCustomField($customFields, $customFieldsValues);
         }
-        if(!empty($user->cities->id))
-        {
-            $cities=City::where('country_id',$user->cities->country_id)->get();
-
-        }
-        else
-            $cities=[];
-          //  return dd($user->subcategories);
-        $user->rating=getRating($user);
+        if (!empty($user->cities->id)) {
+            $cities = City::where('country_id', $user->cities->country_id)->get();
+        } else
+            $cities = [];
+        //  return dd($user->subcategories);
+        $user->rating = getRating($user);
 
         $userCoordinates =  GmapLocation::where('user_id', $request->id)->first();
 
-        if(!empty($userCoordinates)) {
+        if (!empty($userCoordinates)) {
             Mapper::map(
                 $userCoordinates->latitude,
                 $userCoordinates->longitude,
@@ -175,16 +174,16 @@ class UserController extends Controller
                     'draggable' => false,
                     'marker'    => true,
                     'markers' => ['title' => 'My Location', 'animation' => 'BOUNCE']
-                ]);
+                ]
+            );
 
-                // document.getElementById("gmap").style.
-                $style='style="width: 100%; height: 300px"';
+            // document.getElementById("gmap").style.
+            $style = 'style="width: 100%; height: 300px"';
         } else {
-                $style="";
+            $style = "";
         }
 
-        return $dataTable=$subCategoriesDataTableDataTable->render('settings.users.profile',compact(['user', 'role', 'rolesSelected', 'customFields', 'customFieldsValues','countries','cities','style']));
-
+        return $dataTable = $subCategoriesDataTableDataTable->render('settings.users.profile', compact(['user', 'role', 'rolesSelected', 'customFields', 'customFieldsValues', 'countries', 'cities', 'style']));
     }
 
     /**
@@ -194,12 +193,12 @@ class UserController extends Controller
      */
     public function create()
     {
-        if(!auth()->user()->hasPermissionTo('users.create')){
+        if (!auth()->user()->hasPermissionTo('users.create')) {
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
-        $countries=Country::all();
-//        $cities=City::all();
+        $countries = Country::all();
+        //        $cities=City::all();
         $role = $this->roleRepository->pluck('name', 'name');
 
         $rolesSelected = [];
@@ -208,14 +207,13 @@ class UserController extends Controller
             $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->userRepository->model());
             $html = generateCustomField($customFields);
         }
-        $style="";
+        $style = "";
         return view('settings.users.create')
             ->with("role", $role)
             ->with("customFields", isset($html) ? $html : false)
             ->with("rolesSelected", $rolesSelected)
             ->with("style", $style)
             ->with("countries", $countries);
-
     }
 
     /**
@@ -227,12 +225,11 @@ class UserController extends Controller
      */
     public function store(CreateUserRequest $request)
     {
-        if(!auth()->user()->hasPermissionTo('users.store')){
+        if (!auth()->user()->hasPermissionTo('users.store')) {
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
-        if($request->city=="0")
-        {
+        if ($request->city == "0") {
             Flash::warning(trans('lang.select_country_city'));
             return redirect()->back();
         }
@@ -244,38 +241,38 @@ class UserController extends Controller
 
         $input = $request->all();
 
-        $input['user_id']=Auth()->user()->id;
+        $input['user_id'] = Auth()->user()->id;
         $input['password'] = Hash::make($input['password']);
 
-        while(true) {
+        while (true) {
             $payment_id = '#' . rand(1000, 9999) . rand(1000, 9999);
             if (!(User::where('payment_id', $payment_id)->exists())) {
                 break;
             } else continue;
         }
 
-            $input['language'] = $request->input('language') == null ? '' : $request->input('language', '');
+        $input['language'] = $request->input('language') == null ? '' : $request->input('language', '');
 
-            
 
-            $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');
-            $input['payment_id'] = $payment_id;
-            $balance = new Balance();
-            $balance->balance = 0.0;
-            $balance->save();
-            $input['balance_id'] = $balance->id;
-            $input['is_verified'] = 0;
-            $input['city_id'] = $request->city;
-            $token = openssl_random_pseudo_bytes(16);
-            $user = $this->vendorRepository->create($input);
 
-            //Convert the binary data into hexadecimal representation.
-            $token = bin2hex($user->id . $token);
-            $input['device_token'] = $token;
-            $user = $this->vendorRepository->update($input,$user->id);
+        $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');
+        $input['payment_id'] = $payment_id;
+        $balance = new Balance();
+        $balance->balance = 0.0;
+        $balance->save();
+        $input['balance_id'] = $balance->id;
+        $input['is_verified'] = 0;
+        $input['city_id'] = $request->city;
+        $token = openssl_random_pseudo_bytes(16);
+        $user = $this->vendorRepository->create($input);
 
-             $user->assignRole('homeowner');
-             $user->assignRole($request->roles);
+        //Convert the binary data into hexadecimal representation.
+        $token = bin2hex($user->id . $token);
+        $input['device_token'] = $token;
+        $user = $this->vendorRepository->update($input, $user->id);
+
+        $user->assignRole('homeowner');
+        $user->assignRole($request->roles);
 
 
         try {
@@ -292,7 +289,6 @@ class UserController extends Controller
                 $user->avatar = $imageName;
                 $user->save();
             }
-
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }
@@ -345,16 +341,16 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        if(!auth()->user()->hasPermissionTo('users.edit')){
+        if (!auth()->user()->hasPermissionTo('users.edit')) {
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
-        if ($id==1) {
+        if ($id == 1) {
             Flash::success(trans('lang.Permission_denied'));
             return redirect(route('users.index'));
         }
 
-        $countries=Country::all();
+        $countries = Country::all();
 
         $user = $this->userRepository->findWithoutFail($id);
         unset($user->password);
@@ -373,22 +369,19 @@ class UserController extends Controller
 
             return redirect(route('users.index'));
         }
-        if(!empty($user->cities->id))
-        {
-            $cities=City::where('country_id',$user->cities->country_id)->get();
-
-        }
-        else
-        $cities=[];
-        $style="";
-            return view('settings.users.edit')
-                ->with('user', $user)->with("role", $role)
-                ->with("rolesSelected", $rolesSelected)
-                ->with("customFields", $html)
-                ->with("style", $style)
-                ->with("countries", $countries)
-                ->with("cities", $cities);
-        }
+        if (!empty($user->cities->id)) {
+            $cities = City::where('country_id', $user->cities->country_id)->get();
+        } else
+            $cities = [];
+        $style = "";
+        return view('settings.users.edit')
+            ->with('user', $user)->with("role", $role)
+            ->with("rolesSelected", $rolesSelected)
+            ->with("customFields", $html)
+            ->with("style", $style)
+            ->with("countries", $countries)
+            ->with("cities", $cities);
+    }
 
     /**
      * Update the specified User in storage.
@@ -398,9 +391,9 @@ class UserController extends Controller
      *
      * @return Response
      */
-    public function update($id, UpdateUserRequest $request)
+    public function update($id, Request $request)
     {
-        if(!auth()->user()->hasPermissionTo('users.update')){
+        if (!auth()->user()->hasPermissionTo('users.update')) {
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
@@ -409,16 +402,15 @@ class UserController extends Controller
             Flash::warning('This is only demo app you can\'t change this section ');
             return redirect(route('users.profile'));
         }
-        if ($id==1 ) {
+        if ($id == 1) {
             Flash::success(trans('lang.Permission_denied'));
             return redirect(route('users.profile'));
         }
-        if($request->city=="0")
-        {
+        if ($request->city == "0") {
             Flash::warning(trans('lang.select_country_city'));
             return redirect()->back();
         }
-        
+
         if ($request->input('email') == null && $request->input('phone') == null) {
             Flash::success(trans('lang.require_email_phone'));
             return redirect()->back();
@@ -426,19 +418,51 @@ class UserController extends Controller
 
         $input = $request->all();
 
-        $input['user_id']=Auth()->user()->id;
+        $input['user_id'] = Auth()->user()->id;
         $input['password'] = Hash::make($input['password']);
 
-            $input['language'] = $request->input('language') == null ? '' : $request->input('language', '');
-            $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');
+        $input['language'] = $request->input('language') == null ? '' : $request->input('language', '');
+        $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');
 
-            $input['city_id'] = $request->city;
+        $input['city_id'] = $request->city;
 
-            $user = $this->userRepository->update($input,$id);
+        unset($input['email']);
 
-            DB::table('model_has_roles')->where('model_id', $user->id)->delete();
+        unset($input['phone']);
 
-            $user->assignRole($request->roles);
+        $user = $this->vendorRepository->update($input, $id);
+
+        if ($user->email != $request->email) {
+
+            $checkEmail = User::where('email', '=', $request->email)->first();
+
+            if ($checkEmail != null) {
+                Flash::error(trans('validation.email'));
+
+                return redirect(route('users.edit', [$user->id]));
+            } else {
+                $user->email = $request->email;
+            }
+        }
+
+        if ($user->phone != $request->phone) {
+
+            $checkPhone = User::where('phone', '=', $request->phone)->first();
+
+            if ($checkPhone != null) {
+                Flash::error(trans('validation.phone'));
+
+                return redirect(route('users.edit', [$user->id]));
+            } else {
+                $user->phone = $request->phone;
+            }
+        }
+
+        $user->save();
+
+        DB::table('model_has_roles')->where('model_id', $user->id)->delete();
+
+        $user->assignRole($request->roles);
 
         try {
 
@@ -450,15 +474,14 @@ class UserController extends Controller
 
                 $request->file('avatar')->move(public_path('storage/Avatar'), $imageName);
 
-                try{ unlink(public_path('storage/Avatar').'/'.$user->avatar);}
-                catch (\Exception $e) {}
+                try {
+                    unlink(public_path('storage/Avatar') . '/' . $user->avatar);
+                } catch (\Exception $e) {
+                }
 
                 $user->avatar = $imageName;
                 $user->save();
             }
-
-
-
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }
@@ -466,7 +489,6 @@ class UserController extends Controller
         Flash::success(trans('lang.update_operation'));
 
         return redirect(route('users.index'));
-
     }
 
     /**
@@ -478,7 +500,7 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        if(!auth()->user()->hasPermissionTo('users.destroy')){
+        if (!auth()->user()->hasPermissionTo('users.destroy')) {
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
@@ -499,8 +521,10 @@ class UserController extends Controller
             return redirect(route('users.index'));
         }
 
-        try{ unlink(public_path('storage/Avatar').'/'.$user->avatar);}
-        catch (\Exception $e) {}
+        try {
+            unlink(public_path('storage/Avatar') . '/' . $user->avatar);
+        } catch (\Exception $e) {
+        }
 
         $this->userRepository->delete($id);
 
@@ -531,8 +555,9 @@ class UserController extends Controller
             }
         }
     }
-    public function getcity(Request $request){
-        $cities = City::where('country_id',$request->id)
+    public function getcity(Request $request)
+    {
+        $cities = City::where('country_id', $request->id)
             ->get();
         return $cities;
     }
@@ -545,8 +570,4 @@ class UserController extends Controller
     {
         return $userDataTable->render('settings.users.superAdmin');
     }
-
-
 }
-
-

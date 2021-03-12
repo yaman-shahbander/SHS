@@ -32,6 +32,7 @@ use App\Models\GmapLocation;
 use App\Models\Fee;
 use App\Models\User;
 use App\Balance;
+use Validator;
 
 class VendorController extends Controller
 {
@@ -379,8 +380,9 @@ class VendorController extends Controller
         }
     }
 
-    public function update($id, UpdateUserRequest $request)
+    public function update($id, Request $request)
     {
+
         if (!auth()->user()->hasPermissionTo('vendors.update')) {
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
@@ -412,17 +414,40 @@ class VendorController extends Controller
         $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');
 
         $input['city_id'] = $request->city;
+
         unset($input['email']);
+
         unset($input['phone']);
+
         $user = $this->vendorRepository->update($input, $id);
-        if($user->email !=$request->email) {
-            $user->email=$request->email;
 
-        }
-        if($user->phone !=$request->phone) {
-            $user->phone=$request->phone;
+        if ($user->email != $request->email) {
 
+            $checkEmail = User::where('email', '=', $request->email)->first();
+
+            if ($checkEmail != null) {
+                Flash::error(trans('validation.email'));
+
+                return redirect(route('vendors.edit', [$user->id]));
+            } else {
+                $user->email = $request->email;
+            }
         }
+
+        if ($user->phone != $request->phone) {
+
+            $checkPhone = User::where('phone', '=', $request->phone)->first();
+
+            if ($checkPhone != null) {
+                Flash::error(trans('validation.phone'));
+
+                return redirect(route('vendors.edit', [$user->id]));
+            } else {
+                $user->phone = $request->phone;
+            }
+          
+        }
+
         $user->save();
 
         DB::table('model_has_roles')->where('model_id', $user->id)->delete();
@@ -458,6 +483,7 @@ class VendorController extends Controller
 
     public function edit($id)
     {
+
         if (!auth()->user()->hasPermissionTo('vendors.edit')) {
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }

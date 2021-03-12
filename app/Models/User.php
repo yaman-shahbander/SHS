@@ -1,4 +1,5 @@
 <?php
+
 /**
  * File name: User.php
  * Last modified: 2020.06.11 at 16:10:52
@@ -7,6 +8,7 @@
  */
 
 namespace App\Models;
+
 use App\City;
 use App\Models\Message;
 use App\Models\Status;
@@ -17,8 +19,8 @@ use Laravel\Cashier\Billable;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
-use Spatie\Permission\Traits\HasRoles ;
-use Spatie\Permission\Traits\HasPermissions ;
+use Spatie\Permission\Traits\HasRoles;
+use Spatie\Permission\Traits\HasPermissions;
 use App\Models\BannedUsers;
 use App\subCategory;
 use App\Duration;
@@ -170,21 +172,21 @@ class User extends Authenticatable implements HasMedia
             } else {
                 return asset(config('medialibrary.icons_folder') . '/' . $extension . '.png');
             }
-        }else{
+        } else {
             return asset('images/avatar_default.png');
         }
     }
 
     public function getCustomFieldsAttribute()
     {
-        $hasCustomField = in_array(static::class,setting('custom_field_models',[]));
-        if (!$hasCustomField){
+        $hasCustomField = in_array(static::class, setting('custom_field_models', []));
+        if (!$hasCustomField) {
             return [];
         }
         $array = $this->customFieldsValues()
             ->join('custom_fields', 'custom_fields.id', '=', 'custom_field_values.custom_field_id')
-//            ->where('custom_fields.in_table', '=', true)
-                ->select(['value','view','name'])
+            //            ->where('custom_fields.in_table', '=', true)
+            ->select(['value', 'view', 'name'])
             ->get()->toArray();
 
         return convertToAssoc($array, 'name');
@@ -223,7 +225,7 @@ class User extends Authenticatable implements HasMedia
     }
     public function cities()
     {
-        return $this->belongsTo(City::class, 'city_id','id');
+        return $this->belongsTo(City::class, 'city_id', 'id');
     }
 
     public function status()
@@ -231,135 +233,143 @@ class User extends Authenticatable implements HasMedia
         return $this->belongsTo(Status::class, 'status_id');
     }
 
-    public function bannedusers() {
+    public function bannedusers()
+    {
         return $this->hasOne(BannedUsers::class, 'user_id');
     }
     public function clients()
     {
-        return $this->belongsToMany(User::class,'reviews','vendor_id','client_id')
-            ->withPivot('description','approved', 'service_rating','price_rating','speed_rating','knowledge_rating','trust_rating')
+        return $this->belongsToMany(User::class, 'reviews', 'vendor_id', 'client_id')
+            ->withPivot('description', 'approved', 'service_rating', 'price_rating', 'speed_rating', 'knowledge_rating', 'trust_rating')
             ->withTimestamps();
-
     }
 
     public function vendors()
     {
-        return $this->belongsToMany(User::class,'reviews','client_id','vendor_id')
-            ->withPivot('description', 'service_rating','approved','price_rating','speed_rating','knowledge_rating','trust_rating')
+        return $this->belongsToMany(User::class, 'reviews', 'client_id', 'vendor_id')
+            ->withPivot('description', 'service_rating', 'approved', 'price_rating', 'speed_rating', 'knowledge_rating', 'trust_rating')
             ->withTimestamps();
-
     }
 
     public function clientsAPI()
     {
-        return $this->belongsToMany(User::class,'reviews','vendor_id','client_id')
-            ->withPivot(['description','id'])->select(['users.id','users.name', 'users.avatar', 'users.last_name'])->where('approved', 1)
+        return $this->belongsToMany(User::class, 'reviews', 'vendor_id', 'client_id')
+            ->withPivot(['description', 'id'])->select(['users.id', 'users.name', 'users.avatar', 'users.last_name'])->where('approved', 1)
             ->withTimestamps();
-
     }
 
     public function vendorsAPI()
     {
-        return $this->belongsToMany(User::class,'reviews','client_id','vendor_id')
-            ->withPivot('description', 'service_rating','approved','price_rating','speed_rating','knowledge_rating','trust_rating')->select(['users.id', 'users.name', 'users.avatar', 'users.last_name'])->where('approved', 1)
+        return $this->belongsToMany(User::class, 'reviews', 'client_id', 'vendor_id')
+            ->withPivot('description', 'service_rating', 'approved', 'price_rating', 'speed_rating', 'knowledge_rating', 'trust_rating')->select(['users.id', 'users.name', 'users.avatar', 'users.last_name'])->where('approved', 1)
             ->withTimestamps();
-
     }
 
     public function homeOwnerFavorite()
     {
-        return $this->belongsToMany(User::class,'favorite_user','vendor_id','user_id')
+        return $this->belongsToMany(User::class, 'favorite_user', 'vendor_id', 'user_id')
             ->withTimestamps();
-
     }
     public function vendorFavorite()
     {
-        return $this->belongsToMany(User::class,'favorite_user','user_id','vendor_id')
+        return $this->belongsToMany(User::class, 'favorite_user', 'user_id', 'vendor_id')
             ->withTimestamps();
-
     }
 
     public function vendorFavoriteAPI()
     {
-        return $this->belongsToMany(User::class,'favorite_user','user_id','vendor_id')->    select(['users.id', 'users.name', 'users.avatar', 'users.last_name', 'users.description'])
+        return $this->belongsToMany(User::class, 'favorite_user', 'user_id', 'vendor_id')->select(['users.id', 'users.name', 'users.avatar', 'users.last_name', 'users.description'])
             ->withTimestamps();
-
     }
-//
-    public function subcategories() {
-        return $this->belongsToMany(subCategory::class,'subcategory_user','vendor_id','subcategory_id')
-        ->withTimestamps();
+    //
+    public function subcategories()
+    {
+        return $this->belongsToMany(subCategory::class, 'subcategory_user', 'vendor_id', 'subcategory_id')
+            ->withTimestamps();
     }
 
-    public function duration() {
+    public function duration()
+    {
         return $this->belongsTo(Duration::class, 'duration_id');
     }
 
     public function subcategoriesApi() {
          return $this->belongsToMany(subCategory::class,'subcategory_user','vendor_id','subcategory_id')->select(['sub_categories.id', 'sub_categories.name','sub_categories.image', 'sub_categories.description'])
           ->withTimestamps();
+
     }
 
-    public function specialOffers() {
+    public function specialOffers()
+    {
         return $this->hasMany(specialOffers::class, 'user_id', 'id');
     }
 
-    public function homeOwnerHistoryAPI() {
+    public function homeOwnerHistoryAPI()
+    {
         return $this->belongsToMany(User::class, 'homeowners_vendors', 'homeowner_id', 'vendor_id')->select(['users.id', 'users.name', 'users.avatar', 'users.last_name', 'users.description'])->withTimeStamps();
     }
 
-    public function VendorHistoryAPI() {
+    public function VendorHistoryAPI()
+    {
         return $this->belongsToMany(User::class, 'homeowners_vendors', 'vendor_id', 'homeowner_id')->select(['users.id', 'users.name', 'users.avatar', 'users.last_name', 'users.description'])->withTimeStamps();
     }
 
-    public function Balance() {
+    public function Balance()
+    {
         return $this->belongsTo(Balance::class, 'balance_id')->select(['id', 'balance']);
     }
-    public function delegate() {
+    public function delegate()
+    {
         return $this->belongsTo(Delegate::class, 'delegate_id');
     }
 
-    public function FromUserName() {
-        return $this->belongsToMany(User::class, 'transfer_transactions',  'to_id','from_id')->withPivot('amount', 'type')
-        ->withTimestamps();
+    public function FromUserName()
+    {
+        return $this->belongsToMany(User::class, 'transfer_transactions',  'to_id', 'from_id')->withPivot('amount', 'type')
+            ->withTimestamps();
     }
 
-    public function ToUserName() {
-        return $this->belongsToMany(User::class, 'transfer_transactions',  'from_id','to_id')->withPivot('amount', 'type')
-        ->withTimestamps();
+    public function ToUserName()
+    {
+        return $this->belongsToMany(User::class, 'transfer_transactions',  'from_id', 'to_id')->withPivot('amount', 'type')
+            ->withTimestamps();
     }
 
-    public function coordinates() {
+    public function coordinates()
+    {
         return $this->hasOne(GmapLocation::class, 'user_id');
     }
-    public function daysApi() {
-        return $this->belongsToMany(Day::class,'days_vendors','vendor_id','day_id')->select(['days.id','name_en', 'name_ar','days_vendors.start', 'days_vendors.end'])
-         ->withTimestamps();
-   }
-   public function days() {
-    return $this->belongsToMany(Day::class,'days_vendors','vendor_id','day_id')->withPivot('start', 'end');
+    public function daysApi()
+    {
+        return $this->belongsToMany(Day::class, 'days_vendors', 'vendor_id', 'day_id')->select(['days.id', 'name_en', 'name_ar', 'days_vendors.start', 'days_vendors.end'])
+            ->withTimestamps();
+    }
+    public function days()
+    {
+        return $this->belongsToMany(Day::class, 'days_vendors', 'vendor_id', 'day_id')->withPivot('start', 'end');
     }
 
 
-   function vendor_city() {
-       return $this->belongsToMany(City::class, 'vendors_cities', 'vendor_id', 'city_id')->select(['cities.id', 'cities.city_name'])->withTimeStamps();
-   }
-   public function gallery()
-   {
-       return $this->hasMany(\App\Models\Gallery::class, 'user_id');
-   }
+    function vendor_city()
+    {
+        return $this->belongsToMany(City::class, 'vendors_cities', 'vendor_id', 'city_id')->select(['cities.id', 'cities.city_name'])->withTimeStamps();
+    }
+    public function gallery()
+    {
+        return $this->hasMany(\App\Models\Gallery::class, 'user_id');
+    }
 
-   public function messages_from()
-   {
-       return $this->belongsToMany(Message::class, 'messages', 'from', 'to', 'users.device_token','users.device_token');
-   }
-   public function messages_to()
-   {
-       return $this->belongsToMany(Message::class, 'messages', 'to', 'from', 'users.device_token', 'users.device_token');
-   }
+    public function messages_from()
+    {
+        return $this->belongsToMany(Message::class, 'messages', 'from', 'to', 'users.device_token', 'users.device_token');
+    }
+    public function messages_to()
+    {
+        return $this->belongsToMany(Message::class, 'messages', 'to', 'from', 'users.device_token', 'users.device_token');
+    }
     public function messages()
     {
-        return $this->hasMany(Message::class, 'to','device_token');
+        return $this->hasMany(Message::class, 'to', 'device_token');
     }
     //    public function setGalleryAPI()
     //    {
@@ -368,25 +378,25 @@ class User extends Authenticatable implements HasMedia
 
     public function vendorViews()
     {
-        return $this->belongsToMany(User::class,'views','user_id','vendor_id')
+        return $this->belongsToMany(User::class, 'views', 'user_id', 'vendor_id')
             ->withTimestamps();
     }
 
     public function userViews()
     {
-        return $this->belongsToMany(User::class,'views','vendor_id','user_id')
+        return $this->belongsToMany(User::class, 'views', 'vendor_id', 'user_id')
             ->withTimestamps();
     }
 
     public function vendorContacts()
     {
-        return $this->belongsToMany(User::class,'contacts','user_id','vendor_id')
+        return $this->belongsToMany(User::class, 'contacts', 'user_id', 'vendor_id')
             ->withTimestamps();
     }
 
     public function userContacts()
     {
-        return $this->belongsToMany(User::class,'contacts','vendor_id','user_id')
+        return $this->belongsToMany(User::class, 'contacts', 'vendor_id', 'user_id')
             ->withTimestamps();
     }
 }
