@@ -35,7 +35,7 @@ $userLongitude=null;
 
                 foreach ($attrs as $attr) {
                     $respone[$i]['id'] = $attr->id;
-                    $respone[$i]['name'] = $attr->name;
+                    $respone[$i]['name'] = $attr->nickname;
                     $respone[$i]['avatar'] = asset('storage/Avatar').'/'.$attr->avatar;
                     $respone[$i]['email'] = $attr->email;
                     $respone[$i]['description'] = $attr->description;
@@ -67,9 +67,9 @@ $userLongitude=null;
                     $user->vendorFavoriteAPI()->attach($request->vendor_id);
 
             $vendor=User::find($request->vendor_id);
-                    
 
-             //for send notification 
+
+             //for send notification
         $SERVER_API_KEY = 'AAAA71-LrSk:APA91bHCjcToUH4PnZBAhqcxic2lhyPS2L_Eezgvr3N-O3ouu2XC7-5b2TjtCCLGpKo1jhXJqxEEFHCdg2yoBbttN99EJ_FHI5J_Nd_MPAhCre2rTKvTeFAgS8uszd_P6qmp7NkSXmuq';
 
         $headers = [

@@ -33,7 +33,7 @@ class durationDataTable extends DataTable
     {
         $dataTable = new EloquentDataTable($query);
         $columns = array_column($this->getColumns(), 'data');
-        $dataTable = $dataTable 
+        $dataTable = $dataTable
             ->editColumn('duration_id', function ($vendorduration) {
              return getvendorRegistrationduration($vendorduration);
              })
@@ -63,9 +63,9 @@ class durationDataTable extends DataTable
             ],
             [
                     'data'  => 'duration_id',
-                    'title' =>  trans('lang.duration')
+                    'title' =>  trans('lang.durations')
             ],
-            
+
             [
                 'data' => 'start_date',
                 'title' => trans('lang.start_date'),

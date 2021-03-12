@@ -114,7 +114,7 @@ class UnapprovedVendorController extends Controller
             return redirect(route('unapprovedServiceProvider.index'));
         }
 
-     
+
 
         if ($user->balance_id != null) {
             Balance::find($user->balance_id)->delete();
@@ -125,7 +125,7 @@ class UnapprovedVendorController extends Controller
 
         $this->vendorRepository->delete($id);
 
-        //for send notification 
+        //for send notification
         $SERVER_API_KEY = 'AAAA71-LrSk:APA91bHCjcToUH4PnZBAhqcxic2lhyPS2L_Eezgvr3N-O3ouu2XC7-5b2TjtCCLGpKo1jhXJqxEEFHCdg2yoBbttN99EJ_FHI5J_Nd_MPAhCre2rTKvTeFAgS8uszd_P6qmp7NkSXmuq';
 
         $headers = [
@@ -133,7 +133,7 @@ class UnapprovedVendorController extends Controller
             'Content-Type: application/json',
         ];
         $data = [
-            "registration_ids" => $user->pluck('fcm_token'),
+            "registration_ids" => array($user->fcm_token),
             "notification" => [
                 "title"    => config('notification_lang.Notification_title_unapproved_' . $user->language),
                 "body"     => config('notification_lang.Notification_body_unapproved_' . $user->language)
@@ -171,14 +171,14 @@ class UnapprovedVendorController extends Controller
         }
 
         try {
-      
+
             $user = User::find($id);
            $user->approved_vendor = 1;
             if($user->save()){
 
 
 
-             //for send notification 
+             //for send notification
         $SERVER_API_KEY = 'AAAA71-LrSk:APA91bHCjcToUH4PnZBAhqcxic2lhyPS2L_Eezgvr3N-O3ouu2XC7-5b2TjtCCLGpKo1jhXJqxEEFHCdg2yoBbttN99EJ_FHI5J_Nd_MPAhCre2rTKvTeFAgS8uszd_P6qmp7NkSXmuq';
 
         $headers = [
@@ -186,7 +186,7 @@ class UnapprovedVendorController extends Controller
             'Content-Type: application/json',
         ];
         $data = [
-            "registration_ids" => $user->pluck('fcm_token'),
+            "registration_ids" => array($user->fcm_token),
             "notification" => [
                 "title"    => config('notification_lang.Notification_title_approved_' . $user->language),
                 "body"     => config('notification_lang.Notification_body_approved_' . $user->language)
@@ -219,7 +219,7 @@ class UnapprovedVendorController extends Controller
         return redirect(route('unapprovedServiceProvider.index'));
     }
 
-           
+
         } catch (ValidatorException $e) {
         Flash::error($e->getMessage());
         return redirect(route('unapprovedServiceProvider.index'));

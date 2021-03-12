@@ -12,10 +12,9 @@ use DB;
 
 class MessageApiController extends Controller
 {
-
     public function index(Request $request)
     {
-        if ($request->header('devicetoken')) {
+        if($request->header('devicetoken')) {
 
             $user = User::where('device_token', $request->header('devicetoken'))->first();
 
@@ -31,35 +30,85 @@ class MessageApiController extends Controller
                 ->where('messages.from', $user->device_token)
                 ->orWhere('messages.to', $user->device_token)
                 ->orderBy('messages.created_at', 'desc')
-                ->get(['users.id', 'users.device_token', 'users.name', 'users.avatar', 'messages.message', 'messages.created_at', 'messages.is_read'])
+                ->get(['users.id','users.device_token','users.name','users.avatar','messages.message','messages.created_at', 'messages.is_read'])
                 ->unique('id');
-            $response = [];
-            foreach ($users as $key => $usermessag) {
+            $response=[];
+            $support = User::find(1);
 
-                $usermessag->avatar = asset('storage/Avatar') . '/' . $usermessag->avatar;
-                if ($users[$key]['device_token'] == $user->device_token) {
+            $response['support'] = [
+                'id'            => $support->id,
+                'device_token'  => $support->device_token,
+                'name'          => $support->name,
+                'avatar'        => asset('storage/Avatar') . '/' . $support->avatar
+            ];
+            foreach ($users as $key=>$usermessag){
+
+                $usermessag->avatar= asset('storage/Avatar') . '/' . $usermessag->avatar;
+                if($users[$key]['device_token']==$user->device_token){
                     unset($users[$key]);
                     continue;
                 }
-                $response[] = $usermessag;
+                $response['contacts'][]=$usermessag;
             }
-            if (count($users) == 0)
-                $response = [];
+            if(count($users)==0)
+                // $response=$users->toArray();
+                // else
+                $response['contacts']=[];
 
-            $support = User::find(1);
-
-                $response['support'] = [
-                    'id'            => $support->id,
-                    'device_token'  => $support->device_token,
-                    'name'          => $support->name,
-                    'avatar'        => asset('storage/Avatar') . '/' . $support->avatar
-                ];
 
             return $this->sendResponse($response, 'Contacts retrieved successfully');
+
         } else {
             return $this->sendError('User not found', 401);
         }
     }
+//    public function index(Request $request)
+//    {
+//        if ($request->header('devicetoken')) {
+//
+//            $user = User::where('device_token', $request->header('devicetoken'))->first();
+//
+//            if (empty($user)) {
+//                return $this->sendError('User not found', 401);
+//            }
+//
+//
+//            $users = Message::join('users',  function ($join) {
+//                $join->on('messages.from', '=', 'users.device_token')
+//                    ->orOn('messages.to', '=', 'users.device_token');
+//            })
+//                ->where('messages.from', $user->device_token)
+//                ->orWhere('messages.to', $user->device_token)
+//                ->orderBy('messages.created_at', 'desc')
+//                ->get(['users.id', 'users.device_token', 'users.name', 'users.avatar', 'messages.message', 'messages.created_at', 'messages.is_read'])
+//                ->unique('id');
+//            $response = [];
+//            foreach ($users as $key => $usermessag) {
+//
+//                $usermessag->avatar = asset('storage/Avatar') . '/' . $usermessag->avatar;
+//                if ($users[$key]['device_token'] == $user->device_token) {
+//                    unset($users[$key]);
+//                    continue;
+//                }
+//                $response[] = $usermessag;
+//            }
+//            if (count($users) == 0)
+//                $response = [];
+//
+//            $support = User::find(1);
+//
+//                $response['support'] = [
+//                    'id'            => $support->id,
+//                    'device_token'  => $support->device_token,
+//                    'name'          => $support->name,
+//                    'avatar'        => asset('storage/Avatar') . '/' . $support->avatar
+//                ];
+//
+//            return $this->sendResponse($response, 'Contacts retrieved successfully');
+//        } else {
+//            return $this->sendError('User not found', 401);
+//        }
+//    }
 
     public function getMessage(Request $request)
     {
@@ -129,7 +178,7 @@ class MessageApiController extends Controller
 
 
 
-                //for send notification 
+                //for send notification
 
                 $reciver = User::where('device_token', $request->to)->first();
 

@@ -51,7 +51,7 @@ class durationOffersController extends Controller
         $this->customFieldRepository = $customFieldRepo;
         $this->uploadRepository = $uploadRepo;
     }
-    
+
     public function index(DurationOfeersDataTable $durationOffersDataTable)
     {
         if(!auth()->user()->hasPermissionTo('durationOffer.index')){
@@ -99,7 +99,7 @@ class durationOffersController extends Controller
         try {
             $duration = $this->durationRepository->create($input);
             $duration->customFieldsValues()->createMany(getCustomFieldsValues($customFields, $request));
-            
+
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }
@@ -126,7 +126,7 @@ class durationOffersController extends Controller
      */
     public function edit($id)
     {
-        if(!auth()->user()->hasPermissionTo('durationoffer.edit')){
+        if(!auth()->user()->hasPermissionTo('durationOffer.edit')){
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
@@ -138,14 +138,14 @@ class durationOffersController extends Controller
 
             return redirect(route('durationOffer.index'));
         }
-        
+
         return view('durationOffer.edit')->with('duration', $duration)->with("customFields", isset($html) ? $html : false);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * 
+     *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Duration  $duration
      * @return \Illuminate\Http\Response

@@ -71,12 +71,12 @@ class MoneyAPIController extends Controller
                 $amount  = strip_tags($request->amount);
 
                 //If the field has any character
-                if(preg_match('/[a-zA-Z]/', $amount)) { 
+                if(preg_match('/[a-zA-Z]/', $amount)) {
                     return $this->sendError('The field must contain only numbers', 401);
                  }
-                 
+
                  //If the field has any special character
-                 if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $amount)) { 
+                 if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $amount)) {
                     return $this->sendError('The field must contain only numbers', 401);
                 }
                 // Transfering to the same user
@@ -102,8 +102,8 @@ class MoneyAPIController extends Controller
                  //amount should not be negative
                  if ($amount < 0) {
                     return $this->sendError('Transfer failed! amount should not be negative', 401);
-                 } 
-                
+                 }
+
 
                 if ($user->Balance->balance - $amount >= 0) {
                     $user->Balance->balance   = $user->Balance->balance - $amount;
@@ -115,8 +115,8 @@ class MoneyAPIController extends Controller
 
                     $user->ToUserName()->attach($transfer);
 
-                    
-        //for send notification 
+
+        //for send notification
         $SERVER_API_KEY = 'AAAA71-LrSk:APA91bHCjcToUH4PnZBAhqcxic2lhyPS2L_Eezgvr3N-O3ouu2XC7-5b2TjtCCLGpKo1jhXJqxEEFHCdg2yoBbttN99EJ_FHI5J_Nd_MPAhCre2rTKvTeFAgS8uszd_P6qmp7NkSXmuq';
 
         $headers = [
@@ -192,7 +192,7 @@ class MoneyAPIController extends Controller
                 if ($userBalance == null) return $this->sendError( 'No balance for the current user',401);
 
                 $response = [
-                    'balance' => $userBalance->balance,
+                    'balance' => "".$userBalance->balance,
                     'payment_id'=>$user->payment_id
                 ];
 

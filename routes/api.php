@@ -49,7 +49,7 @@ Route::prefix('homeOwner')->group(function () {
     Route::post('leaveReview', 'API\ReviewsAPIController@leaveReview');
     //Gmaps location
     Route::post('storegmapLocation', 'API\GmapLocationAPIController@store');
-
+    Route::post('saveGmapLocation', 'API\GmapLocationAPIController@save');
     Route::post('updategmapLocation', 'API\GmapLocationAPIController@update');
     //save home owner photo
     Route::post('photoProfile', 'API\Driver\UserAPIController@backgroundPic');
@@ -159,7 +159,7 @@ Route::prefix('vendor')->group(function () {
     //add, update and delete vendor cities
     Route::post('VendorCitiesavailibility', 'API\Manager\UserAPIController@addVendorCities');
 
-    
+
 });
 
 

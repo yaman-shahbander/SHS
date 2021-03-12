@@ -43,7 +43,7 @@
           <!-- Select category-->
         <div class="form-group row">
               {!! Form::label('category', trans('lang.category'), ['class' => 'col-3 control-label text-right']) !!}
-              <div class="col-9">  
+              <div class="col-9">
               <select name="category" id="category" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
               <option value="0">select</option>
                 @foreach($categories as $category)
@@ -59,7 +59,7 @@
         <!-- Select subcategory-->
         <div class="form-group row " @if(Request::is('*edit')) style="visibility:visible" @else style="visibility:hidden" @endif id="sub">
             {!! Form::label('subcategory', trans('lang.subcategory'), ['class' => 'col-3 control-label text-right']) !!}
-            <div class="col-9">
+            <div class="col-9 subcategory">
               <select name="subcategory" id="subcategory" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
               <option value="" >select</option>
                 @if(Request::is('*edit'))
@@ -74,10 +74,10 @@
                </div>
             </div>
         </div>
-          
+
         </div>
         <div style="flex: 50%;max-width: 50%;padding: 0 4px;" class="column">
-        
+
         <!-- image Field -->
 
         <div class="form-group row">
@@ -93,13 +93,13 @@
 
                     <div class="left">
                         @if(Request::is('*edit'))
-                            @if($offer->image != null ) 
+                            @if($offer->image != null )
                                 <img id="img-uploaded" class="img2" src="{{asset('storage/specialOffersPic' . "/" . $offer->image)}}" alt="your image" />
                             @endif
                         @else
                             <img id="img-uploaded" class="img2" src="{{asset('storage/specialOffersPic/default.png')}}" alt="your image" />
                         @endif
-                      
+
                     </div>
 
                      <div class="right">
@@ -115,7 +115,7 @@
 
         </div>
      </div>
-  </div>     
+  </div>
           @prepend('scripts')
 
           <script>
@@ -130,7 +130,7 @@
                     var data = "id="+var1.val();
 
                     var url = $('.subcategory').data('route');
-                  
+
 
                     $.post(url , data , function(res){
                         $subcategory=['<option value="0" selected="">select </option>'];
@@ -146,6 +146,7 @@
 
                         $('#subcategory').empty();
                         $('#subcategory').append($subcategory);
+                        refsubcategory();
 
 
                     });
@@ -153,13 +154,13 @@
                 });
 
             });
-          </script> 
+          </script>
 
 
-            
+
           @endprepend
         </div>
-        
+
       <!-- Submit Field -->
         <div class="form-group col-12 text-right">
           <button type="submit" class="btn btn-{{setting('theme_color')}}" ><i class="fa fa-save"></i> Save Offer</button>

@@ -100,7 +100,7 @@ class vendorApiController extends Controller
 
                         $respone['vendor_list'][] = [
                             'id' => $vendor->id,
-                            'name' => $vendor->name,
+                            'name' => $vendor->nickname,
                             'email' => $vendor->email,
                             'rating' => sprintf("%.1f", (round((getRating($vendor) / 20) * 2) / 2)),
                             'description' => $vendor->description,
@@ -129,7 +129,7 @@ class vendorApiController extends Controller
 
                             [
                                 'id' => $featuredVendor[0]->id,
-                                'name' => $featuredVendor[0]->name,
+                                'name' => $featuredVendor[0]->nickname,
                                 'email' => $featuredVendor[0]->email,
                                 'latitude' => $featuredVendor[0]->coordinates != null ? $featuredVendor[0]->coordinates->latitude : null,
                                 'longitude' => $featuredVendor[0]->coordinates != null ? $featuredVendor[0]->coordinates->longitude : null,
@@ -300,14 +300,24 @@ class vendorApiController extends Controller
                     'id'             => $vendor->id,
                     'name'           => $vendor->name,
                     'email'          => $vendor->email,
+                    'Owner_name'    => $vendor->owner_name,
+                    'caption'          => $vendor->caption,
+                    'city'          =>$vendor->cities==null?' ':$vendor->cities->city_name,
+                    'Business_name' => $vendor->nickname,
+                    'device_token'   => $vendor->device_token,
                     'rating'         => sprintf("%.1f", round((getRating($vendor) / 20) * 2) / 2),
                     'description'    => $vendor->description,
                     'phone'          => $vendor->phone,
+                    'latitude' => $vendor->coordinates == null ? null : $vendor->coordinates->latitude,
+                    'longitude' => $vendor->coordinates == null ? null : $vendor->coordinates->longitude,
                     'avatar'         => asset('storage/Avatar') . '/' . $vendor->avatar,
                     'background'         => asset('storage/vendors_background') . '/' . $vendor->background_profile,
                     'address'        => $vendor->address,
                     'website'        => $vendor->website,
-                    'subcategories'  => $vendor->subcategoriesApi->makeHidden('pivot'),
+                    'subcategories'  => $vendor->subcategoriesApi->makeHidden('pivot')->transform(function($q){
+                        $q['image']=asset('storage/subcategoriesPic').'/'.($q->image==null?'image_default.png':$q->image);
+                    return $q;
+                    }),
                     'offers'         => $vendor->specialOffers->makeHidden(['user_id', 'created_at', 'updated_at']),
                     'reviews_count'  => count($reviews),
                     'reviews'        => $reviews,
@@ -469,7 +479,7 @@ class vendorApiController extends Controller
                     $response = [
                         'caption' => $user->caption,
                         'Business_name' => $user->nickname,
-                        'Owner_name' => $user->name,
+                        'Owner_name' => $user->owner_name,
                         'About_you' => $user->description
                     ];
 
@@ -503,7 +513,7 @@ class vendorApiController extends Controller
                         $response = [
                             'caption' => $user->caption,
                             'Business_name' => $user->nickname,
-                            'Owner_name' => $user->name,
+                            'Owner_name' => $user->owner_name,
                             'About_you' => $user->description
                         ];
 

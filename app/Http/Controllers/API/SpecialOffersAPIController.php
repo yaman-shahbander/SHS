@@ -124,7 +124,8 @@ class SpecialOffersAPIController extends Controller
 
                     $request->file('image')->move(public_path('storage/specialOffersPic'), $imageName);
 
-                    $vendor_specialOffer->update(['image' => $imageName]);
+                        $vendor_specialOffer->image=$imageName;
+                        $vendor_specialOffer->save();
 
                     $response['image'] = asset('storage/specialOffersPic') . '/' .$imageName;
 

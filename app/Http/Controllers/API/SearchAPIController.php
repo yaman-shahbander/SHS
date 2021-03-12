@@ -64,7 +64,7 @@ class SearchAPIController extends Controller
 
                         $respone[] = [
                             'id' => $vendor->id,
-                            'name' => $vendor->name,
+                            'name' => $vendor->nickname,
                             'email' => $vendor->email,
                             'rating' => sprintf("%.1f",(round((getRating($vendor)/20)*2)/2)),
                             'description' => $vendor->description,

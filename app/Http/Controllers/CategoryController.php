@@ -43,55 +43,13 @@ class CategoryController extends Controller
      * @param CategoryDataTable $categoryDataTable
      * @return Response
      */
-    public function index(Request $request)
-
+    public function index(CategoryDataTable $categoryDataTable)
     {
+        if(!auth()->user()->hasPermissionTo('categories.index')){
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
+        }
 
-        try {
-
-
-            $lang = $request->lang;
-
-            $categories = $this->categoryRepository->all(['id','name','name_en', 'name_ar','image','description','description_ar','description_en'])->transform(function($q) use ($lang){
-
-                $q->subCategory->transform(function($q) use ($lang){
-                    if ($lang) {
-                        $q['name'] = $q['name_' . $lang];
-                        $q['description'] = $q['description_' . $lang];
-                    }
-                    try{
-
-                        $q['image']=asset('storage/subcategoriesPic').'/'.($q->image==null?'image_default.png':$q->image);
-
-                    } catch (\Exception $e) {
-
-                        $q['image']=url('images/image_default.png');
-                    }
-
-                    return $q->only('id','name','description','image');
-                });
-
-                if ($lang) {
-                    $q['name'] = $q['name_' . $lang];
-                    $q['description'] = $q['description_' . $lang];
-                }
-
-                try{
-
-                    $q['image']=asset('storage/categoriesPic').'/'.($q->image==null?'image_default.png':$q->image);
-
-                }  catch (\Exception $e) {
-                    $q['image']=url('images/image_default.png'); }
-                return $q;
-            })->makeHidden(['custom_fields','has_media','media', 'name_en', 'name_ar','description_ar','description_en']);
-
-            $response=$categories->toArray();
-
-            return $this->sendResponse($response, 'Categories retrieved successfully');
-
-        } catch (\Exception $e) {
-            return $this->sendError('error', 401); }
-
+        return $categoryDataTable->render('categories.index');
     }
 
     /**

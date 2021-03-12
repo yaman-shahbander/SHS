@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="{{asset('/css/nice-select2.css')}}">
 
 <style>
- 
+
 
  .center {
    display:inline;
@@ -62,7 +62,7 @@
  }
  .small{
    color: firebrick;
- } 
+ }
    [type="file"] {
        height: 0;
        overflow: hidden;
@@ -386,5 +386,15 @@ $(".uploader").change(function(){
 <script>
     var options = {searchable: true};
     NiceSelect.bind(document.getElementById("subcategory"), options);
+
+
+
+    function refsubcategory(){
+        var options={searchable:true};
+        $('.subcategory .nice-select').remove();
+        NiceSelect.bind(document.getElementById("subcategory"), options);
+
+
+    }
 </script>
 @endpush

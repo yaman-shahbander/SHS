@@ -35,7 +35,7 @@ class GmapLocationAPIController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function save(Request $request)
     {
         if($request->header('devicetoken')) {
             try {
@@ -44,12 +44,12 @@ class GmapLocationAPIController extends Controller
                     return $this->sendError('User not found', 401);
                 }
 
-                $checkUserCoordinates = GmapLocation::where('user_id', $user->id)->first();
-                if (!empty($checkUserCoordinates)) {
-                    return $this->sendResponse([], 'Coordinates are exist');
+                $coordinates = GmapLocation::where('user_id', $user->id)->first();
+                if (empty($coordinates)) {
+                    $coordinates = new GmapLocation();
                 }
 
-                $coordinates = new GmapLocation();
+
                 $coordinates->user_id = $user->id;
                 $coordinates->latitude = $request->latitude;
                 $coordinates->longitude = $request->longitude;

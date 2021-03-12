@@ -296,7 +296,7 @@ class User extends Authenticatable implements HasMedia
     }
 
     public function subcategoriesApi() {
-         return $this->belongsToMany(subCategory::class,'subcategory_user','vendor_id','subcategory_id')->select(['sub_categories.id', 'sub_categories.name', 'sub_categories.description'])
+         return $this->belongsToMany(subCategory::class,'subcategory_user','vendor_id','subcategory_id')->select(['sub_categories.id', 'sub_categories.name','sub_categories.image', 'sub_categories.description'])
           ->withTimestamps();
     }
 
