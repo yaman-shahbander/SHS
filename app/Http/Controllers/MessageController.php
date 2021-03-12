@@ -131,6 +131,10 @@ class MessageController extends Controller
         $response = curl_exec($ch);
     }
 
+    public function getImage(Request $request) {
+        return dd($request->all());
+    }
+
     public function getChats(Request $request)
     {
         $search = $request->searchValue;
