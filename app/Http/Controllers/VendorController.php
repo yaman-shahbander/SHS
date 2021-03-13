@@ -254,7 +254,8 @@ class VendorController extends Controller
                 break;
             } else continue;
         }
-
+        $input['approved']=1;
+        $input['is_verified']=1;
         $input['language'] = $request->input('language') == null ? '' : $request->input('language', '');
         $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');
         $input['payment_id'] = $payment_id;
@@ -262,7 +263,7 @@ class VendorController extends Controller
         $balance->balance = 0.0;
         $balance->save();
         $input['balance_id'] = $balance->id;
-        $input['is_verified'] = 0;
+
         $input['city_id'] = $request->city;
         $token = openssl_random_pseudo_bytes(16);
         $user = $this->vendorRepository->create($input);
@@ -445,7 +446,7 @@ class VendorController extends Controller
             } else {
                 $user->phone = $request->phone;
             }
-          
+
         }
 
         $user->save();
