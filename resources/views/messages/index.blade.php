@@ -14,7 +14,7 @@
 
 <div class="input-text">
     <input type="text" name="message" id="inputmessage" class="submit" autofocus>
-    <form name="data-form" id="data-form" class="data-form" enctype="multipart/form-data">
+    <form name="data-form" id="dataform" class="data-form" enctype="multipart/form-data">
         {{ csrf_field() }}
         <input type="file" name="image" id="image" class="image">
         <input type="submit" value="Send">
@@ -53,31 +53,36 @@
     });
 
 
-    $('#data-form').submit(function(event) {
+    $('#dataform').submit(function(event) {
         event.preventDefault();
-        var image = new FormData($(this)[0]);
-        var data = {
-            'receiver_id': receiver_id,
-            'image': image
-        };
+        var image = document.getElementById('image').files;
+        //var data = new FormData($('#dataform')[0]);
+        // {
+        //     'receiver_id': receiver_id,
+        //     'image': image
+        // };
 
-        console.log(data);
+            console.log(image);
+        axios({
+            method: 'post',
+            url: 'test123',
+            data: {
+                name : "Mousa",
+                surname: "Kalouk",
+                age: 23,
+                description: "sdafsdf",
+                image: image,
+               
+            }
+        });
+
+        //console.log(data);
 
         // $.post("/test123", {
         //     data: data
         //     }, function(data, status) {
         //         alert('value stored');
         //     });
-
-        
-
-        // var ar = [];
-
-        // ar.push(image);
-
-        // $.post("test123", function(data) {
-        //     console.log(data);
-        // });
 
         // $.ajax({
         //     url: "test123",
