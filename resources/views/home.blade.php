@@ -102,9 +102,15 @@
 
             </div>
 
-            <div class="col-md-8" id="messages">
-
+            <div class="col-md-8" >
+            <div id="ggg"></div>
+            <div data-role="controls" id="recordAudio" style="display: none;">
+            <button class="voiceRecord">Record</button>
+            
+        </div>
+        <div data-role="recordings"></div>
             </div>
+            
         </div>
     </div>
     

@@ -20,6 +20,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/record.css') }}" rel="stylesheet">
 
     <style>
         /* width */
@@ -218,12 +219,14 @@
 
         <main class="py-4">
             @yield('content')
+           
         </main>
     </div>
 
     <script src="https://js.pusher.com/5.0/pusher.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
 
     <script>
         var receiver_id = '';
@@ -281,9 +284,10 @@
                     data: "",
                     cache: false,
                     success: function(data) {
-                        $('#messages').html(data);
+                        $('div#ggg').html(data);
 
                         scrollToBottomFunc();
+                        $('#recordAudio').css('display','inline');
                     }
                 });
             });
@@ -299,6 +303,117 @@
             $('#inputmessage').focus();
         }
     </script>
+
+
+
+
+    <script src="https://stephino.github.io/dist/recorder.js"></script>
+
+<script>
+    jQuery(document).ready(function () {
+        var $ = jQuery;
+        var myRecorder = {
+            objects: {
+                context: null,
+                stream: null,
+                recorder: null
+            },
+            init: function () {
+                if (null === myRecorder.objects.context) {
+                    myRecorder.objects.context = new (
+                            window.AudioContext || window.webkitAudioContext
+                            );
+                }
+            },
+            start: function () {
+                var options = {audio: true, video: false};
+                navigator.mediaDevices.getUserMedia(options).then(function (stream) {
+                    myRecorder.objects.stream = stream;
+                    myRecorder.objects.recorder = new Recorder(
+                            myRecorder.objects.context.createMediaStreamSource(stream),
+                            {numChannels: 1}
+                    );
+                    myRecorder.objects.recorder.record();
+                }).catch(function (err) {});
+            },
+            stop: function (listObject) {
+                if (null !== myRecorder.objects.stream) {
+                    myRecorder.objects.stream.getAudioTracks()[0].stop();
+                    
+                }
+                if (null !== myRecorder.objects.recorder) {
+                    myRecorder.objects.recorder.stop();
+
+                    // Validate object
+                    if (null !== listObject
+                            && 'object' === typeof listObject
+                            && listObject.length > 0) {
+                        // Export the WAV file
+                        myRecorder.objects.recorder.exportWAV(function (blob) {
+                            var url = (window.URL || window.webkitURL)
+                                    .createObjectURL(blob);
+
+                            // Prepare the playback
+                            var audioObject = $('<audio id="test" controls></audio>')
+                                    .attr('src', url);
+                                    $('#auduoFileRecording').attr('value',url)
+                                    
+                            //////////////////////////////////////////// 
+
+                            // $.ajaxSetup({
+                            //     headers: {
+                            //         'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                            //     }
+                            // });
+
+                            // $.ajax({
+                            //     url: './sendMessage',
+                            //     method: "POST",
+                            //     processData: false,
+                            //     cache: false,
+                            //     data: { audioTag : audioObject[0] }
+                            // });
+                            
+                            // Prepare the download link
+                            var downloadObject = $('<a>&#9660;</a>')
+                                    .attr('href', url);
+
+                            // Wrap everything in a row
+                            var holderObject = $('<div class="row"></div>')
+                                    .append(audioObject);
+
+                            // Append to the list
+                            listObject.append(holderObject);
+                        });
+                    }
+                }
+            }
+        };
+
+        // Prepare the recordings list
+        var listObject = $('[data-role="recordings"]');
+
+        // Prepare the record button
+        $('[data-role="controls"] > button').click(function () {
+            // Initialize the recorder
+            myRecorder.init();
+
+            // Get the button state
+            var buttonState = !!$(this).attr('data-recording');
+
+            // Toggle
+            if (!buttonState) {
+                $(this).attr('data-recording', 'true');
+                myRecorder.start();
+            } else {
+                $(this).attr('data-recording', '');
+                myRecorder.stop(listObject);
+            }
+        });
+    });
+</script>
+
+
 </body>
 
 </html>
