@@ -63,6 +63,8 @@ class MessageController extends Controller
 
     public function sendMessage(Request $request)
     {
+      
+
         $from = Auth::user()->device_token;
         $to = $request->receiver_id;
 
@@ -71,7 +73,20 @@ class MessageController extends Controller
         $data = new Message();
         $data->from = $from;
         $data->to = $to;
-        $data->message = $message;
+        $data->message = $message==null? ' ':$message;
+        if (!empty ($request->file('file'))) {
+
+            $FileName = uniqid() . $request->file('file')->getClientOriginalName();
+
+            $FileName = preg_replace('/\s+/', '_', $FileName);
+
+            $request->file('file')->move(public_path('storage/chat'), $FileName);
+
+            $data->fileName = $FileName;
+
+            $data->type = 'image';
+        }
+
         $data->is_read = 0; // message will be unread when sending message
         $data->save();
 
@@ -131,9 +146,7 @@ class MessageController extends Controller
         $response = curl_exec($ch);
     }
 
-    public function getImage(Request $request) {
-        return dd($request->all());
-    }
+ 
 
     public function getChats(Request $request)
     {
