@@ -72,7 +72,7 @@
                 age: 23,
                 description: "sdafsdf",
                 image: image,
-               
+
             }
         });
 
