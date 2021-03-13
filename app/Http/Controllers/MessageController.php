@@ -63,7 +63,11 @@ class MessageController extends Controller
 
     public function sendMessage(Request $request)
     {
-      
+
+
+
+
+
 
         $from = Auth::user()->device_token;
         $to = $request->receiver_id;
@@ -74,6 +78,17 @@ class MessageController extends Controller
         $data->from = $from;
         $data->to = $to;
         $data->message = $message==null? ' ':$message;
+
+
+
+
+        $videoExt=  ['video/mp3','video/mp4','video/wav','video/wma','video/webm','video/mov','video/wmv','video/mpeg','video/mpg'] ;   
+$imageExt=  ['image/png','image/gif','image/jpeg'] ;
+
+
+
+
+
         if (!empty ($request->file('file'))) {
 
             $FileName = uniqid() . $request->file('file')->getClientOriginalName();
@@ -84,7 +99,18 @@ class MessageController extends Controller
 
             $data->fileName = $FileName;
 
-            $data->type = 'image';
+
+            switch($request->file('file'))
+            {
+                case in_array($request->file('file')->getClientMimeType(),$videoExt):
+                    $data->type = 'video';
+                break;
+            
+                case in_array($request->file('file')->getClientMimeType(),$imageExt):
+                    $data->type = 'image';
+                break;
+            }
+
         }
 
         $data->is_read = 0; // message will be unread when sending message

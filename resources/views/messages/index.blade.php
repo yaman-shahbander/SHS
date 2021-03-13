@@ -10,8 +10,16 @@
                     <a href="{{ asset('storage/chat') . '/' . $message->fileName }}" download>
                          <img src="{{ asset('storage/chat') . '/' . $message->fileName }}" alt="" width="250px" height="100px">
                     </a>
-                    
+
+         @elseif($message->type == 'video')
+                     
+         <video width="320" height="240" controls>
+  <source src="{{ asset('storage/chat') . '/' . $message->fileName }}" type="video/mp4">
+
+</video>
                 @endif
+
+       
             </div>
         </li>
         @endforeach
@@ -20,7 +28,7 @@
 
 <div class="input-text">
     <input type="text" name="message" id="inputmessage" class="submit" autofocus>
-    <input type="file" name="image" id="image" class="image">
+    <input type="file" name="image" id="image" class="image"  accept=".png,.gif, .jpeg,.mp3,.mp4,.wav,.wma,.webm,.mov,.wmv,.mpeg,.mpg">
     <!-- <input type="submit" id="submit" value="Send"> -->
 </div>
 <script>
