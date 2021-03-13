@@ -6,6 +6,20 @@
             <div class="{{ ($message->from == Auth::user()->device_token) ? 'sent' : 'received' }}">
                 <p>{{ $message->message }}</p>
                 <p class="date">{{ date('d M y, h:i a', strtotime($message->created_at)) }}</p>
+                @if($message->type == 'image')
+                    <a href="{{ asset('storage/chat') . '/' . $message->fileName }}" download>
+                         <img src="{{ asset('storage/chat') . '/' . $message->fileName }}" alt="" width="250px" height="100px">
+                    </a>
+
+         @elseif($message->type == 'video')
+
+         <video width="320" height="240" controls>
+  <source src="{{ asset('storage/chat') . '/' . $message->fileName }}" type="video/mp4">
+
+</video>
+                @endif
+
+
             </div>
         </li>
         @endforeach
@@ -14,88 +28,43 @@
 
 <div class="input-text">
     <input type="text" name="message" id="inputmessage" class="submit" autofocus>
-    <form name="data-form" id="dataform" class="data-form" enctype="multipart/form-data">
-        {{ csrf_field() }}
-        <input type="file" name="image" id="image" class="image">
-        <input type="submit" value="Send">
-    </form>
+    <input type="file" name="image" id="image" class="image"  accept=".png,.gif, .jpeg,.mp4,.wma,.webm,.mov,.wmv,.mpeg,.mpg">
+    <!-- <input type="submit" id="submit" value="Send"> -->
 </div>
-
 <script>
-    $(document).on('keyup', '.input-text input', function(e) {
+$("#image").change(function () {
+    $('#inputmessage').focus();
+});</script>
+<script>
+    $(document).on('keyup', '.input-text #inputmessage', function(e) {
         var message = $(this).val();
 
+        var image = document.getElementById('image').files;
+
         // check if enter key is pressed and message is not null also receiver is selected
-        if (e.keyCode == 13 && message != '' && receiver_id != '') {
+        if ((e.keyCode == 13 && message != '' && receiver_id != '') || (e.keyCode == 13 && image.length != 0 && receiver_id != '')) {
             $(this).val(''); // while pressed enter text box will be empty
 
-            var datastr = "receiver_id=" + receiver_id + "&message=" + message;
+            var data = new FormData();
 
-            $.ajax({
-                type: "post",
-                url: "message", // need to create this post route
-                data: datastr,
-                cache: false,
-                success: function(data) {
+            data.append('file', image[0]);
 
-                },
-                error: function(jqXHR, status, err) {},
-                complete: function() {
-                    scrollToBottomFunc();
-                }
-            })
+            data.append('message', message);
 
-            //  $('#inputmessage').attr('autofocus');
+            data.append('receiver_id', receiver_id);
+
+            document.getElementById('image').value = ''; // while pressed enter text box will be empty
+
+            //var datastr = "receiver_id=" + receiver_id + "&message=" + message;
+
+            axios.post('message', data).then(function(response) {
+                scrollToBottomFunc();
+            });
 
         }
-        //$("#Box1").
-
     });
 
 
-    $('#dataform').submit(function(event) {
-        event.preventDefault();
-        var image = document.getElementById('image').files;
-        //var data = new FormData($('#dataform')[0]);
-        // {
-        //     'receiver_id': receiver_id,
-        //     'image': image
-        // };
 
-            console.log(image);
-        axios({
-            method: 'post',
-            url: 'test123',
-            data: {
-                name : "Mousa",
-                surname: "Kalouk",
-                age: 23,
-                description: "sdafsdf",
-                image: image,
-
-            }
-        });
-
-        //console.log(data);
-
-        // $.post("/test123", {
-        //     data: data
-        //     }, function(data, status) {
-        //         alert('value stored');
-        //     });
-
-        // $.ajax({
-        //     url: "test123",
-        //     method: 'POST',
-        //     data: data,
-
-        //     success: function(result) {
-
-        //     },
-        //     error: function(data) {
-        //         console.log(data);
-        //     }
-        // });
-
-    });
 </script>
+

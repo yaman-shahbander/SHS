@@ -63,6 +63,12 @@ class MessageController extends Controller
 
     public function sendMessage(Request $request)
     {
+
+
+
+
+
+
         $from = Auth::user()->device_token;
         $to = $request->receiver_id;
 
@@ -71,7 +77,42 @@ class MessageController extends Controller
         $data = new Message();
         $data->from = $from;
         $data->to = $to;
-        $data->message = $message;
+        $data->message = $message==null? ' ':$message;
+
+
+
+
+        $videoExt=  ['video/mp3','video/mp4','video/wav','video/wma','video/webm','video/mov','video/wmv','video/mpeg','video/mpg'] ;   
+$imageExt=  ['image/png','image/gif','image/jpeg'] ;
+
+
+
+
+
+        if (!empty ($request->file('file'))) {
+
+            $FileName = uniqid() . $request->file('file')->getClientOriginalName();
+
+            $FileName = preg_replace('/\s+/', '_', $FileName);
+
+            $request->file('file')->move(public_path('storage/chat'), $FileName);
+
+            $data->fileName = $FileName;
+
+
+            switch($request->file('file'))
+            {
+                case in_array($request->file('file')->getClientMimeType(),$videoExt):
+                    $data->type = 'video';
+                break;
+            
+                case in_array($request->file('file')->getClientMimeType(),$imageExt):
+                    $data->type = 'image';
+                break;
+            }
+
+        }
+
         $data->is_read = 0; // message will be unread when sending message
         $data->save();
 
@@ -131,9 +172,7 @@ class MessageController extends Controller
         $response = curl_exec($ch);
     }
 
-    public function getImage(Request $request) {
-        return dd($request->all());
-    }
+ 
 
     public function getChats(Request $request)
     {

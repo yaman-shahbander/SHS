@@ -75,8 +75,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
 
         Route::post('message', 'MessageController@sendMessage');  
         
-        Route::post('test123', 'MessageController@getImage')->name('test123');  
-       // Route::post('message', 'MessageController@sendMessage');
+    
 
 
 
