@@ -160,6 +160,11 @@ Route::prefix('vendor')->group(function () {
     Route::post('VendorCitiesavailibility', 'API\Manager\UserAPIController@addVendorCities');
 
 
+    Route::get('checkVendorIfApproved', 'API\Manager\UserAPIController@checkVendorIfApproved');
+
+
+
+
 });
 
 

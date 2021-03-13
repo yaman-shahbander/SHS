@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 return [
     'title'=>'Smart Home Revices',
@@ -384,7 +384,7 @@ return [
     'custom_field_values_help' => 'Insert multiple values only for \'Select, Multi Select, Radio\' Ex: VALUE:KEY',
     'custom_field_values_placeholder' => 'أدخل القيم هنا',
     'dashboard' =>'لوحة التحكم',
-    
+
     'faq' => 'Faq',
     'faq_answer' => 'أجب',
     'faq_answer_help' => 'أدخل الإجابة',
@@ -411,7 +411,7 @@ return [
     'faq_question_placeholder' => 'Insert Question',
     'faq_table' => 'Faqs List',
     'faq_updated_at' => 'تاريخ التحديث',
-   
+
     'gallery' => 'معرض الصور',
     'gallery_create' => 'أضف صور جديدة',
     'gallery_desc' => 'إدارة معرض الصور',
@@ -721,7 +721,7 @@ return [
     'user_id_help' => 'Insert',
     'user_id_placeholder' => 'Insert',
     'user_login_as_user' => 'Login as this user',
-    'user_name' => 'الاسم',
+    'user_name' => 'اسم المستخدم',
     'last_name' => 'الكنية',
     'user_name_help' => 'Insert Name',
     'user_name_placeholder' => 'ادخل الاسم',
@@ -744,7 +744,7 @@ return [
     'user_updated_at' => 'تاريخ التحديث',
     'user_updated_at_help' => 'أدخل تاريخ التحديث',
     'user_updated_at_placeholder' => 'أدخل تاريخ التحديث',
-    
+
     'vendors'=>'مزودين الخدمة',
     'vendors_settings' => 'أعدادات مزودين الخدمة',
     'vendor' => 'مزود خدمة',
@@ -1024,8 +1024,8 @@ return [
     'always_temp'                    =>   'عليك أختيار حظر دائم أو حظر مؤقت',
     'required_description'           =>   'يجب كتابة وصف',
     'unblock_user'                   =>   'تم إالغاء الحظر بنجاح',
-    'something_wrong'                =>   'شيىء ما خاطئ',         
-    'cat_not_found'                  =>   'التصنيف ليس موجود', 
+    'something_wrong'                =>   'شيىء ما خاطئ',
+    'cat_not_found'                  =>   'التصنيف ليس موجود',
     'city_not_found'                 =>   'لم يتم العثور على المدينة',
     'country_not_found'              =>   'لم يتم العثور على الدولة',
     'country_exist'                  =>   'الدولة موجودة مسبقا',
@@ -1047,7 +1047,7 @@ return [
     'only_numbers'                   =>   'فشل في التحويل! الحقل يجب أن يحوي فقط أرقام',
     'transfer_same_user'             =>   'فشل في التحويل! يجب التحويل إلى مستخدم مختلف',
     'failed_balance'                 =>   'فشل في التحويل! المستخدم لا يملك رصيد',
-    'amount_value'                   =>   'فشل في التحويل! حقل الكمية يجب أن يحوي قيمة', 
+    'amount_value'                   =>   'فشل في التحويل! حقل الكمية يجب أن يحوي قيمة',
     'negative_amount'                =>   'فشل في التحويل! الكمية يجب أن لا تكون سالبة',
     'success_transfer'               =>   'تم التحويل بنجاح',
     'failure_transfer'               =>   'فشل في التحويل! لا يوجد رصيد كافي',
@@ -1057,7 +1057,7 @@ return [
     'select_country_city'            =>   'رجاءا قم بإختيار دولة و مدينة',
     'residence_city'                 =>   'المدينة الحالية',
     'favorite_service_providers'     =>   'مزودين الخدمة المفضلين',
-    'my_reviews'                     =>   'مراجعاتي',  
+    'my_reviews'                     =>   'مراجعاتي',
     'all_reviews_user_for_vendors'   =>   'مراجعات هذا المستخدم عن مزودين الخدمة',
     'edit_block'                     =>   'تعديل الحظر',
     'block_user'                     =>   'حظر المستخدم',
@@ -1077,4 +1077,4 @@ return [
     'unapproved_SP_settings'         =>   'اعدادات مزودين خدمة لم يتم الموافقة عليهم',
     'unapproved_SP_list'             =>   'لائحة مزودين خدمة لم يتم الموافقة عليهم',
 
-]; 
+];

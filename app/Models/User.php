@@ -96,7 +96,8 @@ class User extends Authenticatable implements HasMedia
         'website',
         'address',
         'fcm_token',
-        'owner_name'
+        'owner_name',
+        'is_verified'
     ];
     /**
      * The attributes that should be casted to native types.

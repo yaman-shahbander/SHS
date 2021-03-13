@@ -1232,6 +1232,22 @@ $days=[];
             return $this->sendError('Something is wrong', 401);
         }
     }
+    public function checkVendorIfApproved(Request $request ) {
+        try {
+            $vendor = User::where('device_token', $request->header('devicetoken'))->first();
+
+            if (empty($vendor)) {
+                return $this->sendError('User not found', 401);
+            }
+            $response=[];
+            $response['approved']=$vendor->approved_vendor;
+
+            return $this->sendResponse($response, 'verify get successfully');
+
+        } catch (\Exception $e) {
+            return $this->sendError('Something is wrong', 401);
+        }
+    }
 
 }
 

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 return [
     'title'=>'Smart Home Services',
@@ -423,7 +423,7 @@ return [
     'faq_question_placeholder' => 'Insert Question',
     'faq_table' => 'Faqs List',
     'faq_updated_at' => 'Updated At',
-   
+
     'gallery' => 'Gallery',
     'gallery_approved' => 'Approved',
     'gallery_create' => 'Create Gallery',
@@ -752,7 +752,7 @@ return [
     'user_id_help' => 'Insert',
     'user_id_placeholder' => 'Insert',
     'user_login_as_user' => 'Login as this user',
-    'user_name' => 'Name',
+    'user_name' => 'User Name',
     'last_name' => 'Last Name',
     'user_name_help' => 'Insert Name',
     'user_name_placeholder' => 'Insert Name',
@@ -885,7 +885,7 @@ return [
     'banned_user_edit' => 'Banned User Edit',
     'banned_user_name' => 'Banned User Name',
     'banned_user_detail' => 'Banned User Detail',
-    
+
     'transfer'=>'Transfer',
     'transfer_money'=>'Transfer Money',
     'transfer_money_edit'=>'Transfer Money Edit',
@@ -1053,8 +1053,8 @@ return [
     'always_temp'                    =>   'You have to select temporary time or check it forever',
     'required_description'           =>   'You have to write a description',
     'unblock_user'                   =>   'User Blocked Succesfully',
-    'something_wrong'                =>   'somthing was wrong',          
-    'cat_not_found'                  =>   'Category not found', 
+    'something_wrong'                =>   'somthing was wrong',
+    'cat_not_found'                  =>   'Category not found',
     'city_not_found'                 =>   'City not found',
     'country_not_found'              =>   'Country not found',
     'country_exist'                  =>   'This country is exist',
@@ -1076,7 +1076,7 @@ return [
     'only_numbers'                   =>   'Transfer failed! field must only contain numbers',
     'transfer_same_user'             =>   'Transfer failed! User can\'t be the same',
     'failed_balance'                 =>   'Transfer failed! doesn\'t have balance account ',
-    'amount_value'                   =>   'Transfer failed! amount should have a value', 
+    'amount_value'                   =>   'Transfer failed! amount should have a value',
     'negative_amount'                =>   'Transfer failed! amount should not be negative',
     'success_transfer'               =>   'Transfer Saved successfully',
     'failure_transfer'               =>   'Transfer failed! Not enough balance',
@@ -1086,7 +1086,7 @@ return [
     'select_country_city'            =>   'please select country and city',
     'residence_city'                 =>   'Residence City',
     'favorite_service_providers'     =>   'Favorite service providers',
-    'my_reviews'                     =>   'My Reviews',  
+    'my_reviews'                     =>   'My Reviews',
     'all_reviews_user_for_vendors'   =>   'All reviews that the user did for service providers',
     'edit_block'                     =>   'Edit Block',
     'block_user'                     =>   'Block User',
@@ -1104,6 +1104,6 @@ return [
     'body'                           =>   'Body',
     'unapproved_SP'                  =>   'Unapproved service providers',
     'unapproved_SP_settings'         =>   'Unapproved service providers settings',
-    'unapproved_SP_list'             =>   'Unapproved service providers list',   
-    'reviewer'                       =>   'reviewer',     
+    'unapproved_SP_list'             =>   'Unapproved service providers list',
+    'reviewer'                       =>   'reviewer',
 ];

@@ -254,14 +254,14 @@ class UserController extends Controller
         $input['language'] = $request->input('language') == null ? '' : $request->input('language', '');
 
 
-
+        $input['is_verified']=1;
         $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');
         $input['payment_id'] = $payment_id;
         $balance = new Balance();
         $balance->balance = 0.0;
         $balance->save();
         $input['balance_id'] = $balance->id;
-        $input['is_verified'] = 0;
+
         $input['city_id'] = $request->city;
         $token = openssl_random_pseudo_bytes(16);
         $user = $this->vendorRepository->create($input);
