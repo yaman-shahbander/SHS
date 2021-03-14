@@ -41,20 +41,27 @@
     });
 </script>
 <script>
+    
     $(document).on('keyup', '.input-text #inputmessage', function(e) {
         var message = $(this).val();
-
+     
         var image = document.getElementById('image').files;
         var recordAudio = $('#auduoFileRecording').attr('value');
-// alert(recordAudio);
+        
+       
+        // alert(recordAudio);
 
         // check if enter key is pressed and message is not null also receiver is selected
 
-        if((e.keyCode == 13 && recordAudio!="" && receiver_id != ''))
-        {
-            $(this).val('');
+        if((e.keyCode == 13 && recordAudio!=""  && message == '' && receiver_id != ''))
+        {var newr=recordAudio;
+            recordAudio="";
+            
+            //alert($(this).val());
+           
+            document.getElementById('auduoFileRecording').value ="";
             // alert(recordAudio);
-            fetch(recordAudio).then(response => response.blob())
+            fetch(newr).then(response => response.blob())
                 .then(blob => {
                     const data = new FormData();
                     data.append("file", blob, "firecord.wav"); // where `.ext` matches file `MIME` type
@@ -64,19 +71,23 @@
                     axios.post('message', data).then(function(response) {
                         scrollToBottomFunc();
                     });
-                    document.getElementById('auduoFileRecording').value ="";
-                    document.getElementById('auduoFileRecording').style.display ="none";
-
+         
+                    recordAudio="";
                 })
                 .then(response => response.ok)
                 .then(res => console.log(res))
                 .catch(err => console.log(err));
+
+                recordAudio="";
+                    document.getElementById('auduoFileRecording').value ="";
+                    document.getElementById('auduoFileRecording').style.display ="none";
+                 
         }
 
 
         else if ((e.keyCode == 13 && message != '' && receiver_id != '') || (e.keyCode == 13 && image.length != 0 && receiver_id != '')) {
             $(this).val(''); // while pressed enter text box will be empty
-
+      
             var data = new FormData();
 
             data.append('file', image[0]);
@@ -86,7 +97,7 @@
             data.append('receiver_id', receiver_id);
 
             document.getElementById('image').value = ''; // while pressed enter text box will be empty
-
+            document.getElementById("noFile").innerHTML = "No file chosen...";
             //var datastr = "receiver_id=" + receiver_id + "&message=" + message;
 
             axios.post('message', data).then(function(response) {

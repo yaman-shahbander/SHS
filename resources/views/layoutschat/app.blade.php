@@ -289,6 +289,8 @@
                         scrollToBottomFunc();
                         $('#recordAudio').css('display','inline');
                         $('#textInputId').css('display','inline');
+                        $('.inputselement').css('display','');
+                        
 
                     }
                 });
@@ -418,6 +420,8 @@
     });
 </script>
 
+
+@yield('script')
 
 </body>
 
