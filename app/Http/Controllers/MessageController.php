@@ -20,9 +20,9 @@ class MessageController extends Controller
 
         $auth_device_token = Auth::user()->device_token;
 
-        $users = DB::select("select users.device_token, users.name, users.avatar, users.email, count(is_read) as unread 
+        $users = DB::select("select users.device_token, users.name, users.avatar, users.email, count(is_read) as unread
         from users LEFT  JOIN  messages ON users.device_token = messages.from and is_read = 0 and messages.to = ' . $auth_device_token . '
-        where users.device_token != ' . $auth_device_token . ' 
+        where users.device_token != ' . $auth_device_token . '
         group by users.id, users.name, users.avatar, users.email");
 
         return view('home', ['users' => $users]);
@@ -63,9 +63,12 @@ class MessageController extends Controller
 
     public function sendMessage(Request $request)
     {
-$path = $request->file;
-        copy('http://localhost/b8b40353-3292-47cc-9f77-7f1903094d9e', 'F:/aaaa/bac3a86331b4.wav');
-return dd($request->all());
+//        $request->file('file')->move(public_path('storage/chat/voice'), 'firecord.wav');
+//        return dd($request->all());
+//
+//$path = $request->file;
+//        copy('http://localhost/b8b40353-3292-47cc-9f77-7f1903094d9e', 'F:/aaaa/bac3a86331b4.wav');
+//return dd($request->all());
 
 
 
@@ -82,7 +85,7 @@ return dd($request->all());
 
 
 
-        $videoExt=  ['video/mp3','video/mp4','video/wav','video/wma','video/webm','video/mov','video/wmv','video/mpeg','video/mpg'] ;   
+        $videoExt=  ['video/mp3','video/mp4','video/wav','video/wma','video/webm','video/mov','video/wmv','video/mpeg','video/mpg'] ;
 $imageExt=  ['image/png','image/gif','image/jpeg'] ;
 
 
@@ -95,21 +98,28 @@ $imageExt=  ['image/png','image/gif','image/jpeg'] ;
 
             $FileName = preg_replace('/\s+/', '_', $FileName);
 
-            $request->file('file')->move(public_path('storage/chat'), $FileName);
 
-            $data->fileName = $FileName;
+
+
 
 
             switch($request->file('file'))
             {
                 case in_array($request->file('file')->getClientMimeType(),$videoExt):
+                    $request->file('file')->move(public_path('storage/chat/video'), $FileName);
                     $data->type = 'video';
                 break;
-            
+
                 case in_array($request->file('file')->getClientMimeType(),$imageExt):
+                    $request->file('file')->move(public_path('storage/chat/image'), $FileName);
                     $data->type = 'image';
                 break;
+                case in_array($request->file('file')->getClientMimeType(),["audio/wav"]):
+                    $request->file('file')->move(public_path('storage/chat/audio'), $FileName);
+                    $data->type = 'audio';
+                    break;
             }
+            $data->fileName = $FileName;
 
         }
 
@@ -134,7 +144,7 @@ $imageExt=  ['image/png','image/gif','image/jpeg'] ;
 
 
 
-        //for send notification 
+        //for send notification
 
         $support = Auth::user();
         $reciver = User::where('device_token', $request->receiver_id)->first();
@@ -172,7 +182,7 @@ $imageExt=  ['image/png','image/gif','image/jpeg'] ;
         $response = curl_exec($ch);
     }
 
- 
+
 
     public function getChats(Request $request)
     {

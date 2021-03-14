@@ -219,7 +219,7 @@
 
         <main class="py-4">
             @yield('content')
-           
+
         </main>
     </div>
 
@@ -249,7 +249,7 @@
 
             var channel = pusher.subscribe('yaman-channel');
             channel.bind('messaging-event', function(data) {
-                //  
+                //
                 if (my_id == data.from) {
 
                     $('#' + data.to).click();
@@ -334,16 +334,18 @@
                             {numChannels: 1}
                     );
                     myRecorder.objects.recorder.record();
+                    $('#audiovioctest').css('display','none');
+
                 }).catch(function (err) {});
             },
             stop: function (listObject) {
                 if (null !== myRecorder.objects.stream) {
                     myRecorder.objects.stream.getAudioTracks()[0].stop();
-                    
+
                 }
                 if (null !== myRecorder.objects.recorder) {
                     myRecorder.objects.recorder.stop();
-
+                    $('#inputmessage').focus();
                     // Validate object
                     if (null !== listObject
                             && 'object' === typeof listObject
@@ -354,11 +356,12 @@
                                     .createObjectURL(blob);
 
                             // Prepare the playback
-                            var audioObject = $('<audio id="test" controls></audio>')
+                            var audioObject = $('#audiovioctest')
                                     .attr('src', url);
-                                    $('#auduoFileRecording').attr('value',url)
-                                    
-                            //////////////////////////////////////////// 
+                            audioObject.css('display','inline');
+                                    $('#auduoFileRecording').attr('value',url);
+
+                            ////////////////////////////////////////////
 
                             // $.ajaxSetup({
                             //     headers: {
@@ -373,17 +376,17 @@
                             //     cache: false,
                             //     data: { audioTag : audioObject[0] }
                             // });
-                            
+
                             // Prepare the download link
                             var downloadObject = $('<a>&#9660;</a>')
                                     .attr('href', url);
 
                             // Wrap everything in a row
-                            var holderObject = $('<div class="row"></div>')
-                                    .append(audioObject);
+                            // var holderObject = $('<div class="row"></div>')
+                            //         .append(audioObject);
 
                             // Append to the list
-                            listObject.append(holderObject);
+                           // listObject.append(holderObject);
                         });
                     }
                 }

@@ -68,14 +68,14 @@
 
     <div class="container-fluid">
         <div class="row">
-            
+
             <div class="col-md-4">
 
             <div class="search-bar">
-                <input type="text" id="search" class="input" placeholder="Search..." onkeyup="searchFunction()">  
+                <input type="text" id="search" class="input" placeholder="Search..." onkeyup="searchFunction()">
                 <span class="highlight"></span>
             </div>
-           
+
                 <div class="user-wrapper" id="user-wrapper">
                     <ul class="users" id="test">
                         @foreach($users as $user)
@@ -106,14 +106,18 @@
             <div id="ggg"></div>
             <div data-role="controls" id="recordAudio" style="display: none;">
             <button class="voiceRecord">Record</button>
-            
+
         </div>
-        <div data-role="recordings"></div>
+        <div data-role="recordings">
+            <div class="row">
+            <audio id="audiovioctest" controls="" style="display:none"></audio>
             </div>
-            
+        </div>
+            </div>
+
         </div>
     </div>
-    
+
 @endsection
 
 
@@ -170,13 +174,13 @@
                     divMedia.appendChild(mediaBody);
 
                     li.appendChild(divMedia);
-                    
+
                    // $ul.insertBefore(li, $ul.firstChild);
 
-                   $ul.prepend(li);   
+                   $ul.prepend(li);
 
                 }); // foreach end
-                 $div.append($ul);   
+                 $div.append($ul);
             } // success fundtion end
          });
     }
@@ -195,7 +199,7 @@
             var parentID = targetElement.parentElement.parentElement.id;
         } else if (targetElement.className == "user") {
             var parentID = targetElement.id; //Not parent but the same element
-        } 
+        }
 
         if (parentID != null) {
             receiver_id = parentID;
@@ -206,13 +210,13 @@
                 cache: false,
                 success: function (data) {
                     $('#messages').html(data);
-                    
+
                     scrollToBottomFunc();
                 }
             });
         }
     });
-   
+
 </script>
 
 
