@@ -62,6 +62,11 @@
     margin: 0 25px 0 0 !important
 }
 
+
+
+
+
+
 </style>
 
 @section('content')
@@ -104,16 +109,39 @@
 
             <div class="col-md-8" >
             <div id="ggg"></div>
-            <div data-role="controls" id="recordAudio" style="display: none;">
+                <div class="row">
+                <div class="input-text col-md-7"  id="textInputId" style="display: none">
+                    <input type="text" name="message" id="inputmessage" class="submit" autofocus>
+
+
+
+
+                    <!-- <input type="submit" id="submit" value="Send"> -->
+                </div>
+                    <div class="col-md-3">
+                        <input type="file" name="image" id="image" class="image uploader newimg" accept=".png,.gif, .jpeg,.mp4,.wma,.webm,.mov,.wmv,.mpeg,.mpg">
+
+
+
+
+
+
+
+                        <input type="file" id="auduoFileRecording" value="" hidden >
+                    </div>
+                    <div class="col-md-2">
+                <div data-role="controls" id="recordAudio" style="display: none;">
             <button class="voiceRecord">Record</button>
 
-        </div>
-        <div data-role="recordings">
-            <div class="row">
-            <audio id="audiovioctest" controls="" style="display:none"></audio>
-            </div>
-        </div>
-            </div>
+                </div>
+                <div data-role="recordings">
+                    <div class="row">
+                    <audio id="audiovioctest" controls="" style="display:none"></audio>
+                    </div>
+                </div>
+                </div>
+                </div>
+                    </div>
 
         </div>
     </div>

@@ -5,7 +5,7 @@
             {{--if message from id is equal to auth id then it is sent by logged in user --}}
             <div class="{{ ($message->from == Auth::user()->device_token) ? 'sent' : 'received' }}">
                 <p>{{ $message->message }}</p>
-                <p class="date">{{ date('d M y, h:i a', strtotime($message->created_at)) }}</p>
+
                 @if($message->type == 'image')
                 <a href="{{ asset('storage/chat/image') . '/' . $message->fileName }}" download>
                     <img src="{{ asset('storage/chat/image') . '/' . $message->fileName }}" alt="" width="250px" height="100px">
@@ -20,12 +20,12 @@
 
                 @elseif($message->type == 'audio')
 
-                    <audio id="audiovioctest" controls=""  src="{{ asset('storage/chat/audio') . '/' . $message->fileName }}"></audio>
+                    <audio  controls=""  src="{{ asset('storage/chat/audio') . '/' . $message->fileName }}"></audio>
 
 
                 @endif
 
-
+                <p class="date">{{ date('d M y, h:i a', strtotime($message->created_at)) }}</p>
             </div>
         </li>
         @endforeach
@@ -34,16 +34,6 @@
     </ul>
 </div>
 
-<div class="input-text">
-    <input type="text" name="message" id="inputmessage" class="submit" autofocus>
-    <input type="file" name="image" id="image" class="image" accept=".png,.gif, .jpeg,.mp4,.wma,.webm,.mov,.wmv,.mpeg,.mpg">
-
-    <input type="file" id="auduoFileRecording" value="" hidden >
-
-
-
-    <!-- <input type="submit" id="submit" value="Send"> -->
-</div>
 
 <script>
     $("#image").change(function() {
@@ -62,6 +52,7 @@
 
         if((e.keyCode == 13 && recordAudio!="" && receiver_id != ''))
         {
+            $(this).val('');
             // alert(recordAudio);
             fetch(recordAudio).then(response => response.blob())
                 .then(blob => {
@@ -75,7 +66,7 @@
                     });
                     document.getElementById('auduoFileRecording').value ="";
                     document.getElementById('auduoFileRecording').style.display ="none";
-                    $(this).val('');
+
                 })
                 .then(response => response.ok)
                 .then(res => console.log(res))

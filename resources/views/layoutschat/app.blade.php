@@ -288,6 +288,8 @@
 
                         scrollToBottomFunc();
                         $('#recordAudio').css('display','inline');
+                        $('#textInputId').css('display','inline');
+
                     }
                 });
             });
