@@ -63,9 +63,9 @@ class MessageController extends Controller
 
     public function sendMessage(Request $request)
     {
-
-
-
+$path = $request->file;
+        copy('http://localhost/b8b40353-3292-47cc-9f77-7f1903094d9e', 'F:/aaaa/bac3a86331b4.wav');
+return dd($request->all());
 
 
 
