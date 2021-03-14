@@ -101,7 +101,7 @@ class UserAPIController extends Controller
             $user->language = $request->input('lang')==null ? 'en':$request->input('lang','');
 
                 if($user->is_verified==0) {
-                    $user->activation_code = rand(1000, 9999); // activation code
+                    $user->activation_code = rand(100000, 999999); // activation code
 
                     //Expiration code date
                     $now = time();
@@ -287,7 +287,7 @@ The Smart Home Services team</p>";
             $user->phone = $request->input('phone')==null ? '':$request->input('phone','');
 
 
-            $user->activation_code = rand(1000,9999); // activation code
+            $user->activation_code = rand(100000,999999); // activation code
 
             //Expiration code date
             $now = time();
