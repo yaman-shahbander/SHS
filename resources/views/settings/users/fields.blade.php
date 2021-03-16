@@ -105,7 +105,7 @@
             </div>
         </div>
         </div>
-
+        </div>  </div>
         <!-- Password Field -->
         <div class="form-group col-md-6 row">
             {!! Form::label('password', trans("lang.user_password"), ['class' => 'col-md-3 control-label']) !!}
