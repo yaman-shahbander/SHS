@@ -272,7 +272,7 @@
             elemVal = "emptyValue"
         }
         $.ajax({
-            url: "{{ url('api/search') }}",
+            url: "{{ url('api/searchInChatDashboard') }}",
             type: "POST",
             data: {
                 searchValue: elemVal
