@@ -749,7 +749,8 @@ class VendorController extends Controller
         $input['user_id'] = Auth()->user()->id;
         $input['password'] = Hash::make($input['password']);
         $input['country_prefix'] = $request->countries_code;
-        
+        $input['facebook'] = $request->facebook;
+        $input['instagram'] = $request->instagram;
 
         while (true) {
             $payment_id = '#' . rand(1000, 9999) . rand(1000, 9999);
@@ -920,6 +921,10 @@ class VendorController extends Controller
         $input['city_id'] = $request->city;
 
         $input['country_prefix'] = $request->countries_code;
+
+        $input['facebook'] = $request->facebook;
+        
+        $input['instagram'] = $request->instagram;
 
         unset($input['email']);
 

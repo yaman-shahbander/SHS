@@ -208,7 +208,7 @@
             </div>
     </div>
 </div>
-            <div class="card-body own-padding">
+            <div class="card-body own-padding" style="position: relative; left: 300px;">
                     <div class="container mt-5 mb-5">
                         <div class="row height d-flex justify-content-center align-items-center">
                             <div class="col-md-12">

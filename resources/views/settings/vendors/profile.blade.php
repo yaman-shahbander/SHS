@@ -190,7 +190,31 @@
                     </div>
                     <!-- /.card -->
 
-                    
+                    <!-- social media-->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fa fa-list mr-2"></i>{{trans('lang.social_media')}}</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body ">
+                            <div class="row">
+                               <div class="col-md-12">
+                               <strong><i>{{ trans('lang.facebook_link') }} :</i></strong>
+                               </div>
+                               <div class="col-md-12">
+                               <a href={{ $user->facebook }}>{{ $user->facebook }}</a>
+                               </div>
+                               <div class="col-md-12">
+                               <strong><i>{{ trans('lang.instagram_link') }} :</i></strong>
+                               </div>
+                               <div class="col-md-12">
+                               <a href={{ $user->instagram }}>{{ $user->instagram }}</a>
+                               </div>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
 
                    
 

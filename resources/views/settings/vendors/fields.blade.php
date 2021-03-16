@@ -85,6 +85,7 @@
 
         {!! Form::label('phone', trans("lang.phone"), ['class' => 'col-md-3 control-label']) !!}
         
+        @if(Request::is('*edit') || Request::is('*create'))
         <div class="form-group col-md-8 row">
             <div class="col-md-12">
                 <select name="countries_code" id="countries_code" data-show-content="true" aria-controls="dataTableBuilder" class="form-control form-control-sm" style="margin-top: 1px; height: 36px;">
@@ -98,10 +99,17 @@
                 </select>
             </div>
         </div>
-            <div class="col-md-9">
+        @endif
+        @if(!(Request::is('*edit') || Request::is('*create')))
+        <div class="col-md-9">
+                {!! Form::text('phone',null , ['class' => 'form-control phone','placeholder'=>  "Insert phone number",'id' =>'phone']) !!}
+        </div>
+        @else 
+        <div class="col-md-9">
                 {!! Form::text('phone',null , ['class' => 'form-control phone','placeholder'=>  "Insert phone number", 'style' => 'position: relative; left: 121px; top: -5px;', 
                 'id' =>'phone']) !!}
             </div>
+        @endif
         </div>
 
         <!-- website Field -->
@@ -144,14 +152,6 @@
                         </div>
                     </div>
                 </div>
-
-
-                {{--                <div class="col-md-6 row">--}}
-                {{--                    {!! Form::label('roles[]', trans("lang.user_role_id"),['class' => 'col-3 control-label']) !!}--}}
-                {{--                    <div class="col-9">--}}
-                {{--                        {!! Form::select('roles[]', $role, $rolesSelected, ['class' => 'select2 form-control' , 'multiple'=>'multiple','placeholder'=>trans('lang.user_role_id_placeholder')]) !!}--}}
-                {{--                    </div>--}}
-                {{--                </div>--}}
             </div>
         @endcan
         <div class="form-group row col-md-6">
@@ -170,6 +170,19 @@
                 trans("lang.category_description_placeholder")  ]) !!}
 
                 <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
+            </div>
+        </div>
+
+        <div class="form-group row col-md-6">
+            {!! Form::label('facebook', trans("lang.facebook_link"), ['class' => 'col-3 control-label']) !!}
+            <div class="col-9">
+              {!! Form::text('facebook', null ,['class' => 'form-control','placeholder'=>  "Insert Facebook link"]) !!}
+            </div>
+        </div>
+        <div class="form-group row col-md-6">
+            {!! Form::label('instagram', trans("lang.instagram_link"), ['class' => 'col-3 control-label']) !!}
+            <div class="col-9">
+              {!! Form::text('instagram', null ,['class' => 'form-control','placeholder'=>  "Insert Instagram link"]) !!}
             </div>
         </div>
 

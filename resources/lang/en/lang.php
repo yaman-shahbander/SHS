@@ -1107,4 +1107,7 @@ return [
     'unapproved_SP_list'             =>   'Unapproved service providers list',
     'reviewer'                       =>   'reviewer',
     'image_not_found_in_gallery'     =>   'Image not found!',
+    'facebook_link'                  =>   'Facebook link',
+    'instagram_link'                 =>   'Instagram link',
+    'social_media'                   =>   'Social Media',
 ];
