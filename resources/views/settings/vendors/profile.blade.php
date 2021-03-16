@@ -233,6 +233,43 @@
                     </div>
 
                     </div>
+
+
+                    <div class="row">
+<div class="col-md-12">
+        <!-- users who added this vendor as a favorite-->
+        <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title"><i class="fa fa-list mr-2"></i> {{trans('lang.gallery')}}</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <div class="row">
+                      @foreach($SP_Galleries as $SP_Gallery)
+                        <div class="col-md-4">
+                          <a href="{{ asset('storage/gallery') . '/' . "$SP_Gallery->image" }}" download>
+                           <img width="200px" height="100px" src="{{ asset('storage/gallery') . '/' . "$SP_Gallery->image" }}" alt="Image here!" style="
+                            margin-bottom: 25px;
+                            border: 1px solid #021a4054;
+                            padding: 3px;
+                            "> 
+                          </a>
+                          <a href="{{route('DeleteGallerySpImage', ['id' => $SP_Gallery->id ])}}" 
+                          onclick="alert('are you sure?');" 
+                          style="position:absolute; left: 85%; top: -8%;
+                           color: white; z-index:1000; background-color: red; border-radius: 50%; width: 15px; height: 17px;">
+                            <strong style="position: absolute; top: -3px; left: 3px;">x</strong> 
+                          </a>
+                        </div>
+                      @endforeach
+                    </div>
+                </div>
+                <!-- /.card-body -->
+            </div>
+        <!-- /.card -->
+    </div>
+</div>
+           
 <div class="row">
 <div class="col-md-6">
         <!-- users who added this vendor as a favorite-->

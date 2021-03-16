@@ -33,6 +33,7 @@ use App\Models\Fee;
 use App\Models\User;
 use App\Balance;
 use Validator;
+use App\Models\Gallery;
 
 class VendorController extends Controller
 {
@@ -201,9 +202,9 @@ class VendorController extends Controller
         }
 
         $favoriteVendor = $user->homeOwnerFavorite; // Users who added this vendor as a favorite
+        $SP_Galleries = $user->gallery;
 
-
-        return $dataTable = $subCategoriesDataTableDataTable->render('settings.vendors.profile', compact(['user', 'role', 'rolesSelected', 'customFields', 'customFieldsValues', 'countries', 'cities', 'style', 'favoriteVendor']));
+        return $dataTable = $subCategoriesDataTableDataTable->render('settings.vendors.profile', compact(['user', 'role', 'rolesSelected', 'customFields', 'customFieldsValues', 'countries', 'cities', 'style', 'favoriteVendor', 'SP_Galleries']));
 
 
 
@@ -542,7 +543,7 @@ class VendorController extends Controller
         if (empty($user)) {
             Flash::success(trans('lang.user_not_found'));
 
-            return redirect(route('users.index'));
+            return redirect(route('vendors.index'));
         }
 
         if ($user->balance_id != null) {
@@ -559,5 +560,26 @@ class VendorController extends Controller
         Flash::success(trans('lang.delete_operation'));
 
         return redirect(route('vendors.index'));
+    }
+
+    public function DeleteGallerySpImage(Request $request) {
+
+        if (!auth()->user()->hasPermissionTo('vendorsGallery.destroy')) {
+            return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
+        }
+
+        $gallery = Gallery::find($request->id);
+
+        if (empty($gallery)) {
+            Flash::success(trans('lang.image_not_found_in_gallery'));
+
+            return redirect()->back();
+        }
+
+        $gallery->delete();
+
+        Flash::success(trans('lang.delete_operation'));
+
+        return redirect()->back();
     }
 }

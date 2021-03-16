@@ -1106,4 +1106,5 @@ return [
     'unapproved_SP_settings'         =>   'Unapproved service providers settings',
     'unapproved_SP_list'             =>   'Unapproved service providers list',
     'reviewer'                       =>   'reviewer',
+    'image_not_found_in_gallery'     =>   'Image not found!',
 ];
