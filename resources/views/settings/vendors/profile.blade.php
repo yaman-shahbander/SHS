@@ -278,12 +278,12 @@
                             padding: 3px;
                             "> 
                           </a>
-                          <a href="{{route('DeleteGallerySpImage', ['id' => $SP_Gallery->id ])}}" 
-                          onclick="alert('are you sure?');" 
+                          <bold
+                          onclick="DeleteImageGallery('{{$SP_Gallery->id}}')" 
                           style="position:absolute; left: 85%; top: -8%;
-                           color: white; z-index:1000; background-color: red; border-radius: 50%; width: 15px; height: 17px;">
+                           color: white; z-index:1000; background-color: red; border-radius: 50%; width: 15px; height: 17px; cursor:pointer">
                             <strong style="position: absolute; top: -3px; left: 3px;">x</strong> 
-                          </a>
+                          </bold>
                         </div>
                       @endforeach
                     </div>
@@ -528,6 +528,29 @@
     </script>
 @endpush
 @section('script')
+
+<script>
+    function DeleteImageGallery(id){
+        if (confirm("Are you sure?") == true) {
+			$.ajax({
+                url: "{{route('DeleteGallerySpImage')}}",
+                method: 'get',
+                data: {
+                    id : id
+                },
+                success: function() {
+                    window.location.reload();
+                }
+            });
+		} else {
+			userPreference = "Save Canceled!";
+		}
+        // //
+        
+
+    }
+    
+</script>
 
 <script>
 

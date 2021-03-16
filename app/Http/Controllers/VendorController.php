@@ -923,7 +923,7 @@ class VendorController extends Controller
         $input['country_prefix'] = $request->countries_code;
 
         $input['facebook'] = $request->facebook;
-        
+
         $input['instagram'] = $request->instagram;
 
         unset($input['email']);
