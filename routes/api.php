@@ -249,8 +249,11 @@ Route::post('change_phone', 'API\AuthController@change_phone');
 Route::post('verify_change_phone', 'API\AuthController@verified_change_phone');
 Route::resource('restaurants', 'API\RestaurantAPIController');
 
+
+
 Route::resource('faq_categories', 'API\FaqCategoryAPIController');
 Route::get('foods/categories', 'API\FoodAPIController@categories');
+Route::get('food/categories', 'API\NotificationAPIController@getMediacolunm');
 Route::resource('foods', 'API\FoodAPIController');
 Route::resource('galleries', 'API\GalleryAPIController');
 Route::resource('food_reviews', 'API\FoodReviewAPIController');

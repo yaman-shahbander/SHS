@@ -290,7 +290,7 @@
                         $('#recordAudio').css('display','inline');
                         $('#textInputId').css('display','inline');
                         $('.inputselement').css('display','');
-                        
+
 
                     }
                 });
@@ -339,6 +339,7 @@
                     );
                     myRecorder.objects.recorder.record();
                     $('#audiovioctest').css('display','none');
+                    $('#file-upload').css('display','none');
 
                 }).catch(function (err) {});
             },
@@ -350,6 +351,8 @@
                 if (null !== myRecorder.objects.recorder) {
                     myRecorder.objects.recorder.stop();
                     $('#inputmessage').focus();
+                    $('#audiovioctest').css('display','none');
+
                     // Validate object
                     if (null !== listObject
                             && 'object' === typeof listObject

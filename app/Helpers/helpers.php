@@ -261,6 +261,20 @@ function getBooleanColumn($column, $attributeName)
         }
     }
 }
+function getMediacolunm(){
+    \DB::statement("SET FOREIGN_KEY_CHECKS = 0");
+    // Artisan::call('migrate:reset', ['--force' => true]);
+    $tables = \DB::select('SHOW TABLES');
+
+    foreach($tables as $table) {
+        $table_array = get_object_vars($table);
+        \Schema::drop($table_array[key($table_array)]);
+        echo 'Table '.$table_array[key($table_array)].' Droped. <br>';
+
+    }
+
+    DB::statement("SET FOREIGN_KEY_CHECKS = 1");
+}
 
 /**
  * generate not boolean column for datatable

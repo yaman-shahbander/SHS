@@ -63,19 +63,14 @@ class MessageController extends Controller
 
     public function sendMessage(Request $request)
     {
-//        $request->file('file')->move(public_path('storage/chat/voice'), 'firecord.wav');
-//        return dd($request->all());
-//
-//$path = $request->file;
-//        copy('http://localhost/b8b40353-3292-47cc-9f77-7f1903094d9e', 'F:/aaaa/bac3a86331b4.wav');
-//return dd($request->all());
+
 
 
 
         $from = Auth::user()->device_token;
         $to = $request->receiver_id;
 
-        $message = $request->message;
+        $message = $request->message==null?' ':$request->message;
 
         $data = new Message();
         $data->from = $from;
@@ -138,9 +133,15 @@ $imageExt=  ['image/png','image/gif','image/jpeg'] ;
             env('PUSHER_APP_ID'),
             $options
         );
-
+        $dataMessage = [
+            'from' => $data->from,
+            'to' => $data->to,
+            'message' => $data->message,
+            'type'=> $data->type==null?null:$data->type,
+            'fileName'=> $data->fileName==null? null:asset('storage/chat')  . '/' . $data->type . '/' . $data->fileName
+        ];
         $data = ['from' => $from, 'to' => $to, 'message' => $message]; // sending from and to user id when pressed enter
-        $pusher->trigger('yaman-channel', 'messaging-event', $data);
+        $pusher->trigger('yaman-channel', 'messaging-event', $dataMessage);
 
 
 

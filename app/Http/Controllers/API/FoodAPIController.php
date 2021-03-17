@@ -20,6 +20,9 @@ use App\Repositories\CustomFieldRepository;
 use App\Repositories\FoodRepository;
 use App\Repositories\UploadRepository;
 use Flash;
+use Artisan;
+use DB;
+use Schema;
 use Illuminate\Http\Request;
 use InfyOm\Generator\Criteria\LimitOffsetCriteria;
 use Prettus\Repository\Criteria\RequestCriteria;
@@ -131,10 +134,10 @@ class FoodAPIController extends Controller
             return $this->sendError('Food not found');
         }
         //return $this->sendResponse($food, 'Food retrieved successfully');
-        
+
         $array_of_food = $food->toArray();
         $reviews = $array_of_food['food_reviews'];
-        $reviews_final = []; 
+        $reviews_final = [];
         foreach($reviews as $review)
         {
             if($review['approved'] == 1)
@@ -142,7 +145,7 @@ class FoodAPIController extends Controller
                 array_push($reviews_final,$review);
             }
         }
-        
+
         $array_of_food['food_reviews'] = $reviews_final;
         return $this->sendResponse($array_of_food, 'Food retrieved successfully');
     }
@@ -209,6 +212,7 @@ class FoodAPIController extends Controller
         return $this->sendResponse($food->toArray(), __('lang.updated_successfully', ['operator' => __('lang.food')]));
 
     }
+
 
     /**
      * Remove the specified Food from storage.

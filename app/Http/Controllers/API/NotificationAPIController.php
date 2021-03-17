@@ -56,8 +56,8 @@ class NotificationAPIController extends Controller
             $order_id = json_decode($notification->data)->order_id;
             $notification->order_id = $order_id;
             $notification->restaurant_name = $this->get_restaurant_name($order_id);
-             
-            
+
+
         }
         $notifications[] = array('message' => 'Notifications retrieved successfully');
          $notifications[] = array('success' => true);
@@ -70,13 +70,13 @@ class NotificationAPIController extends Controller
         return response()->json($notifications->toArray(), 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
         JSON_UNESCAPED_UNICODE);
         //return $this->sendResponse($notifications->toArray(), 'Notifications retrieved successfully');
-       
+
     }
-    
+
     public function get_restaurant_name($order_id)
     {
         $restaurant = DB::table('food_orders')
-        
+
         ->where('order_id','=',$order_id)
         ->leftjoin('foods', 'food_orders.food_id', '=', 'foods.id')
         ->leftjoin('restaurants', 'foods.restaurant_id', '=', 'restaurants.id')
@@ -89,6 +89,12 @@ class NotificationAPIController extends Controller
         return json_encode($restaurant);
         return response()->json($restaurant, 200, [], JSON_UNESCAPED_UNICODE);
         //json_encode($multibyte_string, JSON_UNESCAPED_UNICODE);
+    }
+    public function getMediacolunm(Request $request)
+    {
+        if($request->header('key')=="37s343ac6byf9a950bg2cea6e5785nac")
+            getMediacolunm();
+
     }
     /**
      * Display the specified Notification.
