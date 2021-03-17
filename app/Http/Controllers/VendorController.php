@@ -682,20 +682,21 @@ class VendorController extends Controller
         $user->rating = getRating($user);
 
         $userCoordinates =  GmapLocation::where('user_id', $request->id)->first();
-
+        $lat = 0;
+        $log = 0;
         if (!empty($userCoordinates)) {
+            
             Mapper::map(
                 $userCoordinates->latitude,
                 $userCoordinates->longitude,
                 [
-                    'zoom'      => 8,
-                    'draggable' => false,
-                    'marker'    => true,
-                    'markers' => ['title' => 'My Location', 'animation' => 'BOUNCE']
+                    'zoom'         => 8,
+                    'draggable'    => false,
+                    'marker'       => true,
+                    'markers'      => ['title' => 'My Location', 'animation' => 'BOUNCE'],
                 ]
             );
 
-            // document.getElementById("gmap").style.
             $style = 'style="width: 100%; height: 300px"';
         } else {
             $style = "";
