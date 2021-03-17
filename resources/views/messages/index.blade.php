@@ -41,24 +41,29 @@
     });
 </script>
 <script>
-    
     $(document).on('keyup', '.input-text #inputmessage', function(e) {
         var message = $(this).val();
-     
+
         var image = document.getElementById('image').files;
-        var recordAudio = $('#auduoFileRecording').attr('value');
-        
-       
+
+       var recordAudio = $('#auduoFileRecording').attr('value');
+
+
         // alert(recordAudio);
 
         // check if enter key is pressed and message is not null also receiver is selected
 
-        if((e.keyCode == 13 && recordAudio!=""  && message == '' && receiver_id != ''))
-        {var newr=recordAudio;
+        if((e.keyCode == 13 && recordAudio!=""   && message == '' && receiver_id != ''))
+        {
+            $('#auduoFileRecording').attr('value',"");
+            console.log("World!");
+            recordAudiobool=0;
+            // recordAudio = $('#auduoFileRecording').attr('value');
+            var newr=recordAudio;
             recordAudio="";
-            
+
             //alert($(this).val());
-           
+
             document.getElementById('auduoFileRecording').value ="";
             // alert(recordAudio);
             fetch(newr).then(response => response.blob())
@@ -71,7 +76,7 @@
                     axios.post('message', data).then(function(response) {
                         scrollToBottomFunc();
                     });
-         
+
                     recordAudio="";
                 })
                 .then(response => response.ok)
@@ -79,15 +84,23 @@
                 .catch(err => console.log(err));
 
                 recordAudio="";
+            $('#audiovioctest').attr('src','');
+            $('#audiovioctest').attr('style','display:none;');
                     document.getElementById('auduoFileRecording').value ="";
                     document.getElementById('auduoFileRecording').style.display ="none";
-                 
+            recordAudiobool=1;
+            $('#file-upload').css('display','inline');
+
+
         }
 
 
         else if ((e.keyCode == 13 && message != '' && receiver_id != '') || (e.keyCode == 13 && image.length != 0 && receiver_id != '')) {
             $(this).val(''); // while pressed enter text box will be empty
-      
+            $('#auduoFileRecording').attr('value','');
+            $('#audiovioctest').attr('src','');
+            $('#audiovioctest').attr('style','display:none;');
+
             var data = new FormData();
 
             data.append('file', image[0]);

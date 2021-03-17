@@ -229,7 +229,7 @@
 
                     <!-- <input type="submit" id="submit" value="Send"> -->
                 </div>
-          
+
                 <div class="col-md-4">
                     <!-- <input type="file" name="image" id="image" class="image uploader newimg btn btn-primary" style="width: 100%;" > -->
 
@@ -240,7 +240,8 @@
                             <input type="file" name="image" id="image" accept=".png,.gif, .jpeg,.mp4,.wma,.webm,.mov,.wmv,.mpeg,.mpg" onchange="pathchange()">
                         </div>
                     </div>
-                    
+
+                    <audio id="audiovioctest" controls="" style="display:none"></audio>
 
 
                     <input type="file" id="auduoFileRecording" value="" hidden>
@@ -252,7 +253,6 @@
                     </div>
                     <div data-role="recordings">
                         <div class="row">
-                            <audio id="audiovioctest" controls="" style="display:none"></audio>
                         </div>
                     </div>
                 </div>
@@ -379,7 +379,7 @@
         }
     }
 
-   
+
         // if (/^\s*$/.test(filename)) {
         //     $(".file-upload").removeClass('active');
         //     $("#noFile").text("No file chosen...");
