@@ -956,9 +956,18 @@ class VendorController extends Controller
 
         $location = GmapLocation::where('user_id', $user->id)->first();
 
-        $location->latitude  = $request->latitude;
-        $location->longitude = $request->longitude;
-        $location->save();
+        if(empty($location)) {
+            $location = new GmapLocation();
+            $location->user_id   = $user->id;
+            $location->latitude  = $request->latitude;
+            $location->longitude = $request->longitude;
+            $location->save();
+        } else {
+            $location->latitude  = $request->latitude;
+            $location->longitude = $request->longitude;
+            $location->save();
+        }
+        
 
         if ($user->email != $request->email) {
 
