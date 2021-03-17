@@ -35,6 +35,7 @@ use App\Balance;
 use Validator;
 use App\Models\Gallery;
 
+
 class VendorController extends Controller
 {
     /** @var  ReviewsRepositry */
@@ -637,6 +638,21 @@ class VendorController extends Controller
             $html = generateCustomField($customFields);
         }
         $style = "";
+
+        Mapper::map(
+            36.216667,
+            37.166668,
+                [
+                    'zoom'         => 8,
+                    'draggable'    => true,
+                    'marker'       => true,
+                    'markers'      => ['title' => 'My Location', 'animation' => 'BOUNCE'],
+                    'eventDragEnd' =>  '
+                                        document.getElementById("latitude").value = event.latLng.lat(),
+                                        document.getElementById("longitude").value = event.latLng.lng()',  
+                ]
+            );
+
         return view('settings.vendors.create')
             ->with("role", $role)
             ->with("customFields", isset($html) ? $html : false)
@@ -682,8 +698,7 @@ class VendorController extends Controller
         $user->rating = getRating($user);
 
         $userCoordinates =  GmapLocation::where('user_id', $request->id)->first();
-        $lat = 0;
-        $log = 0;
+
         if (!empty($userCoordinates)) {
             
             Mapper::map(
@@ -752,7 +767,7 @@ class VendorController extends Controller
         $input['country_prefix'] = $request->countries_code;
         $input['facebook'] = $request->facebook;
         $input['instagram'] = $request->instagram;
-
+        
         while (true) {
             $payment_id = '#' . rand(1000, 9999) . rand(1000, 9999);
             if (!(User::where('payment_id', $payment_id)->exists())) {
@@ -773,13 +788,19 @@ class VendorController extends Controller
         $token = openssl_random_pseudo_bytes(16);
         $user = $this->vendorRepository->create($input);
 
+        // saving location of SP
+        $location = new GmapLocation();
+        $location->user_id   = $user->id;
+        $location->latitude  = $request->latitude;
+        $location->longitude = $request->longitude;
+        $location->save();
         //Convert the binary data into hexadecimal representation.
         $token = bin2hex($user->id . $token);
         $input['device_token'] = $token;
         $user = $this->vendorRepository->update($input, $user->id);
 
         $user->assignRole('vendor');
-        $user->assignRole($request->roles);
+        //$user->assignRole($request->roles);
 
         try {
 
@@ -933,6 +954,12 @@ class VendorController extends Controller
 
         $user = $this->vendorRepository->update($input, $id);
 
+        $location = GmapLocation::where('user_id', $user->id)->first();
+
+        $location->latitude  = $request->latitude;
+        $location->longitude = $request->longitude;
+        $location->save();
+
         if ($user->email != $request->email) {
 
             $checkEmail = User::where('email', '=', $request->email)->first();
@@ -962,9 +989,9 @@ class VendorController extends Controller
 
         $user->save();
 
-        DB::table('model_has_roles')->where('model_id', $user->id)->delete();
+        //DB::table('model_has_roles')->where('model_id', $user->id)->delete();
 
-        $user->assignRole($request->roles);
+        //$user->assignRole($request->roles);
 
         try {
 
@@ -1525,6 +1552,22 @@ class VendorController extends Controller
             $cities = City::where('country_id', $user->cities->country_id)->get();
         } else
             $cities = [];
+
+
+            Mapper::map(
+                $user->coordinates->latitude,
+                $user->coordinates->longitude,
+                    [
+                        'zoom'         => 8,
+                        'draggable'    => true,
+                        'marker'       => true,
+                        'markers'      => ['title' => 'My Location', 'animation' => 'BOUNCE'],
+                        'eventDragEnd' =>  '
+                                            document.getElementById("latitude").value = event.latLng.lat(),
+                                            document.getElementById("longitude").value = event.latLng.lng()',  
+                    ]
+                );
+
         $style = "";
         return view('settings.vendors.edit')
             ->with('user', $user)->with("role", $role)
