@@ -1553,10 +1553,10 @@ class VendorController extends Controller
         } else
             $cities = [];
 
-
+            
             Mapper::map(
-                $user->coordinates->latitude,
-                $user->coordinates->longitude,
+                $user->coordinates != null ? $user->coordinates->latitude : 36.216667 ,
+                $user->coordinates != null ? $user->coordinates->longitude : 37.166668,
                     [
                         'zoom'         => 8,
                         'draggable'    => true,

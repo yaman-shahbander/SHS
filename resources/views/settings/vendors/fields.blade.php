@@ -236,8 +236,8 @@
     </div>
 
     @if(Request::is('*edit'))
-    <input type="text" name="latitude" id="latitude" value="{{ $user->coordinates->latitude }}" style="display:none">
-    <input type="text" name="longitude" id="longitude" value="{{ $user->coordinates->longitude }}" style="display:none">
+    <input type="text" name="latitude" id="latitude" value="{{ $user->coordinates != null ? $user->coordinates->latitude : 36.216667 }}" style="display:none">
+    <input type="text" name="longitude" id="longitude" value="{{ $user->coordinates != null ? $user->coordinates->longitude : 37.166668 }}" style="display:none">
     @else
     <input type="text" name="latitude" id="latitude" value="36.216667" style="display:none">
     <input type="text" name="longitude" id="longitude" value="37.166668" style="display:none">
