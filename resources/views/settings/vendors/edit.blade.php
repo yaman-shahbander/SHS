@@ -389,4 +389,10 @@ $(".uploader").change(function(){
    // $('#quote').summernote('disable');
 </script>
 
+
+<script>
+    var options = {searchable: true};
+    NiceSelect.bind(document.getElementById("countries_code"), options);
+</script>
+
 @endpush

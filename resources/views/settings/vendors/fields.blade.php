@@ -82,10 +82,34 @@
 
         <!-- phone Field -->
         <div class="form-group col-md-6 row">
-            {!! Form::label('phone', trans("lang.phone"), ['class' => 'col-md-3 control-label']) !!}
-            <div class="col-md-9">
-                {!! Form::text('phone',null , ['class' => 'form-control','placeholder'=>  "Insert phone number"]) !!}
+
+        {!! Form::label('phone', trans("lang.phone"), ['class' => 'col-md-3 control-label']) !!}
+        
+        @if(Request::is('*edit') || Request::is('*create'))
+        <div class="form-group col-md-8 row">
+            <div class="col-md-12">
+                <select name="countries_code" id="countries_code" data-show-content="true" aria-controls="dataTableBuilder" class="form-control form-control-sm" style="margin-top: 1px; height: 36px;">
+                
+                @foreach($countries_codes as $countries_code)
+                  <option value="{{ $countries_code['prefix'] }}"
+                  @if(Request::is('*edit')) @if($user->country_prefix == $countries_code['prefix']) selected @endif @endif>
+                  {{$countries_code['name']}} {{ $countries_code['prefix'] }}
+                  </option>
+                @endforeach
+                </select>
             </div>
+        </div>
+        @endif
+        @if(!(Request::is('*edit') || Request::is('*create')))
+        <div class="col-md-9">
+                {!! Form::text('phone',null , ['class' => 'form-control phone','placeholder'=>  "Insert phone number",'id' =>'phone']) !!}
+        </div>
+        @else 
+        <div class="col-md-9">
+                {!! Form::text('phone',null , ['class' => 'form-control phone','placeholder'=>  "Insert phone number", 'style' => 'position: relative; left: 121px; top: -5px;', 
+                'id' =>'phone']) !!}
+            </div>
+        @endif
         </div>
 
         <!-- website Field -->
@@ -118,7 +142,7 @@
                     <div class="col-9" >
 
                         <select name="language" id="language" data-show-content="true" aria-controls="dataTableBuilder" class="form-control form-control-sm" required>
-                            <option value="en" @if(Request::is('*edit')) @if($user->language=='en') selected @endif  @endif ></option>  Speaking English</option>
+                            <option value="en" @if(Request::is('*edit')) @if($user->language=='en') selected @endif  @endif >Speaking English</option>
 
                             <option value="ar"  @if(Request::is('*edit')) @if($user->language=='ar') selected @endif @endif >  يتحدث العربية </option>
                         </select>
@@ -128,14 +152,6 @@
                         </div>
                     </div>
                 </div>
-
-
-                {{--                <div class="col-md-6 row">--}}
-                {{--                    {!! Form::label('roles[]', trans("lang.user_role_id"),['class' => 'col-3 control-label']) !!}--}}
-                {{--                    <div class="col-9">--}}
-                {{--                        {!! Form::select('roles[]', $role, $rolesSelected, ['class' => 'select2 form-control' , 'multiple'=>'multiple','placeholder'=>trans('lang.user_role_id_placeholder')]) !!}--}}
-                {{--                    </div>--}}
-                {{--                </div>--}}
             </div>
         @endcan
         <div class="form-group row col-md-6">
@@ -154,6 +170,19 @@
                 trans("lang.category_description_placeholder")  ]) !!}
 
                 <div class="form-text text-muted">{{ trans("lang.category_description_help") }}</div>
+            </div>
+        </div>
+
+        <div class="form-group row col-md-6">
+            {!! Form::label('facebook', trans("lang.facebook_link"), ['class' => 'col-3 control-label']) !!}
+            <div class="col-9">
+              {!! Form::text('facebook', null ,['class' => 'form-control','placeholder'=>  "Insert Facebook link"]) !!}
+            </div>
+        </div>
+        <div class="form-group row col-md-6">
+            {!! Form::label('instagram', trans("lang.instagram_link"), ['class' => 'col-3 control-label']) !!}
+            <div class="col-9">
+              {!! Form::text('instagram', null ,['class' => 'form-control','placeholder'=>  "Insert Instagram link"]) !!}
             </div>
         </div>
 
@@ -244,6 +273,15 @@
                         $('#city').empty();
                         $('#city').append($city);
                     });
+                });
+            });
+        </script>
+
+        <script>
+            $(document).ready(function () { 
+                $('#countries_code').on('change',function(){
+                    $('.phone').val('');
+                    $('.phone').val($('#countries_code').val());
                 });
             });
         </script>

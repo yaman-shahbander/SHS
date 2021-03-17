@@ -190,7 +190,31 @@
                     </div>
                     <!-- /.card -->
 
-                    
+                    <!-- social media-->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fa fa-list mr-2"></i>{{trans('lang.social_media')}}</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body ">
+                            <div class="row">
+                               <div class="col-md-12">
+                               <strong><i>{{ trans('lang.facebook_link') }} :</i></strong>
+                               </div>
+                               <div class="col-md-12">
+                               <a href={{ $user->facebook }}>{{ $user->facebook }}</a>
+                               </div>
+                               <div class="col-md-12">
+                               <strong><i>{{ trans('lang.instagram_link') }} :</i></strong>
+                               </div>
+                               <div class="col-md-12">
+                               <a href={{ $user->instagram }}>{{ $user->instagram }}</a>
+                               </div>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
 
                    
 
@@ -233,6 +257,43 @@
                     </div>
 
                     </div>
+
+
+                    <div class="row">
+<div class="col-md-12">
+        <!-- users who added this vendor as a favorite-->
+        <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title"><i class="fa fa-list mr-2"></i> {{trans('lang.gallery')}}</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <div class="row">
+                      @foreach($SP_Galleries as $SP_Gallery)
+                        <div class="col-md-4">
+                          <a href="{{ asset('storage/gallery') . '/' . "$SP_Gallery->image" }}" download>
+                           <img width="200px" height="100px" src="{{ asset('storage/gallery') . '/' . "$SP_Gallery->image" }}" alt="Image here!" style="
+                            margin-bottom: 25px;
+                            border: 1px solid #021a4054;
+                            padding: 3px;
+                            "> 
+                          </a>
+                          <bold
+                          onclick="DeleteImageGallery('{{$SP_Gallery->id}}')" 
+                          style="position:absolute; left: 85%; top: -8%;
+                           color: white; z-index:1000; background-color: red; border-radius: 50%; width: 15px; height: 17px; cursor:pointer">
+                            <strong style="position: absolute; top: -3px; left: 3px;">x</strong> 
+                          </bold>
+                        </div>
+                      @endforeach
+                    </div>
+                </div>
+                <!-- /.card-body -->
+            </div>
+        <!-- /.card -->
+    </div>
+</div>
+           
 <div class="row">
 <div class="col-md-6">
         <!-- users who added this vendor as a favorite-->
@@ -467,6 +528,29 @@
     </script>
 @endpush
 @section('script')
+
+<script>
+    function DeleteImageGallery(id){
+        if (confirm("Are you sure?") == true) {
+			$.ajax({
+                url: "{{route('DeleteGallerySpImage')}}",
+                method: 'get',
+                data: {
+                    id : id
+                },
+                success: function() {
+                    window.location.reload();
+                }
+            });
+		} else {
+			userPreference = "Save Canceled!";
+		}
+        // //
+        
+
+    }
+    
+</script>
 
 <script>
 

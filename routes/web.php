@@ -74,7 +74,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
         Route::get('/message/{id}', 'MessageController@getMessage')->name('message');
 
         Route::post('message', 'MessageController@sendMessage');  
-        
+        Route::get('DeleteGallerySpImage', 'VendorController@DeleteGallerySpImage')->name('DeleteGallerySpImage');
     
 
 

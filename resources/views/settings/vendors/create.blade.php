@@ -376,6 +376,11 @@ $(".uploader").change(function(){
     NiceSelect.bind(document.getElementById("country"), options);
 </script>
 
+<script>
+    var options = {searchable: true};
+    NiceSelect.bind(document.getElementById("countries_code"), options);
+</script>
+
 @endpush
 
 

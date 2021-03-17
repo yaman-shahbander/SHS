@@ -331,4 +331,4 @@ Route::get('phonetest','HomeController@mousa');
 
 //Search in chat
 
-Route::post('/search', 'MessageController@getChats')->name('getSearch');
+Route::post('/searchInChatDashboard', 'MessageController@getChats')->name('getSearch');

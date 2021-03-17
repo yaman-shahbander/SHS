@@ -1076,5 +1076,8 @@ return [
     'unapproved_SP'                  =>   'مزودين خدمة لم يتم الموافقة عليهم',
     'unapproved_SP_settings'         =>   'اعدادات مزودين خدمة لم يتم الموافقة عليهم',
     'unapproved_SP_list'             =>   'لائحة مزودين خدمة لم يتم الموافقة عليهم',
-
+    'image_not_found_in_gallery'     =>   'لم يتم العثور على الصورة',
+    'facebook_link'                  =>   'رابط حساب الفيسبوك',
+    'instagram_link'                 =>   'رابط حساب الانستغرام',
+    'social_media'                   =>   'مواقع التواصل الأجتماعي',
 ];
