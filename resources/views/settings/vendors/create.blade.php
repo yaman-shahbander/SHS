@@ -14,6 +14,10 @@
   <link rel="stylesheet" href="{{asset('plugins/select2/select2.min.css')}}">
   <link rel="stylesheet" href="{{asset('flag.css')}}"/>
   <link rel="stylesheet" href="{{asset('/css/nice-select2.css')}}">
+  <link href="{{asset('includes/css/style.css')}}" rel="stylesheet">
+  <link href="{{asset('css/jquery.multiselect.css')}}" rel="stylesheet">
+{{--<link rel="stylesheet" type="text/css" href="jquery.multiselect.css">--}}
+
 
   <style>
 
@@ -317,6 +321,9 @@
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 {{--<script src="{{asset('plugins/summernote/summernote-bs4.min.js')}}"></script>--}}
 {{--dropzone--}}
+
+<script src="{{asset('js/bootstrap.js')}}"></script>
+<script src="{{asset('js/jquery.multiselect.js')}}"></script>
 <script src="{{asset('plugins/dropzone/dropzone.js')}}"></script>
 <script type="text/javascript">
     Dropzone.autoDiscover = false;

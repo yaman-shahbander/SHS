@@ -12,6 +12,9 @@
 {{--<link rel="stylesheet" href="{{asset('plugins/summernote/summernote-bs4.css')}}">--}}
 <link rel="stylesheet" href="{{asset('/css/nice-select2.css')}}">
 
+<link href="{{asset('includes/css/style.css')}}" rel="stylesheet">
+<link href="{{asset('css/jquery.multiselect.css')}}" rel="stylesheet">
+
 <style>
 
 
@@ -283,7 +286,7 @@
   </div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
- 
+
   <div class="content">
   <div class="clearfix"></div>
   @include('flash::message')
@@ -323,6 +326,9 @@
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 
 {{--dropzone--}}
+
+<script src="{{asset('js/bootstrap.js')}}"></script>
+<script src="{{asset('js/jquery.multiselect.js')}}"></script>
 <script src="{{asset('plugins/dropzone/dropzone.js')}}"></script>
 {{-- <script src="{{asset('plugins/summernote/summernote-bs4.min.js')}}"></script>--}}
 <script type="text/javascript">

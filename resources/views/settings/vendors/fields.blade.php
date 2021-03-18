@@ -84,12 +84,12 @@
         <div class="form-group col-md-6 row">
 
         {!! Form::label('phone', trans("lang.phone"), ['class' => 'col-md-3 control-label']) !!}
-        
+
         @if(Request::is('*edit') || Request::is('*create'))
         <div class="form-group col-md-8 row">
             <div class="col-md-12">
                 <select name="countries_code" id="countries_code" data-show-content="true" aria-controls="dataTableBuilder" class="form-control form-control-sm" style="margin-top: 1px; height: 36px;">
-                
+
                 @foreach($countries_codes as $countries_code)
                   <option value="{{ $countries_code['prefix'] }}"
                   @if(Request::is('*edit')) @if($user->country_prefix == $countries_code['prefix']) selected @endif @endif>
@@ -104,9 +104,9 @@
         <div class="col-md-9">
                 {!! Form::text('phone',null , ['class' => 'form-control phone','placeholder'=>  "Insert phone number",'id' =>'phone']) !!}
         </div>
-        @else 
+        @else
         <div class="col-md-9">
-                {!! Form::text('phone',null , ['class' => 'form-control phone','placeholder'=>  "Insert phone number", 'style' => 'position: relative; left: 121px; top: -5px;', 
+                {!! Form::text('phone',null , ['class' => 'form-control phone','placeholder'=>  "Insert phone number", 'style' => 'position: relative; left: 121px; top: -5px;',
                 'id' =>'phone']) !!}
             </div>
         @endif
@@ -186,6 +186,55 @@
             </div>
         </div>
 
+    </div>
+
+    <div class="row">
+
+
+        <div class="col-lg-12">
+            <div class="div-center">
+
+
+                <input id="subcategorySelected" name="subcategorySelected" value="" type="text">
+                <h2>select categories</h2>
+                <select name="langOptgroup[]" multiple="" id="langOptgroup" >
+                    @forelse($categories as $caregory)
+                        <optgroup label="{{$caregory->name}}">
+                            @forelse( $caregory->subCategory as $subCategory)
+                                <option value="{{$subCategory->id}}">{{$subCategory->name}}</option>
+
+                            @empty
+                            @endforelse
+
+                        </optgroup>
+
+                        @empty
+                        @endforelse
+{{--                    <optgroup label="Programming Languages">--}}
+{{--                        <option value="C++ / C#">C++ / C#</option>--}}
+{{--                        <option value="Java">Java</option>--}}
+{{--                        <option value="Objective-C">Objective-C</option>--}}
+{{--                    </optgroup>--}}
+{{--                    <optgroup label="Client-side scripting Languages">--}}
+{{--                        <option value="JavaScript">JavaScript</option>--}}
+{{--                    </optgroup>--}}
+{{--                    <optgroup label="Server-side scripting Languages">--}}
+{{--                        <option value="Perl">Perl</option>--}}
+{{--                        <option value="PHP">PHP</option>--}}
+{{--                        <option value="Ruby on Rails">Ruby on Rails</option>--}}
+{{--                    </optgroup>--}}
+{{--                    <optgroup label="Mobile Platforms">--}}
+{{--                        <option value="Android">Android</option>--}}
+{{--                        <option value="iOS">iOS</option>--}}
+{{--                    </optgroup>--}}
+{{--                    <optgroup label="Document Markup Languages">--}}
+{{--                        <option value="HTML">HTML</option>--}}
+{{--                        <option value="XML">XML</option>--}}
+{{--                    </optgroup>--}}
+                </select>
+
+            </div>
+        </div>
     </div>
     <div class="row">
         <!-- Language Field -->
@@ -278,13 +327,26 @@
         </script>
 
         <script>
-            $(document).ready(function () { 
+            $(document).ready(function () {
                 $('#countries_code').on('change',function(){
                     $('.phone').val('');
                     $('.phone').val($('#countries_code').val());
                 });
             });
         </script>
+        <script>
+
+
+
+            $('#langOptgroup').multiselect({
+                columns: 2,
+                placeholder: 'Select Languages',
+                search: true,
+                selectAll: true
+            });
+        </script>
+
+
 
     @endprepend
 

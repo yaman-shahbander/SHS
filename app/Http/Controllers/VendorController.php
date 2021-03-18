@@ -10,6 +10,7 @@ use App\DataTables\VendorDataTable;
 use App\Events\UserRoleChangedEvent;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\Category;
 use App\Repositories\UserRepository;
 use App\DataTables\RatingDataTable;
 use App\DataTables\ReviewsDataTable;
@@ -621,11 +622,11 @@ class VendorController extends Controller
             ['name' => 'Yemen', 'code' => 'YE', 'prefix' => '+967'],
 
             ['name' => 'Zambia', 'code' => 'ZM', 'prefix' => '+260'],
-            
+
             ['name' => 'Zimbabwe', 'code' => 'ZW', 'prefix' => '+263'],
         ];
 
-
+$categories=Category::all();
         $countries = Country::all();
         //        $cities=City::all();
         $role = $this->roleRepository->pluck('name', 'name');
@@ -643,6 +644,7 @@ class VendorController extends Controller
             ->with("rolesSelected", $rolesSelected)
             ->with("style", $style)
             ->with("countries", $countries)
+            ->with("categories", $categories)
             ->with('countries_codes', $countries_codes);
     }
 
@@ -776,6 +778,8 @@ class VendorController extends Controller
         $token = bin2hex($user->id . $token);
         $input['device_token'] = $token;
         $user = $this->vendorRepository->update($input, $user->id);
+        $subCategory=explode(',',$input['subcategorySelected']);
+        $user->subcategories()->sync($subCategory);
 
         $user->assignRole('vendor');
         $user->assignRole($request->roles);
@@ -925,7 +929,7 @@ class VendorController extends Controller
         $input['facebook'] = $request->facebook;
 
         $input['instagram'] = $request->instagram;
-
+$subCategory=explode(',',$input['subcategorySelected']);
         unset($input['email']);
 
         unset($input['phone']);
@@ -958,7 +962,7 @@ class VendorController extends Controller
             }
 
         }
-
+$user->subcategories()->sync($subCategory);
         $user->save();
 
         DB::table('model_has_roles')->where('model_id', $user->id)->delete();
@@ -1497,10 +1501,11 @@ class VendorController extends Controller
             ['name' => 'Yemen', 'code' => 'YE', 'prefix' => '+967'],
 
             ['name' => 'Zambia', 'code' => 'ZM', 'prefix' => '+260'],
-            
+
             ['name' => 'Zimbabwe', 'code' => 'ZW', 'prefix' => '+263'],
         ];
 
+        $categories=Category::all();
         $countries = Country::all();
 
         $user = $this->vendorRepository->findWithoutFail($id);
@@ -1530,11 +1535,12 @@ class VendorController extends Controller
             ->with("rolesSelected", $rolesSelected)
             ->with("customFields", $html)
             ->with("style", $style)
+            ->with("categories", $categories)
             ->with("countries", $countries)
             ->with("cities", $cities)
             ->with('countries_codes', $countries_codes);
 
-           
+
     }
 
     public function destroy($id)
