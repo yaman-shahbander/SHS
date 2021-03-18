@@ -1110,4 +1110,5 @@ return [
     'facebook_link'                  =>   'Facebook link',
     'instagram_link'                 =>   'Instagram link',
     'social_media'                   =>   'Social Media',
+    'SP_location'                    =>   'Select location on the map',
 ];

@@ -21,7 +21,7 @@
 
         <!-- username Field -->
         <div class="form-group col-md-6 row">
-            {!! Form::label('nickname', trans("lang.businessName").'*', ['class' => 'col-3 control-label']) !!}
+            {!! Form::label('nickname', trans("lang.businessName") . '*', ['class' => 'col-3 control-label']) !!}
             <div class="col-md-9">
                 {!! Form::text('nickname', null,  ['class' => 'form-control','placeholder'=>  trans('lang.last_name_placeholder'), 'required']) !!}
             </div>
@@ -276,6 +276,25 @@
         </div>
 
 
+<!--  -->
+@if(Request::is('*create') || Request::is('*edit'))
+<div class="form-group row col-md-6">
+    {!! Form::label('map', trans('lang.SP_location'), ['class' => 'col-md-12 control-label', 'style' => 'font-size:15px']) !!}
+    <div id="gmMapLocation" style="width:500px; height: 300px; margin-left: 20px;">
+        {!! Mapper::render() !!}
+    </div>
+
+    @if(Request::is('*edit'))
+    <input type="text" name="latitude" id="latitude" value="{{ $user->coordinates != null ? $user->coordinates->latitude : 36.216667 }}" style="display:none">
+    <input type="text" name="longitude" id="longitude" value="{{ $user->coordinates != null ? $user->coordinates->longitude : 37.166668 }}" style="display:none">
+    @else
+    <input type="text" name="latitude" id="latitude" value="36.216667" style="display:none">
+    <input type="text" name="longitude" id="longitude" value="37.166668" style="display:none">
+    @endif
+
+    
+</div>
+@endif
     </div>
 
     @prepend('scripts')

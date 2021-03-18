@@ -35,6 +35,7 @@ use App\Models\User;
 use App\Balance;
 use Validator;
 use App\Models\Gallery;
+use App\Models\Category;
 
 class VendorController extends Controller
 {
@@ -638,6 +639,21 @@ $categories=Category::all();
             $html = generateCustomField($customFields);
         }
         $style = "";
+
+        Mapper::map(
+            36.216667,
+            37.166668,
+                [
+                    'zoom'         => 8,
+                    'draggable'    => true,
+                    'marker'       => true,
+                    'markers'      => ['title' => 'My Location', 'animation' => 'BOUNCE'],
+                    'eventDragEnd' =>  '
+                                        document.getElementById("latitude").value = event.latLng.lat(),
+                                        document.getElementById("longitude").value = event.latLng.lng()',  
+                ]
+            );
+
         return view('settings.vendors.create')
             ->with("role", $role)
             ->with("customFields", isset($html) ? $html : false)
@@ -686,18 +702,18 @@ $categories=Category::all();
         $userCoordinates =  GmapLocation::where('user_id', $request->id)->first();
 
         if (!empty($userCoordinates)) {
+            
             Mapper::map(
                 $userCoordinates->latitude,
                 $userCoordinates->longitude,
                 [
-                    'zoom'      => 8,
-                    'draggable' => false,
-                    'marker'    => true,
-                    'markers' => ['title' => 'My Location', 'animation' => 'BOUNCE']
+                    'zoom'         => 8,
+                    'draggable'    => false,
+                    'marker'       => true,
+                    'markers'      => ['title' => 'My Location', 'animation' => 'BOUNCE'],
                 ]
             );
 
-            // document.getElementById("gmap").style.
             $style = 'style="width: 100%; height: 300px"';
         } else {
             $style = "";
@@ -723,6 +739,7 @@ $categories=Category::all();
 
     public function store(CreateUserRequest $request)
     {
+        
 
         if (!auth()->user()->hasPermissionTo('vendors.store')) {
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
@@ -753,7 +770,7 @@ $categories=Category::all();
         $input['country_prefix'] = $request->countries_code;
         $input['facebook'] = $request->facebook;
         $input['instagram'] = $request->instagram;
-
+        
         while (true) {
             $payment_id = '#' . rand(1000, 9999) . rand(1000, 9999);
             if (!(User::where('payment_id', $payment_id)->exists())) {
@@ -774,6 +791,12 @@ $categories=Category::all();
         $token = openssl_random_pseudo_bytes(16);
         $user = $this->vendorRepository->create($input);
 
+        // saving location of SP
+        $location = new GmapLocation();
+        $location->user_id   = $user->id;
+        $location->latitude  = $request->latitude;
+        $location->longitude = $request->longitude;
+        $location->save();
         //Convert the binary data into hexadecimal representation.
         $token = bin2hex($user->id . $token);
         $input['device_token'] = $token;
@@ -782,7 +805,7 @@ $categories=Category::all();
         $user->subcategories()->sync($subCategory);
 
         $user->assignRole('vendor');
-        $user->assignRole($request->roles);
+        //$user->assignRole($request->roles);
 
         try {
 
@@ -804,7 +827,15 @@ $categories=Category::all();
 
         Flash::success(trans('lang.store_operation'));
 
-        return redirect(route('vendors.index'));
+        $categories = Category::all();
+
+        return view('special_offers.create', [
+            'categories' => $categories,
+            'vendors'    => $user,
+            'url'        => '/special/offers/create', 
+            'customFields'=> isset($html) ? $html : false]);
+
+        // return redirect(route('vendors.index'));
     }
 
     public function featuredfeeFunction()
@@ -936,6 +967,21 @@ $subCategory=explode(',',$input['subcategorySelected']);
 
         $user = $this->vendorRepository->update($input, $id);
 
+        $location = GmapLocation::where('user_id', $user->id)->first();
+
+        if(empty($location)) {
+            $location = new GmapLocation();
+            $location->user_id   = $user->id;
+            $location->latitude  = $request->latitude;
+            $location->longitude = $request->longitude;
+            $location->save();
+        } else {
+            $location->latitude  = $request->latitude;
+            $location->longitude = $request->longitude;
+            $location->save();
+        }
+        
+
         if ($user->email != $request->email) {
 
             $checkEmail = User::where('email', '=', $request->email)->first();
@@ -965,9 +1011,9 @@ $subCategory=explode(',',$input['subcategorySelected']);
 $user->subcategories()->sync($subCategory);
         $user->save();
 
-        DB::table('model_has_roles')->where('model_id', $user->id)->delete();
+        //DB::table('model_has_roles')->where('model_id', $user->id)->delete();
 
-        $user->assignRole($request->roles);
+        //$user->assignRole($request->roles);
 
         try {
 
@@ -1529,6 +1575,22 @@ $user->subcategories()->sync($subCategory);
             $cities = City::where('country_id', $user->cities->country_id)->get();
         } else
             $cities = [];
+
+            
+            Mapper::map(
+                $user->coordinates != null ? $user->coordinates->latitude : 36.216667 ,
+                $user->coordinates != null ? $user->coordinates->longitude : 37.166668,
+                    [
+                        'zoom'         => 8,
+                        'draggable'    => true,
+                        'marker'       => true,
+                        'markers'      => ['title' => 'My Location', 'animation' => 'BOUNCE'],
+                        'eventDragEnd' =>  '
+                                            document.getElementById("latitude").value = event.latLng.lat(),
+                                            document.getElementById("longitude").value = event.latLng.lng()',  
+                    ]
+                );
+
         $style = "";
         return view('settings.vendors.edit')
             ->with('user', $user)->with("role", $role)
