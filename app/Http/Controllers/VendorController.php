@@ -34,7 +34,7 @@ use App\Models\User;
 use App\Balance;
 use Validator;
 use App\Models\Gallery;
-
+use App\Models\Category;
 
 class VendorController extends Controller
 {
@@ -737,6 +737,7 @@ class VendorController extends Controller
 
     public function store(CreateUserRequest $request)
     {
+        
 
         if (!auth()->user()->hasPermissionTo('vendors.store')) {
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
@@ -822,7 +823,15 @@ class VendorController extends Controller
 
         Flash::success(trans('lang.store_operation'));
 
-        return redirect(route('vendors.index'));
+        $categories = Category::all();
+
+        return view('special_offers.create', [
+            'categories' => $categories,
+            'vendors'    => $user,
+            'url'        => '/special/offers/create', 
+            'customFields'=> isset($html) ? $html : false]);
+
+        // return redirect(route('vendors.index'));
     }
 
     public function featuredfeeFunction()

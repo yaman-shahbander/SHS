@@ -1,7 +1,8 @@
 <div style="flex: 50%;max-width: 50%;padding: 0 4px;" class="column">
         <!-- Vendors Field -->
         @if(!Request::is('*edit'))
-        <div class="form-group row ">
+        @if(empty($url))
+        <div class="form-group row">
             {!! Form::label('vendors', trans('lang.vendors'), ['class' => 'col-3 control-label text-right']) !!}
             <div class="col-9">
             <select name="vendors" id="brand" aria-controls="dataTableBuilder" class="form-control form-control-sm" required @if(Request::is('*edit')) disabled @endif>
@@ -15,6 +16,16 @@
               </div>
             </div>
           </div>
+        @else
+        <div class="form-group row">
+            {!! Form::label('vendors', trans('lang.vendors'), ['class' => 'col-3 control-label text-right']) !!}
+            <div class="col-9">
+            <select name="vendors" id="brand" aria-controls="dataTableBuilder" class="form-control form-control-sm" required @if(Request::is('*edit')) disabled @endif>
+                  <option value="{{ $vendors->id }}" selected >{{ $vendors->name }}</option>
+            </select>
+            </div>
+          </div>
+         @endif
         @endif
 
           <!-- Name Field -->
