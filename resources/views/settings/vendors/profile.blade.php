@@ -40,7 +40,14 @@
                         <div class="card-header">
                             <h3 class="card-title"><i class="fa fa-user mr-2"></i> {{trans('lang.user_about_me')}}</h3>
                         </div>
-                        <div class="card-body box-profile">
+                        <div class="card-body box-profile" 
+                                @if($user->background_profile != null || $user->background_profile != '') 
+                                style = "background-image: 
+                                  url('{{ asset('storage/vendors_background') . '/' . $user->background_profile }}');
+                                background-repeat: no-repeat;
+                                background-position: center;
+                                background-size: cover;" 
+                                @endif>
                             <div class="text-center">
                                 <img src="{{$user->getFirstMediaUrl('avatar','icon')}}" class="profile-user-img img-fluid img-circle" alt="{{$user->name}}">
                             </div>

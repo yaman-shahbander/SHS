@@ -824,6 +824,20 @@ $categories=Category::all();
                 $user->avatar = $imageName;
                 $user->save();
             }
+
+            if ($request->file('background_SP')) {
+
+                $imageName = uniqid() . $request->file('background_SP')->getClientOriginalName();
+
+                $imageName = preg_replace('/\s+/', '_', $imageName);
+
+                $request->file('background_SP')->move(public_path('storage/vendors_background'), $imageName);
+
+                $user->background_profile = $imageName;
+
+                $user->save();
+            }
+
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }
@@ -1045,6 +1059,26 @@ $categories=Category::all();
                 $user->avatar = $imageName;
                 $user->save();
             }
+
+
+            if ($request->file('background_SP')) {
+
+                $imageName = uniqid() . $request->file('background_SP')->getClientOriginalName();
+
+                $imageName = preg_replace('/\s+/', '_', $imageName);
+
+                $request->file('background_SP')->move(public_path('storage/vendors_background'), $imageName);
+
+                try {
+                    unlink(public_path('storage/vendors_background') . '/' . $user->background_profile);
+                } catch (\Exception $e) {
+                }
+
+                $user->background_profile = $imageName;
+                
+                $user->save();
+            }
+
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }

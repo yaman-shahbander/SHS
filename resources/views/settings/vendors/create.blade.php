@@ -334,46 +334,94 @@ var h=1;
         /*----------------------------------------
         Upload btn
         ------------------------------------------*/
-        var SITE = SITE || {};
 
-SITE.fileInputs = function() {
-    var $this = $(this),
-        $val = $this.val(),
-        valArray = $val.split('\\'),
-        newVal = valArray[valArray.length-1],
-        $button = $this.siblings('.btn2'),
-        $fakeFile = $this.siblings('.file-holder');
-    if(newVal !== '') {
+function saveAvatar() {
+
+Path = function avatarSaver(event, inpClass = 'imgInp', button = 'btn2', inpPath = 'img-path') {
+    var $avatar = $('#' + inpClass); //  avatar image
+    if (event.target.id == inpClass) {
+         $val = $avatar.val();
+         valArray = $val.split('\\');
+         newVal = valArray[valArray.length-1]; // only image name
+         $button = $avatar.siblings('.' + button);
+         $fakeFile = $avatar.siblings('.file-holder');
+
+       if(newVal !== '') {
         $button.text('Photo Chosen');
-        if($fakeFile.length === 0) {
-
-            $('.newimg.img-path').val(newVal);
+        if($fakeFile.length === 0) { // If image is selected 
+            $('.' + inpPath).val(newVal); // input path
         } else {
             $fakeFile.text(newVal);
         }
+      }
     }
 };
 
-
-$('.file-wrapper input[type=file]').bind('change focus click', SITE.fileInputs);
+$('.file-wrapper #imgInp').bind('change focus click', Path);
 
 function readURL(input) {
-    if (input.files && input.files[0]) {
         var reader = new FileReader();
-        var tmppath = URL.createObjectURL(event.target.files[0]);
+
+        var tmppath = URL.createObjectURL(document.getElementById('imgInp').files[0]);
 
         reader.onload = function (e) {
+
             $('#img-uploaded').attr('src', e.target.result);
 
         }
-
-        reader.readAsDataURL(input.files[0]);
-    }
+        reader.readAsDataURL(document.getElementById('imgInp').files[0]);
 }
 
 $(".uploader").change(function(){
     readURL(this);
 });
+
+}
+
+
+function savebackground() {
+
+    Path = function backgroundSaver(event, inpClass = 'imgInput', button = 'background-btn', inpPath = 'path') {
+    var $background = $('#' + inpClass); //  background image
+    if (event.target.id == inpClass) {
+         $val = $background.val();
+         valArray = $val.split('\\');
+         newVal = valArray[valArray.length-1]; // only image name
+         $button = $background.siblings('.' + button);
+         $fakeFile = $background.siblings('.file-holder');
+
+       if(newVal !== '') {
+        $button.text('Photo Chosen');
+        if($fakeFile.length === 0) { // If image is selected 
+            $('.' + inpPath).val(newVal); // input path
+        } else {
+            $fakeFile.text(newVal);
+        }
+      }
+    }
+};
+
+$('.file-wrapper #imgInput').bind('change focus click', Path);
+
+function readURL(input) {
+        var reader = new FileReader();
+
+        var tmppath = URL.createObjectURL(document.getElementById('imgInput').files[0]);
+
+        reader.onload = function (e) {
+
+            $('.img-background').attr('src', e.target.result);
+
+        }
+        reader.readAsDataURL(document.getElementById('imgInput').files[0]);
+}
+
+$(".uploader").change(function(){
+    readURL(this);
+});
+
+}
+
 
     </script>
 <script src="{{asset('/js/nice-select2.js')}}"></script>

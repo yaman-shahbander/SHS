@@ -100,7 +100,8 @@ class User extends Authenticatable implements HasMedia
         'is_verified',
         'country_prefix',
         'instagram',
-        'facebook'
+        'facebook',
+        'background_profile'
     ];
     /**
      * The attributes that should be casted to native types.
