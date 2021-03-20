@@ -835,6 +835,10 @@ The Smart Home Services team</p>";
                         'image' => asset('storage/specialOffersPic') . '/' . $q->image,
                     ];
                 }),
+                'gallery'        => $vendor->gallery->transform(function($gallery){
+                    $gallery['image'] = asset('storage/gallery') . '/' . $gallery['image'];
+                    return $gallery->only('image','id');
+                }),
             ];
             return $this->sendResponse($response, 'User retrieved successfully');
 

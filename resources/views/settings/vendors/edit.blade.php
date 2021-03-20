@@ -525,11 +525,7 @@ $(".uploader").change(function(){
                 '<td>'+(rangeTimes[d][1]===undefined?'':rangeTimes[d][1])+'</td>'+
                 '</tr>');
         }
-        var obj = [] name: "John", age: 30, city: "New York" };
-        obj.push('kkk');
-        var myJSON = JSON.stringify(obj);
-        document.getElementById("dayWorkingHours").value = myJSON;
-        alert(myJSON);
+      
     }
 
     function getTime(hours, minutes) {
