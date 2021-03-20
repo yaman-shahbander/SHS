@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 
 use App\Models\Gallery;
+use App\Models\User;
 use App\Repositories\GalleryRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -18,7 +19,6 @@ use Image;
  * Class GalleryController
  * @package App\Http\Controllers\API
  */
-
 class GalleryAPIController extends Controller
 {
     /** @var  GalleryRepository */
@@ -38,43 +38,46 @@ class GalleryAPIController extends Controller
      */
     public function index(Request $request)
     {
-        // try{
-        //     $this->galleryRepository->pushCriteria(new RequestCriteria($request));
-        //     $this->galleryRepository->pushCriteria(new LimitOffsetCriteria($request));
-        // } catch (RepositoryException $e) {
-        //     return $this->sendError($e->getMessage());
-        // }
+        if ($request->header('devicetoken')) {
+            $user = User::where('device_token', $request->header('devicetoken'))->first();
 
-        $images = $this->galleryRepository->where('user_id', $request->id)->get();
+            if (empty($user)) {
+                return $this->sendError('User not found', 401);
+            }
 
-        $response = [];
-        foreach($images as $image) {
-            $response[] = [
-                'image'   => asset('storage/gallery') . '/' . $image->image,
-                'user_id' => $image->user_id
-            ];
-        }
+            $images = $user->gallery;
 
-        // $new_galleries = $galleries->toArray();
+            $response = [];
+            foreach ($images as $image) {
+                $response[] = [
+                    'image' => asset('storage/gallery') . '/' . $image->image,
+                    'user_id' => $image->user_id
+                ];
+            }
 
-        // $galleries_final = [];
-        // foreach($new_galleries as $new_gallery)
-        // {
-        //     if($new_gallery['approved'] == 1)
-        //     {
-        //         array_push($galleries_final,$new_gallery);
-        //     }
-        // }
+            // $new_galleries = $galleries->toArray();
 
-        return $this->sendResponse($response, 'Galleries retrieved successfully');
+            // $galleries_final = [];
+            // foreach($new_galleries as $new_gallery)
+            // {
+            //     if($new_gallery['approved'] == 1)
+            //     {
+            //         array_push($galleries_final,$new_gallery);
+            //     }
+            // }
 
+            return $this->sendResponse($response, 'Galleries retrieved successfully');
+
+
+        } else
+            return $this->sendError('nothing to process', 401);
     }
 
     /**
      * Display the specified Gallery.
      * GET|HEAD /galleries/{id}
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -91,29 +94,34 @@ class GalleryAPIController extends Controller
 
         return $this->sendResponse($gallery->toArray(), 'Gallery retrieved successfully');
     }
+
     public function store(Request $request)
     {
+        if ($request->header('devicetoken')) {
+            $user = User::where('device_token', $request->header('devicetoken'))->first();
 
-        if(!$request->hasFile('image')) {
-            return response()->json(['upload_file_not_found'], 400);
-        }
-        $allowedfileExtension=['JPEG','jpg','png','gif','svg'];
-        $files = $request->file('image');
-        $errors = [];
+            if (empty($user)) {
+                return $this->sendError('User not found', 401);
+            }
+            if (!$request->hasFile('image')) {
+                return response()->json(['upload_file_not_found'], 400);
+            }
+            $allowedfileExtension = ['JPEG', 'jpg', 'png', 'gif', 'svg'];
+            $files = $request->file('image');
+            $errors = [];
 
-        foreach( $request->file('image') as $file)
-        {
+            foreach ($request->file('image') as $file) {
 
-            $extension = $file->getClientOriginalExtension();
-            $check = in_array($extension,$allowedfileExtension);
+                $extension = $file->getClientOriginalExtension();
+                $check = in_array($extension, $allowedfileExtension);
 
-            if($check) {
+                if ($check) {
 
-                    $image = Image::make($file);
-                    $image->resize(400, 300);
-                    $image->contrast(10);
-                    $imageName = uniqId().$file->getClientOriginalName();
-                    $image->save(public_path('storage/gallery/').$imageName);
+
+                    $imageName = uniqId() . $file->getClientOriginalName();
+                    $file->move(public_path('storage/gallery'), $imageName);
+
+                    // $image->save(public_path('storage/gallery/') . $imageName);
 //return 55;
 //                    $image->save(public_path('images\gallery/'.$imageName));
 
@@ -124,16 +132,18 @@ class GalleryAPIController extends Controller
                     //store image file into directory and db
                     $save = new Gallery();
                     $save->image = $imageName;
-                    $save->user_id = $request->id;
+                    $save->user_id = $user->id;
                     $save->save();
-            } else {
-                return response()->json(['invalid_file_format'], 422);
+                } else {
+                    return $this->sendError('invalid_file_format', 422);
+                }
+
+
             }
-
-
-        }
-        return response()->json(['file_uploaded'], 200);
+            return $this->sendResponse([], 'file uploaded successfully');
 
 //        return response()->json(['what'], 200);
+        } else
+            return $this->sendError('nothing to process', 401);
     }
 }

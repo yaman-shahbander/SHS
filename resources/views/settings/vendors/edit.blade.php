@@ -14,6 +14,8 @@
 
 <link href="{{asset('includes/css/style.css')}}" rel="stylesheet">
 <link href="{{asset('css/jquery.multiselect.css')}}" rel="stylesheet">
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+
 
 <style>
 
@@ -257,6 +259,45 @@
     }
 
 
+
+    /*//working houres*/
+
+  /* RANGE SLIDER STYLES */
+  .range-checkbox { clear:left; float:left; margin:13px 10px 10px; }
+  .range-label { float:left; display:block; width:103px; margin:10px; cursor: pointer; }
+  .range-slider { float:left; margin:10px; }
+  .range-time { width:100px; float:left; margin:10px; }
+  .range-day-disabled { opacity:.5; }
+  .range-day .ui-slider-range { background: #00A000; }
+  .range-day .ui-slider-handle { cursor:w-resize !important; }
+  .range-day-disabled .ui-slider-range { background: #fff; }
+  .range-day-disabled .ui-slider-handle { cursor:default !important; background:none !important; border:none !important; }
+  .range-values { position:relative; display:block; height:20px; overflow:hidden; margin:10px 0 10px; }
+  .range-values span { position: absolute; border-left: 1px solid grey; padding-left:5px }
+  .range-values span.r-0 { left:0 }
+  .range-values span.r-3 { left:12.5% }
+  .range-values span.r-6 { left:25% }
+  .range-values span.r-9 { left:37.5% }
+  .range-values span.r-12 { left:50% }
+  .range-values span.r-15 { left:62.5% }
+  .range-values span.r-18 { left:75% }
+  .range-values span.r-21 { left:87.5% }
+  .range-values span.r-24 { left:100%;margin-left:-1px; }
+
+  /* RESULT DATA STYLES */
+  #schedule { width: 500px; background:#eee; margin-top:20px; }
+  #schedule th { text-align: left;border-bottom:1px solid grey; }
+  #schedule th,#schedule td { padding:5px; }
+
+  /************ PARAMS ************/
+
+  .range-slider,.range-values {
+      width: 400px;
+  }
+  .range-values,#schedule,h1 {
+      margin-left: 167px;
+  }
+
 </style>
 
 
@@ -401,4 +442,122 @@ $(".uploader").change(function(){
     NiceSelect.bind(document.getElementById("countries_code"), options);
 </script>
 
+
+<script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<script>
+    var rangeTimes = [];
+
+    $(".range-slider").slider({
+        range: true,
+        min: 0,
+        max: 1440,
+        values: [540, 1080],
+        step:30,
+        slide: slideTime,
+        change: updateOpeningHours
+    });
+
+    function slideTime(event, ui){
+        if (event && event.target) {
+            var $rangeslider = $(event.target);
+            var $rangeday = $rangeslider.closest(".range-day");
+            var rangeday_d = parseInt($rangeday.data('day'));
+            var $rangecheck = $rangeday.find(":checkbox");
+            var $rangetime = $rangeslider.next(".range-time");
+        }
+
+        if ($rangecheck.is(':checked')) {
+            $rangeday.removeClass('range-day-disabled');
+            $rangeslider.slider('enable');
+
+            if (ui!==undefined) {
+                var val0 = ui.values[0],
+                    val1 = ui.values[1];
+            } else {
+                var val0 = $rangeslider.slider('values', 0),
+                    val1 = $rangeslider.slider('values', 1);
+            }
+
+            var minutes0 = parseInt(val0 % 60, 10),
+                hours0 = parseInt(val0 / 60 % 24, 10),
+                minutes1 = parseInt(val1 % 60, 10),
+                hours1 = parseInt(val1 / 60 % 24, 10);
+            if (hours1==0) hours1=24;
+
+            rangeTimes[rangeday_d] = [getTime(hours0, minutes0),getTime(hours1, minutes1)];
+
+            $rangetime.text(rangeTimes[rangeday_d][0] + ' - ' + rangeTimes[rangeday_d][1]);
+
+        } else {
+            $rangeday.addClass('range-day-disabled');
+            $rangeslider.slider('disable');
+
+            rangeTimes[rangeday_d] = [];
+
+            $rangetime.text('Closed');
+        }
+    }
+
+    function updateOpeningHours() {
+        if ($('#schedule').length) {
+            $('#schedule tbody').empty();
+        } else {
+            $('#scheduleTable').append('\
+      <table id="schedule">\
+	    <thead>\
+		    <tr>\
+          <th>Day</th>\
+			    <th>Start Time</th>\
+			    <th>End Time</th>\
+		    </tr>\
+	    </thead>\
+	    <tbody>\
+	    </tbody>\
+      </table>');
+        }
+        var days = {};
+        for (d=1; d<=7; d++) {
+
+            $('#schedule tbody').append('<tr>'+
+                '<td>'+d+'</td>'+
+                '<td>'+(rangeTimes[d][0]===undefined?'Closed':rangeTimes[d][0])+'</td>'+
+                '<td>'+(rangeTimes[d][1]===undefined?'':rangeTimes[d][1])+'</td>'+
+                '</tr>');
+        }
+        var obj = [] name: "John", age: 30, city: "New York" };
+        obj.push('kkk');
+        var myJSON = JSON.stringify(obj);
+        document.getElementById("dayWorkingHours").value = myJSON;
+        alert(myJSON);
+    }
+
+    function getTime(hours, minutes) {
+        var time = null;
+        minutes = minutes + "";
+        if (minutes.length == 1) {
+            minutes = "0" + minutes;
+        }
+        return hours + ":" + minutes;
+    }
+
+    $('.range-checkbox').on('change', function(){
+        var $rangecheck = $(this);
+        var $rangeslider = $rangecheck.closest('.range-day').find('.range-slider');
+        slideTime({target:$rangeslider});
+        updateOpeningHours();
+    });
+
+    $("#scheduleSubmit").on('click', updateOpeningHours);
+
+    slideTime({target:$('#range-slider-1')});
+    slideTime({target:$('#range-slider-2')});
+    slideTime({target:$('#range-slider-3')});
+    slideTime({target:$('#range-slider-4')});
+    slideTime({target:$('#range-slider-5')});
+    slideTime({target:$('#range-slider-6')});
+    slideTime({target:$('#range-slider-7')});
+    updateOpeningHours();
+
+</script>
 @endpush

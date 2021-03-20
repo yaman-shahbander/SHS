@@ -35,7 +35,7 @@ use App\Models\User;
 use App\Balance;
 use Validator;
 use App\Models\Gallery;
-use App\Models\Category;
+//use App\Models\Category;
 
 class VendorController extends Controller
 {
@@ -650,7 +650,7 @@ $categories=Category::all();
                     'markers'      => ['title' => 'My Location', 'animation' => 'BOUNCE'],
                     'eventDragEnd' =>  '
                                         document.getElementById("latitude").value = event.latLng.lat(),
-                                        document.getElementById("longitude").value = event.latLng.lng()',  
+                                        document.getElementById("longitude").value = event.latLng.lng()',
                 ]
             );
 
@@ -702,7 +702,7 @@ $categories=Category::all();
         $userCoordinates =  GmapLocation::where('user_id', $request->id)->first();
 
         if (!empty($userCoordinates)) {
-            
+
             Mapper::map(
                 $userCoordinates->latitude,
                 $userCoordinates->longitude,
@@ -739,7 +739,7 @@ $categories=Category::all();
 
     public function store(CreateUserRequest $request)
     {
-        
+
 
         if (!auth()->user()->hasPermissionTo('vendors.store')) {
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
@@ -770,7 +770,7 @@ $categories=Category::all();
         $input['country_prefix'] = $request->countries_code;
         $input['facebook'] = $request->facebook;
         $input['instagram'] = $request->instagram;
-        
+
         while (true) {
             $payment_id = '#' . rand(1000, 9999) . rand(1000, 9999);
             if (!(User::where('payment_id', $payment_id)->exists())) {
@@ -802,7 +802,10 @@ $categories=Category::all();
         $input['device_token'] = $token;
         $user = $this->vendorRepository->update($input, $user->id);
         $subCategory=explode(',',$input['subcategorySelected']);
-        $user->subcategories()->sync($subCategory);
+        if ($input['subcategorySelected'] != null) {
+            $subarray = array_map('intval', explode(',', $input['subcategorySelected'] ));
+            $user->subcategories()->sync($subarray);
+        }
 
         $user->assignRole('vendor');
         //$user->assignRole($request->roles);
@@ -832,7 +835,7 @@ $categories=Category::all();
         return view('special_offers.create', [
             'categories' => $categories,
             'vendors'    => $user,
-            'url'        => '/special/offers/create', 
+            'url'        => '/special/offers/create',
             'customFields'=> isset($html) ? $html : false]);
 
         // return redirect(route('vendors.index'));
@@ -960,7 +963,9 @@ $categories=Category::all();
         $input['facebook'] = $request->facebook;
 
         $input['instagram'] = $request->instagram;
-$subCategory=explode(',',$input['subcategorySelected']);
+
+
+
         unset($input['email']);
 
         unset($input['phone']);
@@ -980,7 +985,7 @@ $subCategory=explode(',',$input['subcategorySelected']);
             $location->longitude = $request->longitude;
             $location->save();
         }
-        
+
 
         if ($user->email != $request->email) {
 
@@ -1008,10 +1013,17 @@ $subCategory=explode(',',$input['subcategorySelected']);
             }
 
         }
-$user->subcategories()->sync($subCategory);
-        $user->save();
+//        return dd( $input['subcategorySelected']);
 
-        //DB::table('model_has_roles')->where('model_id', $user->id)->delete();
+        if ($input['subcategorySelected'] != null) {
+        $subarray = array_map('intval', explode(',', $input['subcategorySelected'] ));
+            $user->subcategories()->sync($subarray);
+        }
+        else
+            $user->subcategories()->detach();
+            $user->save();
+
+            //DB::table('model_has_roles')->where('model_id', $user->id)->delete();
 
         //$user->assignRole($request->roles);
 
@@ -1576,7 +1588,7 @@ $user->subcategories()->sync($subCategory);
         } else
             $cities = [];
 
-            
+
             Mapper::map(
                 $user->coordinates != null ? $user->coordinates->latitude : 36.216667 ,
                 $user->coordinates != null ? $user->coordinates->longitude : 37.166668,
@@ -1587,7 +1599,7 @@ $user->subcategories()->sync($subCategory);
                         'markers'      => ['title' => 'My Location', 'animation' => 'BOUNCE'],
                         'eventDragEnd' =>  '
                                             document.getElementById("latitude").value = event.latLng.lat(),
-                                            document.getElementById("longitude").value = event.latLng.lng()',  
+                                            document.getElementById("longitude").value = event.latLng.lng()',
                     ]
                 );
 
