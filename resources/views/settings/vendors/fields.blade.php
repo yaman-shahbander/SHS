@@ -191,7 +191,7 @@
     <div class="row">
 
 
-        <div class="col-lg-12">
+     <div class="col-lg-12">
             <div class="div-center">
 <?php
                 if(Request::is('*edit'))
@@ -239,6 +239,8 @@
 
             </div>
         </div>
+
+
     </div>
     <div class="row">
         <!-- Language Field -->
@@ -267,9 +269,9 @@
 
                             <div class="right">
 
-                                <input type="text" class="img-path newimg" placeholder="Image Path">
+                                <input type="text" id="ImagePathAvatar" class="img-path newimg" placeholder="Image Path">
                                 <span class="file-wrapper">
-                      <input type="file" name="avatar" id="imgInp" class="uploader newimg"  />
+                      <input type="file" name="avatar" id="imgInp" class="uploader newimg" onclick="saveAvatar()" />
                       <span class="btn2 btn-large btn-alpha">Upload Image</span>
                      </span>
                             </div>
@@ -277,6 +279,58 @@
                     </div>
                 </div>
             </div>
+
+            {!! Form::label('background', trans("lang.background_SP"), ['class' => 'col-md-3 control-label', 'style' => 'font-size:15px']) !!}
+            <!-- $FIELD_NAME_TITLE$ Field -->
+                <div class="row" style="width: 77%;">
+                    <div class="box">
+                        <div class="content">
+
+                            <!-- Custom File Uploader  -->
+
+                            <div class="left">
+                                @if(Request::is('*edit'))
+                                    @if($user->background_profile != null )
+                                        <img id="img-uploaded" class="img2 img-background" src="{{asset('storage/vendors_background' . "/" . $user->background_profile)}}" alt="your image" />
+                                    @endif
+                                @else
+                                    <img id="img-uploaded" class="img2 img-background" src="{{asset('storage/vendors_background/background.jpg')}}" alt="your image" />
+                                @endif
+
+                            </div>
+
+                            <div class="right">
+
+                                <input type="text" class="path newimg" placeholder="Image Path">
+                                <span class="file-wrapper">
+                                <input type="file" name="background_SP" id="imgInput" class="uploader newimg" onclick="savebackground()" />
+                                <span class="btn-large btn-alpha background-btn"
+                                style="
+                                        color: #fff;
+                                        background-color: #007bff;
+                                        border: 1px solid #007bff;
+                                        text-align: center;
+                                        display: inline-block;
+                                        vertical-align: middle;
+                                        white-space: nowrap;
+                                        margin: 0.6em 0.6em .6em 0;
+                                        padding: 0.35em .7em 0.4em;
+                                        text-decoration: none;
+                                        width: auto;
+                                        position: relative;
+                                        border-radius: 4px;
+                                        user-select: none;
+                                        outline: none;
+                                        -webkit-transition: all, 0.25s, ease-in;
+                                        -moz-transition: all, 0.25s, ease-in;
+                                        transition: all, 0.25s, ease-in;
+"
+                                >Upload Image</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
         </div>
 
 

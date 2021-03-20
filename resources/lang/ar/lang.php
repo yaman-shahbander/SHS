@@ -1081,5 +1081,6 @@ return [
     'instagram_link'                 =>   'رابط حساب الانستغرام',
     'social_media'                   =>   'مواقع التواصل الأجتماعي',
     'SP_location'                    =>   'أختر موقع على الخريطة',
+    'background_SP'                  =>   'الخلفية',
 
 ];

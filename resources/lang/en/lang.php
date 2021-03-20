@@ -1111,4 +1111,5 @@ return [
     'instagram_link'                 =>   'Instagram link',
     'social_media'                   =>   'Social Media',
     'SP_location'                    =>   'Select location on the map',
+    'background_SP'                  =>   'Background',
 ];
