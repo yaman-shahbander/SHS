@@ -172,7 +172,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Cornford\Googlmapper\MapperServiceProvider::class,
-
+        Intervention\Image\ImageServiceProvider::class,
     ],
 
     /*
@@ -230,7 +230,6 @@ return [
 //        'PayPal' => Srmklive\PayPal\Facades\PayPal::class,
         'Mapper' => Cornford\Googlmapper\Facades\MapperFacade::class,
         'Image' => Intervention\Image\Facades\Image::class,
-
 
     ],
 

@@ -8,6 +8,7 @@ use App\Models\Message;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Pusher\Pusher;
+use Image;
 
 class MessageController extends Controller
 {
@@ -65,58 +66,51 @@ class MessageController extends Controller
     {
 
 
-
-
         $from = Auth::user()->device_token;
+
         $to = $request->receiver_id;
 
-        $message = $request->message==null?' ':$request->message;
+        $message = $request->message == null ? ' ' : $request->message;
 
         $data = new Message();
         $data->from = $from;
         $data->to = $to;
-        $data->message = $message==null? ' ':$message;
+        $data->message = $message == null ? ' ' : $message;
 
 
+        $videoExt =  ['video/mp3', 'video/mp4', 'video/wav', 'video/wma', 'video/webm', 'video/mov', 'video/wmv', 'video/mpeg', 'video/mpg'];
+
+        $imageExt =  ['image/png', 'image/gif', 'image/jpeg', 'image/jpg'];
 
 
-        $videoExt=  ['video/mp3','video/mp4','video/wav','video/wma','video/webm','video/mov','video/wmv','video/mpeg','video/mpg'] ;
-$imageExt=  ['image/png','image/gif','image/jpeg'] ;
-
-
-
-
-
-        if (!empty ($request->file('file'))) {
+        if (!empty($request->file('file'))) {
 
             $FileName = uniqid() . $request->file('file')->getClientOriginalName();
 
             $FileName = preg_replace('/\s+/', '_', $FileName);
 
-
-
-
-
-
-            switch($request->file('file'))
-            {
-                case in_array($request->file('file')->getClientMimeType(),$videoExt):
+            switch ($request->file('file')) {
+                case in_array($request->file('file')->getClientMimeType(), $videoExt):
                     $request->file('file')->move(public_path('storage/chat/video'), $FileName);
                     $data->type = 'video';
-                break;
+                    break;
 
-                case in_array($request->file('file')->getClientMimeType(),$imageExt):
-                    $request->file('file')->move(public_path('storage/chat/image'), $FileName);
+                case in_array($request->file('file')->getClientMimeType(), $imageExt):
+                    $img = Image::make($request->file('file')->getRealPath());
+                    $img->resize(400, 400, function ($constraint) {
+                        $constraint->aspectRatio();
+                    })->save(public_path('storage/chat/image') . '/' . $FileName);
                     $data->type = 'image';
-                break;
-                case in_array($request->file('file')->getClientMimeType(),["audio/wav"]):
+                    break;
+                case in_array($request->file('file')->getClientMimeType(), ["audio/wav"]):
                     $request->file('file')->move(public_path('storage/chat/audio'), $FileName);
                     $data->type = 'audio';
                     break;
             }
             $data->fileName = $FileName;
-
         }
+
+
 
         $data->is_read = 0; // message will be unread when sending message
         $data->save();
@@ -137,10 +131,11 @@ $imageExt=  ['image/png','image/gif','image/jpeg'] ;
             'from' => $data->from,
             'to' => $data->to,
             'message' => $data->message,
-            'type'=> $data->type==null?null:$data->type,
-            'fileName'=> $data->fileName==null? null:asset('storage/chat')  . '/' . $data->type . '/' . $data->fileName
+            'type' => $data->type == null ? null : $data->type,
+            'fileName' => $data->fileName == null ? null : asset('storage/chat')  . '/' . $data->type . '/' . $data->fileName
         ];
         $data = ['from' => $from, 'to' => $to, 'message' => $message]; // sending from and to user id when pressed enter
+
         $pusher->trigger('yaman-channel', 'messaging-event', $dataMessage);
 
 
