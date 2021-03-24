@@ -396,7 +396,7 @@ Path = function avatarSaver(event, inpClass = 'imgInp', button = 'btn2', inpPath
 
        if(newVal !== '') {
         $button.text('Photo Chosen');
-        if($fakeFile.length === 0) { // If image is selected 
+        if($fakeFile.length === 0) { // If image is selected
             $('.' + inpPath).val(newVal); // input path
         } else {
             $fakeFile.text(newVal);
@@ -440,7 +440,7 @@ function savebackground() {
 
        if(newVal !== '') {
         $button.text('Photo Chosen');
-        if($fakeFile.length === 0) { // If image is selected 
+        if($fakeFile.length === 0) { // If image is selected
             $('.' + inpPath).val(newVal); // input path
         } else {
             $fakeFile.text(newVal);
@@ -488,7 +488,7 @@ $(".uploader").change(function(){
 </script>
 
 
-<script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+{{--<script src="https://code.jquery.com/jquery-1.9.1.js"></script>--}}
 <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <script>
     var rangeTimes = [];
@@ -497,11 +497,12 @@ $(".uploader").change(function(){
         range: true,
         min: 0,
         max: 1440,
-        values: [540, 1080],
+        values: [340, 1080],
         step:30,
         slide: slideTime,
         change: updateOpeningHours
     });
+
 
     function slideTime(event, ui){
         if (event && event.target) {
@@ -561,16 +562,21 @@ $(".uploader").change(function(){
 	    </tbody>\
       </table>');
         }
-        var days = {};
+        var cars = [];
         for (d=1; d<=7; d++) {
-
+            rangeTimes[d][0]===undefined?console.log(d):cars.push({day_id:d,start:rangeTimes[d][0]+":00",end:rangeTimes[d][1]+":00"})  ;
             $('#schedule tbody').append('<tr>'+
                 '<td>'+d+'</td>'+
                 '<td>'+(rangeTimes[d][0]===undefined?'Closed':rangeTimes[d][0])+'</td>'+
                 '<td>'+(rangeTimes[d][1]===undefined?'':rangeTimes[d][1])+'</td>'+
                 '</tr>');
         }
-      
+        // var arr = [ name:"John", email:"Peter", sla:"Sally", lkj:"Jane" ];
+
+        // cars.push({ "id": 1, brand: "Ferrari" });
+        var myJSON = JSON.stringify(cars);
+        document.getElementById("dayWorkingHours").value = myJSON;
+        // console.log(arr[0]);
     }
 
     function getTime(hours, minutes) {
@@ -591,6 +597,8 @@ $(".uploader").change(function(){
 
     $("#scheduleSubmit").on('click', updateOpeningHours);
 
+
+
     slideTime({target:$('#range-slider-1')});
     slideTime({target:$('#range-slider-2')});
     slideTime({target:$('#range-slider-3')});
@@ -598,6 +606,20 @@ $(".uploader").change(function(){
     slideTime({target:$('#range-slider-5')});
     slideTime({target:$('#range-slider-6')});
     slideTime({target:$('#range-slider-7')});
+    updateOpeningHours();
+        @if(Request::is('*edit'))
+        @foreach($user->days as $day)
+    var start=parseInt(""+{{$day->pivot->start[0]}}+{{$day->pivot->start[1]}})*60+parseInt(""+{{$day->pivot->start[3]}}+{{$day->pivot->start[4]}});
+    var end=parseInt(""+{{$day->pivot->end[0]}}+{{$day->pivot->end[1]}})*60+parseInt(""+{{$day->pivot->end[3]}}+{{$day->pivot->end[4]}});
+    $("#range-slider-{{$day->id}}").slider('values',0,start);
+    $("#range-slider-{{$day->id}}").slider('values',1,end);
+
+    slideTime({target:$('#range-slider-{{$day->id}}')});
+
+    @endforeach
+        @endif
+
+
     updateOpeningHours();
 
 </script>

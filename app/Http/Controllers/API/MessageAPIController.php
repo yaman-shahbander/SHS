@@ -266,23 +266,12 @@ class MessageApiController extends Controller
                 return $this->sendError('User not found', 401);
             }
 
-            $message          = new Message();
-
-            $message->from    = $user->device_token;
-
-            $message->to      = $request->to;
-
-            $message->message = $request->message==null? ' ':$request->message;
-
-            $message->is_read = 0;
-
-
 
             $videoExt=  ['video/mp3','video/mp4','video/wav','video/wma','video/webm','video/mov','video/wmv','video/mpeg','video/mpg'] ;
             $imageExt=  ['image/png','image/gif','image/jpeg'] ;
+            $type='message';
 
-
-
+            $FileName=null;
 
 
             if (!empty ($request->file('fileName'))) {
@@ -293,36 +282,35 @@ class MessageApiController extends Controller
 
                 $request->file('fileName')->move(public_path('storage/chat'), $FileName);
 
-                $message->fileName = $FileName;
 
 
                 switch($request->file('fileName'))
                 {
                     case in_array($request->file('fileName')->getClientMimeType(),$videoExt):
-                        $message->type = 'video';
+                        $this->$type = 'video';
                         break;
 
                     case in_array($request->file('fileName')->getClientMimeType(),$imageExt):
-                        $message->type = 'image';
+                        $this->$type = 'image';
                         break;
                 }
 
             }
 
+         try {
 
-            if($message->save()){
 
-                $options = array(
-                    'cluster' => 'ap2',
-                    'useTLS' => true
-                );
+             $options = array(
+                 'cluster' => 'ap2',
+                 'useTLS' => true
+             );
 
-                $pusher = new Pusher(
-                    env('PUSHER_APP_KEY'),
-                    env('PUSHER_APP_SECRET'),
-                    env('PUSHER_APP_ID'),
-                    $options
-                );
+             $pusher = new Pusher(
+                 env('PUSHER_APP_KEY'),
+                 env('PUSHER_APP_SECRET'),
+                 env('PUSHER_APP_ID'),
+                 $options
+             );
 
 //            $data = response()->json([
 //                'from' => $message->from,
@@ -332,60 +320,107 @@ class MessageApiController extends Controller
 //
 //            ]);
 
-                $data = [
-                    'from' => $message->from,
-                    'to' => $message->to,
-                    'message' => $message->message,
-                    'type'=> $message->type==null?null:$message->type,
-                    'fileName'=> $message->fileName==null? null:asset('storage/chat') . '/' . $message->fileName
-                ]; // sending from and to user id when pressed enter
-                $pusher->trigger('yaman-channel', 'messaging-event', $data);
+             if ($request->to == "32345ad6b67mnbe8djje93751eafe59512eb") {
+                 $admins = User::with('roles')
+                     ->leftJoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+                     ->where('role_id', 2)->orWhere('role_id', 1)->get();
+                 foreach ($admins as $admin) {
+                     $message = new Message();
+
+                     $message->from = $user->device_token;
+
+                     $message->to = $admin->device_token;
+
+                     $message->message = $request->message == null ? ' ' : $request->message;
+
+                     $message->fileName = $FileName;
+
+                     $message->type = $this->$type;
+
+                     $message->is_read = 0;
+                     $message->save();
 
 
+                     $data = [
+                         'from' => $message->from,
+                         'to' => $message->to,
+                         'message' => $message->message,
+                         'type' => $message->type == null ? null : $message->type,
+                         'fileName' => $message->fileName == null ? null : asset('storage/chat') . '/' . $message->fileName
+                     ]; // sending from and to user id when pressed enter
+                     $pusher->trigger('yaman-channel', 'messaging-event', $data);
+                 }
 
-                //for send notification
+             } else {
+                 $message = new Message();
 
-                $reciver = User::where('device_token', $request->to)->first();
+                 $message->from = $user->device_token;
 
-                $SERVER_API_KEY = 'AAAA71-LrSk:APA91bHCjcToUH4PnZBAhqcxic2lhyPS2L_Eezgvr3N-O3ouu2XC7-5b2TjtCCLGpKo1jhXJqxEEFHCdg2yoBbttN99EJ_FHI5J_Nd_MPAhCre2rTKvTeFAgS8uszd_P6qmp7NkSXmuq';
+                 $message->to = $request->to;
 
-                $headers = [
-                    'Authorization: key=' . $SERVER_API_KEY,
-                    'Content-Type: application/json',
-                ];
+                 $message->message = $request->message == null ? ' ' : $request->message;
+                 $message->fileName = $FileName;
+                 $message->type = $this->$type;
+                 $message->is_read = 0;
+                 $message->save();
 
-                $data = [
-                    "registration_ids" => array($reciver->fcm_token),
-                    "notification" => [
-                        "title"    => config('notification_lang.Notification_SP_message_title_' . $reciver->language),
-                        "body"     =>  $user->name . ' ' . config('notification_lang.Notification_SP_message_body_' . $reciver->language) . ' ' . $request->message
-                    ]
-                ];
+                 $data = [
+                     'from' => $message->from,
+                     'to' => $message->to,
+                     'message' => $message->message,
+                     'type' => $message->type == null ? null : $message->type,
+                     'fileName' => $message->fileName == null ? null : asset('storage/chat') . '/' . $message->fileName
+                 ]; // sending from and to user id when pressed enter
+                 $pusher->trigger('yaman-channel', 'messaging-event', $data);
 
-                $dataString = json_encode($data);
-
-                $ch = curl_init();
-
-                curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
-                curl_setopt($ch, CURLOPT_POST, true);
-
-
-                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-
-                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
-                //return dd(curl_exec($ch));
-                $response = curl_exec($ch);
+             }
 
 
+             //for send notification
 
-                return $this->sendResponse([], 'Message saved successfully');
+             $reciver = User::where('device_token', $request->to)->first();
+
+             $SERVER_API_KEY = 'AAAA71-LrSk:APA91bHCjcToUH4PnZBAhqcxic2lhyPS2L_Eezgvr3N-O3ouu2XC7-5b2TjtCCLGpKo1jhXJqxEEFHCdg2yoBbttN99EJ_FHI5J_Nd_MPAhCre2rTKvTeFAgS8uszd_P6qmp7NkSXmuq';
+
+             $headers = [
+                 'Authorization: key=' . $SERVER_API_KEY,
+                 'Content-Type: application/json',
+             ];
+
+             $data = [
+                 "registration_ids" => array($reciver->fcm_token),
+                 "notification" => [
+                     "title" => config('notification_lang.Notification_SP_message_title_' . $reciver->language),
+                     "body" => $user->name . ' ' . config('notification_lang.Notification_SP_message_body_' . $reciver->language) . ' ' . $request->message
+                 ]
+             ];
+
+             $dataString = json_encode($data);
+
+             $ch = curl_init();
+
+             curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+             curl_setopt($ch, CURLOPT_POST, true);
+
+
+             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+             curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+             //return dd(curl_exec($ch));
+             $response = curl_exec($ch);
+
+
+             return $this->sendResponse([], 'Message saved successfully');
+         }
+            catch (\Exception $e){
+
+                return $this->sendError($e->getMessage(), 401);
+
             }
-
-            return $this->sendError('Message not saved', 401);
 
         }
     }

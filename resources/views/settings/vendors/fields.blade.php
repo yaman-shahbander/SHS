@@ -194,8 +194,14 @@
      <div class="col-lg-12">
             <div class="div-center">
 <?php
-                if(Request::is('*edit'))
-               $subarray=$user->subcategories->transform(function($q){return $q->id;})
+                if(Request::is('*edit')){
+               $subarray=$user->subcategories->transform(function($q){return $q->id;});
+
+                $dayarray=[];
+                foreach ($user->days as $day){
+                    $dayarray[]=$day->id;
+                }
+                }
                 ?>
 
                 <input id="subcategorySelected" name="subcategorySelected" value="" type="text"
@@ -452,50 +458,50 @@
         </div>
 
         <div class="range-day" id="range-day-1" data-day="1">
-            <input type="checkbox" name="day-1" id="day-1" value="1" class="range-checkbox" checked>
-            <label for="day-1" class="range-label">Monday:</label>
+            <input type="checkbox" name="day-1" id="day-1" value="1" class="range-checkbox" @if(Request::is('*edit'))@if(in_array(1,$dayarray)) checked @endif @endif>
+            <label for="day-1" class="range-label">Sunday:</label>
             <div id="range-slider-1" class="range-slider"></div>
             <span id="range-time-1" class="range-time"></span>
         </div>
 
         <div class="range-day" id="range-day-2" data-day="2">
-            <input type="checkbox" name="day-2" id="day-2" value="1" class="range-checkbox" checked>
-            <label for="day-2" class="range-label">Tuesday:</label>
+            <input type="checkbox" name="day-2" id="day-2" value="1" class="range-checkbox" @if(Request::is('*edit'))@if(in_array(2,$dayarray)) checked @endif @endif>
+            <label for="day-2" class="range-label">Monday:</label>
             <div id="range-slider-2" class="range-slider"></div>
             <span id="range-time-2" class="range-time"></span>
         </div>
 
         <div class="range-day" id="range-day-3" data-day="3">
-            <input type="checkbox" name="day-3" id="day-3" value="1" class="range-checkbox" checked>
-            <label for="day-3" class="range-label">Wednesday:</label>
+            <input type="checkbox" name="day-3" id="day-3" value="1" class="range-checkbox" @if(Request::is('*edit'))@if(in_array(3,$dayarray)) checked @endif @endif>
+            <label for="day-3" class="range-label">Tuesday:</label>
             <div id="range-slider-3" class="range-slider"></div>
             <span id="range-time-3" class="range-time"></span>
         </div>
 
         <div class="range-day" id="range-day-4" data-day="4">
-            <input type="checkbox" name="day-4" id="day-4" value="1" class="range-checkbox" checked>
-            <label for="day-4" class="range-label">Thursday‎:</label>
+            <input type="checkbox" name="day-4" id="day-4" value="1" class="range-checkbox" @if(Request::is('*edit'))@if(in_array(4,$dayarray)) checked @endif @endif>
+            <label for="day-4" class="range-label">Wednesday‎:</label>
             <div id="range-slider-4" class="range-slider"></div>
             <span id="range-time-4" class="range-time"></span>
         </div>
 
         <div class="range-day" id="range-day-5" data-day="5">
-            <input type="checkbox" name="day-5" id="day-5" value="1" class="range-checkbox" checked>
-            <label for="day-5" class="range-label">Friday:</label>
+            <input type="checkbox" name="day-5" id="day-5" value="1" class="range-checkbox" @if(Request::is('*edit'))@if(in_array(5,$dayarray)) checked @endif @endif>
+            <label for="day-5" class="range-label">Thursday:</label>
             <div id="range-slider-5" class="range-slider"></div>
             <span id="range-time-5" class="range-time"></span>
         </div>
 
         <div class="range-day" id="range-day-6" data-day="6">
-            <input type="checkbox" name="day-6" id="day-6" value="1" class="range-checkbox" checked>
-            <label for="day-6" class="range-label">Saturday:</label>
+            <input type="checkbox" name="day-6" id="day-6" value="1" class="range-checkbox" @if(Request::is('*edit'))@if(in_array(6,$dayarray)) checked @endif @endif>
+            <label for="day-6" class="range-label">Friday:</label>
             <div id="range-slider-6" class="range-slider"></div>
             <span id="range-time-6" class="range-time"></span>
         </div>
 
         <div class="range-day" id="range-day-7" data-day="7">
-            <input type="checkbox" name="day-7" id="day-7" value="1" class="range-checkbox">
-            <label for="day-7" class="range-label">Sunday:</label>
+            <input type="checkbox" name="day-7" id="day-7" value="1" class="range-checkbox" @if(Request::is('*edit'))@if(in_array(7,$dayarray)) checked @endif @endif>
+            <label for="day-7" class="range-label">Saturday:</label>
             <div id="range-slider-7" class="range-slider"></div>
             <span id="range-time-7" class="range-time"></span>
         </div>
@@ -504,7 +510,7 @@
     </div>
     </div>
         <div class="row">
-            <input type="text" id="dayWorkingHours" value="">
+            <input type="text" name="dayWorkingHours" id="dayWorkingHours" value="" style="display: none">
     <div class="col-md-12" id="scheduleTable">
 
     </div>
@@ -514,3 +520,4 @@
         <button type="submit" class="btn btn-{{setting('theme_color')}}"><i class="fa fa-save"></i> {{trans('lang.save')}} </button>
         <a href="{!! route('vendors.index') !!}" class="btn btn-default"><i class="fa fa-undo"></i> {{trans('lang.cancel')}}</a>
     </div>
+
