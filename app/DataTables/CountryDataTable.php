@@ -34,8 +34,8 @@ class CountryDataTable extends DataTable
         $dataTable = new EloquentDataTable($query);
         $columns = array_column($this->getColumns(), 'data');
         $dataTable = $dataTable
-            ->editColumn('updated_at', function ($Country) {
-                return getDateColumn($Country, 'updated_at');
+            ->editColumn('created_at', function ($Country) {
+                return getDateColumn($Country, 'created_at');
             })
             ->addColumn('action', 'country.datatables_actions')
             ->rawColumns(array_merge($columns, ['action']));
@@ -62,8 +62,8 @@ class CountryDataTable extends DataTable
 
             ],
             [
-                'data' => 'updated_at',
-                'title' => trans('lang.category_updated_at'),
+                'data' => 'created_at',
+                'title' => trans('lang.created_at'),
                 'searchable' => false,
             ]
         ];

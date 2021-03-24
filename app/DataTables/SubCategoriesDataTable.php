@@ -45,8 +45,8 @@ class SubCategoriesDataTable extends DataTable
                 }
                 
             })
-            ->editColumn('updated_at', function ($subcategory) {
-                return getDateColumn($subcategory, 'updated_at');
+            ->editColumn('created_at', function ($subcategory) {
+                return getDateColumn($subcategory, 'created_at');
             })
             ->addColumn('action', 'SubCategories.datatables_actions')
             ->editColumn('Parent Category', function ($subcategory) {
@@ -84,8 +84,8 @@ class SubCategoriesDataTable extends DataTable
                 'searchable' => false, 'orderable' => false, 'exportable' => false, 'printable' => false,
             ],
             [
-                'data' => 'updated_at',
-                'title' => trans('lang.category_updated_at'),
+                'data' => 'created_at',
+                'title' => trans('lang.created_at'),
                 'searchable' => false,
             ]
 

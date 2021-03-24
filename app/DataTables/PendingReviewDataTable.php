@@ -35,8 +35,8 @@ class PendingReviewDataTable extends DataTable
         $columns = array_column($this->getColumns(), 'data');
         $dataTable = $dataTable
 
-            ->editColumn('updated_at', function ($review) {
-                return getDateColumn($review, 'updated_at');
+            ->editColumn('created_at', function ($review) {
+                return getDateColumn($review, 'created_at');
             })
             ->editColumn('full_rating',function ($review){
               return getFullRating($review);
@@ -86,8 +86,13 @@ class PendingReviewDataTable extends DataTable
                 'data' => 'full_rating',
                 'title' => trans('lang.rating'),
 
-            ]
+            ],
+            [
+                'data' => 'created_at',
+                'title' => trans('lang.created_at'),
 
+            ]
+            
         ];
 
         $hasCustomField = in_array(reviews::class, setting('custom_field_models', []));

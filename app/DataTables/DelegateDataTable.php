@@ -35,8 +35,8 @@ class DelegateDataTable extends DataTable
         $dataTable = new EloquentDataTable($query);
         $columns = array_column($this->getColumns(), 'data');
         $dataTable = $dataTable
-            ->editColumn('updated_at', function ($delegate) {
-                return getDateColumn($delegate, 'updated_at');
+            ->editColumn('created_at', function ($delegate) {
+                return getDateColumn($delegate, 'created_at');
             })
             ->addColumn('action', 'delegate.datatables_actions')
 //            ->editColumn('name', function ($delegate) {
@@ -75,8 +75,8 @@ class DelegateDataTable extends DataTable
                 'title' => trans('lang.balance'),
             ],
             [
-                'data' => 'updated_at',
-                'title' => trans('lang.category_updated_at'),
+                'data' => 'created_at',
+                'title' => trans('lang.created_at'),
                 'searchable' => false,
             ]
 

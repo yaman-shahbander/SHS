@@ -40,8 +40,8 @@ class durationDataTable extends DataTable
              ->editColumn('discount', function ($vendorduration) {
                return getvendorRegistrationdiscount($vendorduration);
              })
-            ->editColumn('updated_at', function ($vendorduration) {
-                return getDateColumn($vendorduration, 'updated_at');
+            ->editColumn('created_at', function ($vendorduration) {
+                return getDateColumn($vendorduration, 'created_at');
             })
             ->addColumn('action', 'duration.datatables_actions')
             ->rawColumns(array_merge($columns, ['action']));
@@ -77,8 +77,8 @@ class durationDataTable extends DataTable
                 'searchable' => false,
             ],
             [
-                'data' => 'updated_at',
-                'title' => trans('lang.category_updated_at'),
+                'data' => 'created_at',
+                'title' => trans('lang.created_at'),
                 'searchable' => false,
             ]
         ];

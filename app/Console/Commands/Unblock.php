@@ -40,5 +40,7 @@ class Unblock extends Command
     public function handle()
     {
         BannedUsers::where('forever_ban', '!=', '1')->where('temporary_ban', '<=', Carbon::now())->delete();
+
+        
     }
 }

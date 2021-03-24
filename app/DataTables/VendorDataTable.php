@@ -29,8 +29,8 @@ class VendorDataTable extends DataTable
 
         $columns = array_column($this->getColumns(), 'data');
         return $dataTable
-            ->editColumn('updated_at', function ($user) {
-                return getDateColumn($user, 'updated_at');
+            ->editColumn('created_at', function ($user) {
+                return getDateColumn($user, 'created_at');
             })
             ->editColumn('email', function ($user) {
                 return getEmailColumn($user, 'email');
@@ -92,31 +92,32 @@ class VendorDataTable extends DataTable
             [
                 'data' => 'name',
                 'title' => trans('lang.user_name'),
-
+                'searchable' => true,
             ],
             [
                 'data' => 'email',
                 'title' => trans('lang.user_email'),
-
+                'searchable' => true,
             ],
             [
                 'data' => 'phone',
                 'title' => trans('lang.phone'),
-
-            ],
-
-            [
-                'data' => 'status_type',
-                'title' => trans('lang.status'),
+                'searchable' => true,
             ],
             [
                 'data' => 'full_rating',
                 'title' =>  trans('lang.rating'),
+                'searchable' => false,
+            ],
+            [
+                'data' => 'status_type',
+                'title' => trans('lang.status'),
+                'searchable' => false,
             ],
 
             [
-                'data' => 'updated_at',
-                'title' => trans('lang.user_updated_at'),
+                'data' => 'created_at',
+                'title' => trans('lang.created_at'),
                 'searchable' => false,
             ]
 

@@ -40,8 +40,8 @@ class BannedUsersDataTable extends DataTable
             ->editColumn('description', function ($BannedUsers) {
                     return $BannedUsers->description;
              })   
-            ->editColumn('updated_at', function ($BannedUsers) {
-                return getDateColumn($BannedUsers, 'updated_at');
+            ->editColumn('created_at', function ($BannedUsers) {
+                return getDateColumn($BannedUsers, 'created_at');
             })
             ->editColumn('temporary_ban', function ($BannedUsers) {
                 return getDateColumn($BannedUsers, 'temporary_ban');
@@ -71,10 +71,11 @@ class BannedUsersDataTable extends DataTable
             [
                 'data' => 'description',
                 'title' => trans('lang.description'),
+                'searchable' => true,
             ],
             [
-                'data' => 'updated_at',
-                'title' => trans('lang.category_updated_at'),
+                'data' => 'created_at',
+                'title' => trans('lang.created_at'),
                 'searchable' => false,
             ],
             [

@@ -38,8 +38,8 @@ class BalanceDataTable extends DataTable
             ->editColumn('balance_id', function($User) {
                return getBalanceName($User);
             })
-            ->editColumn('updated_at', function ($User) {
-                return getDateColumn($User, 'updated_at');
+            ->editColumn('created_at', function ($User) {
+                return getDateColumn($User, 'created_at');
             })
             ->addColumn('action', 'balance.datatables_actions')
             ->rawColumns(array_merge($columns, ['action']));
@@ -64,8 +64,8 @@ class BalanceDataTable extends DataTable
                 'title' => trans('lang.balance'),
             ],
             [
-                'data' => 'updated_at',
-                'title' => trans('lang.category_updated_at'),
+                'data' => 'created_at',
+                'title' => trans('lang.created_at'),
                 'searchable' => false,
             ]
         ];

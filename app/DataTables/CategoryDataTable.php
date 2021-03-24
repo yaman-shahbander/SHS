@@ -42,7 +42,7 @@ class CategoryDataTable extends DataTable
                 }
                 
             })
-            ->editColumn('updated_at', function ($category) {
+            ->editColumn('created_at', function ($category) {
                 return getDateColumn($category, 'updated_at');
             })
             ->addColumn('action', 'categories.datatables_actions')
@@ -75,8 +75,8 @@ class CategoryDataTable extends DataTable
                 'searchable' => false, 'orderable' => false, 'exportable' => false, 'printable' => false,
             ],
             [
-                'data' => 'updated_at',
-                'title' => trans('lang.category_updated_at'),
+                'data' => 'created_at',
+                'title' => trans('lang.created_at'),
                 'searchable' => false,
             ]
         ];
