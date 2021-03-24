@@ -237,7 +237,7 @@
                         <div class="file-select" style="width: 211px;margin-top: 18px;">
                             <div class="file-select-button" id="fileName" style="position: absolute;">Choose File</div>
                             <div class="file-select-name" id="noFile" style="text-indent: 77px;">No file chosen...</div>
-                            <input type="file" name="image" id="image" accept=".png,.gif, .jpeg,.mp4,.wma,.webm,.mov,.wmv,.mpeg,.mpg" onchange="pathchange()">
+                            <input type="file" name="image" id="image" accept=".png,.gif,.jpeg,.jpg,.mp4,.wma,.webm,.mov,.wmv,.mpeg,.mpg" onchange="pathchange()">
                         </div>
                     </div>
 
