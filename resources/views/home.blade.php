@@ -348,14 +348,14 @@
 
         if (parentID != null) {
             receiver_id = parentID;
+
             $.ajax({
                 type: "get",
                 url: "message/" + receiver_id, // need to create this route
                 data: "",
                 cache: false,
-                success: function(data) {
-                    $('#messages').html(data);
-
+                success: function(messages) {
+                    $('#messages').html(messages);
                     scrollToBottomFunc();
                 }
             });
