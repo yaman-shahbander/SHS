@@ -7,6 +7,7 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Models\BannedUsers;
 use Carbon\Carbon;
 use App\Console\Commands\Unblock;
+use App\Jobs\DeleteBannedUsers;
 
 class Kernel extends ConsoleKernel
 {
@@ -33,11 +34,13 @@ class Kernel extends ConsoleKernel
         // $schedule->command('demo:cron')
         //         ->everyMinute();
 
-          $schedule->command('user:unblock')->everyMinute();
+        // $schedule->command('user:unblock')->everyMinute();
 
-        // $schedule->call(function () {
-        //     BannedUsers::where('forever_ban', '!=', '1')->where('temporary_ban', '<=', Carbon::now())->delete();
-        // })->everyMinute()->runInBackground();
+        $schedule->call(function () {
+            BannedUsers::where('forever_ban', '!=', '1')->where('temporary_ban', '<=', Carbon::now())->delete();
+        })->everyMinute()->runInBackground();
+        //daily()
+        //$schedule->job(new DeleteBannedUsers)->everyMinute();
     }
 
     /**
