@@ -75,7 +75,7 @@ class SpecialOffersDataTable extends DataTable
             [
                 'data' => 'description',
                 'title' => trans('lang.description'),
-
+                'searchable' => true,
             ],
             [
                 'data' => 'user_id',
@@ -85,10 +85,12 @@ class SpecialOffersDataTable extends DataTable
             [
                 'data' => 'subcategory_id',
                 'title' => trans('lang.subcategory'),
+                'searchable' => false,
             ],
             [
                 'data' => 'category',
                 'title' => trans('lang.category'),
+                'searchable' => false,
             ],
             [
                 'data' => 'image',

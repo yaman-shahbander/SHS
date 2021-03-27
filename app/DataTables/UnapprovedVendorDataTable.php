@@ -28,8 +28,8 @@ class UnapprovedVendorDataTable extends DataTable
 
         $columns = array_column($this->getColumns(), 'data');
         return $dataTable
-            ->editColumn('updated_at', function ($user) {
-                return getDateColumn($user, 'updated_at');
+            ->editColumn('created_at', function ($user) {
+                return getDateColumn($user, 'created_at');
             })
             ->editColumn('email', function ($user) {
                 return getEmailColumn($user, 'email');
@@ -100,8 +100,8 @@ class UnapprovedVendorDataTable extends DataTable
 
 
             [
-                'data' => 'updated_at',
-                'title' => trans('lang.user_updated_at'),
+                'data' => 'created_at',
+                'title' => trans('lang.created_at'),
                 'searchable' => false,
             ]
 

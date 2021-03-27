@@ -338,26 +338,24 @@
 
         if (targetElement.className == "name" || targetElement.className == "email") {
             var parentID = targetElement.parentElement.parentElement.parentElement.id;
-
         } else if (targetElement.className == "media-object") {
             var parentID = targetElement.parentElement.parentElement.parentElement.id;
-
         } else if (targetElement.className == "media-body") {
             var parentID = targetElement.parentElement.parentElement.id;
         } else if (targetElement.className == "user") {
-            var parentID = targetElement.id; //Not parent but the same element
+            var parentID = targetElement.id; //Not parent but the same element  
         }
 
         if (parentID != null) {
             receiver_id = parentID;
+
             $.ajax({
                 type: "get",
                 url: "message/" + receiver_id, // need to create this route
                 data: "",
                 cache: false,
-                success: function(data) {
-                    $('#messages').html(data);
-
+                success: function(messages) {
+                    $('#messages').html(messages);
                     scrollToBottomFunc();
                 }
             });
@@ -378,14 +376,4 @@
             noFile.innerHTML =  filename.value.replace("C:\\fakepath\\", "");
         }
     }
-
-
-        // if (/^\s*$/.test(filename)) {
-        //     $(".file-upload").removeClass('active');
-        //     $("#noFile").text("No file chosen...");
-        // } else {
-        //     $(".file-upload").addClass('active');
-        //     $("#noFile").text(filename.replace("C:\\fakepath\\", ""));
-        // }
-
 </script>

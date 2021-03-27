@@ -38,8 +38,8 @@ class SubCategoriesVendorDataTable extends DataTable
             ->editColumn('image', function ($subcategory) {
                 return getMediaColumn($subcategory, 'image');
             })
-            ->editColumn('updated_at', function ($subcategory) {
-                return getDateColumn($subcategory, 'updated_at');
+            ->editColumn('created_at', function ($subcategory) {
+                return getDateColumn($subcategory, 'created_at');
             })
             ->editColumn('Parent Category', function ($subcategory) {
                 return getSubcategoryRelationName($subcategory);
@@ -73,8 +73,8 @@ class SubCategoriesVendorDataTable extends DataTable
                 'searchable' => false, 'orderable' => false, 'exportable' => false, 'printable' => false,
             ],
             [
-                'data' => 'updated_at',
-                'title' => trans('lang.category_updated_at'),
+                'data' => 'created_at',
+                'title' => trans('lang.created_at'),
                 'searchable' => false,
             ]
 

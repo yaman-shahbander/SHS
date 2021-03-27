@@ -187,7 +187,7 @@
 
     $('#dataTableBuilder').on( 'processing.dt', function () {
       // setTimeout(function () {
-      startd = $("tr td:nth-child(5)");
+      startd = $("tr td:nth-child(4)");
       $(document).find(startd).each(function () {
         //alert(startd.text());
 

@@ -40,8 +40,8 @@ class TransferTransactionDataTable extends DataTable
             ->editColumn('to_id', function ($TransferTransaction) {
                 return getReceiverName($TransferTransaction);
             })
-            ->editColumn('updated_at', function ($TransferTransaction) {
-                return getDateColumn($TransferTransaction, 'updated_at');
+            ->editColumn('created_at', function ($TransferTransaction) {
+                return getDateColumn($TransferTransaction, 'created_at');
             })
             ->addColumn('action', 'transfer.datatables_actions')
             ->rawColumns(array_merge($columns, ['action']));
@@ -69,10 +69,11 @@ class TransferTransactionDataTable extends DataTable
             [
                 'data' => 'amount',
                 'title' => trans('lang.amount'),
+                'searchable' => true,
             ],
             [
-                'data' => 'updated_at',
-                'title' => trans('lang.category_updated_at'),
+                'data' => 'created_at',
+                'title' => trans('lang.created_at'),
                 'searchable' => false,
             ]
         ];

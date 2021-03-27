@@ -34,8 +34,8 @@ class CityDataTable extends DataTable
         $dataTable = new EloquentDataTable($query);
         $columns = array_column($this->getColumns(), 'data');
         $dataTable = $dataTable
-            ->editColumn('updated_at', function ($city) {
-                return getDateColumn($city, 'updated_at');
+            ->editColumn('created_at', function ($city) {
+                return getDateColumn($city, 'created_at');
             })
             ->addColumn('action', 'city.datatables_actions')
             ->editColumn('country_id', function ($city) {
@@ -68,8 +68,8 @@ class CityDataTable extends DataTable
                 'searchable' => false, 'orderable' => false, 'exportable' => false, 'printable' => false,
             ],
             [
-                'data' => 'updated_at',
-                'title' => trans('lang.category_updated_at'),
+                'data' => 'created_at',
+                'title' => trans('lang.created_at'),
                 'searchable' => false,
             ]
 

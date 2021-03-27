@@ -26,8 +26,8 @@ class VendorSuggestedDataTable extends DataTable
         $dataTable = new EloquentDataTable($query);
         $columns = array_column($this->getColumns(), 'data');
         return $dataTable
-            ->editColumn('updated_at', function ($vendor) {
-                return getDateColumn($vendor, 'updated_at');
+            ->editColumn('created_at', function ($vendor) {
+                return getDateColumn($vendor, 'created_at');
             })
 
             ->addColumn('action', 'settings.vendors_suggested.datatables_actions')
@@ -81,12 +81,12 @@ class VendorSuggestedDataTable extends DataTable
             [
                 'data' => 'name',
                 'title' => trans('lang.user_name'),
-
+                'searchable' => true,
             ],
             [
                 'data' => 'email',
                 'title' => trans('lang.user_email'),
-
+                'searchable' => true,
             ],
         
             // [
@@ -97,11 +97,11 @@ class VendorSuggestedDataTable extends DataTable
             [
                 'data' => 'phone',
                 'title' => trans('lang.phone'),
-                'searchable' => false, 'orderable' => false, 'exportable' => false, 'printable' => false,
+                'searchable' => true, 'orderable' => false, 'exportable' => false, 'printable' => false,
             ],
             [
-                'data' => 'updated_at',
-                'title' => trans('lang.user_updated_at'),
+                'data' => 'created_at',
+                'title' => trans('lang.created_at'),
                 'searchable' => false,
             ]
         ];

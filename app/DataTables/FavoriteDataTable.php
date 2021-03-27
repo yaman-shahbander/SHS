@@ -29,8 +29,8 @@ class FavoriteDataTable extends DataTable
              ->editColumn('name', function ($user) {
                return "<a href=". url("/homeOwnerFavorites/".$user->id) .">" . $user->name . "</a>";
               })
-            ->editColumn('updated_at', function ($user) {
-                    return getDateColumn($user, 'updated_at');
+            ->editColumn('created_at', function ($user) {
+                    return getDateColumn($user, 'created_at');
                 })
             ->rawColumns($columns);
     }
@@ -82,8 +82,8 @@ class FavoriteDataTable extends DataTable
 
             ],
             [
-                'data' => 'updated_at',
-                'title' => trans('lang.user_updated_at'),
+                'data' => 'created_at',
+                'title' => trans('lang.created_at'),
                 'searchable' => false,
             ]
         ];

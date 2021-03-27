@@ -35,8 +35,8 @@ class DurationOfeersDataTable extends DataTable
         $dataTable = new EloquentDataTable($query);
         $columns = array_column($this->getColumns(), 'data');
         $dataTable = $dataTable 
-            ->editColumn('updated_at', function ($vendorduration) {
-                return getDateColumn($vendorduration, 'updated_at');
+            ->editColumn('created_at', function ($vendorduration) {
+                return getDateColumn($vendorduration, 'created_at');
             })
             ->addColumn('action', 'durationOffer.datatables_actions')
             ->rawColumns(array_merge($columns, ['action']));
@@ -65,8 +65,8 @@ class DurationOfeersDataTable extends DataTable
                     'title' => trans('lang.discount')
             ],
             [
-                'data' => 'updated_at',
-                'title' => trans('lang.category_updated_at'),
+                'data' => 'created_at',
+                'title' => trans('lang.created_at'),
                 'searchable' => false,
             ]
         ];
