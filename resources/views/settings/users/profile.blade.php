@@ -44,8 +44,6 @@
                             <a class="btn btn-outline-{{setting('theme_color')}} btn-block" href="mailto:{{$user->email}}"><i class="fa fa-envelope mr-2"></i>{{$user->email}}
                             </a>
                         </div>
-
-
     <!-- Blocking -->
         <div class="row">
             <div class="content col-md-12">

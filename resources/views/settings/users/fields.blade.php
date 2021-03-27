@@ -219,14 +219,14 @@ $(document).ready(function(){
     </script>
 
     
-<script>
+<!-- <script>
             $(document).ready(function () { 
                 $('#countries_code').on('change',function(){
                     $('.phone').val('');
                     $('.phone').val($('#countries_code').val());
                 });
             });
-        </script>
+        </script> -->
     @endprepend
 
 

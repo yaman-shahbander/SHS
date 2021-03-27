@@ -780,7 +780,9 @@ $categories=Category::all();
         $input['approved']=1;
         $input['is_verified']=1;
         $input['language'] = $request->input('language') == null ? '' : $request->input('language', '');
-        $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');
+
+        $input['phone'] = $request->input('phone') == null ? '' : $request->countries_code . $request->input('phone', '');
+
         $input['payment_id'] = $payment_id;
         $balance = new Balance();
         $balance->balance = 0.0;
@@ -968,7 +970,7 @@ $categories=Category::all();
         $input['password'] = Hash::make($input['password']);
 
         $input['language'] = $request->input('language') == null ? '' : $request->input('language', '');
-        $input['phone'] = $request->input('phone') == null ? '' : $request->input('phone', '');
+        $input['phone'] = $request->input('phone') == null ? '' : $request->countries_code . $request->input('phone', '');
 
         $input['city_id'] = $request->city;
 

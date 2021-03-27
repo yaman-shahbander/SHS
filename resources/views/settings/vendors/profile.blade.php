@@ -46,7 +46,13 @@
                                   url('{{ asset('storage/vendors_background') . '/' . $user->background_profile }}');
                                 background-repeat: no-repeat;
                                 background-position: center;
-                                background-size: cover;" 
+                                background-size: cover;"
+                                @else 
+                                style = "background-image: 
+                                  url('{{ asset('storage/vendors_background') . '/' . 'background.jpg' }}');
+                                background-repeat: no-repeat;
+                                background-position: center;
+                                background-size: cover;"
                                 @endif>
                             <div class="text-center">
                                 <img src="{{$user->getFirstMediaUrl('avatar','icon')}}" class="profile-user-img img-fluid img-circle" alt="{{$user->name}}">
