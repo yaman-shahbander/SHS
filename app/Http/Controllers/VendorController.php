@@ -678,6 +678,7 @@ $categories=Category::all();
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
+        $categories=Category::all();
         $countries = Country::all();
 
         $user = $this->vendorRepository->findWithoutFail($request->id);
@@ -722,7 +723,7 @@ $categories=Category::all();
         $favoriteVendor = $user->homeOwnerFavorite; // Users who added this vendor as a favorite
         $SP_Galleries = $user->gallery;
 
-        return $dataTable = $subCategoriesDataTableDataTable->render('settings.vendors.profile', compact(['user', 'role', 'rolesSelected', 'customFields', 'customFieldsValues', 'countries', 'cities', 'style', 'favoriteVendor', 'SP_Galleries']));
+        return $dataTable = $subCategoriesDataTableDataTable->render('settings.vendors.profile', compact(['user', 'role', 'rolesSelected', 'customFields', 'customFieldsValues', 'countries', 'cities', 'style', 'favoriteVendor', 'SP_Galleries','categories']));
 
 
 

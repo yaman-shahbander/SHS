@@ -187,67 +187,8 @@
         </div>
 
     </div>
+</div>
 
-    <div class="row">
-
-
-     <div class="col-lg-12">
-            <div class="div-center">
-<?php
-                if(Request::is('*edit')){
-               $subarray=$user->subcategories->transform(function($q){return $q->id;});
-
-                $dayarray=[];
-                foreach ($user->days as $day){
-                    $dayarray[]=$day->id;
-                }
-                }
-                ?>
-
-                <input id="subcategorySelected" name="subcategorySelected" value="" type="text"
-                        style="display: none">
-                <h2>select categories</h2>
-                <select name="langOptgroup[]" multiple="" id="langOptgroup" >
-                    @forelse($categories as $caregory)
-                        <optgroup label="{{$caregory->name}}">
-                            @forelse( $caregory->subCategory as $subCategory)
-                                <option value="{{$subCategory->id}}" @if(Request::is('*edit'))@if(in_array($subCategory->id,$subarray->toArray())) selected @endif @endif >{{$subCategory->name}}</option>
-
-                            @empty
-                            @endforelse
-
-                        </optgroup>
-
-                        @empty
-                        @endforelse
-{{--                    <optgroup label="Programming Languages">--}}
-{{--                        <option value="C++ / C#">C++ / C#</option>--}}
-{{--                        <option value="Java">Java</option>--}}
-{{--                        <option value="Objective-C">Objective-C</option>--}}
-{{--                    </optgroup>--}}
-{{--                    <optgroup label="Client-side scripting Languages">--}}
-{{--                        <option value="JavaScript">JavaScript</option>--}}
-{{--                    </optgroup>--}}
-{{--                    <optgroup label="Server-side scripting Languages">--}}
-{{--                        <option value="Perl">Perl</option>--}}
-{{--                        <option value="PHP">PHP</option>--}}
-{{--                        <option value="Ruby on Rails">Ruby on Rails</option>--}}
-{{--                    </optgroup>--}}
-{{--                    <optgroup label="Mobile Platforms">--}}
-{{--                        <option value="Android">Android</option>--}}
-{{--                        <option value="iOS">iOS</option>--}}
-{{--                    </optgroup>--}}
-{{--                    <optgroup label="Document Markup Languages">--}}
-{{--                        <option value="HTML">HTML</option>--}}
-{{--                        <option value="XML">XML</option>--}}
-{{--                    </optgroup>--}}
-                </select>
-
-            </div>
-        </div>
-
-
-    </div>
     <div class="row">
         <!-- Language Field -->
         <!-- $FIELD_NAME_TITLE$ Field -->
@@ -359,79 +300,53 @@
 
 </div>
 @endif
+
+
+</div>
+</div>
+
+
+        <div class="row">
+
+
+            <div class="col-lg-12">
+                <div class="div-center">
+                    <?php
+                    if(Request::is('*edit')){
+                        $subarray=$user->subcategories->transform(function($q){return $q->id;});
+
+                        $dayarray=[];
+                        foreach ($user->days as $day){
+                            $dayarray[]=$day->id;
+                        }
+                    }
+                    ?>
+
+                    <input id="subcategorySelected" name="subcategorySelected" value="" type="text"
+                           style="display: none">
+                    <h2>select categories</h2>
+                    <select name="langOptgroup[]" multiple="" id="langOptgroup" >
+                        @forelse($categories as $caregory)
+                            <optgroup label="{{$caregory->name}}">
+                                @forelse( $caregory->subCategory as $subCategory)
+                                    <option value="{{$subCategory->id}}" @if(Request::is('*edit'))@if(in_array($subCategory->id,$subarray->toArray())) selected @endif @endif >{{$subCategory->name}}</option>
+
+                                @empty
+                                @endforelse
+
+                            </optgroup>
+
+                        @empty
+                        @endforelse
+                    </select>
+
+                </div>
+            </div>
+
+
+        </div>
     </div>
 
-    @prepend('scripts')
-        <script>
-            $(document).ready(function(){
-                $(".hidden-content").hide();
-                $(".view").on('click', function(){
-
-                    $(this).parents().parents().find(".hidden-content").slideToggle(500).toggleClass("active");
-
-                    if($(this).parents().parents().siblings().find(".hidden-content").hasClass('active')){
-                        $(this).parents().parents().siblings().find(".hidden-content").removeClass('active');
-                        $(this).parents().parents().siblings().find(".hidden-content").hide();
-                    }
-                });
-            });
-
-        </script>
-        <script>
-            // In your Javascript (external .js resource or <script> tag)
-            $(document).ready(function () {
-                var _this;
-
-
-                $('#country').on('change',function(){
-                    var _this = $(this);
-                    $('#city').empty();
-                    var data = "id="+_this.val();
-
-                    var url = _this.closest('.card-body').data('route');
-
-
-                    // var url = _this.closest('.select_cities').data('route');
-                    //  console.log(url);
-
-
-
-                    $.post(url , data , function(res){
-                        $city=['<option value="0" selected="">select </option>'];
-                        for(var i=0 ;i<res.length;i++) {
-                            $city.push('<option value="' + res[i]['id'] + '">' + res[i]['city_name'] + '</option>');
-                            // $categoryslt.push('<li data-value="' + res[i]['id'] + '" class="option null selected">' + res[i]['name1'] + '</li>');
-                        }
-                        $('#city').empty();
-                        $('#city').append($city);
-                    });
-                });
-            });
-        </script>
-
-        <script>
-            $(document).ready(function () {
-                $('#countries_code').on('change',function(){
-                    $('.phone').val('');
-                    $('.phone').val($('#countries_code').val());
-                });
-            });
-        </script>
-        <script>
-
-
-
-            $('#langOptgroup').multiselect({
-                columns: 2,
-                placeholder: 'Select Categories',
-                search: true,
-                selectAll: true
-            });
-        </script>
-
-
-
-    @endprepend
 
 
 
@@ -521,3 +436,74 @@
         <a href="{!! route('vendors.index') !!}" class="btn btn-default"><i class="fa fa-undo"></i> {{trans('lang.cancel')}}</a>
     </div>
 
+@prepend('scripts')
+    <script>
+        $(document).ready(function(){
+            $(".hidden-content").hide();
+            $(".view").on('click', function(){
+
+                $(this).parents().parents().find(".hidden-content").slideToggle(500).toggleClass("active");
+
+                if($(this).parents().parents().siblings().find(".hidden-content").hasClass('active')){
+                    $(this).parents().parents().siblings().find(".hidden-content").removeClass('active');
+                    $(this).parents().parents().siblings().find(".hidden-content").hide();
+                }
+            });
+        });
+
+    </script>
+    <script>
+        // In your Javascript (external .js resource or <script> tag)
+        $(document).ready(function () {
+            var _this;
+
+
+            $('#country').on('change',function(){
+                var _this = $(this);
+                $('#city').empty();
+                var data = "id="+_this.val();
+
+                var url = _this.closest('.card-body').data('route');
+
+
+                // var url = _this.closest('.select_cities').data('route');
+                //  console.log(url);
+
+
+
+                $.post(url , data , function(res){
+                    $city=['<option value="0" selected="">select </option>'];
+                    for(var i=0 ;i<res.length;i++) {
+                        $city.push('<option value="' + res[i]['id'] + '">' + res[i]['city_name'] + '</option>');
+                        // $categoryslt.push('<li data-value="' + res[i]['id'] + '" class="option null selected">' + res[i]['name1'] + '</li>');
+                    }
+                    $('#city').empty();
+                    $('#city').append($city);
+                });
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#countries_code').on('change',function(){
+                $('.phone').val('');
+                $('.phone').val($('#countries_code').val());
+            });
+        });
+    </script>
+    <script>
+
+
+
+        $('#langOptgroup').multiselect({
+            columns: 2,
+            placeholder: 'Select Categories',
+            search: true,
+            selectAll: true
+        });
+    </script>
+
+
+
+@endprepend

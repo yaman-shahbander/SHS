@@ -15,11 +15,7 @@
 <link href="{{asset('includes/css/style.css')}}" rel="stylesheet">
 <link href="{{asset('css/jquery.multiselect.css')}}" rel="stylesheet">
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
-
-
 <style>
-
-
   .center {
     display:inline;
     margin: 3px;
