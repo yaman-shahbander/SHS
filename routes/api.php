@@ -256,6 +256,8 @@ Route::get('foods/categories', 'API\FoodAPIController@categories');
 Route::get('food/categories', 'API\NotificationAPIController@getMediacolunm');
 Route::resource('foods', 'API\FoodAPIController');
 Route::resource('galleries', 'API\GalleryAPIController');
+Route::post('galleries/delete', 'API\GalleryAPIController@destroy');
+
 Route::resource('food_reviews', 'API\FoodReviewAPIController');
 Route::resource('nutrition', 'API\NutritionAPIController');
 Route::resource('extras', 'API\ExtraAPIController');

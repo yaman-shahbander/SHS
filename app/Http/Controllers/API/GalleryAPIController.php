@@ -146,4 +146,22 @@ class GalleryAPIController extends Controller
         } else
             return $this->sendError('nothing to process', 401);
     }
+    public function destroy(Request $request)
+    {
+        if ($request->header('devicetoken')) {
+            $user = User::where('device_token', $request->header('devicetoken'))->first();
+
+            if (empty($user)) {
+                return $this->sendError('User not found', 401);
+            }
+
+            $gallery = Gallery::find($request->image_id);
+            $gallery->delete();
+
+            return $this->sendResponse([], 'file delete successfully');
+
+//        return response()->json(['what'], 200);
+        } else
+            return $this->sendError('nothing to process', 401);
+    }
 }

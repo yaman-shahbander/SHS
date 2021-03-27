@@ -332,9 +332,9 @@ class vendorApiController extends Controller
                         return $q->only('id', 'name', 'check', 'workHours');
                     }),
                     'availability'   => $vendor->vendor_city->makeHidden('pivot'),
-                    'gallery'        => $vendor->gallery->transform(function ($gallery) {
+                    'gallery'        => $vendor->gallery->transform(function($gallery){
                         $gallery['image'] = asset('storage/gallery') . '/' . $gallery['image'];
-                        return $gallery['image'];
+                        return $gallery->only('image','id');
                     }),
                     'is_favorite'     =>  $isFavorite
                 ];

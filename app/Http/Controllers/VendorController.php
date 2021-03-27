@@ -678,6 +678,7 @@ $categories=Category::all();
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
         }
 
+        $categories=Category::all();
         $countries = Country::all();
 
         $user = $this->vendorRepository->findWithoutFail($request->id);
@@ -722,7 +723,7 @@ $categories=Category::all();
         $favoriteVendor = $user->homeOwnerFavorite; // Users who added this vendor as a favorite
         $SP_Galleries = $user->gallery;
 
-        return $dataTable = $subCategoriesDataTableDataTable->render('settings.vendors.profile', compact(['user', 'role', 'rolesSelected', 'customFields', 'customFieldsValues', 'countries', 'cities', 'style', 'favoriteVendor', 'SP_Galleries']));
+        return $dataTable = $subCategoriesDataTableDataTable->render('settings.vendors.profile', compact(['user', 'role', 'rolesSelected', 'customFields', 'customFieldsValues', 'countries', 'cities', 'style', 'favoriteVendor', 'SP_Galleries','categories']));
 
 
 
@@ -739,7 +740,15 @@ $categories=Category::all();
 
     public function store(CreateUserRequest $request)
     {
-
+        $json = json_decode($request->dayWorkingHours);
+        $days = [];
+        $i = 0;
+        foreach ($json as $day) {
+            $days[$i]['day_id'] = $day->day_id;
+            $days[$i]['start'] = $day->start;
+            $days[$i]['end'] = $day->end;
+            $i++;
+        }
 
         if (!auth()->user()->hasPermissionTo('vendors.store')) {
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
@@ -777,7 +786,7 @@ $categories=Category::all();
                 break;
             } else continue;
         }
-        $input['approved']=1;
+        $input['approved_vendor']=1;
         $input['is_verified']=1;
         $input['language'] = $request->input('language') == null ? '' : $request->input('language', '');
 
@@ -792,7 +801,7 @@ $categories=Category::all();
         $input['city_id'] = $request->city;
         $token = openssl_random_pseudo_bytes(16);
         $user = $this->vendorRepository->create($input);
-
+        $user->days()->sync($days);
         // saving location of SP
         $location = new GmapLocation();
         $location->user_id   = $user->id;
@@ -941,6 +950,16 @@ $categories=Category::all();
 
     public function update($id, Request $request)
     {
+        $json = json_decode($request->dayWorkingHours);
+        $days = [];
+        $i = 0;
+        foreach ($json as $day) {
+            $days[$i]['day_id'] = $day->day_id;
+            $days[$i]['start'] = $day->start;
+            $days[$i]['end'] = $day->end;
+            $i++;
+        }
+//return dd($days);
 
         if (!auth()->user()->hasPermissionTo('vendors.update')) {
             return view('vendor.errors.page', ['code' => 403, 'message' => trans('lang.Right_Permission')]);
@@ -987,6 +1006,9 @@ $categories=Category::all();
         unset($input['phone']);
 
         $user = $this->vendorRepository->update($input, $id);
+        $user->days()->detach();
+        $user->days()->sync($days);
+//        return dd($days);
 
         $location = GmapLocation::where('user_id', $user->id)->first();
 
@@ -1077,11 +1099,13 @@ $categories=Category::all();
                 }
 
                 $user->background_profile = $imageName;
-                
+
                 $user->save();
             }
 
-        } catch (ValidatorException $e) {
+
+        }
+        catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }
 
@@ -1619,6 +1643,7 @@ $categories=Category::all();
 
             return redirect(route('users.index'));
         }
+
         if (!empty($user->cities->id)) {
             $cities = City::where('country_id', $user->cities->country_id)->get();
         } else

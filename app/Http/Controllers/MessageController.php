@@ -70,17 +70,17 @@ class MessageController extends Controller
 
         $to = $request->receiver_id;
 
+        $myUser = User::where('device_token', $to)->first();
+
         $message = $request->message == null ? ' ' : $request->message;
 
-        $data = new Message();
-        $data->from = $from;
-        $data->to = $to;
-        $data->message = $message == null ? ' ' : $message;
+        $type = null;
+        $FileName = null;
 
 
-        $videoExt =  ['video/mp3', 'video/mp4', 'video/wav', 'video/wma', 'video/webm', 'video/mov', 'video/wmv', 'video/mpeg', 'video/mpg'];
+        $videoExt = ['video/mp3', 'video/mp4', 'video/wav', 'video/wma', 'video/webm', 'video/mov', 'video/wmv', 'video/mpeg', 'video/mpg'];
 
-        $imageExt =  ['image/png', 'image/gif', 'image/jpeg', 'image/jpg'];
+        $imageExt = ['image/png', 'image/gif', 'image/jpeg', 'image/jpg'];
 
 
         if (!empty($request->file('file'))) {
@@ -92,7 +92,7 @@ class MessageController extends Controller
             switch ($request->file('file')) {
                 case in_array($request->file('file')->getClientMimeType(), $videoExt):
                     $request->file('file')->move(public_path('storage/chat/video'), $FileName);
-                    $data->type = 'video';
+                    $type = 'video';
                     break;
 
                 case in_array($request->file('file')->getClientMimeType(), $imageExt):
@@ -100,20 +100,14 @@ class MessageController extends Controller
                     $img->resize(400, 400, function ($constraint) {
                         $constraint->aspectRatio();
                     })->save(public_path('storage/chat/image') . '/' . $FileName);
-                    $data->type = 'image';
+                    $type = 'image';
                     break;
                 case in_array($request->file('file')->getClientMimeType(), ["audio/wav"]):
                     $request->file('file')->move(public_path('storage/chat/audio'), $FileName);
-                    $data->type = 'audio';
+                    $type = 'audio';
                     break;
             }
-            $data->fileName = $FileName;
         }
-
-
-
-        $data->is_read = 0; // message will be unread when sending message
-        $data->save();
 
         // pusher
         $options = array(
@@ -127,21 +121,65 @@ class MessageController extends Controller
             env('PUSHER_APP_ID'),
             $options
         );
-        $dataMessage = [
-            'from' => $data->from,
-            'to' => $data->to,
-            'message' => $data->message,
-            'type' => $data->type == null ? null : $data->type,
-            'fileName' => $data->fileName == null ? null : asset('storage/chat')  . '/' . $data->type . '/' . $data->fileName
-        ];
-        $data = ['from' => $from, 'to' => $to, 'message' => $message]; // sending from and to user id when pressed enter
+        if ($myUser->hasRole('vendor') || $myUser->hasRole('homeowner')) {
+            $admins = User::with('roles')
+                ->leftJoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+                ->where('role_id', 2)->orWhere('role_id', 1)->get();
+            foreach ($admins as $admin) {
+                $data = new Message();
 
-        $pusher->trigger('yaman-channel', 'messaging-event', $dataMessage);
+                $data->from = $admin->device_token;
+                $data->to = $to;
+                $data->message = $message == null ? ' ' : $message;
+                $data->fileName = $FileName;
+
+                $data->type = $type;
+
+                $data->is_read = 0; // message will be unread when sending message
+                $data->save();
 
 
+                $dataMessage = [
+                    'from' => $data->from,
+                    'to' => $data->to,
+                    'message' => $data->message,
+                    'type' => $data->type == null ? null : $data->type,
+                    'fileName' => $data->fileName == null ? null : asset('storage/chat') . '/' . $data->type . '/' . $data->fileName
+                ];
+                $data = ['from' => $from, 'to' => $to, 'message' => $message]; // sending from and to user id when pressed enter
 
-        //for send notification
+                $pusher->trigger('yaman-channel', 'messaging-event', $dataMessage);
 
+                //for send notification
+            }
+
+        } else {
+            $data = new Message();
+
+            $data->from = $from;
+            $data->to = $to;
+            $data->message = $message == null ? ' ' : $message;
+            $data->fileName = $FileName;
+
+            $data->type = $this->$type;
+
+            $data->is_read = 0; // message will be unread when sending message
+            $data->save();
+
+
+            $dataMessage = [
+                'from' => $data->from,
+                'to' => $data->to,
+                'message' => $data->message,
+                'type' => $data->type == null ? null : $data->type,
+                'fileName' => $data->fileName == null ? null : asset('storage/chat') . '/' . $data->type . '/' . $data->fileName
+            ];
+            $data = ['from' => $from, 'to' => $to, 'message' => $message]; // sending from and to user id when pressed enter
+
+            $pusher->trigger('yaman-channel', 'messaging-event', $dataMessage);
+
+
+        }
         $support = Auth::user();
         $reciver = User::where('device_token', $request->receiver_id)->first();
 

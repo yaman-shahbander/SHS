@@ -810,6 +810,8 @@ The Smart Home Services team</p>";
                 'avatar' =>asset('storage/Avatar').'/'.$vendor->avatar,
                 'background' =>asset('storage/vendors_background').'/'.($vendor->background_profile==null?'background.jpg':$vendor->background_profile),
                 'first_name' => $vendor->name,
+                'Business_name' => $vendor->nickname,
+                'approved' => $vendor->approved_vendor,
                 'status' => $vendor->status->only('id', 'status_type'),
                 'rating' => sprintf("%.1f",round((getRating($vendor) / 20) * 2) / 2),
                 'count_reviews' => count($vendor->clients),
@@ -834,6 +836,10 @@ The Smart Home Services team</p>";
                         'description' => $q->description,
                         'image' => asset('storage/specialOffersPic') . '/' . $q->image,
                     ];
+                }),
+                'gallery'        => $vendor->gallery->transform(function($gallery){
+                    $gallery['image'] = asset('storage/gallery') . '/' . $gallery['image'];
+                    return $gallery->only('image','id');
                 }),
             ];
             return $this->sendResponse($response, 'User retrieved successfully');

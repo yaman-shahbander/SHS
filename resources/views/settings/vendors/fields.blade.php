@@ -187,61 +187,8 @@
         </div>
 
     </div>
+</div>
 
-    <div class="row">
-
-
-     <div class="col-lg-12">
-            <div class="div-center">
-<?php
-                if(Request::is('*edit'))
-               $subarray=$user->subcategories->transform(function($q){return $q->id;})
-                ?>
-
-                <input id="subcategorySelected" name="subcategorySelected" value="" type="text"
-                        style="display: none">
-                <h2>select categories</h2>
-                <select name="langOptgroup[]" multiple="" id="langOptgroup" >
-                    @forelse($categories as $caregory)
-                        <optgroup label="{{$caregory->name}}">
-                            @forelse( $caregory->subCategory as $subCategory)
-                                <option value="{{$subCategory->id}}" @if(Request::is('*edit'))@if(in_array($subCategory->id,$subarray->toArray())) selected @endif @endif >{{$subCategory->name}}</option>
-
-                            @empty
-                            @endforelse
-
-                        </optgroup>
-
-                        @empty
-                        @endforelse
-{{--                    <optgroup label="Programming Languages">--}}
-{{--                        <option value="C++ / C#">C++ / C#</option>--}}
-{{--                        <option value="Java">Java</option>--}}
-{{--                        <option value="Objective-C">Objective-C</option>--}}
-{{--                    </optgroup>--}}
-{{--                    <optgroup label="Client-side scripting Languages">--}}
-{{--                        <option value="JavaScript">JavaScript</option>--}}
-{{--                    </optgroup>--}}
-{{--                    <optgroup label="Server-side scripting Languages">--}}
-{{--                        <option value="Perl">Perl</option>--}}
-{{--                        <option value="PHP">PHP</option>--}}
-{{--                        <option value="Ruby on Rails">Ruby on Rails</option>--}}
-{{--                    </optgroup>--}}
-{{--                    <optgroup label="Mobile Platforms">--}}
-{{--                        <option value="Android">Android</option>--}}
-{{--                        <option value="iOS">iOS</option>--}}
-{{--                    </optgroup>--}}
-{{--                    <optgroup label="Document Markup Languages">--}}
-{{--                        <option value="HTML">HTML</option>--}}
-{{--                        <option value="XML">XML</option>--}}
-{{--                    </optgroup>--}}
-                </select>
-
-            </div>
-        </div>
-
-
-    </div>
     <div class="row">
         <!-- Language Field -->
         <!-- $FIELD_NAME_TITLE$ Field -->
@@ -353,56 +300,29 @@
 
 </div>
 @endif
-    </div>
-
-    @prepend('scripts')
-        <script>
-            $(document).ready(function(){
-                $(".hidden-content").hide();
-                $(".view").on('click', function(){
-
-                    $(this).parents().parents().find(".hidden-content").slideToggle(500).toggleClass("active");
-
-                    if($(this).parents().parents().siblings().find(".hidden-content").hasClass('active')){
-                        $(this).parents().parents().siblings().find(".hidden-content").removeClass('active');
-                        $(this).parents().parents().siblings().find(".hidden-content").hide();
-                    }
-                });
-            });
-
-        </script>
-        <script>
-            // In your Javascript (external .js resource or <script> tag)
-            $(document).ready(function () {
-                var _this;
 
 
-                $('#country').on('change',function(){
-                    var _this = $(this);
-                    $('#city').empty();
-                    var data = "id="+_this.val();
-
-                    var url = _this.closest('.card-body').data('route');
+</div>
+</div>
 
 
-                    // var url = _this.closest('.select_cities').data('route');
-                    //  console.log(url);
+        <div class="row">
 
 
+            <div class="col-lg-12">
+                <div class="div-center">
+                    <?php
+                    if(Request::is('*edit')){
+                        $subarray=$user->subcategories->transform(function($q){return $q->id;});
 
-                    $.post(url , data , function(res){
-                        $city=['<option value="0" selected="">select </option>'];
-                        for(var i=0 ;i<res.length;i++) {
-                            $city.push('<option value="' + res[i]['id'] + '">' + res[i]['city_name'] + '</option>');
-                            // $categoryslt.push('<li data-value="' + res[i]['id'] + '" class="option null selected">' + res[i]['name1'] + '</li>');
+                        $dayarray=[];
+                        foreach ($user->days as $day){
+                            $dayarray[]=$day->id;
                         }
-                        $('#city').empty();
-                        $('#city').append($city);
-                    });
-                });
-            });
-        </script>
+                    }
+                    ?>
 
+<<<<<<< HEAD
         <!-- <script>
             $(document).ready(function () {
                 $('#countries_code').on('change',function(){
@@ -412,20 +332,33 @@
             });
         </script> -->
         <script>
+=======
+                    <input id="subcategorySelected" name="subcategorySelected" value="" type="text"
+                           style="display: none">
+                    <h2>select categories</h2>
+                    <select name="langOptgroup[]" multiple="" id="langOptgroup" >
+                        @forelse($categories as $caregory)
+                            <optgroup label="{{$caregory->name}}">
+                                @forelse( $caregory->subCategory as $subCategory)
+                                    <option value="{{$subCategory->id}}" @if(Request::is('*edit'))@if(in_array($subCategory->id,$subarray->toArray())) selected @endif @endif >{{$subCategory->name}}</option>
+>>>>>>> e8322784f486cfa673f75866484ad256df2be2f5
+
+                                @empty
+                                @endforelse
+
+                            </optgroup>
+
+                        @empty
+                        @endforelse
+                    </select>
+
+                </div>
+            </div>
 
 
+        </div>
+    </div>
 
-            $('#langOptgroup').multiselect({
-                columns: 2,
-                placeholder: 'Select Categories',
-                search: true,
-                selectAll: true
-            });
-        </script>
-
-
-
-    @endprepend
 
 
 
@@ -452,50 +385,50 @@
         </div>
 
         <div class="range-day" id="range-day-1" data-day="1">
-            <input type="checkbox" name="day-1" id="day-1" value="1" class="range-checkbox" checked>
-            <label for="day-1" class="range-label">Monday:</label>
+            <input type="checkbox" name="day-1" id="day-1" value="1" class="range-checkbox" @if(Request::is('*edit'))@if(in_array(1,$dayarray)) checked @endif @endif>
+            <label for="day-1" class="range-label">Sunday:</label>
             <div id="range-slider-1" class="range-slider"></div>
             <span id="range-time-1" class="range-time"></span>
         </div>
 
         <div class="range-day" id="range-day-2" data-day="2">
-            <input type="checkbox" name="day-2" id="day-2" value="1" class="range-checkbox" checked>
-            <label for="day-2" class="range-label">Tuesday:</label>
+            <input type="checkbox" name="day-2" id="day-2" value="1" class="range-checkbox" @if(Request::is('*edit'))@if(in_array(2,$dayarray)) checked @endif @endif>
+            <label for="day-2" class="range-label">Monday:</label>
             <div id="range-slider-2" class="range-slider"></div>
             <span id="range-time-2" class="range-time"></span>
         </div>
 
         <div class="range-day" id="range-day-3" data-day="3">
-            <input type="checkbox" name="day-3" id="day-3" value="1" class="range-checkbox" checked>
-            <label for="day-3" class="range-label">Wednesday:</label>
+            <input type="checkbox" name="day-3" id="day-3" value="1" class="range-checkbox" @if(Request::is('*edit'))@if(in_array(3,$dayarray)) checked @endif @endif>
+            <label for="day-3" class="range-label">Tuesday:</label>
             <div id="range-slider-3" class="range-slider"></div>
             <span id="range-time-3" class="range-time"></span>
         </div>
 
         <div class="range-day" id="range-day-4" data-day="4">
-            <input type="checkbox" name="day-4" id="day-4" value="1" class="range-checkbox" checked>
-            <label for="day-4" class="range-label">Thursday‎:</label>
+            <input type="checkbox" name="day-4" id="day-4" value="1" class="range-checkbox" @if(Request::is('*edit'))@if(in_array(4,$dayarray)) checked @endif @endif>
+            <label for="day-4" class="range-label">Wednesday‎:</label>
             <div id="range-slider-4" class="range-slider"></div>
             <span id="range-time-4" class="range-time"></span>
         </div>
 
         <div class="range-day" id="range-day-5" data-day="5">
-            <input type="checkbox" name="day-5" id="day-5" value="1" class="range-checkbox" checked>
-            <label for="day-5" class="range-label">Friday:</label>
+            <input type="checkbox" name="day-5" id="day-5" value="1" class="range-checkbox" @if(Request::is('*edit'))@if(in_array(5,$dayarray)) checked @endif @endif>
+            <label for="day-5" class="range-label">Thursday:</label>
             <div id="range-slider-5" class="range-slider"></div>
             <span id="range-time-5" class="range-time"></span>
         </div>
 
         <div class="range-day" id="range-day-6" data-day="6">
-            <input type="checkbox" name="day-6" id="day-6" value="1" class="range-checkbox" checked>
-            <label for="day-6" class="range-label">Saturday:</label>
+            <input type="checkbox" name="day-6" id="day-6" value="1" class="range-checkbox" @if(Request::is('*edit'))@if(in_array(6,$dayarray)) checked @endif @endif>
+            <label for="day-6" class="range-label">Friday:</label>
             <div id="range-slider-6" class="range-slider"></div>
             <span id="range-time-6" class="range-time"></span>
         </div>
 
         <div class="range-day" id="range-day-7" data-day="7">
-            <input type="checkbox" name="day-7" id="day-7" value="1" class="range-checkbox">
-            <label for="day-7" class="range-label">Sunday:</label>
+            <input type="checkbox" name="day-7" id="day-7" value="1" class="range-checkbox" @if(Request::is('*edit'))@if(in_array(7,$dayarray)) checked @endif @endif>
+            <label for="day-7" class="range-label">Saturday:</label>
             <div id="range-slider-7" class="range-slider"></div>
             <span id="range-time-7" class="range-time"></span>
         </div>
@@ -504,7 +437,7 @@
     </div>
     </div>
         <div class="row">
-            <input type="text" id="dayWorkingHours" value="">
+            <input type="text" name="dayWorkingHours" id="dayWorkingHours" value="" style="display: none">
     <div class="col-md-12" id="scheduleTable">
 
     </div>
@@ -514,3 +447,75 @@
         <button type="submit" class="btn btn-{{setting('theme_color')}}"><i class="fa fa-save"></i> {{trans('lang.save')}} </button>
         <a href="{!! route('vendors.index') !!}" class="btn btn-default"><i class="fa fa-undo"></i> {{trans('lang.cancel')}}</a>
     </div>
+
+@prepend('scripts')
+    <script>
+        $(document).ready(function(){
+            $(".hidden-content").hide();
+            $(".view").on('click', function(){
+
+                $(this).parents().parents().find(".hidden-content").slideToggle(500).toggleClass("active");
+
+                if($(this).parents().parents().siblings().find(".hidden-content").hasClass('active')){
+                    $(this).parents().parents().siblings().find(".hidden-content").removeClass('active');
+                    $(this).parents().parents().siblings().find(".hidden-content").hide();
+                }
+            });
+        });
+
+    </script>
+    <script>
+        // In your Javascript (external .js resource or <script> tag)
+        $(document).ready(function () {
+            var _this;
+
+
+            $('#country').on('change',function(){
+                var _this = $(this);
+                $('#city').empty();
+                var data = "id="+_this.val();
+
+                var url = _this.closest('.card-body').data('route');
+
+
+                // var url = _this.closest('.select_cities').data('route');
+                //  console.log(url);
+
+
+
+                $.post(url , data , function(res){
+                    $city=['<option value="0" selected="">select </option>'];
+                    for(var i=0 ;i<res.length;i++) {
+                        $city.push('<option value="' + res[i]['id'] + '">' + res[i]['city_name'] + '</option>');
+                        // $categoryslt.push('<li data-value="' + res[i]['id'] + '" class="option null selected">' + res[i]['name1'] + '</li>');
+                    }
+                    $('#city').empty();
+                    $('#city').append($city);
+                });
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#countries_code').on('change',function(){
+                $('.phone').val('');
+                $('.phone').val($('#countries_code').val());
+            });
+        });
+    </script>
+    <script>
+
+
+
+        $('#langOptgroup').multiselect({
+            columns: 2,
+            placeholder: 'Select Categories',
+            search: true,
+            selectAll: true
+        });
+    </script>
+
+
+
+@endprepend
