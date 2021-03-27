@@ -43,7 +43,7 @@ class MessageController extends Controller
         })->oRwhere(function ($query) use ($user_token, $auth_device_token) {
             $query->where('from', $auth_device_token)->where('to', $user_token);
         })->get();
-
+ 
         return view('messages.index', ['messages' => $messages]);
     }
 
