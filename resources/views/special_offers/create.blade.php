@@ -389,8 +389,6 @@ $(".uploader").change(function(){
         var options={searchable:true};
         $('.subcategory .nice-select').remove();
         NiceSelect.bind(document.getElementById("subcategory"), options);
-
-
     }
 </script>
 @endpush

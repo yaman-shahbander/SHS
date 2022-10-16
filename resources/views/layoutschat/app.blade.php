@@ -366,7 +366,8 @@
                             var audioObject = $('#audiovioctest')
                                     .attr('src', url);
                             audioObject.css('display','inline');
-                                    $('#auduoFileRecording').attr('value',url);
+
+                                $('#auduoFileRecording').attr('value',url);
 
                             ////////////////////////////////////////////
 

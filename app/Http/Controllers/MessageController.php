@@ -161,7 +161,7 @@ class MessageController extends Controller
             $data->message = $message == null ? ' ' : $message;
             $data->fileName = $FileName;
 
-            $data->type = $this->$type;
+            $data->type = $type;
 
             $data->is_read = 0; // message will be unread when sending message
             $data->save();
